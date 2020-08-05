@@ -1,0 +1,167 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'com.google.firebase.crashlytics'
+
+android {
+    compileSdkVersion 29
+    buildToolsVersion "29.0.3"
+
+    defaultConfig {
+        applicationId "com.techswivel.baseproject"
+        minSdkVersion 16
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
+        multiDexEnabled true
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            manifestPlaceholders = [enableCrashReporting: "true"]
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            applicationVariants.all { variant ->
+                variant.outputs.all { output ->
+                    outputFileName = new File("{Base Project}_v{" + variant.versionName + "}({" + variant.versionCode + "})" + ".apk")
+                }
+            }
+        }
+        debug
+                {
+                    manifestPlaceholders = [enableCrashReporting: "false"]
+                    applicationVariants.all { variant ->
+                        variant.outputs.all { output ->
+                            outputFileName = new File("Base_project-v" + variant.versionName + ".apk")
+                        }
+                    }
+                }
+    }
+
+    flavorDimensions "version"
+    productFlavors {
+        PRODUTION {
+            dimension "version"
+            applicationIdSuffix ".production"
+            manifestPlaceholders = [
+                    appIcon: "@mipmap/app_icon",
+            ]
+        }
+
+        DEVELOPMENT {
+            dimension "version"
+            applicationIdSuffix ".development"
+            manifestPlaceholders = [
+                    appIcon: "@mipmap/app_icon_development",
+            ]
+        }
+        STAGING {
+            dimension "version"
+            applicationIdSuffix ".staging"
+            manifestPlaceholders = [
+                    appIcon: "@mipmap/app_icon_staging",
+            ]
+        }
+        ACCEPTANCE {
+            dimension "version"
+            applicationIdSuffix ".acceptance"
+            manifestPlaceholders = [
+                    appIcon: "@mipmap/app_icon_acceptance",
+            ]
+        }
+    }
+
+    buildFeatures{
+        dataBinding = true
+        viewBinding = true
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
+}
+
+dependencies {
+
+    def dagger2Version = '2.25.2'
+
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation 'androidx.core:core-ktx:1.3.0'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
+    //material Support
+    implementation 'com.google.android.material:material:1.3.0-alpha01'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+
+    //multiDex
+    implementation 'androidx.multidex:multidex:2.0.1'
+
+    //phonumber validation
+    implementation 'io.michaelrocks:libphonenumber-android:8.12.6'
+
+    //Google map
+    implementation 'com.google.android.libraries.places:places:2.3.0'
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
+    implementation 'com.google.android.gms:play-services-places:17.0.0'
+    implementation 'com.google.android.gms:play-services-drive:17.0.0'
+    implementation 'com.google.android.gms:play-services-auth:18.0.0'
+    implementation 'com.google.android.gms:play-services-location:17.0.0'
+    implementation 'com.google.android.gms:play-services-gcm:17.0.0'
+
+    //fireBase sdk
+    implementation 'com.google.firebase:firebase-auth:19.3.1'
+    implementation 'com.google.firebase:firebase-config:19.1.4'
+    implementation 'com.google.firebase:firebase-firestore:21.4.3'
+    implementation 'com.google.firebase:firebase-messaging:20.2.1'
+    implementation 'com.google.firebase:firebase-analytics:17.4.3'
+    implementation 'com.google.firebase:firebase-crashlytics:17.1.0'
+
+    //viewModel
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+    implementation "android.arch.lifecycle:common-java8:1.1.1"
+
+    kapt 'com.squareup.inject:assisted-inject-processor-dagger2:0.5.2'
+    kapt "com.google.dagger:dagger-compiler:$dagger2Version"
+    kapt "com.google.dagger:dagger-android-processor:$dagger2Version"
+    implementation "com.google.dagger:dagger-android-support:$dagger2Version"
+
+
+    //facebook sdk
+    implementation 'com.facebook.android:facebook-android-sdk:5.15.1'
+
+    //google sdk
+    implementation 'com.google.android.gms:play-services-auth:18.0.0'
+
+    //loading circle Image
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
+
+    //Rxjava
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.7'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+
+    //retrofit
+    implementation 'com.squareup.okio:okio:2.2.2'
+    implementation 'com.squareup.retrofit2:adapter-rxjava:2.3.0'
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.6.1'
+    implementation 'com.squareup.retrofit2:converter-gson:2.6.0'
+
+    // glide to
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    kapt 'com.github.bumptech.glide:compiler:4.11.0'
+
+
+
+}
