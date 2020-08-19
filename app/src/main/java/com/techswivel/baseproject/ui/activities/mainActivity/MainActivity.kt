@@ -1,4 +1,4 @@
-package com.techswivel.baseproject.ui
+package com.techswivel.baseproject.ui.activities.mainActivity
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
