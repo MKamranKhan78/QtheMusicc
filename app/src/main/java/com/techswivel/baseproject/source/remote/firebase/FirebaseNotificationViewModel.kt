@@ -1,4 +1,4 @@
-package com.techswivel.udeoglobe.Data.RemoteRepository.firebaseRespository
+package com.techswivel.baseproject.Data.RemoteRepository.firebaseRespository
 
 import com.techswivel.baseproject.ui.base.BaseViewModel
 

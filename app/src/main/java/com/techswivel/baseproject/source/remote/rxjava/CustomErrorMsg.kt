@@ -1,4 +1,4 @@
-package com.techswivel.udeoglobe.Data.RemoteRepository.ServerRepository
+package com.techswivel.baseproject.Data.RemoteRepository.ServerRepository
 
 import android.content.Context
 import android.widget.Toast

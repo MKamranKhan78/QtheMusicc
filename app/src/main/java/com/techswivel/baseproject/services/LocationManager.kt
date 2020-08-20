@@ -1,4 +1,4 @@
-package com.techswivel.udeoglobe.helper
+package com.techswivel.baseproject.helper
 
 import android.Manifest
 import android.annotation.SuppressLint

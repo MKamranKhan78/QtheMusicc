@@ -7,7 +7,7 @@ import android.view.WindowManager
 import androidx.lifecycle.ViewModelProvider
 import com.techswivel.baseproject.R
 import com.techswivel.baseproject.constant.Constants
-import com.techswivel.baseproject.ui.activities.mainActivity.MainActivity
+import com.techswivel.baseproject.ui.activities.serverSettingActivity.ServerSettingActivity
 import com.techswivel.baseproject.ui.base.BaseActivity
 import kotlinx.android.synthetic.main.activity_splash.*
 
@@ -16,7 +16,7 @@ class SplashActivity : BaseActivity() {
     private lateinit var mActivityintent: Intent
     private lateinit var mViewModel: SplashViewModel
     private val mRunnable: Runnable = Runnable {
-        mActivityintent = Intent(this, MainActivity::class.java)
+        mActivityintent = Intent(this, ServerSettingActivity::class.java)
         if (!isFinishing) {
             startActivity(mActivityintent)
             finish()

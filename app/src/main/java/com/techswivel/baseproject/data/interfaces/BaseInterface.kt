@@ -1,4 +1,4 @@
-package com.techswivel.udeoglobe.base
+package com.techswivel.baseproject.base
 
 interface BaseInterface {
     fun showProgressBar()

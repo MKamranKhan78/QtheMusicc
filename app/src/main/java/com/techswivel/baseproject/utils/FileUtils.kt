@@ -21,12 +21,6 @@ import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
-
-
-/**
- * Created by TOSHIBA on 3/29/2018.
- */
-
 object FileUtils {
     fun createImageFile(context: Context): File? {
         val timeStamp = Calendar.getInstance().timeInMillis

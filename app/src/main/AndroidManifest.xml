@@ -27,6 +27,12 @@
             android:screenOrientation="portrait">
 
         </activity>
+        <activity
+            android:name=".ui.activities.serverSettingActivity.ServerSettingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.wrapper.FrameActivity"
+            android:screenOrientation="portrait" />
 
         <service
             android:name=".source.remote.firebase.FirebaseNotificationService"

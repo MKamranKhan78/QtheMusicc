@@ -1,7 +1,7 @@
 package com.techswivel.baseproject
 
+import com.techswivel.baseproject.utils.NetworkStatus
 import com.techswivel.dfaktfahrerapp.models.ErrorResponce
-import com.techswivel.udeoglobe.utils.NetworkStatus
 
 class ApiResponse private constructor(
     val status: NetworkStatus,

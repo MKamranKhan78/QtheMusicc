@@ -23,8 +23,8 @@ abstract class BaseActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        connectionLiveData = NetworckChangeReceiver(this)
-        registerInternetBroadCast(window.decorView.findViewById(android.R.id.content))
+        /*connectionLiveData = NetworckChangeReceiver(this)
+        registerInternetBroadCast(window.decorView.findViewById(android.R.id.content))*/
     }
 
 

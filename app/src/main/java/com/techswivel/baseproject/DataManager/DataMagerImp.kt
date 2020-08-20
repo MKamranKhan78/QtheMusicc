@@ -1,6 +1,6 @@
 package com.techswivel.baseproject.DataManager
 
-import com.techswivel.udeoglobe.googleMapHelper.DirectionObject
+import com.techswivel.baseproject.googleMapHelper.DirectionObject
 import io.reactivex.Observable
 
 interface DataMagerImp {

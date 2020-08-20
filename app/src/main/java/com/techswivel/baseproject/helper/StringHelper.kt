@@ -1,4 +1,4 @@
-package com.techswivel.udeoglobe.helper
+package com.techswivel.baseproject.helper
 
 import android.content.Context
 import android.text.Spanned

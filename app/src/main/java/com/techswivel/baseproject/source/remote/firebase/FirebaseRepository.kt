@@ -1,4 +1,4 @@
-package com.techswivel.udeoglobe.Data.RemoteRepository.firebaseRespository
+package com.techswivel.baseproject.Data.RemoteRepository.firebaseRespository
 
 
 class FirebaseRepository : FirebaseRepositoryImp {

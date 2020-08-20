@@ -1,6 +1,6 @@
 package com.techswivel.baseproject.source.remote.retrofit
 
-import com.techswivel.udeoglobe.googleMapHelper.DirectionObject
+import com.techswivel.baseproject.googleMapHelper.DirectionObject
 import io.reactivex.Observable
 import retrofit2.http.GET
 import retrofit2.http.Url
