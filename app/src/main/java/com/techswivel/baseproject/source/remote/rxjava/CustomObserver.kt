@@ -1,4 +1,4 @@
-package com.techswivel.udeoglobe.Data.RemoteRepository.ServerRepository
+package com.techswivel.baseproject.Data.RemoteRepository.ServerRepository
 
 import android.util.Log
 import com.techswivel.baseproject.source.remote.rxjava.CustomError

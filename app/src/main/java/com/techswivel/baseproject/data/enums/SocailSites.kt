@@ -1,4 +1,4 @@
-package com.techswivel.udeoglobe.utils
+package com.techswivel.baseproject.utils
 
 enum class SocailSites {
     FACEBOOK,

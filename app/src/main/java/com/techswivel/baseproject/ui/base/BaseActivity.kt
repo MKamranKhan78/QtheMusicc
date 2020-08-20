@@ -19,11 +19,12 @@ import com.techswivel.baseproject.services.NetworckChangeReceiver
 abstract class BaseActivity : AppCompatActivity() {
 
     private val fragmentManager = supportFragmentManager
-    private val connectionLiveData = NetworckChangeReceiver(this)
+    private lateinit var connectionLiveData: NetworckChangeReceiver
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        registerInternetBroadCast(window.decorView.findViewById(android.R.id.content))
+        /*connectionLiveData = NetworckChangeReceiver(this)
+        registerInternetBroadCast(window.decorView.findViewById(android.R.id.content))*/
     }
 
 

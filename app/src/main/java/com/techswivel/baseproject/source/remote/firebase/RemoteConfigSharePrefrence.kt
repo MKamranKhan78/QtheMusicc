@@ -1,4 +1,4 @@
-package com.techswivel.udeoglobe.helper.RemoteConfigrations
+package com.techswivel.baseproject.helper.RemoteConfigrations
 
 import android.content.Context
 import android.content.SharedPreferences

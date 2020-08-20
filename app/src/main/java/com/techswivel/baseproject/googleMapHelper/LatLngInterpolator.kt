@@ -1,4 +1,4 @@
-package com.techswivel.udeoglobe.googleMapHelper
+package com.techswivel.baseproject.googleMapHelper
 
 import com.google.android.gms.maps.model.LatLng
 import java.lang.Math.*

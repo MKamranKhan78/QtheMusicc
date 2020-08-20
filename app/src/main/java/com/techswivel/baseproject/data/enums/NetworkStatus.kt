@@ -1,5 +1,5 @@
-package com.techswivel.udeoglobe.utils
+package com.techswivel.baseproject.utils
 
 enum class NetworkStatus {
-    LOADING, SUCCESS, ERROR, COMPLETED
+    LOADING, SUCCESS, ERROR, COMPLETED, EXPIRE
 }

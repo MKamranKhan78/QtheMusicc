@@ -1,3 +1,3 @@
-package com.techswivel.udeoglobe.googleMapHelper
+package com.techswivel.baseproject.googleMapHelper
 
 class PolylineObject(val points: String)

@@ -1,7 +1,7 @@
 package com.techswivel.baseproject.DataManager
 
+import com.techswivel.baseproject.googleMapHelper.DirectionObject
 import com.techswivel.baseproject.source.remote.retrofit.ApiService
-import com.techswivel.udeoglobe.googleMapHelper.DirectionObject
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers

@@ -1,4 +1,4 @@
-package com.techswivel.udeoglobe.googleMapHelper
+package com.techswivel.baseproject.googleMapHelper
 
 class DurationObject {
 
