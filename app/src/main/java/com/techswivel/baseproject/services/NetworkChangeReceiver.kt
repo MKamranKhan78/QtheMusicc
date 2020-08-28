@@ -13,7 +13,7 @@ import android.net.NetworkRequest
 import android.os.Build
 import androidx.lifecycle.LiveData
 
-class NetworckChangeReceiver(val context: Context) : LiveData<Boolean>() {
+class NetworkChangeReceiver(val context: Context) : LiveData<Boolean>() {
 
     private var connectivityManager: ConnectivityManager =
         context.getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -51,8 +51,8 @@ class NetworckChangeReceiver(val context: Context) : LiveData<Boolean>() {
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private fun lollipopNetworkAvailableRequest() {
         val builder = NetworkRequest.Builder()
-            .addTransportType(android.net.NetworkCapabilities.TRANSPORT_CELLULAR)
             .addTransportType(android.net.NetworkCapabilities.TRANSPORT_WIFI)
+            .addTransportType(android.net.NetworkCapabilities.TRANSPORT_CELLULAR)
         connectivityManager.registerNetworkCallback(
             builder.build(),
             getConnectivityManagerCallback()
@@ -63,11 +63,12 @@ class NetworckChangeReceiver(val context: Context) : LiveData<Boolean>() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 
             connectivityManagerCallback = object : ConnectivityManager.NetworkCallback() {
-                override fun onAvailable(network: Network?) {
+
+                override fun onAvailable(network: Network) {
                     postValue(true)
                 }
 
-                override fun onLost(network: Network?) {
+                override fun onLost(network: Network) {
                     postValue(false)
                 }
             }

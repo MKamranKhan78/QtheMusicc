@@ -437,7 +437,7 @@ object ImagePicker {
      */
     fun decodeBitmap(context: Context, theUri: Uri): Bitmap? {
         var outputBitmap: Bitmap? = null
-        var fileDescriptor: AssetFileDescriptor? = null
+        val fileDescriptor: AssetFileDescriptor?
 
         try {
             fileDescriptor = context.contentResolver.openAssetFileDescriptor(theUri, "r")

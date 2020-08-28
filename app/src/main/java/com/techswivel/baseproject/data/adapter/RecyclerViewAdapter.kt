@@ -37,6 +37,10 @@ class RecyclerViewAdapter(
 
     }
 
+    override fun onViewClick(view: View) {
+        TODO("implement view on click")
+    }
+
     override fun getLayoutIdForPosition(position: Int): Int {
         return mAdapterCallBack.inflateLayoutFromId(position, mData!![position])
     }
