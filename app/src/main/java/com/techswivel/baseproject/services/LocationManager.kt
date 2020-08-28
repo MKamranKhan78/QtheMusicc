@@ -76,19 +76,12 @@ class LocationManager constructor(
         mRequestLocationManager?.requestSingleUpdate(
             LocationManager.NETWORK_PROVIDER,
             object : android.location.LocationListener {
-                override fun onLocationChanged(location: Location?) {
-                    location?.let { mCallBack?.onLocationUpdate(it) }
+
+                override fun onLocationChanged(p0: Location) {
+                    p0.let { mCallBack?.onLocationUpdate(it) }
                 }
 
                 override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
-
-                }
-
-                override fun onProviderEnabled(provider: String?) {
-
-                }
-
-                override fun onProviderDisabled(provider: String?) {
 
                 }
 

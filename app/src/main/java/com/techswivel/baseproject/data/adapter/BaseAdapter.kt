@@ -6,8 +6,9 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
+import com.techswivel.baseproject.data.interfaces.AdapterOnClick
 
-abstract class BaseAdapter : RecyclerView.Adapter<BaseViewHolder>() {
+abstract class BaseAdapter : RecyclerView.Adapter<BaseViewHolder>(), AdapterOnClick {
 
     private var isOnClickEnable: Boolean = true
 
@@ -24,7 +25,7 @@ abstract class BaseAdapter : RecyclerView.Adapter<BaseViewHolder>() {
 
     override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
         val obj = getObjForPosition(position)
-        holder.bind(obj)
+        holder.bind(obj, this)
         holder.itemView.tag = obj
         if (isOnClickEnable) {
             holder.itemView.setOnClickListener { itemOnClick(holder.itemView.tag, position) }

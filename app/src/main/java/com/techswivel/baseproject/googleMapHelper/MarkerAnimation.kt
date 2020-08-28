@@ -2,6 +2,7 @@ package com.techswivel.baseproject.googleMapHelper
 
 
 import android.os.Handler
+import android.os.Looper
 import android.os.SystemClock
 import android.view.animation.AccelerateDecelerateInterpolator
 
@@ -15,7 +16,7 @@ object MarkerAnimation {
         latLngInterpolator: LatLngInterpolator
     ) {
         val startPosition = marker.position
-        val handler = Handler()
+        val handler = Handler(Looper.getMainLooper())
         val start = SystemClock.uptimeMillis()
         val interpolator = AccelerateDecelerateInterpolator()
         val durationInMs = 1000f
