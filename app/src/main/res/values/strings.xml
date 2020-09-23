@@ -1,9 +1,22 @@
 <resources>
     <string name="app_name">BaseProject</string>
-    <string name="google_client_id_staging">abcd</string>
-    <string name="google_client_id_development">abcd</string>
+
     <string name="google_client_id_acceptance">abcd</string>
+    <string name="google_client_secret_acceptance">abcd</string>
+    <string name="google_client_redirect_uri_acceptance">abcd</string>
+
+    <string name="google_client_id_development">abcd</string>
+    <string name="google_client_secret_development">abcd</string>
+    <string name="google_client_redirect_uri_development">abcd</string>
+
     <string name="google_client_id_production">abcd</string>
+    <string name="google_client_secret_production">abcd</string>
+    <string name="google_client_redirect_uri_production">abcd</string>
+
+    <string name="google_client_id_staging">abcd</string> <!-- 586601826954-bf3rmcj9dbhii39tpu9negagt85ebfjg.apps.googleusercontent.com -->
+    <string name="google_client_secret_staging">abcd</string> <!-- q25W9B3-pqWebWZ1ZY6Za6op -->
+    <string name="google_client_redirect_uri_staging">abcd</string> <!-- https://udeoglobe-staging.firebaseapp.com/__/auth/handler -->
+
     <string name="google_maps_key">abcd</string>
     <string name="no_internet">No Internet Connection</string>
     <string name="call_not_supported">Call Not Supported</string>

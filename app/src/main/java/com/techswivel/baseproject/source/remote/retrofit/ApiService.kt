@@ -58,6 +58,17 @@ object ApiService {
         .client(client)
         .build()
 
+    /**
+     * Retrofit Framework work With OkHttpClient, Gson and Rxjava to handle server request and parce into Model classes
+     */
+    private val googleRetrofit = Retrofit.Builder()
+        .baseUrl("https://www.googleapis.com/oauth2/v4/")
+        // .addConverterFactory(ResponseConverterFactory.create())
+        .addConverterFactory(GsonConverterFactory.create(gson))
+        .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+        .client(client)
+        .build()
+
 
     /**
      * This method is used to get Instance of Api Class
@@ -79,20 +90,40 @@ object ApiService {
         return directionRetrofit.create(ApiResponse::class.java)
     }
 
+    /**
+     * This method is used to get Instance of Api Class
+     *
+     * @return <Api> return Instance of Api class
+    </Api> */
+    @JvmStatic
+    fun getGoogleResponse(): ApiResponse {
+        return googleRetrofit.create(ApiResponse::class.java)
+    }
+
+    /**
+     * This method is used to get Instance of Api Class
+     *
+     * @return return Instance of Retrofit
+    </Api> */
     @JvmStatic
     fun getRetrofitObject(): Retrofit {
         return retrofit
     }
 
     private fun getBaseUrl(): String {
-        return if (BuildConfig.FLAVOR.equals(Constants.STAGING)) {
-            Constants.STAGING_SERVER_URL
-        } else if (BuildConfig.FLAVOR.equals(Constants.PRODUTION)) {
-            Constants.PRODUTION_SERVER_URL
-        } else if (BuildConfig.FLAVOR.equals(Constants.ACCEPTANCE)) {
-            Constants.ACCEPTANCE_SERVER_URL
-        } else {
-            Constants.DEVELOPMENT_SERVER_URL
+        return when {
+            BuildConfig.FLAVOR.equals(Constants.STAGING) -> {
+                Constants.STAGING_SERVER_URL
+            }
+            BuildConfig.FLAVOR.equals(Constants.PRODUTION) -> {
+                Constants.PRODUTION_SERVER_URL
+            }
+            BuildConfig.FLAVOR.equals(Constants.ACCEPTANCE) -> {
+                Constants.ACCEPTANCE_SERVER_URL
+            }
+            else -> {
+                Constants.DEVELOPMENT_SERVER_URL
+            }
         }
     }
 }
