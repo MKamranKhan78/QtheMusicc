@@ -9,19 +9,21 @@ apply plugin: 'com.google.firebase.crashlytics'
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.2"
-
+    def appVersion = '1.0.0'
+    
     defaultConfig {
         applicationId "com.techswivel.baseproject"
         minSdkVersion 16
         targetSdkVersion 30
         versionCode 1
-        versionName "1.0.0"
+        versionName appVersion
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
         release {
+
             manifestPlaceholders = [enableCrashReporting: "true"]
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
@@ -55,6 +57,7 @@ android {
         development {
             dimension "version"
             applicationIdSuffix ".development"
+            versionName appVersion+"-development"
             manifestPlaceholders = [
                     appIcon: "@mipmap/app_icon_development",
             ]
@@ -62,6 +65,7 @@ android {
         staging {
             dimension "version"
             applicationIdSuffix ".staging"
+            versionName appVersion+"-staging"
             manifestPlaceholders = [
                     appIcon: "@mipmap/app_icon_staging",
             ]
@@ -69,6 +73,7 @@ android {
         acceptance {
             dimension "version"
             applicationIdSuffix ".acceptance"
+            versionName appVersion+"-acceptance"
             manifestPlaceholders = [
                     appIcon: "@mipmap/app_icon_acceptance",
             ]
@@ -114,7 +119,7 @@ dependencies {
     implementation 'io.michaelrocks:libphonenumber-android:8.12.6'
 
     //Google map
-    implementation 'com.google.android.libraries.places:places:2.3.0'
+    implementation 'com.google.android.libraries.places:places:2.4.0'
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
     implementation 'com.google.android.gms:play-services-places:17.0.0'
     implementation 'com.google.android.gms:play-services-drive:17.0.0'
@@ -123,9 +128,9 @@ dependencies {
     implementation 'com.google.android.gms:play-services-gcm:17.0.0'
 
     //fireBase sdk
-    implementation 'com.google.firebase:firebase-auth:19.3.2'
+    implementation 'com.google.firebase:firebase-auth:19.4.0'
     implementation 'com.google.firebase:firebase-config:19.2.0'
-    implementation 'com.google.firebase:firebase-firestore:21.5.0'
+    implementation 'com.google.firebase:firebase-firestore:21.6.0'
     implementation 'com.google.firebase:firebase-messaging:20.2.4'
     implementation 'com.google.firebase:firebase-analytics:17.5.0'
     implementation 'com.google.firebase:firebase-crashlytics:17.2.1'
@@ -155,8 +160,8 @@ dependencies {
     //retrofit
     implementation 'com.squareup.okio:okio:2.7.0'
     implementation 'com.squareup.retrofit2:adapter-rxjava:2.3.0'
-    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.6.1'
-    implementation 'com.squareup.retrofit2:converter-gson:2.6.0'
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.7.1'
+    implementation 'com.squareup.retrofit2:converter-gson:2.7.1'
 
     // glide to
     implementation 'com.github.bumptech.glide:glide:4.11.0'

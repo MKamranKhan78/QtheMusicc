@@ -1,25 +1,14 @@
 package com.techswivel.baseproject.DataManager
 
 import com.techswivel.baseproject.googleMapHelper.DirectionObject
+import com.techswivel.udeoglobe.model.GoogleResponseModel
 import io.reactivex.Observable
+import retrofit2.Response
 
 interface DataMagerImp {
     //Remote calls
     fun getDirectionRoutes(url: String): Observable<DirectionObject>
 
-//    fun editProduct(
-//        productId: Int,
-//        productImage: MultipartBody.Part?,
-//        productVideo: MultipartBody.Part?
-//        , productName: String?
-//        , price: Double?
-//        , categoryId: Int?
-//        , subCategoryId: Int?
-//        , isDeliverable: Boolean?
-//        , description: String?
-//        , isTopProduct: Boolean?
-//        , planId: Int?
-//        , planDuration: Int?
-//    ): Observable<Response<ResponseMain>>
+    fun getGoogleAccessToken(serverAuthCode: String): Observable<Response<GoogleResponseModel>>
 
 }

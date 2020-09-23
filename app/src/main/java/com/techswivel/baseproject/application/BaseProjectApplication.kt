@@ -28,28 +28,28 @@ class BaseProjectApplication : Application(), LifecycleObserver {
             BuildConfig.FLAVOR.equals(Constants.STAGING) -> {
                 mGso =
                     GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)  //google sigin options
-                        .requestIdToken(getString(R.string.google_client_id_staging))
+                        .requestServerAuthCode(getString(R.string.google_client_id_staging))
                         .requestEmail()
                         .build()
             }
             BuildConfig.FLAVOR.equals(Constants.DEVELOPMENT) -> {
                 mGso =
                     GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)  //google sigin options
-                        .requestIdToken(getString(R.string.google_client_id_development))
+                        .requestServerAuthCode(getString(R.string.google_client_id_development))
                         .requestEmail()
                         .build()
             }
             BuildConfig.FLAVOR.equals(Constants.ACCEPTANCE) -> {
                 mGso =
                     GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)  //google sigin options
-                        .requestIdToken(getString(R.string.google_client_id_acceptance))
+                        .requestServerAuthCode(getString(R.string.google_client_id_acceptance))
                         .requestEmail()
                         .build()
             }
             else -> {
                 mGso =
                     GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)  //google sigin options
-                        .requestIdToken(getString(R.string.google_client_id_production))
+                        .requestServerAuthCode(getString(R.string.google_client_id_production))
                         .requestEmail()
                         .build()
             }
