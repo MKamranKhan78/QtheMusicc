@@ -3,6 +3,9 @@ change log need to be done as listed below
 
 TODO:
 1) complete the implementation of firebase cathartics.
-
+2) add utils function in kotlin extention like validate Email, image loading, timeStampConverter, ignoreFirstWhiteSpace
+// example https://www.raywenderlich.com/10986797-extension-functions-and-properties-in-kotlin
+3) implement extention file functions in proper kotlin extention
+// all extentions are place in Extention.kt file.
 
 DONE:
