@@ -7,5 +7,9 @@ TODO:
 // example https://www.raywenderlich.com/10986797-extension-functions-and-properties-in-kotlin
 3) implement extention file functions in proper kotlin extention
 // all extentions are place in Extention.kt file.
+4) implement cancel request in baseViewModel using DisposableManager
+//in baseViewModel create method name cancelApiRequest and add this line
+//DisposableManager.dispose()
+// this will cancel all api request which are currently inProcess
 
 DONE:
