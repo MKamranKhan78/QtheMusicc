@@ -12,18 +12,18 @@ import com.techswivel.baseproject.R
 
 object DialogUtils {
 
-    fun NoInterNetMessage(pContext: Context) {
+    fun noInterNetMessage(pContext: Context) {
         val noInterNetMessage = AlertDialog.Builder(pContext).create()
         noInterNetMessage.setTitle(pContext.resources.getString(R.string.noInternetTitle))
         noInterNetMessage.setCancelable(false)
         noInterNetMessage.setMessage(pContext.resources.getString(R.string.checkInternetConnection))
         noInterNetMessage.setButton(
             AlertDialog.BUTTON_POSITIVE, pContext.resources.getString(R.string.ok)
-        ) { dialog, which -> dialog.dismiss() }
+        ) { dialog, _ -> dialog.dismiss() }
         noInterNetMessage.show()
     }
 
-    fun SuretyDialog(pContext: Context, mMessage: String, pTitle: String, pCallBack: CallBack) {
+    fun suretyDialog(pContext: Context, mMessage: String, pTitle: String, pCallBack: CallBack) {
         val suretyDialog = AlertDialog.Builder(pContext).create()
         suretyDialog.setTitle(pTitle)
         suretyDialog.setCancelable(false)
@@ -31,39 +31,37 @@ object DialogUtils {
         suretyDialog.setButton(
             AlertDialog.BUTTON_POSITIVE,
             pContext.resources.getString(R.string.yes)
-        ) { dialog, which ->
-            pCallBack.OnPostivieCallBack()
+        ) { dialog, _ ->
+            pCallBack.onPositiveCallBack()
             dialog.dismiss()
         }
         suretyDialog.setButton(
             AlertDialog.BUTTON_NEGATIVE,
             pContext.resources.getString(R.string.no)
-        ) { dialog, which -> dialog.dismiss() }
+        ) { dialog, _ ->
+            pCallBack.onNegativeCallBack()
+            dialog.dismiss()
+        }
         suretyDialog.show()
     }
 
 
-    fun RetryDialog(pContext: Context, message: String, pCallBack: CallBack) {
+    fun eetryDialog(pContext: Context, message: String, pCallBack: CallBack) {
         val retryAlertDialog = AlertDialog.Builder(pContext).create()
         retryAlertDialog.setTitle(pContext.resources.getString(R.string.alert))
         retryAlertDialog.setCancelable(false)
         retryAlertDialog.setMessage(message)
         retryAlertDialog.setButton(
             AlertDialog.BUTTON_POSITIVE, pContext.resources.getString(R.string.retry)
-        ) { dialog, which ->
-            pCallBack.OnPostivieCallBack()
+        ) { dialog, _ ->
+            pCallBack.onPositiveCallBack()
             dialog.dismiss()
         }
         retryAlertDialog.show()
     }
 
-    interface CallBack {
-        fun OnPostivieCallBack()
-        fun onNegativeCallBack()
-    }
 
-
-    fun ErrorAlert(pContext: Context, pTitle: String, pMessage: String) {
+    fun errorAlert(pContext: Context, pTitle: String, pMessage: String) {
         val errorDialog = AlertDialog.Builder(pContext).create()
         //  errorDialog.setTitle(pContext.getString(R.string.error_code).plus(pTitle))
         errorDialog.setCancelable(false)
@@ -71,11 +69,11 @@ object DialogUtils {
         errorDialog.setButton(
             AlertDialog.BUTTON_POSITIVE,
             pContext.resources.getString(R.string.ok)
-        ) { dialog, which -> dialog.dismiss() }
+        ) { dialog, _ -> dialog.dismiss() }
         errorDialog.show()
     }
 
-    fun ErrorAlertWithCallBack(
+    fun errorAlertWithCallBack(
         pContext: Context,
         pTitle: String,
         pMessage: String,
@@ -88,14 +86,14 @@ object DialogUtils {
         errorDialog.setButton(
             AlertDialog.BUTTON_POSITIVE,
             pContext.resources.getString(R.string.ok)
-        ) { dialog, which ->
-            pCallBack.OnPostivieCallBack()
+        ) { dialog, _ ->
+            pCallBack.onPositiveCallBack()
             dialog.dismiss()
         }
         errorDialog.show()
     }
 
-    fun RetryErrorAlert(pContext: Context, pTitle: String, pMessage: String, pCallBack: CallBack) {
+    fun retryErrorAlert(pContext: Context, pTitle: String, pMessage: String, pCallBack: CallBack) {
         val errorDialog = AlertDialog.Builder(pContext).create()
         errorDialog.setTitle(pContext.getString(R.string.error_code).plus(pTitle))
         errorDialog.setCancelable(false)
@@ -103,14 +101,14 @@ object DialogUtils {
         errorDialog.setButton(
             AlertDialog.BUTTON_POSITIVE,
             pContext.resources.getString(R.string.retry)
-        ) { dialog, which ->
-            pCallBack.OnPostivieCallBack()
+        ) { dialog, _ ->
+            pCallBack.onPositiveCallBack()
             dialog.dismiss()
         }
         errorDialog.show()
     }
 
-    fun SessionExpireAlert(pContext: Context, pCallBack: CallBack) {
+    fun sessionExpireAlert(pContext: Context, pCallBack: CallBack) {
         val errorDialog = AlertDialog.Builder(pContext).create()
         errorDialog.setTitle(pContext.getString(R.string.session_expire_title))
         errorDialog.setCancelable(false)
@@ -118,14 +116,14 @@ object DialogUtils {
         errorDialog.setButton(
             AlertDialog.BUTTON_POSITIVE,
             pContext.resources.getString(R.string.ok)
-        ) { dialog, which ->
-            pCallBack.OnPostivieCallBack()
+        ) { dialog, _ ->
+            pCallBack.onPositiveCallBack()
             dialog.dismiss()
         }
         errorDialog.show()
     }
 
-    fun RunTimeAlert(
+    fun runTimeAlert(
         pContext: Context,
         pTitle: String,
         pMessage: String,
@@ -133,25 +131,26 @@ object DialogUtils {
         pNegBtnText: String,
         pCallBack: CallBack
     ) {
-        val callDialoge = AlertDialog.Builder(pContext).create()
-        callDialoge.setTitle(pTitle)
-        callDialoge.setCancelable(false)
-        callDialoge.setMessage(pMessage)
-        callDialoge.setButton(
+        val callDialog = AlertDialog.Builder(pContext).create()
+        callDialog.setTitle(pTitle)
+        callDialog.setCancelable(false)
+        callDialog.setMessage(pMessage)
+        callDialog.setButton(
             AlertDialog.BUTTON_POSITIVE,
             pPosBtnText
-        ) { dialog, which ->
-            pCallBack.OnPostivieCallBack()
+        ) { dialog, _ ->
+            pCallBack.onPositiveCallBack()
             dialog.dismiss()
         }
-        callDialoge.setButton(AlertDialog.BUTTON_NEGATIVE, pNegBtnText)
-        { dialog, which ->
+        callDialog.setButton(AlertDialog.BUTTON_NEGATIVE, pNegBtnText)
+        { dialog, _ ->
+            pCallBack.onNegativeCallBack()
             dialog.dismiss()
         }
-        callDialoge.show()
-        callDialoge.getButton(AlertDialog.BUTTON_NEGATIVE)
+        callDialog.show()
+        callDialog.getButton(AlertDialog.BUTTON_NEGATIVE)
             .setTextColor(ContextCompat.getColor(pContext, R.color.colorPrimary));
-        callDialoge.getButton(AlertDialog.BUTTON_POSITIVE)
+        callDialog.getButton(AlertDialog.BUTTON_POSITIVE)
             .setTextColor(ContextCompat.getColor(pContext, R.color.colorPrimary));
     }
 
@@ -176,14 +175,20 @@ object DialogUtils {
         yesBtn.text = pPosBtnText
         noBtn.text = pNegBtnText
         yesBtn.setOnClickListener {
-            pCallBack.OnPostivieCallBack()
+            pCallBack.onPositiveCallBack()
             dialog.dismiss()
         }
         noBtn.setOnClickListener {
+            pCallBack.onNegativeCallBack()
             dialog.dismiss()
         }
         dialog.show()
 
+    }
+
+    interface CallBack {
+        fun onPositiveCallBack()
+        fun onNegativeCallBack()
     }
 
 }

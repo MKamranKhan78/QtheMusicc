@@ -5,6 +5,7 @@ import android.widget.TextView
 import androidx.lifecycle.ViewModel
 import com.techswivel.baseproject.BuildConfig
 import com.techswivel.baseproject.constant.Constants
+import com.techswivel.baseproject.source.remote.rxjava.DisposableManager
 
 
 abstract class BaseViewModel : ViewModel() {
@@ -15,5 +16,9 @@ abstract class BaseViewModel : ViewModel() {
         } else {
             textView.visibility = View.GONE
         }
+    }
+
+    fun cancelServerRequest() {
+        DisposableManager.dispose()
     }
 }

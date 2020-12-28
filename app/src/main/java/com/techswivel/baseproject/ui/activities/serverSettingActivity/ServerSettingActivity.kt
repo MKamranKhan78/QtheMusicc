@@ -6,22 +6,24 @@ import android.view.View
 import com.techswivel.baseproject.BuildConfig
 import com.techswivel.baseproject.R
 import com.techswivel.baseproject.constant.Constants
+import com.techswivel.baseproject.databinding.ActivityServerSettingBinding
 import com.techswivel.baseproject.helper.RemoteConfigrations.RemoteConfigSharePrefrence
 import com.techswivel.baseproject.ui.base.BaseActivity
-import kotlinx.android.synthetic.main.activity_server_setting.*
-import kotlinx.android.synthetic.main.default_app_bar.view.*
 
 class ServerSettingActivity : BaseActivity() {
 
     private var remoteConfigSharedPrefrences: RemoteConfigSharePrefrence? = null
 
+    private lateinit var mBinding: ActivityServerSettingBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_server_setting)
-        setUpActionBar(activityToolbar.toolbar, "", false, isShowHome = true)
-        activityToolbar.toolbarTitle.visibility = View.VISIBLE
-        activityToolbar.toolbarTitle.text = resources.getString(R.string.server_setting)
-        activityToolbar.toolbar.setNavigationOnClickListener {
+        mBinding = ActivityServerSettingBinding.inflate(layoutInflater)
+        setContentView(mBinding.root)
+        setUpActionBar(mBinding.activityToolbar.toolbar, "", false, isShowHome = true)
+        mBinding.activityToolbar.toolbarTitle.visibility = View.VISIBLE
+        mBinding.activityToolbar.toolbarTitle.text = resources.getString(R.string.server_setting)
+        mBinding.activityToolbar.toolbar.setNavigationOnClickListener {
             this.finish()
         }
         initalizComponents()
@@ -32,17 +34,17 @@ class ServerSettingActivity : BaseActivity() {
     }
 
     private fun setMinimumVersion() {
-        textMinimumVersion.text = getString(R.string.minimun_version).plus(" = 16 (4.1.0)")
+        mBinding.textMinimumVersion.text = getString(R.string.minimun_version).plus(" = 16 (4.1.0)")
     }
 
 
     private fun crashingImplementation() {
         if (BuildConfig.FLAVOR.equals(Constants.STAGING)) {
-            buttonCrash.visibility = View.VISIBLE
+            mBinding.buttonCrash.visibility = View.VISIBLE
         } else {
-            buttonCrash.visibility = View.GONE
+            mBinding.buttonCrash.visibility = View.GONE
         }
-        buttonCrash.setOnClickListener { Constants.STAGING.toInt() }
+        mBinding.buttonCrash.setOnClickListener { Constants.STAGING.toInt() }
 
     }
 
@@ -56,12 +58,12 @@ class ServerSettingActivity : BaseActivity() {
         val versionName = packageManager
             .getPackageInfo(packageName, 0).versionName
         val buildVersion = "Build Number: $versionCode\nVersion Name :$versionName"
-        textViewBuildVersion.text = buildVersion
+        mBinding.textViewBuildVersion.text = buildVersion
     }
 
     private fun setUrlText() {
-        textServerName?.text = BuildConfig.FLAVOR.toUpperCase()
-        textServerName?.visibility = View.VISIBLE
+        mBinding.textServerName.text = BuildConfig.FLAVOR.toUpperCase()
+        mBinding.textServerName.visibility = View.VISIBLE
     }
 
     private fun initalizComponents() {
