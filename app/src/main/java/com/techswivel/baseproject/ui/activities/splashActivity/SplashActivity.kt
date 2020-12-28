@@ -8,17 +8,17 @@ import android.os.Looper
 import android.view.WindowInsets
 import android.view.WindowManager
 import androidx.lifecycle.ViewModelProvider
-import com.techswivel.baseproject.R
 import com.techswivel.baseproject.constant.Constants
+import com.techswivel.baseproject.databinding.ActivitySplashBinding
 import com.techswivel.baseproject.ui.activities.serverSettingActivity.ServerSettingActivity
 import com.techswivel.baseproject.ui.base.BaseActivity
 import com.techswivel.baseproject.utils.PermissionUtils
-import kotlinx.android.synthetic.main.activity_splash.*
 
 class SplashActivity : BaseActivity() {
     private var mHandler: Handler? = null
     private lateinit var mActivityIntent: Intent
     private lateinit var mViewModel: SplashViewModel
+    private lateinit var mBinding: ActivitySplashBinding
     private val mRunnable: Runnable = Runnable {
         mActivityIntent = Intent(this, ServerSettingActivity::class.java)
         if (!isFinishing) {
@@ -29,7 +29,8 @@ class SplashActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_splash)
+        mBinding = ActivitySplashBinding.inflate(layoutInflater)
+        setContentView(mBinding.root)
         PermissionUtils.requestNetworkPermission(this)
         mViewModel = ViewModelProvider(
             this,
@@ -47,6 +48,6 @@ class SplashActivity : BaseActivity() {
         }
         mHandler = Handler(Looper.getMainLooper())
         mHandler!!.postDelayed(mRunnable, Constants.SPALSHDELAY.toLong())
-        mViewModel.setServerName(textServerName)
+        mViewModel.setServerName(mBinding.textServerName)
     }
 }

@@ -7,47 +7,47 @@ class RemoteConfigSharePrefrence(private val context: Context) {
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var editor: SharedPreferences.Editor
 
-    fun SetIsSettingFromRemote(isSettingDisplayed: Boolean?) {
+    fun setIsSettingFromRemote(isSettingDisplayed: Boolean?) {
         editor = context.getSharedPreferences(SHARED_PREFRENCE_NAME, Context.MODE_PRIVATE).edit()
         editor.putBoolean(IS_KEY_SETTING_DISPLAYED, isSettingDisplayed!!)
         editor.apply()
     }
 
-    fun SetUrl(url: String, urlKey: String) {
+    fun setUrl(url: String, urlKey: String) {
         editor = context.getSharedPreferences(SHARED_PREFRENCE_NAME, Context.MODE_PRIVATE).edit()
         editor.putString(KEY_URL, url)
         editor.putString(KEY_URL_TYPE, urlKey)
         editor.apply()
     }
 
-    fun GetUrl(): String? {
+    fun getUrl(): String? {
         sharedPreferences =
             context.getSharedPreferences(SHARED_PREFRENCE_NAME, Context.MODE_PRIVATE)
         return sharedPreferences.getString(KEY_URL, "")
     }
 
-    fun GetUrlKey(): String? {
+    fun getUrlKey(): String? {
         sharedPreferences =
             context.getSharedPreferences(SHARED_PREFRENCE_NAME, Context.MODE_PRIVATE)
-        return sharedPreferences!!.getString(KEY_URL_TYPE, "")
+        return sharedPreferences.getString(KEY_URL_TYPE, "")
     }
 
-    fun IsSettingDisplayed(): Boolean? {
+    fun isSettingDisplayed(): Boolean {
         sharedPreferences =
             context.getSharedPreferences(SHARED_PREFRENCE_NAME, Context.MODE_PRIVATE)
-        return sharedPreferences!!.getBoolean(IS_KEY_SETTING_DISPLAYED, false)
+        return sharedPreferences.getBoolean(IS_KEY_SETTING_DISPLAYED, false)
     }
 
-    fun SetBuildFlavour(buildFlavour: String) {
+    fun setBuildFlavour(buildFlavour: String) {
         editor = context.getSharedPreferences(SHARED_PREFRENCE_NAME, Context.MODE_PRIVATE).edit()
         editor.putString(KEY_BUILD_FLAVOUR, buildFlavour)
         editor.apply()
     }
 
-    fun GetBuildFlavour(): String? {
+    fun getBuildFlavour(): String? {
         sharedPreferences =
             context.getSharedPreferences(SHARED_PREFRENCE_NAME, Context.MODE_PRIVATE)
-        return sharedPreferences!!.getString(KEY_BUILD_FLAVOUR, "")
+        return sharedPreferences.getString(KEY_BUILD_FLAVOUR, null)
     }
 
     companion object {
