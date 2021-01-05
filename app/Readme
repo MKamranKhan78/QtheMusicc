@@ -1,0 +1,16 @@
+change log need to be done as listed below
+
+
+TODO:
+
+DONE:
+
+1) complete the implementation of firebase cathartics.
+2) add utils function in kotlin extention like validate Email, image loading, timeStampConverter, ignoreFirstWhiteSpace
+// example https://www.raywenderlich.com/10986797-extension-functions-and-properties-in-kotlin
+3) implement extention file functions in proper kotlin extention
+// all extentions are place in Extention.kt file.
+4) implement cancel request in baseViewModel using DisposableManager
+//in baseViewModel create method name cancelApiRequest and add this line
+//DisposableManager.dispose()
+// this will cancel all api request which are currently inProcess

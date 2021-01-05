@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/customDialogTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_20dp"
+        android:padding="2dp"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/_20sp" />
+
+    <TextView
+        android:id="@+id/customDialogMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_22dp"
+        android:gravity="start"
+        android:padding="2dp"
+        android:textSize="@dimen/_18sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_30dp"
+        android:layout_marginBottom="@dimen/_20dp"
+        android:gravity="end"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <Button
+            android:id="@+id/cutomDialogBtnYes"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_marginEnd="@dimen/_5dp"
+            android:layout_marginRight="@dimen/_5dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/yes"
+            android:textColor="@android:color/white" />
+
+        <Button
+            android:id="@+id/cutomDialogBtnNo"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_marginStart="@dimen/_5dp"
+            android:layout_marginLeft="@dimen/_5dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/no"
+            android:textColor="@android:color/black" />
+    </LinearLayout>
+
+</LinearLayout>

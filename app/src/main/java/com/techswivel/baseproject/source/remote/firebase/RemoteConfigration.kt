@@ -1,19 +1,20 @@
-package com.techswivel.udeoglobe.helper.RemoteConfigrations
+package com.techswivel.baseproject.source.remote.firebase
 
 import android.content.Context
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
+import com.techswivel.baseproject.helper.RemoteConfigrations.RemoteConfigSharePrefrence
 import java.util.*
 
 class RemoteConfigration(private val context: Context) {
     private var isSettingDisplayed: Boolean? = null
 
-    fun FetchRemoteValues() {
+    fun fetchRemoteValues() {
         val remoteConfigSharePrefrence = RemoteConfigSharePrefrence(context)
         val map = HashMap<String, Any>()
         map["isSettingDisplayed"] = false
         val firebaseRemoteConfig: FirebaseRemoteConfig = FirebaseRemoteConfig.getInstance()
-        firebaseRemoteConfig.setDefaults(map)
+        firebaseRemoteConfig.setDefaultsAsync(map)
         val configSettings =
             FirebaseRemoteConfigSettings.Builder().setMinimumFetchIntervalInSeconds(0)
                 .build()
@@ -22,12 +23,9 @@ class RemoteConfigration(private val context: Context) {
             if (task.isSuccessful) {
                 isSettingDisplayed =
                     java.lang.Boolean.valueOf(firebaseRemoteConfig.getString("isSettingDisplayed"))
-                remoteConfigSharePrefrence.SetIsSettingFromRemote(isSettingDisplayed)
-                /*     if (remoteConfigSharePrefrence.GetUrl() == null) {
-                        remoteConfigSharePrefrence.SetUrl(Constants.STAGING_SERVER_URL, Constants.STAGING);
-                    }*/
+                remoteConfigSharePrefrence.setIsSettingFromRemote(isSettingDisplayed)
             } else {
-                task.exception!!.toString()
+                task.exception.toString()
             }
         }
     }

@@ -3,14 +3,14 @@ package com.techswivel.baseproject.constant
 
 object Constants {
 
-    const val STAGING = "STAGING"
-    const val PRODUTION = "PRODUTION"
-    const val ACCEPTANCE = "ACCEPTANCE"
-    const val DEVELOPMENT = "DEVELOPMENT"
-    const val STAGING_SERVER_URL = "https://staging.udeoglobe.com/api/v1/"
-    const val PRODUTION_SERVER_URL = "https://udeoglobe.com/api/v1/"
-    const val ACCEPTANCE_SERVER_URL = "https://acceptance.udeoglobe.com/api/v1/"
-    const val DEVELOPMENT_SERVER_URL = "https://www.udeoglobe.com/development/"
+    const val STAGING = "staging"
+    const val PRODUTION = "production"
+    const val ACCEPTANCE = "acceptance"
+    const val DEVELOPMENT = "development"
+    const val STAGING_SERVER_URL = "https://staging.base.com/api/v1/"
+    const val PRODUTION_SERVER_URL = "https://base.com/api/v1/"
+    const val ACCEPTANCE_SERVER_URL = "https://acceptance.base.com/api/v1/"
+    const val DEVELOPMENT_SERVER_URL = "https://development.base.com/api/v1/"
 
     val NO_INTERNET_TITLE = "NO INTERNET"
     val NO_INTERNET_MESSAGE = "Please connect to a stable internet"

@@ -1,13 +1,42 @@
 <resources>
     <string name="app_name">BaseProject</string>
-    <string name="google_client_id_staging">abcd</string>
-    <string name="google_client_id_development">abcd</string>
+
     <string name="google_client_id_acceptance">abcd</string>
+    <string name="google_client_secret_acceptance">abcd</string>
+    <string name="google_client_redirect_uri_acceptance">abcd</string>
+
+    <string name="google_client_id_development">abcd</string>
+    <string name="google_client_secret_development">abcd</string>
+    <string name="google_client_redirect_uri_development">abcd</string>
+
     <string name="google_client_id_production">abcd</string>
+    <string name="google_client_secret_production">abcd</string>
+    <string name="google_client_redirect_uri_production">abcd</string>
+
+    <string name="google_client_id_staging">abcd</string> <!-- 586601826954-bf3rmcj9dbhii39tpu9negagt85ebfjg.apps.googleusercontent.com -->
+    <string name="google_client_secret_staging">abcd</string> <!-- q25W9B3-pqWebWZ1ZY6Za6op -->
+    <string name="google_client_redirect_uri_staging">abcd</string> <!-- https://udeoglobe-staging.firebaseapp.com/__/auth/handler -->
+
     <string name="google_maps_key">abcd</string>
     <string name="no_internet">No Internet Connection</string>
     <string name="call_not_supported">Call Not Supported</string>
     <string name="pick_image_intent_text">Pick Image</string>
     <string name="something_wrong__with_direction_api">Some Thing went wrong with Direction Api</string>
     <string name="facebook_app_id">123456</string>
+    <string name="server_setting">Server Settings</string>
+    <string name="minimun_version">Minimun Version</string>
+    <string name="ok">OK</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="noInternetTitle">Please Connect to working internet</string>
+    <string name="checkInternetConnection">Please Connect to working internet</string>
+    <string name="alert">Alert</string>
+    <string name="retry">Retry</string>
+    <string name="areYouSure">Are You Sure?</string>
+    <string name="error_code">Error Code : </string>
+    <string name="session_expire_title">Session Expired</string>
+    <string name="session_expire_message">Your session has been expired please login again</string>
+    <string name="build_version">Build Version</string>
+    <string name="url">Url</string>
+    <string name="crash_app">Crash App</string>
 </resources>

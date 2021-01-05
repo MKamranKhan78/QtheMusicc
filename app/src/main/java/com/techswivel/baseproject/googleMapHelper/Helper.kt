@@ -1,4 +1,4 @@
-package com.techswivel.udeoglobe.googleMapHelper
+package com.techswivel.baseproject.googleMapHelper
 
 import android.content.Context
 import android.util.Log

@@ -1,4 +1,4 @@
-package com.techswivel.udeoglobe.helper
+package com.techswivel.baseproject.services
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.IntentSender.SendIntentException
 import android.location.Location
 import android.location.LocationManager
+import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.os.Looper
 import android.util.Log
@@ -19,6 +20,7 @@ import com.techswivel.baseproject.constant.Constants.LOCATION_UPDATE_DISTANCE
 import com.techswivel.baseproject.constant.Constants.LOCATION_UPDATE_TIME
 import com.techswivel.baseproject.utils.PermissionUtils
 import com.techswivel.baseproject.utils.PermissionUtils.PERMISSION_GPS_SETTING
+import java.util.function.Consumer
 
 
 class LocationManager constructor(
@@ -31,6 +33,12 @@ class LocationManager constructor(
     private var mLocationRequest: LocationRequest? = LocationRequest()
     private var mRequestLocationManager: LocationManager? = null
     private var mFusedLocationClient: FusedLocationProviderClient? = null
+    private val locationConsumerCallback = Consumer<Location> { location ->
+        if (null != location) {
+            mCallBack?.onLocationUpdate(location)
+        }
+    }
+
     private var locationCallback: LocationCallback = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult?) {
             locationResult ?: return
@@ -73,27 +81,37 @@ class LocationManager constructor(
 
     @SuppressLint("MissingPermission")
     fun getLastKnownLocation() {
-        mRequestLocationManager?.requestSingleUpdate(
-            LocationManager.NETWORK_PROVIDER,
-            object : android.location.LocationListener {
-                override fun onLocationChanged(location: Location?) {
-                    location?.let { mCallBack?.onLocationUpdate(it) }
-                }
+        if (SDK_INT >= android.os.Build.VERSION_CODES.R) {
+            // Fetching the one time current location.
+            // Handle runtime location permission, before calling this method, otherwise it will through the SecurityException.
+            // Provider, executor and Consumer<Location> cannot be passed null.
+            // Cancellation Request object can be passed as null.
 
-                override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
+            mRequestLocationManager?.getCurrentLocation(
+                LocationManager.NETWORK_PROVIDER,
+                null,
+                mActivity.mainExecutor,
+                locationConsumerCallback
+            )
 
-                }
+        } else {
+            mRequestLocationManager?.requestSingleUpdate(
+                LocationManager.NETWORK_PROVIDER,
+                object : android.location.LocationListener {
 
-                override fun onProviderEnabled(provider: String?) {
+                    override fun onLocationChanged(p0: Location) {
+                        p0.let { mCallBack?.onLocationUpdate(it) }
+                    }
 
-                }
+                    override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
 
-                override fun onProviderDisabled(provider: String?) {
+                    }
 
-                }
+                }, null
+            )
+        }
 
-            }, null
-        )
+
     }
 
     fun getLocationPermission() {
@@ -115,9 +133,10 @@ class LocationManager constructor(
         val task = client.checkLocationSettings(builder.build())
         task.addOnSuccessListener(mActivity) {
             Log.i(TAG, "onSuccess: GPS location is fine")
-            mCallBack?.onGPSSettingIsFine()
+            mCallBack?.isGPSSettingEnable(true)
         }
         task.addOnFailureListener(mActivity) { e ->
+            mCallBack?.isGPSSettingEnable(false)
             if (e is ResolvableApiException) {
                 Log.e(TAG, "onFailure: GPS Setting is not fine ")
 
@@ -158,7 +177,7 @@ class LocationManager constructor(
     }
 
     interface LocationManagerCallBack {
-        fun onGPSSettingIsFine()
+        fun isGPSSettingEnable(isEnable: Boolean)
         fun onLocationUpdate(pLocation: Location)
     }
 }

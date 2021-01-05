@@ -1,4 +1,4 @@
-package com.techswivel.udeoglobe.utils
+package com.techswivel.baseproject.utils
 
 import android.content.Context
 import android.content.SharedPreferences
