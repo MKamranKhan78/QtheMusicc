@@ -47,6 +47,7 @@ android {
     productFlavors {
         production {
             dimension "version"
+            applicationIdSuffix ".production"
             manifestPlaceholders = [
                     appIcon: "@mipmap/app_icon",
             ]
