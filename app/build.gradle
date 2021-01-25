@@ -146,7 +146,7 @@ dependencies {
 
 
     //facebook sdk
-    implementation 'com.facebook.android:facebook-android-sdk:5.15.1'
+    implementation 'com.facebook.android:facebook-android-sdk:8.1.0'
 
 
     //loading circle Image
