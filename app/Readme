@@ -5,5 +5,6 @@ TODO:
 2) Replace PrefUtils with DataFlow
 3) set log for environment specific
 4) implement advance crashlytics like add logs in firebase
+5) update rxjava to handle dummy data or database.
 DONE:
 1) add dark and light theme setting
