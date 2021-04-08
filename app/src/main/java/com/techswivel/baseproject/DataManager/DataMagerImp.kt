@@ -1,6 +1,7 @@
 package com.techswivel.baseproject.DataManager
 
 import com.techswivel.baseproject.googleMapHelper.DirectionObject
+import com.techswivel.dfaktfahrerapp.models.ResponseMain
 import com.techswivel.udeoglobe.model.GoogleResponseModel
 import io.reactivex.Observable
 import retrofit2.Response
@@ -10,5 +11,7 @@ interface DataMagerImp {
     fun getDirectionRoutes(url: String): Observable<DirectionObject>
 
     fun getGoogleAccessToken(serverAuthCode: String): Observable<Response<GoogleResponseModel>>
+
+    fun sendOTP(email: String): Observable<Response<ResponseMain>>
 
 }
