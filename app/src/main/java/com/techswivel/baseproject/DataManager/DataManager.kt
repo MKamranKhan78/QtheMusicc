@@ -1,11 +1,13 @@
 package com.techswivel.baseproject.DataManager
 
 import com.techswivel.baseproject.BuildConfig
+import com.techswivel.baseproject.DataManager.DummayDataManager.Companion.getResponseDummyData
 import com.techswivel.baseproject.R
 import com.techswivel.baseproject.application.BaseProjectApplication
 import com.techswivel.baseproject.constant.Constants
 import com.techswivel.baseproject.googleMapHelper.DirectionObject
 import com.techswivel.baseproject.source.remote.retrofit.ApiService
+import com.techswivel.dfaktfahrerapp.models.ResponseMain
 import com.techswivel.udeoglobe.model.GoogleAuthModel
 import com.techswivel.udeoglobe.model.GoogleResponseModel
 import io.reactivex.Observable
@@ -79,6 +81,18 @@ object DataManager : DataMagerImp {
         }
         return ApiService.getGoogleResponse().getGoogleToken(data).subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
+    }
+
+
+    /**
+     * This is example code for success dummy response now you don't need to pass data directly from doOnSubscribe.
+     * After that all apis are called same as this. */
+    override fun sendOTP(email: String): Observable<Response<ResponseMain>> {
+        return Observable.create { observer ->
+            // observer.onError(Throwable("This is dummy thorwable if you want to test failed case."))
+            observer.onNext(getResponseDummyData())
+            observer.onComplete()
+        }
     }
 
 

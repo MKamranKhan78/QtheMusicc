@@ -1,4 +1,4 @@
-package com.techswivel.baseproject.utils
+package com.techswivel.baseproject.source.local.prefrance
 
 import android.content.Context
 import android.content.SharedPreferences
