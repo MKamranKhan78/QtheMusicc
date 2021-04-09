@@ -7,5 +7,3 @@ TODO:
 3) implement advance crashlytics like add logs in firebase
 4) .idea file need to add in git ignore.
 DONE:
-1) add dark and light theme setting
-2) update rxjava to handle dummy data or database.
