@@ -9,4 +9,24 @@ TODO:
 5) add call back from adopter when view click is perform.
 6) add chooser fragment for image and videos
 7) add under development fragment.
+8) rename data package to customData
+9) separate dataManager for local and remote.
+10) add package with name fragment,dialogueFragment and custom widget.
+11) add class for custom swipe to delete for recyclerview.
+12) uncomment code for base viewHolder dataBinding.
+13) update Dialogue utils class
+14) add firebase message subscription topic.
+15) fix phone number validation issue.
+16) add new start activity method with flag but with out bundle.
+17) rename PRODUTION to PRODUCTION content.
+18) adjust ResponseModel for data object.
+19) uncomment code in ErrorUtils class.
+20) add some time stamp converter and all other converter put into converter class and set them to binding adapter.
+21) configure NDK for keys.
+22) add api key in data interceptor.
+23) remove third party file picker and unused file picker class and add new module for it.
+24) add network viewModel package.
+25) add color selector in the color package.
+26) add button selector for enable and disable.
+27) add generic validation process.
 DONE:
