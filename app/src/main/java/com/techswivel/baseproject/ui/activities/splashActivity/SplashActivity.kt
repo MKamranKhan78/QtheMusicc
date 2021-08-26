@@ -30,6 +30,7 @@ class SplashActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = ActivitySplashBinding.inflate(layoutInflater)
+        switchTheme(true)
         setContentView(mBinding.root)
         PermissionUtils.requestNetworkPermission(this)
         mViewModel = ViewModelProvider(
