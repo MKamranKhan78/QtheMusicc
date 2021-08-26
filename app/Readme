@@ -5,7 +5,6 @@ TODO:
 1) Replace PrefUtils with DataFlow
 2) set log for environment specific
 3) implement advance crashlytics like add logs in firebase
-4) .idea file need to add in git ignore.
 5) add call back from adopter when view click is perform.
 6) add chooser fragment for image and videos
 7) add under development fragment.
@@ -31,3 +30,4 @@ TODO:
 27) add generic validation process.
 
 DONE:
+4) .idea file need to add in git ignore.
