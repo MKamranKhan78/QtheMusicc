@@ -40,4 +40,7 @@
     <string name="build_version">Build Version</string>
     <string name="url">Url</string>
     <string name="crash_app">Crash App</string>
+    <string name="str_screen_under_development">Under Development Screen</string>
+    <string name="msg_subscribed">Subscribe To FCM Topic Successfully</string>
+    <string name="msg_subscribe_failed">Failed to Subscribe to FCM Topic</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.techswivel.baseproject.data.adapter
+package com.techswivel.baseproject.customData.adapter
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager

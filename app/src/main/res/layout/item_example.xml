@@ -5,7 +5,11 @@
 
         <variable
             name="click"
-            type="com.techswivel.baseproject.data.interfaces.AdapterOnClick" />
+            type="com.techswivel.baseproject.customData.interfaces.AdapterOnClick" />
+
+        <variable
+            name="obj"
+            type="com.techswivel.baseproject.models.ResponseMain" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -18,7 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:onClick="@{click.onViewClick}"
+            android:onClick="@{(view)-> click.onViewClick(view,obj)}"
             android:src="@drawable/ic_launcher_background" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

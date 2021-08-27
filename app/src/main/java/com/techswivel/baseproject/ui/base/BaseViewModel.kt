@@ -10,7 +10,7 @@ import com.techswivel.baseproject.source.remote.rxjava.DisposableManager
 
 abstract class BaseViewModel : ViewModel() {
     fun setServerName(textView: TextView) {
-        if (!BuildConfig.FLAVOR.equals(Constants.PRODUTION)) {
+        if (!BuildConfig.FLAVOR.equals(Constants.PRODUCTION)) {
             textView.visibility = View.VISIBLE
             textView.text = BuildConfig.FLAVOR.toUpperCase()
         } else {

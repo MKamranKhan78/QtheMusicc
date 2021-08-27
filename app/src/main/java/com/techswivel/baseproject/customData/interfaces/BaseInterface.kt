@@ -1,4 +1,4 @@
-package com.techswivel.baseproject.data.interfaces
+package com.techswivel.baseproject.customData.interfaces
 
 interface BaseInterface {
     fun showProgressBar()

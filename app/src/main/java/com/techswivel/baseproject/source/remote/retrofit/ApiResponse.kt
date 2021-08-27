@@ -1,8 +1,8 @@
 package com.techswivel.baseproject.source.remote.retrofit
 
 import com.techswivel.baseproject.googleMapHelper.DirectionObject
-import com.techswivel.udeoglobe.model.GoogleAuthModel
-import com.techswivel.udeoglobe.model.GoogleResponseModel
+import com.techswivel.baseproject.models.GoogleAuthModel
+import com.techswivel.baseproject.models.GoogleResponseModel
 import io.reactivex.Observable
 import retrofit2.Response
 import retrofit2.http.Body

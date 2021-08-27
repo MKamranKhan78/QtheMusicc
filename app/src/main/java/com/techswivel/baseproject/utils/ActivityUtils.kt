@@ -60,6 +60,12 @@ object ActivityUtils {
         activity.startActivity(intent)
     }
 
+    fun startNewActivity(activity: Activity, pClassName: Class<*>, flag: Int) {
+        val intent = Intent(activity, pClassName)
+        intent.addFlags(flag)
+        activity.startActivity(intent)
+    }
+
     fun openPlaceAutoCompleteActivity(mActivity: Activity) {
         try {
             val fields =

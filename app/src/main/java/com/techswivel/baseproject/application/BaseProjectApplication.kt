@@ -2,6 +2,7 @@ package com.techswivel.baseproject.application
 
 import android.app.Application
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
@@ -10,6 +11,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.libraries.places.api.Places
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.ktx.messaging
 import com.techswivel.baseproject.BuildConfig
 import com.techswivel.baseproject.R
 import com.techswivel.baseproject.constant.Constants
@@ -58,6 +61,15 @@ class BaseProjectApplication : Application(), LifecycleObserver {
         mContext = this
         Places.initialize(this, this.getString(R.string.google_maps_key))
         Places.createClient(this)
+
+        Firebase.messaging.subscribeToTopic(Constants.FCM_ANDROID_TOPIC)
+            .addOnCompleteListener { task ->
+                var msg = getString(R.string.msg_subscribed)
+                if (!task.isSuccessful) {
+                    msg = getString(R.string.msg_subscribe_failed)
+                }
+                Log.d("TAG", msg)
+            }
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)

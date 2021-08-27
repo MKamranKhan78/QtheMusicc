@@ -2,7 +2,9 @@ package com.techswivel.baseproject.source.remote.retrofit
 
 import android.annotation.SuppressLint
 import android.util.Log
+import com.techswivel.baseproject.BuildConfig
 import com.techswivel.baseproject.application.BaseProjectApplication
+import com.techswivel.baseproject.constant.Constants
 import com.techswivel.baseproject.source.local.prefrance.PrefUtils
 import com.techswivel.baseproject.utils.CommonKeys
 import okhttp3.Interceptor
@@ -38,6 +40,7 @@ class DataInterceptor : Interceptor {
             )
             Log.d(TAG, "JWT : ".plus(jwt))
             val requestBuilder = request.newBuilder()
+                .header("api-key", getApiKey())
                 .header("Authorization", jwt)
                 .header("Content-Type", "application/json")
                 .header("Accept", "application/json")
@@ -59,6 +62,23 @@ class DataInterceptor : Interceptor {
         return response.newBuilder()
             .body(ResponseBody.create(response.body()!!.contentType(), bodyString))
             .build()
+    }
+
+    private fun getApiKey(): String {
+        return when (BuildConfig.FLAVOR) {
+            Constants.STAGING -> {
+                Constants.STAGING_API_KEY
+            }
+            Constants.DEVELOPMENT -> {
+                Constants.DEVELOPMENT_API_KEY
+            }
+            Constants.ACCEPTANCE -> {
+                Constants.ACCEPTANCE_API_KEY
+            }
+            else -> {
+                Constants.PRODUCTION_API_KEY
+            }
+        }
     }
 
     companion object {

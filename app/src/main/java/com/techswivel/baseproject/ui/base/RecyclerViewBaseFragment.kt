@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
-import com.techswivel.baseproject.data.adapter.VerticalSpaceItemDecoration
+import com.techswivel.baseproject.customData.adapter.VerticalSpaceItemDecoration
 
 abstract class RecyclerViewBaseFragment : BaseFragment() {
 
