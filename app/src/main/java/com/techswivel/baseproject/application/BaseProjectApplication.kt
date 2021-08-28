@@ -2,7 +2,6 @@ package com.techswivel.baseproject.application
 
 import android.app.Application
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
@@ -16,6 +15,7 @@ import com.google.firebase.messaging.ktx.messaging
 import com.techswivel.baseproject.BuildConfig
 import com.techswivel.baseproject.R
 import com.techswivel.baseproject.constant.Constants
+import com.techswivel.baseproject.utils.Log
 
 
 class BaseProjectApplication : Application(), LifecycleObserver {

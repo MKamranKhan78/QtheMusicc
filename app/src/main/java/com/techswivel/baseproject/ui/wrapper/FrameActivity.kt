@@ -3,13 +3,13 @@ package com.techswivel.baseproject.ui.wrapper
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
-import android.util.Log
 import android.view.MenuItem
 import androidx.fragment.app.Fragment
 import com.techswivel.baseproject.R
 import com.techswivel.baseproject.ui.base.BaseActivity
 import com.techswivel.baseproject.utils.CommonKeys.Companion.KEY_DATA
 import com.techswivel.baseproject.utils.CommonKeys.Companion.KEY_FRAGMENT
+import com.techswivel.baseproject.utils.Log
 
 
 class FrameActivity : BaseActivity(), ActivityWrapperCallBacks {

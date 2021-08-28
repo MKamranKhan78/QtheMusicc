@@ -3,7 +3,6 @@ package com.techswivel.baseproject.googleMapHelper
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
-import android.util.Log
 import android.widget.Toast
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
@@ -16,6 +15,7 @@ import com.techswivel.baseproject.R
 import com.techswivel.baseproject.constant.Constants
 import com.techswivel.baseproject.constant.Constants.DIRECTION_API
 import com.techswivel.baseproject.source.remote.rxjava.CustomError
+import com.techswivel.baseproject.utils.Log
 import java.util.*
 
 @SuppressLint("StaticFieldLeak")

@@ -1,4 +1,4 @@
-package com.techswivel.baseproject.utils
+package com.techswivel.baseproject.helper
 
 import android.annotation.SuppressLint
 import android.content.Context

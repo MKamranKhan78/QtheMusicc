@@ -1,7 +1,7 @@
 package com.techswivel.baseproject.customData.adapter
 
-import android.util.Log
 import android.view.View
+import com.techswivel.baseproject.utils.Log
 
 class RecyclerViewAdapter(
     private val mAdapterCallBack: CallBack,

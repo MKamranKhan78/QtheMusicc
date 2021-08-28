@@ -27,7 +27,6 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Parcelable
 import android.provider.MediaStore
-import android.util.Log
 import androidx.annotation.Nullable
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider

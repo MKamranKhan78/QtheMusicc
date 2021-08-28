@@ -1,12 +1,12 @@
 package com.techswivel.baseproject.source.remote.retrofit
 
 import android.annotation.SuppressLint
-import android.util.Log
 import com.techswivel.baseproject.BuildConfig
 import com.techswivel.baseproject.application.BaseProjectApplication
 import com.techswivel.baseproject.constant.Constants
 import com.techswivel.baseproject.source.local.prefrance.PrefUtils
 import com.techswivel.baseproject.utils.CommonKeys
+import com.techswivel.baseproject.utils.Log
 import okhttp3.Interceptor
 import okhttp3.Request
 import okhttp3.Response

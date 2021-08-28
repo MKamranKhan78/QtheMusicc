@@ -1,11 +1,11 @@
 package com.techswivel.baseproject.ui.base
 
 import android.content.Context
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import com.techswivel.baseproject.utils.Log
 
 
 abstract class BaseFragment : Fragment() {

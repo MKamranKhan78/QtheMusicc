@@ -1,6 +1,6 @@
 package com.techswivel.dfaktfahrerapp.ui.fragments.underDevelopmentMessageFragment
 
-import androidx.lifecycle.ViewModel
+import com.techswivel.baseproject.ui.base.BaseViewModel
 
-class UnderDevelopmentMessageViewModel : ViewModel() {
+class UnderDevelopmentMessageViewModel : BaseViewModel() {
 }

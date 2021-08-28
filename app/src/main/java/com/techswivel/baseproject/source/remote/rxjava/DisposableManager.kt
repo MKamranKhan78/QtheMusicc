@@ -1,6 +1,6 @@
 package com.techswivel.baseproject.source.remote.rxjava
 
-import android.util.Log
+import com.techswivel.baseproject.utils.Log
 
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
