@@ -1,7 +1,7 @@
-package com.techswivel.baseproject.data.adapter
+package com.techswivel.baseproject.customData.adapter
 
-import android.util.Log
 import android.view.View
+import com.techswivel.baseproject.utils.Log
 
 class RecyclerViewAdapter(
     private val mAdapterCallBack: CallBack,
@@ -37,8 +37,8 @@ class RecyclerViewAdapter(
 
     }
 
-    override fun onViewClick(view: View) {
-        TODO("implement view on click")
+    override fun onViewClick(view: View, data: Any) {
+        mAdapterCallBack.onViewClicked(view, data)
     }
 
     override fun getLayoutIdForPosition(position: Int): Int {
@@ -73,8 +73,18 @@ class RecyclerViewAdapter(
     }
 
     interface CallBack {
-        fun onItemClick(data: Any?, position: Int)
-        fun onItemLongClick(view: View, data: Any?, position: Int)
+        fun onViewClicked(view: View, data: Any?) {
+
+        }
+
+        fun onItemClick(data: Any?, position: Int) {
+
+        }
+
+        fun onItemLongClick(view: View, data: Any?, position: Int) {
+
+        }
+
         fun inflateLayoutFromId(position: Int, data: Any?): Int
         fun onNoDataFound()
     }

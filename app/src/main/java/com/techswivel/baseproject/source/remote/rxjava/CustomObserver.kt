@@ -1,8 +1,8 @@
 package com.techswivel.baseproject.Data.RemoteRepository.ServerRepository
 
-import android.util.Log
 import com.techswivel.baseproject.source.remote.rxjava.CustomError
 import com.techswivel.baseproject.source.remote.rxjava.DisposableManager
+import com.techswivel.baseproject.utils.Log
 import io.reactivex.annotations.NonNull
 import io.reactivex.annotations.Nullable
 import io.reactivex.disposables.Disposable

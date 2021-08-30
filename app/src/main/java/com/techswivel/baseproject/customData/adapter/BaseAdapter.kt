@@ -1,4 +1,4 @@
-package com.techswivel.baseproject.data.adapter
+package com.techswivel.baseproject.customData.adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
-import com.techswivel.baseproject.data.interfaces.AdapterOnClick
+import com.techswivel.baseproject.customData.interfaces.AdapterOnClick
 
 abstract class BaseAdapter : RecyclerView.Adapter<BaseViewHolder>(), AdapterOnClick {
 

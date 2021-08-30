@@ -3,7 +3,7 @@ package com.techswivel.baseproject.ui.base
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.techswivel.baseproject.data.adapter.VerticalSpaceItemDecoration
+import com.techswivel.baseproject.customData.adapter.VerticalSpaceItemDecoration
 
 abstract class RecyclerViewBaseDialogFragment : BaseDialogFragment() {
     protected open fun setUpRecyclerView(pRecyclerView: RecyclerView) {

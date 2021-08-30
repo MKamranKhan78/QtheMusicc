@@ -11,7 +11,6 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.provider.MediaStore.Images
 import android.util.Base64
-import android.util.Log
 import com.android.volley.VolleyLog.TAG
 import com.techswivel.baseproject.application.BaseProjectApplication
 import java.io.ByteArrayOutputStream
@@ -21,6 +20,7 @@ import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
+
 object FileUtils {
     fun createImageFile(context: Context): File? {
         val timeStamp = Calendar.getInstance().timeInMillis

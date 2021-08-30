@@ -1,7 +1,6 @@
-package com.techswivel.baseproject
+package com.techswivel.baseproject.models
 
-import com.techswivel.baseproject.utils.NetworkStatus
-import com.techswivel.dfaktfahrerapp.models.ErrorResponce
+import com.techswivel.baseproject.customData.enums.NetworkStatus
 
 class ApiResponse private constructor(
     val status: NetworkStatus,

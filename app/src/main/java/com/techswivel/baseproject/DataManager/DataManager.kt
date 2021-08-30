@@ -6,10 +6,10 @@ import com.techswivel.baseproject.R
 import com.techswivel.baseproject.application.BaseProjectApplication
 import com.techswivel.baseproject.constant.Constants
 import com.techswivel.baseproject.googleMapHelper.DirectionObject
+import com.techswivel.baseproject.models.GoogleAuthModel
+import com.techswivel.baseproject.models.GoogleResponseModel
+import com.techswivel.baseproject.models.ResponseMain
 import com.techswivel.baseproject.source.remote.retrofit.ApiService
-import com.techswivel.dfaktfahrerapp.models.ResponseMain
-import com.techswivel.udeoglobe.model.GoogleAuthModel
-import com.techswivel.udeoglobe.model.GoogleResponseModel
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers

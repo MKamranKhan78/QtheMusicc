@@ -10,7 +10,6 @@ import android.location.LocationManager
 import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.os.Looper
-import android.util.Log
 import android.widget.Toast
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
@@ -18,6 +17,7 @@ import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
 import com.techswivel.baseproject.constant.Constants.LOCATION_UPDATE_DISTANCE
 import com.techswivel.baseproject.constant.Constants.LOCATION_UPDATE_TIME
+import com.techswivel.baseproject.utils.Log
 import com.techswivel.baseproject.utils.PermissionUtils
 import com.techswivel.baseproject.utils.PermissionUtils.PERMISSION_GPS_SETTING
 import java.util.function.Consumer

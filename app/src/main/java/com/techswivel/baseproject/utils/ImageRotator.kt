@@ -23,7 +23,6 @@ import android.graphics.Matrix
 import android.media.ExifInterface
 import android.net.Uri
 import android.provider.MediaStore
-import android.util.Log
 
 /**
  * Author: Mario Velasco Casquero

@@ -115,8 +115,8 @@ object ApiService {
             BuildConfig.FLAVOR.equals(Constants.STAGING) -> {
                 Constants.STAGING_SERVER_URL
             }
-            BuildConfig.FLAVOR.equals(Constants.PRODUTION) -> {
-                Constants.PRODUTION_SERVER_URL
+            BuildConfig.FLAVOR.equals(Constants.PRODUCTION) -> {
+                Constants.PRODUCTION_SERVER_URL
             }
             BuildConfig.FLAVOR.equals(Constants.ACCEPTANCE) -> {
                 Constants.ACCEPTANCE_SERVER_URL

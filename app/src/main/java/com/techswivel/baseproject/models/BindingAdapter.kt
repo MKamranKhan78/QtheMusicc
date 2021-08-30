@@ -1,4 +1,4 @@
-package com.techswivel.dfaktfahrerapp.models
+package com.techswivel.baseproject.models
 
 import android.os.Build
 import android.widget.ImageView

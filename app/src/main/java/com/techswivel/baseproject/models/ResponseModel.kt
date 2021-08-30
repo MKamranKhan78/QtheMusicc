@@ -1,4 +1,4 @@
-package com.techswivel.dfaktfahrerapp.models
+package com.techswivel.baseproject.models
 
 import com.google.gson.annotations.SerializedName
 
@@ -8,5 +8,5 @@ data class ResponseModel(
     @SerializedName("message")
     var message: String,
     @SerializedName("data")
-    var data: Any
+    var data: MyDataClass
 )

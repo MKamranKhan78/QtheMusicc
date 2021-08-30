@@ -1,8 +1,8 @@
 package com.techswivel.baseproject.DataManager
 
 import com.techswivel.baseproject.googleMapHelper.DirectionObject
-import com.techswivel.dfaktfahrerapp.models.ResponseMain
-import com.techswivel.udeoglobe.model.GoogleResponseModel
+import com.techswivel.baseproject.models.GoogleResponseModel
+import com.techswivel.baseproject.models.ResponseMain
 import io.reactivex.Observable
 import retrofit2.Response
 

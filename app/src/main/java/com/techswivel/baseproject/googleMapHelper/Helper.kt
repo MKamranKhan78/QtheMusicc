@@ -1,10 +1,9 @@
 package com.techswivel.baseproject.googleMapHelper
 
 import android.content.Context
-import android.util.Log
 import com.techswivel.baseproject.R
-
 import com.techswivel.baseproject.constant.Constants.DIRECTION_API
+import com.techswivel.baseproject.utils.Log
 
 class Helper(var pContext: Context) {
     companion object {

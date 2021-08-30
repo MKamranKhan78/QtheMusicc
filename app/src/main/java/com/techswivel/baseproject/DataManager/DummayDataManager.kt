@@ -1,8 +1,8 @@
 package com.techswivel.baseproject.DataManager
 
 import com.techswivel.baseproject.models.MyDataClass
-import com.techswivel.dfaktfahrerapp.models.ResponseMain
-import com.techswivel.dfaktfahrerapp.models.ResponseModel
+import com.techswivel.baseproject.models.ResponseMain
+import com.techswivel.baseproject.models.ResponseModel
 import retrofit2.Response
 
 class DummayDataManager {
