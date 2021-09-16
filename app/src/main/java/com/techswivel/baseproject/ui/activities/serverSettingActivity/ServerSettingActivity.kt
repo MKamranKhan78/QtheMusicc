@@ -57,7 +57,8 @@ class ServerSettingActivity : BaseActivity() {
         }
         val versionName = packageManager
             .getPackageInfo(packageName, 0).versionName
-        val buildVersion = "Build Number: $versionCode\nVersion Name :$versionName"
+        val buildVersion =
+            "Build Number:$versionCode\nVersion Name :$versionName"
         mBinding.textViewBuildVersion.text = buildVersion
     }
 

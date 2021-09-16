@@ -9,26 +9,27 @@ android {
     compileSdkVersion 30
     buildToolsVersion "30.0.2"
     def appVersion = '1.0.0'
+    def appCenterBuildID = "${System.env.APPCENTER_BUILD_ID}" != "null" ? "${System.env.APPCENTER_BUILD_ID}" : "1"
     
     defaultConfig {
         applicationId "com.techswivel.baseproject"
         minSdkVersion 16
         targetSdkVersion 30
-        versionCode 1
+        versionCode appCenterBuildID.toInteger()
         versionName appVersion
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("int", "APPCENTER_BUILD_ID", appCenterBuildID)
     }
 
     buildTypes {
         release {
-
             manifestPlaceholders = [enableCrashReporting: "true"]
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             applicationVariants.all { variant ->
                 variant.outputs.all { output ->
-                    outputFileName = new File("{Base Project}_v{" + variant.versionName + "}({" + variant.versionCode + "})" + ".apk")
+                    outputFileName = new File("{Base Project}_v" + variant.versionName + "(" + android.defaultConfig.buildConfigFields["APPCENTER_BUILD_ID"].value + ")" + ".apk")
                 }
             }
         }
@@ -37,7 +38,7 @@ android {
                     manifestPlaceholders = [enableCrashReporting: "false"]
                     applicationVariants.all { variant ->
                         variant.outputs.all { output ->
-                            outputFileName = new File("Base_project-v" + variant.versionName + ".apk")
+                            outputFileName = new File("Base_project-v" + variant.versionName + "(" + android.defaultConfig.buildConfigFields["APPCENTER_BUILD_ID"].value + ")" + ".apk")
                         }
                     }
                 }
