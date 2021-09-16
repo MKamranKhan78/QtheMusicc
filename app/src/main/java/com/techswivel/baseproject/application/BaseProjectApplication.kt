@@ -59,6 +59,11 @@ class BaseProjectApplication : Application(), LifecycleObserver {
         Places.initialize(this, this.getString(R.string.google_maps_key))
         Places.createClient(this)
 
+
+        /**
+         * FacebookSdk was not initialized because of that app was getting crash
+         * you need to un comment code after configuring firebase with the application.
+         * */
 //        Firebase.messaging.subscribeToTopic(Constants.FCM_ANDROID_TOPIC)
 //            .addOnCompleteListener { task ->
 //                var msg = getString(R.string.msg_subscribed)
