@@ -38,7 +38,7 @@ android {
                     manifestPlaceholders = [enableCrashReporting: "false"]
                     applicationVariants.all { variant ->
                         variant.outputs.all { output ->
-                            outputFileName = new File("Base_project-v{" + variant.versionName + "}(" + android.defaultConfig.buildConfigFields["APPCENTER_BUILD_ID"].value + ")" + ".apk")
+                            outputFileName = new File("Base_project-v" + variant.versionName + "(" + android.defaultConfig.buildConfigFields["APPCENTER_BUILD_ID"].value + ")" + ".apk")
                         }
                     }
                 }
