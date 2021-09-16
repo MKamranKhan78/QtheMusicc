@@ -9,6 +9,7 @@ android {
     compileSdkVersion 30
     buildToolsVersion "30.0.2"
     def appVersion = '1.0.0'
+    def appCenterBuildID = "${System.env.APPCENTER_BUILD_ID}" != "null" ? "${System.env.APPCENTER_BUILD_ID}" : "1"
     
     defaultConfig {
         applicationId "com.techswivel.baseproject"
@@ -18,7 +19,7 @@ android {
         versionName appVersion
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        buildConfigField("int", "APPCENTER_BUILD_ID", "${System.env.APPCENTER_BUILD_ID}")
+        buildConfigField("int", "APPCENTER_BUILD_ID", appCenterBuildID)
     }
 
     buildTypes {

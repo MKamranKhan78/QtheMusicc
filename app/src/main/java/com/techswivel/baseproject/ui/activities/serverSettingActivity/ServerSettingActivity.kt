@@ -1,6 +1,5 @@
 package com.techswivel.baseproject.ui.activities.serverSettingActivity
 
-import android.os.Build
 import android.os.Bundle
 import android.view.View
 import com.techswivel.baseproject.BuildConfig
@@ -50,11 +49,7 @@ class ServerSettingActivity : BaseActivity() {
 
     private fun getAndSetBuildVersion() {
 
-        val versionCode = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            packageManager.getPackageInfo(packageName, 0).longVersionCode
-        } else {
-            packageManager.getPackageInfo(packageName, 0).versionCode
-        }
+        val versionCode = BuildConfig.APPCENTER_BUILD_ID
         val versionName = packageManager
             .getPackageInfo(packageName, 0).versionName
         val buildVersion =
