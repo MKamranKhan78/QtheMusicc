@@ -15,7 +15,7 @@ android {
         applicationId "com.techswivel.baseproject"
         minSdkVersion 16
         targetSdkVersion 30
-        versionCode 1
+        versionCode appCenterBuildID.toInteger()
         versionName appVersion
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -29,7 +29,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             applicationVariants.all { variant ->
                 variant.outputs.all { output ->
-                    outputFileName = new File("{Base Project}_v{" + variant.versionName + "}(" + android.defaultConfig.buildConfigFields["APPCENTER_BUILD_ID"].value + ")" + ".apk")
+                    outputFileName = new File("{Base Project}_v" + variant.versionName + "(" + android.defaultConfig.buildConfigFields["APPCENTER_BUILD_ID"].value + ")" + ".apk")
                 }
             }
         }
