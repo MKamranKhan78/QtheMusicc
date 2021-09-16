@@ -18,7 +18,7 @@ android {
         versionName appVersion
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        buildConfigField("String", "APPCENTER_BUILD_ID", "\"${System.env.APPCENTER_BUILD_ID}\"")
+        buildConfigField("String", "APPCENTER_BUILD_ID", "${System.env.APPCENTER_BUILD_ID}")
     }
 
     buildTypes {
