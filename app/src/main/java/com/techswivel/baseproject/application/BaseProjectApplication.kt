@@ -61,7 +61,7 @@ class BaseProjectApplication : Application(), LifecycleObserver {
 
 
         /**
-         * FacebookSdk was not initialized because of that app was getting crash
+         * FirebaseAuth was not initialized because of that app was getting crash
          * you need to un comment code after configuring firebase with the application.
          * */
 //        Firebase.messaging.subscribeToTopic(Constants.FCM_ANDROID_TOPIC)
