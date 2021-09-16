@@ -22,13 +22,12 @@ android {
 
     buildTypes {
         release {
-
             manifestPlaceholders = [enableCrashReporting: "true"]
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             applicationVariants.all { variant ->
                 variant.outputs.all { output ->
-                    outputFileName = new File("{Base Project}_v{" + variant.versionName + "}({" + buildConfigField("String", "APPCENTER_BUILD_ID", "\"${System.env.APPCENTER_BUILD_ID}\"") + "})" + ".apk")
+                    outputFileName = new File("{Base Project}_v{" + variant.versionName + "}(" + buildConfigField("String", "APPCENTER_BUILD_ID", "\"${System.getenv("APPCENTER_BUILD_ID")}\"") + ")" + ".apk")
                 }
             }
         }
