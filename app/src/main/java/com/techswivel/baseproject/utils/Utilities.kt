@@ -26,4 +26,24 @@ object Utilities {
         val sdf = SimpleDateFormat(formatter)
         return sdf.format(Date().time)
     }
+
+    fun getAndroidVersion(apiLevel: Int): String {
+        return when (apiLevel) {
+            16 -> "4.1"
+            17 -> "4.2"
+            18 -> "4.3"
+            19 -> "4.4"
+            21 -> "5.0"
+            22 -> "5.1"
+            23 -> "6.0"
+            24 -> "7.0"
+            25 -> "7.1"
+            26 -> "8.0"
+            27 -> "8.1"
+            28 -> "9.0"
+            29 -> "10.0"
+            30 -> "11"
+            else -> ""
+        }
+    }
 }
