@@ -1,5 +1,6 @@
 package com.techswivel.baseproject.ui.activities.serverSettingActivity
 
+import android.content.pm.ApplicationInfo
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -9,6 +10,7 @@ import com.techswivel.baseproject.constant.Constants
 import com.techswivel.baseproject.databinding.ActivityServerSettingBinding
 import com.techswivel.baseproject.helper.RemoteConfigrations.RemoteConfigSharePrefrence
 import com.techswivel.baseproject.ui.base.BaseActivity
+import com.techswivel.baseproject.utils.Utilities
 
 class ServerSettingActivity : BaseActivity() {
 
@@ -34,7 +36,17 @@ class ServerSettingActivity : BaseActivity() {
     }
 
     private fun setMinimumVersion() {
-        mBinding.textMinimumVersion.text = getString(R.string.minimun_version).plus(" = 16 (4.1.0)")
+        val appInfo: ApplicationInfo =
+            packageManager.getApplicationInfo(this.applicationInfo.packageName, 0)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            mBinding.textMinimumVersion.text =
+                getString(R.string.minimun_version).plus(" = ")
+                    .plus(appInfo.minSdkVersion.toString()).plus(" (")
+                    .plus(Utilities.getAndroidVersion(appInfo.minSdkVersion)).plus(")")
+        } else {
+            mBinding.textMinimumVersion.text =
+                getString(R.string.minimun_version).plus(" = 16 (4.1.0)")
+        }
     }
 
 
