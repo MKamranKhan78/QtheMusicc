@@ -15,5 +15,6 @@ TODO:
 11) add color selector in the color package.
 12) add button selector for enable and disable.
 13) add generic validation process.
+14) add permission handler base fragment using this (https://premsinghsodha7.medium.com/android-runtime-permissions-with-coroutines-9722bb04657e) article
 
 DONE:
