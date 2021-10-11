@@ -95,7 +95,7 @@ object DialogUtils {
 
     fun retryErrorAlert(pContext: Context, pTitle: String, pMessage: String, pCallBack: CallBack) {
         val errorDialog = AlertDialog.Builder(pContext).create()
-        errorDialog.setTitle(pContext.getString(R.string.error_code).plus(pTitle))
+        errorDialog.setTitle(pContext.getString(R.string.error))
         errorDialog.setCancelable(false)
         errorDialog.setMessage(pMessage)
         errorDialog.setButton(
