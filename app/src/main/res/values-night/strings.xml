@@ -29,12 +29,11 @@
     <string name="ok">OK</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
-    <string name="noInternetTitle">Please Connect to working internet</string>
-    <string name="checkInternetConnection">Please Connect to working internet</string>
+    <string name="noInternet">Please Connect to working internet</string>
     <string name="alert">Alert</string>
     <string name="retry">Retry</string>
     <string name="areYouSure">Are You Sure?</string>
-    <string name="error_code">Error Code : </string>
+    <string name="error">Error</string>
     <string name="session_expire_title">Session Expired</string>
     <string name="session_expire_message">Your session has been expired please login again</string>
     <string name="build_version">Build Version</string>
