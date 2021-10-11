@@ -23,6 +23,7 @@ object ApiService {
      * OkHttpClient handle server Communication with Retrofit framework
      */
     private val client = OkHttpClient.Builder()
+        .addInterceptor(NetworkConnectionInterceptor())
         .addInterceptor(DataInterceptor())
         .connectTimeout(3, TimeUnit.MINUTES)
         .readTimeout(3, TimeUnit.MINUTES)
