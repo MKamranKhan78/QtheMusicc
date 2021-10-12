@@ -12,16 +12,6 @@ import com.techswivel.baseproject.R
 
 object DialogUtils {
 
-    fun noInterNetMessage(pContext: Context) {
-        val noInterNetMessage = AlertDialog.Builder(pContext).create()
-        noInterNetMessage.setTitle(pContext.resources.getString(R.string.noInternetTitle))
-        noInterNetMessage.setCancelable(false)
-        noInterNetMessage.setMessage(pContext.resources.getString(R.string.checkInternetConnection))
-        noInterNetMessage.setButton(
-            AlertDialog.BUTTON_POSITIVE, pContext.resources.getString(R.string.ok)
-        ) { dialog, _ -> dialog.dismiss() }
-        noInterNetMessage.show()
-    }
 
     fun suretyDialog(pContext: Context, mMessage: String, pTitle: String, pCallBack: CallBack) {
         val suretyDialog = AlertDialog.Builder(pContext).create()
