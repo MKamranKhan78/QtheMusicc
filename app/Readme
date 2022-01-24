@@ -18,3 +18,4 @@ TODO:
 14) add permission handler base fragment using this (https://premsinghsodha7.medium.com/android-runtime-permissions-with-coroutines-9722bb04657e) article
 
 DONE:
+0) Migration from JCenter to MavenCentral.
