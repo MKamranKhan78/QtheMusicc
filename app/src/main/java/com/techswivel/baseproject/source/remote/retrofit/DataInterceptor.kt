@@ -18,7 +18,10 @@ import java.io.IOException
  * Created by Nasar Iqbal on 2/27/2018.
  */
 class DataInterceptor : Interceptor {
-
+    private external fun getStagingApiKey(): String?
+    private external fun getDevelopmentApiKey(): String?
+    private external fun getAcceptanceApiKey(): String?
+    private external fun getProductionApiKey(): String?
 
     @Throws(IOException::class)
     override fun intercept(chain: Interceptor.Chain): Response {
@@ -64,19 +67,19 @@ class DataInterceptor : Interceptor {
             .build()
     }
 
-    private fun getApiKey(): String {
+    private fun getApiKey(): String? {
         return when (BuildConfig.FLAVOR) {
             Constants.STAGING -> {
-                Constants.STAGING_API_KEY
+                getStagingApiKey()
             }
             Constants.DEVELOPMENT -> {
-                Constants.DEVELOPMENT_API_KEY
+                getDevelopmentApiKey()
             }
             Constants.ACCEPTANCE -> {
-                Constants.ACCEPTANCE_API_KEY
+                getAcceptanceApiKey()
             }
             else -> {
-                Constants.PRODUCTION_API_KEY
+                getProductionApiKey()
             }
         }
     }
