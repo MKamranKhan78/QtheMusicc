@@ -2,7 +2,6 @@ change log need to be done as listed below
 
 
 TODO:
-1) Replace PrefUtils with DataFlow
 2) implement advance crashlytics like add logs in firebase
 3) add chooser fragment for image and videos
 4) separate dataManager for local and remote.
@@ -19,3 +18,4 @@ TODO:
 DONE:
 0) Migration from JCenter to MavenCentral.
 9) configure NDK for keys.
+1) Replace PrefUtils with DataFlow

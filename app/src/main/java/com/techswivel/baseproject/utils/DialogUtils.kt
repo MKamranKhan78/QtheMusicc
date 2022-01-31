@@ -36,7 +36,7 @@ object DialogUtils {
     }
 
 
-    fun eetryDialog(pContext: Context, message: String, pCallBack: CallBack) {
+    fun retryDialog(pContext: Context, message: String, pCallBack: CallBack) {
         val retryAlertDialog = AlertDialog.Builder(pContext).create()
         retryAlertDialog.setTitle(pContext.resources.getString(R.string.alert))
         retryAlertDialog.setCancelable(false)

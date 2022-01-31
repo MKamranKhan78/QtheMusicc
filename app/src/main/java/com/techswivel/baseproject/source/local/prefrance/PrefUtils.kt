@@ -3,6 +3,10 @@ package com.techswivel.baseproject.source.local.prefrance
 import android.content.Context
 import android.content.SharedPreferences
 
+/**
+ * This class is Deprecated now, use [DataStoreUtils] instead.
+ */
+
 object PrefUtils {
     private val PREF_NAME = "_Pref_"
 
