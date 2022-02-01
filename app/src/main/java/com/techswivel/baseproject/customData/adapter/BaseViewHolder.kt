@@ -11,12 +11,6 @@ class BaseViewHolder(private val mBinding: ViewDataBinding) :
     fun bind(obj: Any?, callBack: AdapterOnClick) {
         mBinding.setVariable(BR.obj, obj)
         mBinding.setVariable(BR.click, callBack)
-//        mBinding.setVariable(BR.position, layoutPosition)
         mBinding.executePendingBindings()
     }
-
-    fun getmBinding(): ViewDataBinding {
-        return mBinding
-    }
-
 }

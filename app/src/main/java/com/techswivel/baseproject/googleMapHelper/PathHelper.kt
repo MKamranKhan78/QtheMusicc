@@ -10,13 +10,12 @@ import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.Polyline
 import com.google.android.gms.maps.model.PolylineOptions
 import com.techswivel.baseproject.Data.RemoteRepository.ServerRepository.CustomObserver
-import com.techswivel.baseproject.DataManager.DataManager
+import com.techswivel.baseproject.DataManager.RemoteDataManager
 import com.techswivel.baseproject.R
 import com.techswivel.baseproject.constant.Constants
 import com.techswivel.baseproject.constant.Constants.DIRECTION_API
 import com.techswivel.baseproject.source.remote.rxjava.CustomError
 import com.techswivel.baseproject.utils.Log
-import java.util.*
 
 @SuppressLint("StaticFieldLeak")
 object PathHelper {
@@ -45,7 +44,7 @@ object PathHelper {
 
 
     private fun getDirectionFromDirectionApiServer(URL: String) {
-        val dataManager = DataManager
+        val dataManager = RemoteDataManager
         dataManager.getDirectionRoutes(URL)
             .subscribe(object : CustomObserver<DirectionObject>() {
                 override fun onSuccess(t: DirectionObject) {

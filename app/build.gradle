@@ -131,7 +131,7 @@ dependencies {
     //multiDex
     implementation 'androidx.multidex:multidex:2.0.1'
 
-    //phonumber validation
+    //phone number validation
     implementation 'io.michaelrocks:libphonenumber-android:8.12.41'
 
     //Google map
@@ -156,15 +156,14 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation "android.arch.lifecycle:common-java8:1.1.1"
 
+    //Dagger
     kapt 'com.squareup.inject:assisted-inject-processor-dagger2:0.5.2'
     kapt "com.google.dagger:dagger-compiler:$dagger2Version"
     kapt "com.google.dagger:dagger-android-processor:$dagger2Version"
     implementation "com.google.dagger:dagger-android-support:$dagger2Version"
 
-
     //facebook sdk
     implementation 'com.facebook.android:facebook-android-sdk:12.0.0'
-
 
     //loading circle Image
     implementation 'de.hdodenhof:circleimageview:3.1.0'

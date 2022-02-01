@@ -5,10 +5,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
-import com.techswivel.baseproject.DataManager.DataManager
+import com.techswivel.baseproject.DataManager.RemoteDataManager
 
 object BindingAdapter {
-    val mDataManager = DataManager
+    val mDataManager = RemoteDataManager
 
     @JvmStatic
     @BindingAdapter("setTextToTextView")

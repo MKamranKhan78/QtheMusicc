@@ -3,15 +3,9 @@ change log need to be done as listed below
 
 TODO:
 2) implement advance crashlytics like add logs in firebase
-3) add chooser fragment for image and videos
-4) separate dataManager for local and remote.
-5) uncomment code for base viewHolder dataBinding.
-6) update Dialogue utils class
+ 3) add chooser fragment for image and videos
 7) fix phone number validation issue.
 8) add some time stamp converter and all other converter put into converter class and set them to binding adapter.
-10) remove third party file picker and unused file picker class and add new module for it.
-11) add color selector in the color package.
-12) add button selector for enable and disable.
 13) add generic validation process.
 14) add permission handler base fragment using this (https://premsinghsodha7.medium.com/android-runtime-permissions-with-coroutines-9722bb04657e) article
 
@@ -19,3 +13,9 @@ DONE:
 0) Migration from JCenter to MavenCentral.
 9) configure NDK for keys.
 1) Replace PrefUtils with DataFlow
+5) uncomment code for base viewHolder dataBinding.
+6) update Dialogue utils class
+10) remove third party file picker and unused file picker class and add new module for it.
+12) add button selector for enable and disable.
+11) add color selector in the color package.
+4) separate dataManager for local and remote.

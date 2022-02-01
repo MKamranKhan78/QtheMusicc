@@ -6,7 +6,7 @@ import com.techswivel.baseproject.models.ResponseMain
 import io.reactivex.Observable
 import retrofit2.Response
 
-interface DataMagerImp {
+interface DataManagerImp {
     //Remote calls
     fun getDirectionRoutes(url: String): Observable<DirectionObject>
 
