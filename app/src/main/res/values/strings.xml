@@ -41,4 +41,13 @@
     <string name="str_screen_under_development">Under Development Screen</string>
     <string name="msg_subscribed">Subscribe To FCM Topic Successfully</string>
     <string name="msg_subscribe_failed">Failed to Subscribe to FCM Topic</string>
+    <string name="str_select_image">Select Image</string>
+    <string name="str_select_video">Select Video</string>
+    <string name="str_gallery">Gallery</string>
+    <string name="str_camera">Camera</string>
+    <string name="cancel">Cancel</string>
+    <string name="go_to_setting">Go To Setting</string>
+    <string name="camera_permission_msg">Please enable camera permission from Settings.</string>
+    <string name="gallery_permission_msg">Please enable gallery permission from Settings.</string>
+    <string name="permission_denied">Permission Denied</string>
 </resources>

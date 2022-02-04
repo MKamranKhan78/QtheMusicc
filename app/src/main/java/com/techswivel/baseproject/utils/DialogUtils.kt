@@ -1,8 +1,13 @@
 package com.techswivel.baseproject.utils
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
+import android.content.DialogInterface
+import android.content.Intent
+import android.net.Uri
+import android.provider.Settings
 import android.view.Window
 import android.widget.Button
 import android.widget.TextView
@@ -174,6 +179,32 @@ object DialogUtils {
         }
         dialog.show()
 
+    }
+
+    fun goToSystemLocationSetting(activity: Activity, permissionMessage: String) {
+        val alertDialog = androidx.appcompat.app.AlertDialog.Builder(activity).create()
+        alertDialog.setTitle(activity.getString(R.string.alert))
+        alertDialog.setMessage(
+            permissionMessage
+        )
+        alertDialog.setCancelable(false)
+        alertDialog.setButton(
+            androidx.appcompat.app.AlertDialog.BUTTON_POSITIVE,
+            activity.getString(R.string.go_to_setting)
+        ) { dialog: DialogInterface, which: Int ->
+            val intent = Intent()
+            intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+            val uri = Uri.fromParts("package", activity.packageName, null)
+            intent.data = uri
+            activity.startActivity(intent)
+            dialog.dismiss()
+        }
+        alertDialog.setButton(
+            androidx.appcompat.app.AlertDialog.BUTTON_NEGATIVE, activity.getString(R.string.cancel)
+        ) { dialog: DialogInterface, which: Int ->
+            dialog.dismiss()
+        }
+        alertDialog.show()
     }
 
     interface CallBack {

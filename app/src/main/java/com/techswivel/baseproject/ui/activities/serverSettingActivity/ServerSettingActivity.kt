@@ -1,6 +1,7 @@
 package com.techswivel.baseproject.ui.activities.serverSettingActivity
 
 import android.content.pm.ApplicationInfo
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -10,9 +11,12 @@ import com.techswivel.baseproject.constant.Constants
 import com.techswivel.baseproject.databinding.ActivityServerSettingBinding
 import com.techswivel.baseproject.helper.RemoteConfigrations.RemoteConfigSharePrefrence
 import com.techswivel.baseproject.ui.base.BaseActivity
+import com.techswivel.baseproject.ui.dialogFragments.chooserDialogFragment.ChooserDialogFragment
+import com.techswivel.baseproject.utils.CommonKeys
+import com.techswivel.baseproject.utils.Log
 import com.techswivel.baseproject.utils.Utilities
 
-class ServerSettingActivity : BaseActivity() {
+class ServerSettingActivity : BaseActivity(), ChooserDialogFragment.CallBack {
 
     private var remoteConfigSharedPrefrences: RemoteConfigSharePrefrence? = null
 
@@ -56,7 +60,10 @@ class ServerSettingActivity : BaseActivity() {
         } else {
             mBinding.buttonCrash.visibility = View.GONE
         }
-        mBinding.buttonCrash.setOnClickListener { Constants.STAGING.toInt() }
+        mBinding.buttonCrash.setOnClickListener {
+            openChooserDialog(CommonKeys.TYPE_PHOTO)
+//            Constants.STAGING.toInt()
+        }
 
     }
 
@@ -81,5 +88,18 @@ class ServerSettingActivity : BaseActivity() {
 
     private fun initalizComponents() {
         remoteConfigSharedPrefrences = RemoteConfigSharePrefrence(this)
+    }
+
+    private fun openChooserDialog(viewType: Int) {
+        val fragmentTransaction = supportFragmentManager.beginTransaction()
+        // Create and show the dialog.
+        val dialogFragment =
+            ChooserDialogFragment.newInstance(viewType, 1, this)
+        dialogFragment.show(fragmentTransaction, "dialog")
+
+    }
+
+    override fun onActivityResult(requestCode: Int, mImageUri: List<Uri>?) {
+        Log.e("Tag12312", "Result $mImageUri")
     }
 }
