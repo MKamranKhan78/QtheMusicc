@@ -3,6 +3,7 @@ package com.techswivel.baseproject.ui.dialogFragments.chooserDialogFragment
 import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
@@ -14,9 +15,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.Toast
-import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.lifecycle.ViewModelProvider
 import com.techswivel.baseproject.R
+import com.techswivel.baseproject.constant.Constants.CAMERA_PICKER_REQUEST_CODE
+import com.techswivel.baseproject.constant.Constants.IMAGE_PICKER_REQUEST_CODE
+import com.techswivel.baseproject.constant.Constants.VIDEO_CAMERA_PICKER_REQUEST_CODE
+import com.techswivel.baseproject.constant.Constants.VIDEO_GALLERY_PICKER_REQUEST_CODE
 import com.techswivel.baseproject.databinding.FragmentDialogChooserBinding
 import com.techswivel.baseproject.ui.base.BaseDialogFragment
 import com.techswivel.baseproject.utils.CommonKeys
@@ -26,24 +31,8 @@ import com.techswivel.baseproject.utils.PermissionUtils
 
 class ChooserDialogFragment : BaseDialogFragment() {
     private lateinit var binding: FragmentDialogChooserBinding
-    private var mImageUri: MutableList<Uri> = ArrayList()
-    private lateinit var getContentAlbum: ActivityResultLauncher<String>
-    private lateinit var getContentCamera: ActivityResultLauncher<Intent>
-
+    private lateinit var viewModel: ChooserDialogFragmentViewModel
     private var callBack: CallBack? = null
-
-    private var mRequestCode: Int = -1
-
-    private var viewType = 0
-    private var limitOfPickImage: Int = 0
-
-    private val IMAGE_PICKER_REQUEST_CODE = 1234
-
-    private val CAMERA_PICKER_REQUEST_CODE = 12345
-
-    private val VIDEO_GALLARY_PICKER_REQUEST_CODE = 2234
-
-    private val VIDEO_CAMERA_PICKER_REQUEST_CODE = 22345
 
     companion object {
 
@@ -78,10 +67,11 @@ class ChooserDialogFragment : BaseDialogFragment() {
             dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             dialog?.window?.requestFeature(Window.FEATURE_NO_TITLE)
         }
+        viewModel = ViewModelProvider(this)[ChooserDialogFragmentViewModel::class.java]
         val args = arguments
         if (args != null && !args.isEmpty) {
-            viewType = args.getInt(CommonKeys.KEY_DATA)
-            limitOfPickImage = args.getInt(CommonKeys.KEY_LIMIT)
+            viewModel.viewType = args.getInt(CommonKeys.KEY_DATA)
+            viewModel.limitOfPickImage = args.getInt(CommonKeys.KEY_LIMIT)
         }
         binding = FragmentDialogChooserBinding.inflate(inflater, container, false)
         return binding.root
@@ -89,21 +79,28 @@ class ChooserDialogFragment : BaseDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        getContentAlbum =
-            registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-                if (uri != null) {
-                    mImageUri.add(uri)
-                    callBack?.onActivityResult(mRequestCode, mImageUri)
+        viewModel.getContentAlbum =
+            registerForActivityResult(ActivityResultContracts.GetMultipleContents()) { uriList: List<Uri>? ->
+                if (!uriList.isNullOrEmpty()) {
+                    viewModel.mImageUri.addAll(uriList)
+                    callBack?.onActivityResult(null, viewModel.mImageUri)
                     dismiss()
                 }
             }
 
-        getContentCamera =
+        viewModel.getContentCamera =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.data != null && result.resultCode == RESULT_OK) {
-                    val uri = result.data?.extras?.get("data") as Uri
-                    mImageUri.add(uri)
-                    callBack?.onActivityResult(mRequestCode, mImageUri)
+                    if (viewModel.mRequestCode == VIDEO_CAMERA_PICKER_REQUEST_CODE) {
+                        val uri = result?.data?.data
+                        if (uri != null) {
+                            viewModel.mImageUri.add(uri)
+                        }
+                        callBack?.onActivityResult(null, viewModel.mImageUri)
+                    } else {
+                        val mImageBitmap = result.data?.extras?.get("data") as Bitmap
+                        callBack?.onActivityResult(mImageBitmap, null)
+                    }
                     dismiss()
                 }
             }
@@ -111,21 +108,22 @@ class ChooserDialogFragment : BaseDialogFragment() {
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
-        permissions: Array<String>,
+        permissions: Array<out String>,
         grantResults: IntArray
     ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         try {
             if ((grantResults.isNotEmpty() &&
                         grantResults[0] == PackageManager.PERMISSION_GRANTED)
             ) {
-                when (mRequestCode) {
+                when (viewModel.mRequestCode) {
                     CAMERA_PICKER_REQUEST_CODE -> {
                         openCameraIntent()
                     }
                     IMAGE_PICKER_REQUEST_CODE -> {
                         openGalleryIntent()
                     }
-                    VIDEO_GALLARY_PICKER_REQUEST_CODE -> {
+                    VIDEO_GALLERY_PICKER_REQUEST_CODE -> {
                         openGalleryForVideo()
                     }
                     VIDEO_CAMERA_PICKER_REQUEST_CODE -> {
@@ -137,7 +135,7 @@ class ChooserDialogFragment : BaseDialogFragment() {
                         permissions[0]
                     )
                 ) {
-                    if (mRequestCode == CAMERA_PICKER_REQUEST_CODE || mRequestCode == VIDEO_CAMERA_PICKER_REQUEST_CODE) {
+                    if (viewModel.mRequestCode == CAMERA_PICKER_REQUEST_CODE || viewModel.mRequestCode == VIDEO_CAMERA_PICKER_REQUEST_CODE) {
                         DialogUtils.goToSystemLocationSetting(
                             requireActivity(),
                             getString(R.string.camera_permission_msg)
@@ -172,7 +170,7 @@ class ChooserDialogFragment : BaseDialogFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        when (viewType) {
+        when (viewModel.viewType) {
             CommonKeys.TYPE_PHOTO -> typePhoto()
             CommonKeys.TYPE_VIDEO -> typeVideo()
         }
@@ -181,7 +179,7 @@ class ChooserDialogFragment : BaseDialogFragment() {
     private fun typePhoto() {
         binding.textSelect.text = getString(R.string.str_select_image)
         binding.cameraLayout.setOnClickListener {
-            mRequestCode = CAMERA_PICKER_REQUEST_CODE
+            viewModel.mRequestCode = CAMERA_PICKER_REQUEST_CODE
             if (PermissionUtils.isCameraPermissionGranted(requireContext())) {
                 openCameraIntent()
             } else {
@@ -190,7 +188,7 @@ class ChooserDialogFragment : BaseDialogFragment() {
 
         }
         binding.galleryLayout.setOnClickListener {
-            mRequestCode = IMAGE_PICKER_REQUEST_CODE
+            viewModel.mRequestCode = IMAGE_PICKER_REQUEST_CODE
             if (PermissionUtils.isStoragePermissionGranted(requireContext())) {
                 openGalleryIntent()
             } else {
@@ -203,7 +201,7 @@ class ChooserDialogFragment : BaseDialogFragment() {
     private fun typeVideo() {
         binding.textSelect.text = getString(R.string.str_select_video)
         binding.cameraLayout.setOnClickListener {
-            mRequestCode = VIDEO_CAMERA_PICKER_REQUEST_CODE
+            viewModel.mRequestCode = VIDEO_CAMERA_PICKER_REQUEST_CODE
             if (PermissionUtils.isCameraPermissionGranted(requireContext())) {
                 openCameraForVideo()
             } else {
@@ -213,7 +211,7 @@ class ChooserDialogFragment : BaseDialogFragment() {
 
         }
         binding.galleryLayout.setOnClickListener {
-            mRequestCode = VIDEO_GALLARY_PICKER_REQUEST_CODE
+            viewModel.mRequestCode = VIDEO_GALLERY_PICKER_REQUEST_CODE
             if (PermissionUtils.isStoragePermissionGranted(requireContext())) {
                 openGalleryForVideo()
             } else {
@@ -224,14 +222,14 @@ class ChooserDialogFragment : BaseDialogFragment() {
     }
 
     private fun openGalleryForVideo() {
-        getContentAlbum.launch("video/*")
+        viewModel.getContentAlbum.launch("video/*")
     }
 
     private fun openCameraForVideo() {
 
         if (PermissionUtils.isCameraPermissionGranted(context)) {
             val intent = Intent(MediaStore.ACTION_VIDEO_CAPTURE)
-            getContentCamera.launch(intent)
+            viewModel.getContentCamera.launch(intent)
         } else {
             PermissionUtils.requestCameraPermission(activity)
         }
@@ -240,13 +238,13 @@ class ChooserDialogFragment : BaseDialogFragment() {
 
 
     private fun openGalleryIntent() {
-        getContentAlbum.launch("image/*")
+        viewModel.getContentAlbum.launch("image/*")
     }
 
     private fun openCameraIntent() {
         if (PermissionUtils.isCameraPermissionGranted(context)) {
             val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            getContentCamera.launch(intent)
+            viewModel.getContentCamera.launch(intent)
 
         } else {
             PermissionUtils.requestCameraPermission(activity)
@@ -256,7 +254,7 @@ class ChooserDialogFragment : BaseDialogFragment() {
 
     interface CallBack {
         fun onActivityResult(
-            requestCode: Int,
+            mImageBitmap: Bitmap?,
             mImageUri: List<Uri>?
         )
     }

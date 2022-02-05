@@ -35,4 +35,12 @@ object Constants {
     const val FCM_ANDROID_TOPIC = "Android_Users"
 
     const val CPP_LIBRARY_NAME = "keys"
+
+    const val IMAGE_PICKER_REQUEST_CODE = 1234
+
+    const val CAMERA_PICKER_REQUEST_CODE = 12345
+
+    const val VIDEO_GALLERY_PICKER_REQUEST_CODE = 2234
+
+    const val VIDEO_CAMERA_PICKER_REQUEST_CODE = 22345
 }

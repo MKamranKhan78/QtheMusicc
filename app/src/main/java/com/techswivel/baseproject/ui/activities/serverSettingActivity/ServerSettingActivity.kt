@@ -1,6 +1,7 @@
 package com.techswivel.baseproject.ui.activities.serverSettingActivity
 
 import android.content.pm.ApplicationInfo
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -19,6 +20,7 @@ import com.techswivel.baseproject.utils.Utilities
 class ServerSettingActivity : BaseActivity(), ChooserDialogFragment.CallBack {
 
     private var remoteConfigSharedPrefrences: RemoteConfigSharePrefrence? = null
+    private lateinit var dialogFragment: ChooserDialogFragment
 
     private lateinit var mBinding: ActivityServerSettingBinding
 
@@ -61,7 +63,7 @@ class ServerSettingActivity : BaseActivity(), ChooserDialogFragment.CallBack {
             mBinding.buttonCrash.visibility = View.GONE
         }
         mBinding.buttonCrash.setOnClickListener {
-            openChooserDialog(CommonKeys.TYPE_PHOTO)
+            openChooserDialog(CommonKeys.TYPE_VIDEO)
 //            Constants.STAGING.toInt()
         }
 
@@ -93,13 +95,26 @@ class ServerSettingActivity : BaseActivity(), ChooserDialogFragment.CallBack {
     private fun openChooserDialog(viewType: Int) {
         val fragmentTransaction = supportFragmentManager.beginTransaction()
         // Create and show the dialog.
-        val dialogFragment =
+        dialogFragment =
             ChooserDialogFragment.newInstance(viewType, 1, this)
         dialogFragment.show(fragmentTransaction, "dialog")
 
     }
 
-    override fun onActivityResult(requestCode: Int, mImageUri: List<Uri>?) {
+    override fun onActivityResult(mImageBitmap: Bitmap?, mImageUri: List<Uri>?) {
+        Log.e("Tag12312", "Result $mImageBitmap")
         Log.e("Tag12312", "Result $mImageUri")
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (::dialogFragment.isInitialized) {
+            dialogFragment.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        }
+
     }
 }
