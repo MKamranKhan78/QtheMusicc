@@ -3,7 +3,6 @@ change log need to be done as listed below
 
 TODO:
 2) implement advance crashlytics like add logs in firebase
- 3) add chooser fragment for image and videos
 7) fix phone number validation issue.
 8) add some time stamp converter and all other converter put into converter class and set them to binding adapter.
 13) add generic validation process.
@@ -19,3 +18,4 @@ DONE:
 12) add button selector for enable and disable.
 11) add color selector in the color package.
 4) separate dataManager for local and remote.
+3) add chooser fragment for image and videos

@@ -1,8 +1,6 @@
 package com.techswivel.baseproject.ui.activities.serverSettingActivity
 
 import android.content.pm.ApplicationInfo
-import android.graphics.Bitmap
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -12,16 +10,10 @@ import com.techswivel.baseproject.constant.Constants
 import com.techswivel.baseproject.databinding.ActivityServerSettingBinding
 import com.techswivel.baseproject.helper.RemoteConfigrations.RemoteConfigSharePrefrence
 import com.techswivel.baseproject.ui.base.BaseActivity
-import com.techswivel.baseproject.ui.dialogFragments.chooserDialogFragment.ChooserDialogFragment
-import com.techswivel.baseproject.utils.CommonKeys
-import com.techswivel.baseproject.utils.Log
 import com.techswivel.baseproject.utils.Utilities
 
-class ServerSettingActivity : BaseActivity(), ChooserDialogFragment.CallBack {
-
-    private var remoteConfigSharedPrefrences: RemoteConfigSharePrefrence? = null
-    private lateinit var dialogFragment: ChooserDialogFragment
-
+class ServerSettingActivity : BaseActivity() {
+    private var remoteConfigSharedPreferences: RemoteConfigSharePrefrence? = null
     private lateinit var mBinding: ActivityServerSettingBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,7 +26,7 @@ class ServerSettingActivity : BaseActivity(), ChooserDialogFragment.CallBack {
         mBinding.activityToolbar.toolbar.setNavigationOnClickListener {
             this.finish()
         }
-        initalizComponents()
+        initializeComponents()
         crashingImplementation()
         getAndSetBuildVersion()
         setUrlText()
@@ -55,7 +47,6 @@ class ServerSettingActivity : BaseActivity(), ChooserDialogFragment.CallBack {
         }
     }
 
-
     private fun crashingImplementation() {
         if (BuildConfig.FLAVOR.equals(Constants.STAGING)) {
             mBinding.buttonCrash.visibility = View.VISIBLE
@@ -63,14 +54,12 @@ class ServerSettingActivity : BaseActivity(), ChooserDialogFragment.CallBack {
             mBinding.buttonCrash.visibility = View.GONE
         }
         mBinding.buttonCrash.setOnClickListener {
-            openChooserDialog(CommonKeys.TYPE_VIDEO)
-//            Constants.STAGING.toInt()
+            Constants.STAGING.toInt()
         }
 
     }
 
     private fun getAndSetBuildVersion() {
-
         val versionCode = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             packageManager.getPackageInfo(packageName, 0).longVersionCode
         } else {
@@ -88,33 +77,7 @@ class ServerSettingActivity : BaseActivity(), ChooserDialogFragment.CallBack {
         mBinding.textServerName.visibility = View.VISIBLE
     }
 
-    private fun initalizComponents() {
-        remoteConfigSharedPrefrences = RemoteConfigSharePrefrence(this)
-    }
-
-    private fun openChooserDialog(viewType: Int) {
-        val fragmentTransaction = supportFragmentManager.beginTransaction()
-        // Create and show the dialog.
-        dialogFragment =
-            ChooserDialogFragment.newInstance(viewType, 1, this)
-        dialogFragment.show(fragmentTransaction, "dialog")
-
-    }
-
-    override fun onActivityResult(mImageBitmap: Bitmap?, mImageUri: List<Uri>?) {
-        Log.e("Tag12312", "Result $mImageBitmap")
-        Log.e("Tag12312", "Result $mImageUri")
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (::dialogFragment.isInitialized) {
-            dialogFragment.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        }
-
+    private fun initializeComponents() {
+        remoteConfigSharedPreferences = RemoteConfigSharePrefrence(this)
     }
 }

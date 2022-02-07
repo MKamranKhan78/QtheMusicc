@@ -1,15 +1,12 @@
 package com.techswivel.baseproject.ui.dialogFragments.chooserDialogFragment
 
 import android.app.Activity.RESULT_OK
-import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -41,13 +38,11 @@ class ChooserDialogFragment : BaseDialogFragment() {
         @JvmStatic
         fun newInstance(
             viewType: Int,
-            limitOfPickImage: Int,
             callBack: CallBack
         ): ChooserDialogFragment {
             val fragment = ChooserDialogFragment()
             val bundle = Bundle()
             bundle.putInt(CommonKeys.KEY_DATA, viewType)
-            bundle.putInt(CommonKeys.KEY_LIMIT, limitOfPickImage)
             fragment.arguments = bundle
             fragment.setCallBack(callBack)
             return fragment
@@ -71,7 +66,6 @@ class ChooserDialogFragment : BaseDialogFragment() {
         val args = arguments
         if (args != null && !args.isEmpty) {
             viewModel.viewType = args.getInt(CommonKeys.KEY_DATA)
-            viewModel.limitOfPickImage = args.getInt(CommonKeys.KEY_LIMIT)
         }
         binding = FragmentDialogChooserBinding.inflate(inflater, container, false)
         return binding.root
@@ -79,27 +73,42 @@ class ChooserDialogFragment : BaseDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.getContentAlbum =
+        /**
+         * There is no specific method available that sets maximum number of content that user
+         * can select from gallery however, user can select single content by using [ActivityResultContracts.GetContent]
+         * and multiple contents by using [ActivityResultContracts.GetMultipleContents].
+         * For reference [https://stackoverflow.com/questions/64431993/how-to-get-specific-number-of-images-with-activity-results-api]
+         */
+        viewModel.getContentGallery =
             registerForActivityResult(ActivityResultContracts.GetMultipleContents()) { uriList: List<Uri>? ->
                 if (!uriList.isNullOrEmpty()) {
+                    viewModel.mImageUri.clear()
                     viewModel.mImageUri.addAll(uriList)
-                    callBack?.onActivityResult(null, viewModel.mImageUri)
+                    callBack?.onActivityResult(viewModel.mImageUri)
                     dismiss()
                 }
             }
 
-        viewModel.getContentCamera =
+        viewModel.getContentCameraVideo =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.data != null && result.resultCode == RESULT_OK) {
-                    if (viewModel.mRequestCode == VIDEO_CAMERA_PICKER_REQUEST_CODE) {
-                        val uri = result?.data?.data
-                        if (uri != null) {
-                            viewModel.mImageUri.add(uri)
-                        }
-                        callBack?.onActivityResult(null, viewModel.mImageUri)
-                    } else {
-                        val mImageBitmap = result.data?.extras?.get("data") as Bitmap
-                        callBack?.onActivityResult(mImageBitmap, null)
+                    val uri = result?.data?.data
+                    if (uri != null) {
+                        viewModel.mImageUri.clear()
+                        viewModel.mImageUri.add(uri)
+                        callBack?.onActivityResult(viewModel.mImageUri)
+                    }
+                    dismiss()
+                }
+            }
+
+        viewModel.getContentCameraImage =
+            registerForActivityResult(ActivityResultContracts.TakePicture()) { isSuccess ->
+                if (isSuccess) {
+                    viewModel.imageLatestTmpUri?.let { uri ->
+                        viewModel.mImageUri.clear()
+                        viewModel.mImageUri.add(uri)
+                        callBack?.onActivityResult(viewModel.mImageUri)
                     }
                     dismiss()
                 }
@@ -118,16 +127,16 @@ class ChooserDialogFragment : BaseDialogFragment() {
             ) {
                 when (viewModel.mRequestCode) {
                     CAMERA_PICKER_REQUEST_CODE -> {
-                        openCameraIntent()
+                        viewModel.openCameraIntent()
                     }
                     IMAGE_PICKER_REQUEST_CODE -> {
-                        openGalleryIntent()
+                        viewModel.openGalleryIntent()
                     }
                     VIDEO_GALLERY_PICKER_REQUEST_CODE -> {
-                        openGalleryForVideo()
+                        viewModel.openGalleryForVideo()
                     }
                     VIDEO_CAMERA_PICKER_REQUEST_CODE -> {
-                        openCameraForVideo()
+                        viewModel.openCameraForVideo()
                     }
                 }
             } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -164,9 +173,7 @@ class ChooserDialogFragment : BaseDialogFragment() {
             }
         } catch (e: Exception) {
         }
-
     }
-
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -181,20 +188,19 @@ class ChooserDialogFragment : BaseDialogFragment() {
         binding.cameraLayout.setOnClickListener {
             viewModel.mRequestCode = CAMERA_PICKER_REQUEST_CODE
             if (PermissionUtils.isCameraPermissionGranted(requireContext())) {
-                openCameraIntent()
+                viewModel.openCameraIntent()
             } else {
                 PermissionUtils.requestCameraPermission(requireActivity())
             }
-
         }
+
         binding.galleryLayout.setOnClickListener {
             viewModel.mRequestCode = IMAGE_PICKER_REQUEST_CODE
             if (PermissionUtils.isStoragePermissionGranted(requireContext())) {
-                openGalleryIntent()
+                viewModel.openGalleryIntent()
             } else {
                 PermissionUtils.requestStoragePermission(requireActivity())
             }
-
         }
     }
 
@@ -203,58 +209,24 @@ class ChooserDialogFragment : BaseDialogFragment() {
         binding.cameraLayout.setOnClickListener {
             viewModel.mRequestCode = VIDEO_CAMERA_PICKER_REQUEST_CODE
             if (PermissionUtils.isCameraPermissionGranted(requireContext())) {
-                openCameraForVideo()
+                viewModel.openCameraForVideo()
             } else {
                 PermissionUtils.requestCameraPermission(requireActivity())
             }
-
-
         }
+
         binding.galleryLayout.setOnClickListener {
             viewModel.mRequestCode = VIDEO_GALLERY_PICKER_REQUEST_CODE
             if (PermissionUtils.isStoragePermissionGranted(requireContext())) {
-                openGalleryForVideo()
+                viewModel.openGalleryForVideo()
             } else {
                 PermissionUtils.requestStoragePermission(requireActivity())
             }
-
         }
-    }
-
-    private fun openGalleryForVideo() {
-        viewModel.getContentAlbum.launch("video/*")
-    }
-
-    private fun openCameraForVideo() {
-
-        if (PermissionUtils.isCameraPermissionGranted(context)) {
-            val intent = Intent(MediaStore.ACTION_VIDEO_CAPTURE)
-            viewModel.getContentCamera.launch(intent)
-        } else {
-            PermissionUtils.requestCameraPermission(activity)
-        }
-
-    }
-
-
-    private fun openGalleryIntent() {
-        viewModel.getContentAlbum.launch("image/*")
-    }
-
-    private fun openCameraIntent() {
-        if (PermissionUtils.isCameraPermissionGranted(context)) {
-            val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            viewModel.getContentCamera.launch(intent)
-
-        } else {
-            PermissionUtils.requestCameraPermission(activity)
-        }
-
     }
 
     interface CallBack {
         fun onActivityResult(
-            mImageBitmap: Bitmap?,
             mImageUri: List<Uri>?
         )
     }

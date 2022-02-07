@@ -9,7 +9,6 @@ class CommonKeys {
         const val KEY_LAST_NAME = "_key_last_name_"
         const val KEY_PROFILE_PIC = "_key_picture_picture"
         const val KEY_IS_LOGGED_IN = "_key_is_logged_in"
-        const val KEY_LIMIT = "_key_limit_"
         const val TYPE_VIDEO = 1
         const val TYPE_PHOTO = 2
     }

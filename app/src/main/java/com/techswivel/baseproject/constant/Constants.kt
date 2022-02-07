@@ -22,7 +22,7 @@ object Constants {
     const val LOCATION_UPDATE_TIME = 0 //in miliSeconds like miliSeconds X seconds X mint X hours
     const val LOCATION_UPDATE_DISTANCE = 20 //in meter
 
-    const val PREF_NAME = "_Pref_"
+    const val PREF_NAME = "_Data_Store_Pref_"
 
     const val STRIPE_KEY = "abc"
     const val SPLASHDELAY = 1000 * 3 * 1 // in milliSeconds
