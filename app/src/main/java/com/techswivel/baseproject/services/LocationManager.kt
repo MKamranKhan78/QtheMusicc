@@ -40,7 +40,7 @@ class LocationManager constructor(
     }
 
     private var locationCallback: LocationCallback = object : LocationCallback() {
-        override fun onLocationResult(locationResult: LocationResult?) {
+        override fun onLocationResult(locationResult: LocationResult) {
             locationResult ?: return
             for (location in locationResult.locations) {
                 mCallBack?.onLocationUpdate(location)
@@ -48,8 +48,10 @@ class LocationManager constructor(
         }
     }
 
-    override fun onLocationChanged(p0: Location?) {
-        p0?.let { mCallBack?.onLocationUpdate(it) }
+    override fun onLocationChanged(mLocation: Location) {
+        mLocation.let { location ->
+            mCallBack?.onLocationUpdate(location)
+        }
     }
 
     fun build() {
@@ -99,8 +101,10 @@ class LocationManager constructor(
                 LocationManager.NETWORK_PROVIDER,
                 object : android.location.LocationListener {
 
-                    override fun onLocationChanged(p0: Location) {
-                        p0.let { mCallBack?.onLocationUpdate(it) }
+                    override fun onLocationChanged(mLocation: Location) {
+                        mLocation.let { location ->
+                            mCallBack?.onLocationUpdate(location)
+                        }
                     }
 
                     override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
@@ -162,11 +166,13 @@ class LocationManager constructor(
     @SuppressLint("MissingPermission")
     fun startLocationUpdates() {
         if (PermissionUtils.isLocationPermisionGranted(mContext)) {
-            mFusedLocationClient?.requestLocationUpdates(
-                mLocationRequest,
-                locationCallback,
-                Looper.getMainLooper()
-            )
+            mLocationRequest?.let {
+                mFusedLocationClient?.requestLocationUpdates(
+                    it,
+                    locationCallback,
+                    Looper.getMainLooper()
+                )
+            }
         } else {
             PermissionUtils.requestLocationPermission(mActivity)
         }

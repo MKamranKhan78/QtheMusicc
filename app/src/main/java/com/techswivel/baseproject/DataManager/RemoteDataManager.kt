@@ -16,7 +16,7 @@ import io.reactivex.schedulers.Schedulers
 import retrofit2.Response
 
 
-object DataManager : DataMagerImp {
+object RemoteDataManager : BaseDataManager() {
 
     private lateinit var data: GoogleAuthModel
 
@@ -94,6 +94,5 @@ object DataManager : DataMagerImp {
             observer.onComplete()
         }
     }
-
 
 }

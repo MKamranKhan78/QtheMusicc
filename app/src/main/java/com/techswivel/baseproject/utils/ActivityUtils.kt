@@ -77,7 +77,7 @@ object ActivityUtils {
             GoogleApiAvailability.getInstance().getErrorDialog(
                 mActivity, e.connectionStatusCode,
                 Constants.GOOGLE_REQUEST_CODE
-            ).show()
+            )?.show()
             e.printStackTrace()
         } catch (e: GooglePlayServicesNotAvailableException) {
             e.printStackTrace()

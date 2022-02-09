@@ -13,9 +13,7 @@ import com.techswivel.baseproject.ui.base.BaseActivity
 import com.techswivel.baseproject.utils.Utilities
 
 class ServerSettingActivity : BaseActivity() {
-
-    private var remoteConfigSharedPrefrences: RemoteConfigSharePrefrence? = null
-
+    private var remoteConfigSharedPreferences: RemoteConfigSharePrefrence? = null
     private lateinit var mBinding: ActivityServerSettingBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,7 +26,7 @@ class ServerSettingActivity : BaseActivity() {
         mBinding.activityToolbar.toolbar.setNavigationOnClickListener {
             this.finish()
         }
-        initalizComponents()
+        initializeComponents()
         crashingImplementation()
         getAndSetBuildVersion()
         setUrlText()
@@ -49,19 +47,19 @@ class ServerSettingActivity : BaseActivity() {
         }
     }
 
-
     private fun crashingImplementation() {
         if (BuildConfig.FLAVOR.equals(Constants.STAGING)) {
             mBinding.buttonCrash.visibility = View.VISIBLE
         } else {
             mBinding.buttonCrash.visibility = View.GONE
         }
-        mBinding.buttonCrash.setOnClickListener { Constants.STAGING.toInt() }
+        mBinding.buttonCrash.setOnClickListener {
+            Constants.STAGING.toInt()
+        }
 
     }
 
     private fun getAndSetBuildVersion() {
-
         val versionCode = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             packageManager.getPackageInfo(packageName, 0).longVersionCode
         } else {
@@ -79,7 +77,7 @@ class ServerSettingActivity : BaseActivity() {
         mBinding.textServerName.visibility = View.VISIBLE
     }
 
-    private fun initalizComponents() {
-        remoteConfigSharedPrefrences = RemoteConfigSharePrefrence(this)
+    private fun initializeComponents() {
+        remoteConfigSharedPreferences = RemoteConfigSharePrefrence(this)
     }
 }

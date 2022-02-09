@@ -6,11 +6,10 @@ import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-
 object Converter {
 
     @SuppressLint("SimpleDateFormat")
-    fun convertToUTCTimeFormate(timeInMilliSecond: Long): String {
+    fun convertToUTCTimeFormat(timeInMilliSecond: Long): String {
         return String.format(
             "%02d:%02d",
             TimeUnit.MILLISECONDS.toMinutes(timeInMilliSecond) -
@@ -38,5 +37,14 @@ object Converter {
         val sdf = SimpleDateFormat("hh:mm a dd MMMM,yyyy")
         //sdf.timeZone = TimeZone.getTimeZone("UTC")
         return sdf.format(calendar.time)
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    fun convertDateFormat(dateString: String, fromFormat: String, toFormat: String): String {
+        val input = SimpleDateFormat(fromFormat)
+        val output = SimpleDateFormat(toFormat)
+        val oneWayTripDate = input.parse(dateString) // parse input
+        return output.format(oneWayTripDate) // format output
+
     }
 }

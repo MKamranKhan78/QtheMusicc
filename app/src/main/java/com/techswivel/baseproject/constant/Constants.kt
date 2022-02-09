@@ -12,11 +12,6 @@ object Constants {
     const val ACCEPTANCE_SERVER_URL = "https://acceptance.base.com/api/v1/"
     const val DEVELOPMENT_SERVER_URL = "https://development.base.com/api/v1/"
 
-    const val STAGING_API_KEY = "43359168-d3e9-4653-acbf-b883fcd53cd4"
-    const val PRODUCTION_API_KEY = "6280e964-0561-4dfe-94ff-39a52517667f"
-    const val ACCEPTANCE_API_KEY = "0ca64a59-0d94-4fdb-80be-e33f985c8758"
-    const val DEVELOPMENT_API_KEY = "43359168-d3e9-4653-acbf-b883fcd53cd4"
-
     val NO_INTERNET_TITLE = "NO INTERNET"
     val NO_INTERNET_MESSAGE = "Please connect to a stable internet"
     val LOCATION_PERMISSION_TITLE = "Location permission denied!"
@@ -27,6 +22,7 @@ object Constants {
     const val LOCATION_UPDATE_TIME = 0 //in miliSeconds like miliSeconds X seconds X mint X hours
     const val LOCATION_UPDATE_DISTANCE = 20 //in meter
 
+    const val PREF_NAME = "_Data_Store_Pref_"
 
     const val STRIPE_KEY = "abc"
     const val SPLASHDELAY = 1000 * 3 * 1 // in milliSeconds
@@ -38,4 +34,13 @@ object Constants {
 
     const val FCM_ANDROID_TOPIC = "Android_Users"
 
+    const val CPP_LIBRARY_NAME = "keys"
+
+    const val IMAGE_PICKER_REQUEST_CODE = 1234
+
+    const val CAMERA_PICKER_REQUEST_CODE = 12345
+
+    const val VIDEO_GALLERY_PICKER_REQUEST_CODE = 2234
+
+    const val VIDEO_CAMERA_PICKER_REQUEST_CODE = 22345
 }
