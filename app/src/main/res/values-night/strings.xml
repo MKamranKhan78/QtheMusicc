@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">BaseProject</string>
+    <string name="app_name">QTheMusic</string>
 
     <string name="google_client_id_acceptance">abcd</string>
     <string name="google_client_secret_acceptance">abcd</string>

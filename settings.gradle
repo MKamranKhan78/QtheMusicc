@@ -1,2 +1,2 @@
 include ':app'
-rootProject.name = "BaseProject"
+rootProject.name = "QTheMusic"

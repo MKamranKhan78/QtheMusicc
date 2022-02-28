@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu>
+    <!--    <item-->
+    <!--        android:id="@+id/bottom_nav_bible"-->
+    <!--        android:icon="@drawable/ic_bible_bottom"-->
+    <!--        android:title="@string/bible" />-->
+    <!--    <item-->
+    <!--        android:id="@+id/bottom_nav_cpb"-->
+    <!--        android:icon="@drawable/ic_cpb_bottom"-->
+    <!--        android:title="@string/cpb" />-->
+    <!--    <item-->
+    <!--        android:id="@+id/bottom_nav_home"-->
+    <!--        android:icon="@drawable/ic_home"-->
+    <!--        android:title="@string/home" />-->
+
+    <!--    <item-->
+    <!--        android:id="@+id/bottom_nav_notes"-->
+    <!--        android:icon="@drawable/ic_note"-->
+    <!--        android:title="@string/notes" />-->
+    <!--    <item-->
+    <!--        android:id="@+id/bottom_nav_google"-->
+    <!--        android:icon="@drawable/ic_google"-->
+    <!--        android:title="@string/google" />-->
+</menu>

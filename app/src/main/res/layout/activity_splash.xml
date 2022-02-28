@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.techswivel.baseproject.ui.activities.splashActivity.SplashActivity">
+    tools:context="com.techswivel.qthemusic.ui.activities.splashActivity.SplashActivity">
 
     <TextView
         android:id="@+id/textServerName"
