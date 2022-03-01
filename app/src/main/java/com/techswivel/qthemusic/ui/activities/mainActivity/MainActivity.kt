@@ -60,6 +60,10 @@ class MainActivity : BaseActivity() {
 
     private fun openFragment(fragment: Fragment) {
         ::mFragment.set(fragment)
-        mFragment.let { it?.let { it1 -> replaceFragment(mBinding.mainContainer.id, it1) } }
+        mFragment.let { fragmentInstance ->
+            fragmentInstance?.let { fragmentToBeReplaced ->
+                replaceFragment(mBinding.mainContainer.id, fragmentToBeReplaced)
+            }
+        }
     }
 }

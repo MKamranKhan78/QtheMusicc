@@ -11,7 +11,6 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.provider.MediaStore.Images
 import android.util.Base64
-import com.android.volley.VolleyLog.TAG
 import com.techswivel.qthemusic.application.QTheMusicApplication
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -22,6 +21,8 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 object FileUtils {
+    private const val TAG = "FileUtils"
+
     fun createImageFile(context: Context): File? {
         val timeStamp = Calendar.getInstance().timeInMillis
         val imageFileName = "Image$timeStamp"

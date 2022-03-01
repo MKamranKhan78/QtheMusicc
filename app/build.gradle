@@ -12,7 +12,7 @@ android {
     
     defaultConfig {
         applicationId "com.techswivel.qthemusic"
-        minSdkVersion 16
+        minSdkVersion 19
         targetSdkVersion 31
         versionCode appCenterBuildID.toInteger()
         versionName appVersion
@@ -47,7 +47,7 @@ android {
         }
         debug
                 {
-                    manifestPlaceholders = [enableCrashReporting: "true"]
+                    manifestPlaceholders = [enableCrashReporting: "false"]
                     applicationVariants.all { variant ->
                         variant.outputs.all { output ->
                             outputFileName = new File("Q_The_Music-v" + variant.versionName + "(" + android.defaultConfig.buildConfigFields["APPCENTER_BUILD_ID"].value + ")" + ".apk")
@@ -116,7 +116,7 @@ dependencies {
 
     def dagger2Version = '2.25.2'
 
-    implementation platform('com.google.firebase:firebase-bom:26.2.0')
+    implementation platform('com.google.firebase:firebase-bom:29.1.0')
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.core:core-ktx:1.7.0'
@@ -138,15 +138,6 @@ dependencies {
 
     //phone number validation
     implementation 'io.michaelrocks:libphonenumber-android:8.12.41'
-
-    //Google map
-    implementation 'com.google.android.libraries.places:places:2.5.0'
-    implementation 'com.google.android.gms:play-services-maps:17.0.0'
-    implementation 'com.google.android.gms:play-services-places:17.0.0'
-    implementation 'com.google.android.gms:play-services-drive:17.0.0'
-    implementation 'com.google.android.gms:play-services-auth:20.0.1'
-    implementation 'com.google.android.gms:play-services-location:19.0.1'
-    implementation 'com.google.android.gms:play-services-gcm:17.0.0'
 
     //fireBase sdk
     implementation 'com.google.firebase:firebase-auth-ktx'

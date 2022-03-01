@@ -7,7 +7,6 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 import androidx.multidex.MultiDex
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.libraries.places.api.Places
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.techswivel.qthemusic.BuildConfig
@@ -56,9 +55,6 @@ class QTheMusicApplication : Application(), LifecycleObserver {
         }
 
         mContext = this
-        Places.initialize(this, this.getString(R.string.google_maps_key))
-        Places.createClient(this)
-
 
         /**
          * FirebaseAuth was not initialized because of that app was getting crash

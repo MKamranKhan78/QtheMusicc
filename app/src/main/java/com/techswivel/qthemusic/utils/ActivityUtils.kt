@@ -9,14 +9,7 @@ import android.os.Bundle
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
-import com.google.android.gms.common.GoogleApiAvailability
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException
-import com.google.android.gms.common.GooglePlayServicesRepairableException
-import com.google.android.libraries.places.api.model.Place
-import com.google.android.libraries.places.widget.Autocomplete
-import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.techswivel.qthemusic.R
-import com.techswivel.qthemusic.constant.Constants
 import com.techswivel.qthemusic.ui.wrapper.FrameActivity
 import com.techswivel.qthemusic.utils.CommonKeys.Companion.KEY_FRAGMENT
 
@@ -64,25 +57,6 @@ object ActivityUtils {
         val intent = Intent(activity, pClassName)
         intent.addFlags(flag)
         activity.startActivity(intent)
-    }
-
-    fun openPlaceAutoCompleteActivity(mActivity: Activity) {
-        try {
-            val fields =
-                listOf(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG, Place.Field.ADDRESS);
-            val intent = Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields)
-                .build(mActivity)
-            mActivity.startActivityForResult(intent, Constants.KEY_REQUEST_PLACE)
-        } catch (e: GooglePlayServicesRepairableException) {
-            GoogleApiAvailability.getInstance().getErrorDialog(
-                mActivity, e.connectionStatusCode,
-                Constants.GOOGLE_REQUEST_CODE
-            )?.show()
-            e.printStackTrace()
-        } catch (e: GooglePlayServicesNotAvailableException) {
-            e.printStackTrace()
-        }
-
     }
 
     @SuppressLint("MissingPermission")

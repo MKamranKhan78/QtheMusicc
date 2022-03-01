@@ -5,7 +5,6 @@ import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.application.QTheMusicApplication
 import com.techswivel.qthemusic.constant.Constants
 import com.techswivel.qthemusic.dataManager.DummyDataManager.Companion.getResponseDummyData
-import com.techswivel.qthemusic.googleMapHelper.DirectionObject
 import com.techswivel.qthemusic.models.GoogleAuthModel
 import com.techswivel.qthemusic.models.GoogleResponseModel
 import com.techswivel.qthemusic.models.ResponseMain
@@ -21,12 +20,6 @@ object RemoteDataManager : BaseDataManager() {
     private lateinit var data: GoogleAuthModel
 
     // Remote calls
-    override fun getDirectionRoutes(url: String): Observable<DirectionObject> {
-        return ApiService.getDirectionResponse().getDirectionRoutes(url)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-    }
-
     override fun getGoogleAccessToken(serverAuthCode: String): Observable<Response<GoogleResponseModel>> {
 
         when {
