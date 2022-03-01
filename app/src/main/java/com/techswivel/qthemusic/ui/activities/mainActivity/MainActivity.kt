@@ -6,7 +6,9 @@ import androidx.fragment.app.Fragment
 import com.techswivel.dfaktfahrerapp.ui.fragments.underDevelopmentMessageFragment.UnderDevelopmentMessageFragment
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.databinding.ActivityMainBinding
+import com.techswivel.qthemusic.ui.activities.serverSettingActivity.ServerSettingActivity
 import com.techswivel.qthemusic.ui.base.BaseActivity
+import com.techswivel.qthemusic.utils.ActivityUtils
 
 class MainActivity : BaseActivity() {
 
@@ -46,7 +48,8 @@ class MainActivity : BaseActivity() {
                     openUnderDevelopmentFragment()
                 }
                 R.id.bottom_nav_profile -> {
-                    openUnderDevelopmentFragment()
+                    openServerSettingActivity()
+                    return@setOnItemSelectedListener false
                 }
             }
             return@setOnItemSelectedListener true
@@ -56,6 +59,13 @@ class MainActivity : BaseActivity() {
     private fun openUnderDevelopmentFragment() {
         popUpAllFragmentIncludeThis(UnderDevelopmentMessageFragment::class.java.name)
         openFragment(UnderDevelopmentMessageFragment.newInstance())
+    }
+
+    private fun openServerSettingActivity() {
+        ActivityUtils.startNewActivity(
+            this,
+            ServerSettingActivity::class.java
+        )
     }
 
     private fun openFragment(fragment: Fragment) {
