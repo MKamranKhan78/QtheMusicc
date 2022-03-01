@@ -1,66 +1,34 @@
 {
   "project_info": {
-    "project_number": "586601826954",
-    "firebase_url": "https://udeoglobe-staging.firebaseio.com",
-    "project_id": "udeoglobe-staging",
-    "storage_bucket": "udeoglobe-staging.appspot.com"
+    "project_number": "74605093159",
+    "project_id": "qthemusic-staging",
+    "storage_bucket": "qthemusic-staging.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:586601826954:android:7d80bcfaa23a6651d4fb73",
+        "mobilesdk_app_id": "1:74605093159:android:e5eb0e4ee96f3aa0670902",
         "android_client_info": {
-          "package_name": "com.techswivel.udeoglobe.staging"
+          "package_name": "com.techswivel.qthemusic.staging"
         }
       },
       "oauth_client": [
         {
-          "client_id": "586601826954-j564eoegrtp0hep18vb5s4vio3iopbuj.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.techswivel.udeoglobe.staging",
-            "certificate_hash": "213541563709d88e90fbabc6c173bf5c0d8a2639"
-          }
-        },
-        {
-          "client_id": "586601826954-l1fpli4livmarji0eihodaoj625tf02n.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.techswivel.udeoglobe.staging",
-            "certificate_hash": "14dfc1336db59e6a3597a00c071f54af9e53e442"
-          }
-        },
-        {
-          "client_id": "586601826954-tdj9qeotp151vj0sr09de5o4v2i88lo8.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.techswivel.udeoglobe.staging",
-            "certificate_hash": "d8802c20c51fc93ecfe9d2eeb25450463886ac1e"
-          }
-        },
-        {
-          "client_id": "586601826954-bf3rmcj9dbhii39tpu9negagt85ebfjg.apps.googleusercontent.com",
+          "client_id": "74605093159-funodu4lv47i9u57h2meqahlcan5elo3.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDSOoFs_LjI8jgiU7lkD4caGX0ocMKkRuo"
+          "current_key": "AIzaSyAvE5F20EO0C-amV_tfmbR58_zgXjG29Bc"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "586601826954-s4a3m4olhp5okl17l3ilqm9tr3ao1rsv.apps.googleusercontent.com",
+              "client_id": "74605093159-funodu4lv47i9u57h2meqahlcan5elo3.apps.googleusercontent.com",
               "client_type": 3
-            },
-            {
-              "client_id": "586601826954-er156b5id9hcc2pb6bncfhm0n2kss0et.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.techswivel.udeoglobe.staging"
-              }
             }
           ]
         }

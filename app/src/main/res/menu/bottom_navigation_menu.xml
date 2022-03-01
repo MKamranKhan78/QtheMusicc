@@ -1,24 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu>
-    <!--    <item-->
-    <!--        android:id="@+id/bottom_nav_bible"-->
-    <!--        android:icon="@drawable/ic_bible_bottom"-->
-    <!--        android:title="@string/bible" />-->
-    <!--    <item-->
-    <!--        android:id="@+id/bottom_nav_cpb"-->
-    <!--        android:icon="@drawable/ic_cpb_bottom"-->
-    <!--        android:title="@string/cpb" />-->
-    <!--    <item-->
-    <!--        android:id="@+id/bottom_nav_home"-->
-    <!--        android:icon="@drawable/ic_home"-->
-    <!--        android:title="@string/home" />-->
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/bottom_nav_home"
+        android:icon="@drawable/ic_search"
+        android:title="@string/str_home" />
+    <item
+        android:id="@+id/bottom_nav_search"
+        android:icon="@drawable/ic_search"
+        android:title="@string/str_search" />
 
-    <!--    <item-->
-    <!--        android:id="@+id/bottom_nav_notes"-->
-    <!--        android:icon="@drawable/ic_note"-->
-    <!--        android:title="@string/notes" />-->
-    <!--    <item-->
-    <!--        android:id="@+id/bottom_nav_google"-->
-    <!--        android:icon="@drawable/ic_google"-->
-    <!--        android:title="@string/google" />-->
+    <item
+        android:id="@+id/bottom_nav_categories"
+        android:icon="@drawable/ic_categories"
+        android:title="@string/str_categories" />
+    <item
+        android:id="@+id/bottom_nav_profile"
+        android:icon="@drawable/ic_profile"
+        android:title="@string/str_profile" />
 </menu>

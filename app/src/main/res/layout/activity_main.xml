@@ -20,9 +20,10 @@
             android:layout_gravity="bottom"
             android:background="?android:attr/windowBackground"
             android:foreground="?attr/selectableItemBackground"
-            app:itemBackground="@color/colorPrimary"
-            app:itemIconTint="@android:color/white"
-            app:labelVisibilityMode="unlabeled"
+            app:itemBackground="@color/bottom_nav_background"
+            app:itemIconTint="@color/bnv_tab_item_foreground"
+            app:itemTextColor="@color/bnv_tab_item_foreground"
+            app:labelVisibilityMode="labeled"
             app:menu="@menu/bottom_navigation_menu" />
 
 </RelativeLayout>
