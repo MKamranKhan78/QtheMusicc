@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">QTheMusic</string>
+    <string name="app_name">Q the Music</string>
 
     <string name="google_client_id_acceptance">abcd</string>
     <string name="google_client_secret_acceptance">abcd</string>
