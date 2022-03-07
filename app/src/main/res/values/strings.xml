@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BaseProject</string>
+    <string name="app_name">Q the Music</string>
 
     <string name="google_client_id_acceptance">abcd</string>
     <string name="google_client_secret_acceptance">abcd</string>
@@ -17,11 +17,9 @@
     <string name="google_client_secret_staging">abcd</string> <!-- q25W9B3-pqWebWZ1ZY6Za6op -->
     <string name="google_client_redirect_uri_staging">abcd</string> <!-- https://udeoglobe-staging.firebaseapp.com/__/auth/handler -->
 
-    <string name="google_maps_key">abcd</string>
     <string name="no_internet">No Internet Connection</string>
     <string name="call_not_supported">Call Not Supported</string>
     <string name="pick_image_intent_text">Pick Image</string>
-    <string name="something_wrong__with_direction_api">Some Thing went wrong with Direction Api</string>
     <string name="facebook_app_id">123456</string>
     <string name="server_setting">Server Settings</string>
     <string name="minimun_version">Minimun Version</string>
@@ -50,4 +48,8 @@
     <string name="camera_permission_msg">Please enable camera permission from Settings.</string>
     <string name="gallery_permission_msg">Please enable gallery permission from Settings.</string>
     <string name="permission_denied">Permission Denied</string>
+    <string name="str_home">Home</string>
+    <string name="str_search">Search</string>
+    <string name="str_categories">Categories</string>
+    <string name="str_profile">Profile</string>
 </resources>

@@ -1,42 +1,33 @@
 {
   "project_info": {
-    "project_number": "317041736827",
-    "firebase_url": "https://udeoglobe-acceptance.firebaseio.com",
-    "project_id": "udeoglobe-acceptance",
-    "storage_bucket": "udeoglobe-acceptance.appspot.com"
+    "project_number": "345540049924",
+    "project_id": "qthemusic-acceptance",
+    "storage_bucket": "qthemusic-acceptance.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:317041736827:android:383b0465902a913ade36de",
+        "mobilesdk_app_id": "1:345540049924:android:285d7af9dce623959bc951",
         "android_client_info": {
-          "package_name": "com.techswivel.udeoglobe.acceptance"
+          "package_name": "com.techswivel.qthemusic.acceptance"
         }
       },
       "oauth_client": [
         {
-          "client_id": "317041736827-8772l5j54v226svcfdh8bvgh6q0ob9kd.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.techswivel.udeoglobe.acceptance",
-            "certificate_hash": "14dfc1336db59e6a3597a00c071f54af9e53e442"
-          }
-        },
-        {
-          "client_id": "317041736827-knag0u3q6v3gm60h2dqhqokvtrc8ftv4.apps.googleusercontent.com",
+          "client_id": "345540049924-j2pgaphe6hhoios3oag2g7ktpdo1crrb.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAkys577lJeMgFyuQEZH270RnjA0ufQ-Qc"
+          "current_key": "AIzaSyA6TK0P0hNnjt6zKrDvZqWtqCLkF9YiYjE"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "317041736827-knag0u3q6v3gm60h2dqhqokvtrc8ftv4.apps.googleusercontent.com",
+              "client_id": "345540049924-j2pgaphe6hhoios3oag2g7ktpdo1crrb.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

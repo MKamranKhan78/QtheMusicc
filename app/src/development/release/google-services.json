@@ -1,42 +1,62 @@
 {
   "project_info": {
-    "project_number": "187049806187",
-    "firebase_url": "https://udeoglobe-development.firebaseio.com",
-    "project_id": "udeoglobe-development",
-    "storage_bucket": "udeoglobe-development.appspot.com"
+    "project_number": "74605093159",
+    "project_id": "qthemusic-staging",
+    "storage_bucket": "qthemusic-staging.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:187049806187:android:11701c422f1b41b3bda42e",
+        "mobilesdk_app_id": "1:74605093159:android:ae364ce2949f3dc1670902",
         "android_client_info": {
-          "package_name": "com.techswivel.udeoglobe.development"
+          "package_name": "com.techswivel.qthemusic.development"
         }
       },
       "oauth_client": [
         {
-          "client_id": "187049806187-hqj7f3md56gld7ni2bd3j0dvqpbl0gl8.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.techswivel.udeoglobe.development",
-            "certificate_hash": "14dfc1336db59e6a3597a00c071f54af9e53e442"
-          }
-        },
-        {
-          "client_id": "187049806187-er0blheg2jiqsdudfr6vl6am3hjr37av.apps.googleusercontent.com",
+          "client_id": "74605093159-funodu4lv47i9u57h2meqahlcan5elo3.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCT0sRqrCuXfmH4b-R2wbMtAtJk0Tsu8JU"
+          "current_key": "AIzaSyAvE5F20EO0C-amV_tfmbR58_zgXjG29Bc"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "187049806187-er0blheg2jiqsdudfr6vl6am3hjr37av.apps.googleusercontent.com",
+              "client_id": "74605093159-funodu4lv47i9u57h2meqahlcan5elo3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:74605093159:android:e5eb0e4ee96f3aa0670902",
+        "android_client_info": {
+          "package_name": "com.techswivel.qthemusic.staging"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "74605093159-funodu4lv47i9u57h2meqahlcan5elo3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAvE5F20EO0C-amV_tfmbR58_zgXjG29Bc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "74605093159-funodu4lv47i9u57h2meqahlcan5elo3.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
