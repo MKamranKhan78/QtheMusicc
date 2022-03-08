@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/color_black_landing_background"
+    tools:context=".ui.fragments.underDevelopmentMessageFragment.profile_landing_screen.ProfileLandingFragment">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_setting_white"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="@dimen/_20dp"
+        android:layout_marginEnd="@dimen/_20dp"
+        tools:ignore="ContentDescription"
+        />
+
+    <LinearLayout
+        android:id="@+id/profileViewLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/_70dp"
+        android:orientation="vertical"
+        android:paddingStart="@dimen/_10dp"
+        android:paddingEnd="@dimen/_10dp"
+        android:paddingBottom="@dimen/_10dp">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:layout_width="@dimen/_110dp"
+            android:layout_height="@dimen/_110dp"
+            android:layout_gravity="center_horizontal"
+            app:shapeAppearanceOverlay="@style/circleImageView"
+            app:srcCompat="@drawable/ic_launcher_background"
+            tools:ignore="VectorDrawableCompat" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/_10dp"
+            android:text="Kamran khan"
+            android:textColor="@color/color_white_text"
+            android:textSize="@dimen/_20sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/_10dp"
+            android:background="@drawable/capsule_shape_button"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                tools:ignore="UselessParent">
+
+                <ImageView
+                    android:id="@+id/premiumButtonIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_setting_white"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_10dp"
+                    android:layout_toEndOf="@id/premiumButtonIcon"
+                    android:text="Listen With Premium"
+                    android:textColor="@color/color_white_text"
+                    android:textStyle="bold" />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10dp"
+            android:layout_marginTop="@dimen/_10dp"
+            android:layout_marginEnd="@dimen/_10dp"
+            app:cardBackgroundColor="#303033"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="10dp"
+            app:cardMaxElevation="12dp"
+            app:cardPreventCornerOverlap="true">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#303033"
+                android:padding="@dimen/_20dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/currentPlanTextview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:text="current plan"
+                    android:textColor="@color/color_white_text_profile"
+                    android:textSize="@dimen/_10sp" />
+
+                <TextView
+                    android:id="@+id/pricePerMonthTextview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/currentPlanTextview"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginTop="@dimen/_20dp"
+                    android:text="Standard plan"
+                    android:textColor="@color/color_white_text_profile"
+                    android:textSize="@dimen/_14sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/pricePerMonthTextview"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginTop="@dimen/_2dp"
+                    android:text="0.5 / month"
+                    android:textColor="@color/color_white_text_profile"
+                    android:textSize="@dimen/_10sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/pricePerMonthTextview"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginStart="@dimen/_16dp"
+                    android:text="Change"
+                    android:textColor="#BA011A"
+                    android:textSize="@dimen/_14sp" />
+
+            </RelativeLayout>
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/_20dp"
+        android:layout_below="@id/profileViewLinearLayout"
+        android:background="@color/color_black_landing_background"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10dp"
+            android:layout_marginTop="@dimen/_10dp"
+            android:layout_marginEnd="@dimen/_10dp"
+            android:drawablePadding="@dimen/_10dp"
+            android:padding="@dimen/_10dp"
+            android:text="Playlists"
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/_15sp"
+            app:drawableStartCompat="@drawable/ic_icon_material_playlist_play"
+            app:drawableEndCompat="@drawable/ic_icon_ionic_ios_arrow_down" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10dp"
+            android:layout_marginTop="@dimen/_10dp"
+            android:layout_marginEnd="@dimen/_10dp"
+            android:drawablePadding="@dimen/_10dp"
+            android:padding="@dimen/_10dp"
+            android:text="Favorite Songs"
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/_15sp"
+            app:drawableStartCompat="@drawable/ic_favorite_songs"
+            app:drawableEndCompat="@drawable/ic_icon_ionic_ios_arrow_down" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10dp"
+            android:layout_marginTop="@dimen/_10dp"
+            android:layout_marginEnd="@dimen/_10dp"
+            android:drawablePadding="@dimen/_10dp"
+            android:padding="@dimen/_10dp"
+            android:text="Purchased Albums"
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/_15sp"
+            app:drawableStartCompat="@drawable/ic_album"
+            app:drawableEndCompat="@drawable/ic_icon_ionic_ios_arrow_down" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10dp"
+            android:layout_marginTop="@dimen/_10dp"
+            android:layout_marginEnd="@dimen/_10dp"
+            android:drawablePadding="@dimen/_10dp"
+            android:padding="@dimen/_10dp"
+            android:text="Purchased Songs"
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/_15sp"
+            app:drawableStartCompat="@drawable/ic_album"
+            app:drawableEndCompat="@drawable/ic_icon_ionic_ios_arrow_down" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10dp"
+            android:layout_marginTop="@dimen/_10dp"
+            android:layout_marginEnd="@dimen/_10dp"
+            android:drawablePadding="@dimen/_10dp"
+            android:padding="@dimen/_10dp"
+            android:text="Following Artist"
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/_15sp"
+            app:drawableStartCompat="@drawable/ic_fav_artist"
+            app:drawableEndCompat="@drawable/ic_icon_ionic_ios_arrow_down" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10dp"
+            android:layout_marginTop="@dimen/_10dp"
+            android:layout_marginEnd="@dimen/_10dp"
+            android:drawablePadding="@dimen/_10dp"
+            android:padding="@dimen/_10dp"
+            android:text="Listening History"
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/_15sp"
+            app:drawableStartCompat="@drawable/ic_listening_history"
+            app:drawableEndCompat="@drawable/ic_icon_ionic_ios_arrow_down" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10dp"
+            android:layout_marginTop="@dimen/_10dp"
+            android:layout_marginEnd="@dimen/_10dp"
+            android:drawablePadding="@dimen/_10dp"
+            android:padding="@dimen/_10dp"
+            android:text="Downloaded"
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/_15sp"
+            app:drawableStartCompat="@drawable/ic_downloaded"
+            app:drawableEndCompat="@drawable/ic_icon_ionic_ios_arrow_down" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10dp"
+            android:layout_marginTop="@dimen/_10dp"
+            android:layout_marginEnd="@dimen/_10dp"
+            android:drawablePadding="@dimen/_10dp"
+            android:padding="@dimen/_10dp"
+            android:text="Buying History"
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/_15sp"
+            app:drawableStartCompat="@drawable/ic_listening_history"
+            app:drawableEndCompat="@drawable/ic_icon_ionic_ios_arrow_down" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10dp"
+            android:layout_marginTop="@dimen/_10dp"
+            android:layout_marginEnd="@dimen/_10dp"
+            android:drawablePadding="@dimen/_10dp"
+            android:padding="@dimen/_10dp"
+            android:text="Your Interests"
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/_15sp"
+            app:drawableStartCompat="@drawable/ic_album"
+            app:drawableEndCompat="@drawable/ic_icon_ionic_ios_arrow_down" />
+    </LinearLayout>
+
+</RelativeLayout>

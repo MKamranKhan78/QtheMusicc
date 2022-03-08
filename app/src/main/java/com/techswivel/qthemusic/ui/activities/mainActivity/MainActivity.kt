@@ -8,6 +8,7 @@ import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.databinding.ActivityMainBinding
 import com.techswivel.qthemusic.ui.activities.serverSettingActivity.ServerSettingActivity
 import com.techswivel.qthemusic.ui.base.BaseActivity
+import com.techswivel.qthemusic.ui.fragments.underDevelopmentMessageFragment.profile_landing_screen.ProfileLandingFragment
 import com.techswivel.qthemusic.utils.ActivityUtils
 
 class MainActivity : BaseActivity() {
@@ -48,12 +49,18 @@ class MainActivity : BaseActivity() {
                     openUnderDevelopmentFragment()
                 }
                 R.id.bottom_nav_profile -> {
-                    openServerSettingActivity()
-                    return@setOnItemSelectedListener false
+                    openLandingProfileFragment()
+//                    openServerSettingActivity()
+//                    return@setOnItemSelectedListener false
+
                 }
             }
             return@setOnItemSelectedListener true
         }
+    }
+
+    private fun openLandingProfileFragment() {
+        openFragment(ProfileLandingFragment())
     }
 
     private fun openUnderDevelopmentFragment() {
