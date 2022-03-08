@@ -8,6 +8,7 @@ import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.databinding.ActivityMainBinding
 import com.techswivel.qthemusic.ui.activities.serverSettingActivity.ServerSettingActivity
 import com.techswivel.qthemusic.ui.base.BaseActivity
+import com.techswivel.qthemusic.ui.fragments.homeFragment.HomeFragment
 import com.techswivel.qthemusic.utils.ActivityUtils
 
 class MainActivity : BaseActivity() {
@@ -19,7 +20,7 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         mBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
-        openUnderDevelopmentFragment()
+        openHomeFragment()
         setBottomNavigationSelector()
     }
 
@@ -39,7 +40,7 @@ class MainActivity : BaseActivity() {
         mBinding.bottomNavigation.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.bottom_nav_home -> {
-                    openUnderDevelopmentFragment()
+                    openHomeFragment()
                 }
                 R.id.bottom_nav_search -> {
                     openUnderDevelopmentFragment()
@@ -54,6 +55,11 @@ class MainActivity : BaseActivity() {
             }
             return@setOnItemSelectedListener true
         }
+    }
+
+    private fun openHomeFragment() {
+        popUpAllFragmentIncludeThis(HomeFragment::class.java.name)
+        openFragment(HomeFragment.newInstance())
     }
 
     private fun openUnderDevelopmentFragment() {

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/main_background"
+    tools:context=".ui.fragments.homeFragment.HomeFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_recommended_for_you"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_20dp"
+            android:layout_marginTop="@dimen/_20dp"
+            android:fontFamily="@font/manrope_bold"
+            android:text="@string/str_recommended_for_you"
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/_18sp" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_songs"
+            style="@style/TabButtonTextStyle"
+            android:layout_width="@dimen/_100dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_recommended_for_you"
+            android:layout_marginStart="@dimen/_12dp"
+            android:layout_marginTop="@dimen/_10dp"
+            android:background="@drawable/selected_tab_background"
+            android:text="@string/str_songs" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_albums"
+            style="@style/TabButtonTextStyle"
+            android:layout_width="@dimen/_100dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_recommended_for_you"
+            android:layout_marginStart="-5dp"
+            android:layout_marginTop="@dimen/_10dp"
+            android:layout_toEndOf="@id/btn_songs"
+            android:background="@drawable/unselected_tab_background"
+            android:text="@string/str_albums" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_artists"
+            style="@style/TabButtonTextStyle"
+            android:layout_width="@dimen/_100dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_recommended_for_you"
+            android:layout_marginStart="-5dp"
+            android:layout_marginTop="@dimen/_10dp"
+            android:layout_toEndOf="@id/btn_albums"
+            android:background="@drawable/unselected_tab_background"
+            android:text="@string/str_artists" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_recommended_media"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/btn_songs"
+            android:orientation="horizontal"
+            android:padding="@dimen/_16dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_recommended_media" />
+
+        <TextView
+            android:id="@+id/tv_whats_your_mood"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/recycler_view_recommended_media"
+            android:layout_marginStart="@dimen/_20dp"
+            android:layout_marginTop="@dimen/_20dp"
+            android:fontFamily="@font/manrope_bold"
+            android:text="@string/str_what_s_your_mood"
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/_18sp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_whats_your_mood"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_whats_your_mood"
+            android:orientation="horizontal"
+            android:padding="@dimen/_16dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_whats_your_mood" />
+
+    </RelativeLayout>
+
+</ScrollView>
