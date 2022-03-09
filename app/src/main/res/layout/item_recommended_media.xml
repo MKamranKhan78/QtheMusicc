@@ -26,24 +26,12 @@
                 android:scaleType="fitXY"
                 android:src="@drawable/no_image_palce_holder" />
 
-            <androidx.cardview.widget.CardView
-                android:layout_width="@dimen/_30dp"
-                android:layout_height="@dimen/_30dp"
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:layout_margin="@dimen/_10dp"
-                android:background="@android:color/transparent"
-                android:padding="@dimen/_20dp"
-                app:cardBackgroundColor="@color/color_black"
-                app:cardCornerRadius="@dimen/_20dp"
-                app:cardElevation="@dimen/_8dp">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:src="@drawable/ic_icon_paid_crown" />
-
-            </androidx.cardview.widget.CardView>
+                android:src="@drawable/ic_icon_crown_white" />
 
         </androidx.cardview.widget.CardView>
 

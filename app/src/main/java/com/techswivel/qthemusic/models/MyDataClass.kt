@@ -7,8 +7,10 @@ class MyDataClass(
     @Expose
     @SerializedName("auth")
     val authModel: User?,
+    val recommendedSongsResponse: RecommendedSongsResponse?,
 ) {
     constructor() : this(
+        null,
         null
     )
 }

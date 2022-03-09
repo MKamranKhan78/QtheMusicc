@@ -89,6 +89,47 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/item_whats_your_mood" />
 
+        <TextView
+            android:id="@+id/tv_trending_songs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/recycler_view_whats_your_mood"
+            android:layout_marginStart="@dimen/_20dp"
+            android:layout_marginTop="@dimen/_20dp"
+            android:fontFamily="@font/manrope_bold"
+            android:text="@string/str_trending_songs"
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/_18sp" />
+
+        <TextView
+            android:id="@+id/tv_total_songs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/recycler_view_whats_your_mood"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="@dimen/_20dp"
+            android:layout_marginEnd="@dimen/_20dp"
+            android:fontFamily="@font/manrope_regular"
+            android:text="30 songs"
+            android:textColor="@color/color_light_grey"
+            android:textSize="@dimen/_14sp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_trending_songs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_total_songs"
+            android:padding="@dimen/_16dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_trending_songs" />
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone" />
+
     </RelativeLayout>
 
 </ScrollView>
