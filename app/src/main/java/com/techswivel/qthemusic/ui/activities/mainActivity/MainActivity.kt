@@ -1,7 +1,9 @@
 package com.techswivel.qthemusic.ui.activities.mainActivity
 
 import android.app.Activity
+import android.os.Build
 import android.os.Bundle
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.techswivel.dfaktfahrerapp.ui.fragments.underDevelopmentMessageFragment.UnderDevelopmentMessageFragment
 import com.techswivel.qthemusic.R
@@ -22,6 +24,7 @@ class MainActivity : BaseActivity() {
         setContentView(mBinding.root)
         openUnderDevelopmentFragment()
         setBottomNavigationSelector()
+        changeStatusBarColor()
     }
 
     override fun onBackPressed() {
@@ -56,6 +59,13 @@ class MainActivity : BaseActivity() {
                 }
             }
             return@setOnItemSelectedListener true
+        }
+    }
+
+    private fun changeStatusBarColor() {
+        if (Build.VERSION.SDK_INT >= 21) {
+            val window = this.window
+            window.statusBarColor = ContextCompat.getColor(this, R.color.color_black)
         }
     }
 
