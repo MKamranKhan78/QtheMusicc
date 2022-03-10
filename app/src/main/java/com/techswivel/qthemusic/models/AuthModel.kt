@@ -1,28 +1,29 @@
 package com.techswivel.qthemusic.models
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 data class AuthModel(
     @SerializedName("name")
-    val name: String,
+    val name: String?,
     @SerializedName("email")
-    val email: String,
+    val email: String?,
     @SerializedName("avatar")
-    val avatar: String,
+    val avatar: String?,
     @SerializedName("jwt")
-    val jwt: String,
+    val jwt: String?,
     @SerializedName("dOB")
-    val dOB: Int,
+    val dOB: Int?,
     @SerializedName("phoneNumber")
-    val phoneNumber: String,
+    val phoneNumber: String?,
     @SerializedName("gender")
-    val gender: String,
+    val gender: String?,
     @SerializedName("isInterestsSet")
-    val isInterestsSet: Boolean,
+    val isInterestsSet: Boolean?,
     @SerializedName("address")
-    val address: Address,
+    val address: Address?,
     @SerializedName("subscription")
-    val subscription: Subscription,
+    val subscription: Subscription?,
     @SerializedName("notification")
-    val notification: Notification
-)
+    val notification: Notification?
+) : Serializable

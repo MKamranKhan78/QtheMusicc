@@ -1,5 +1,6 @@
 package com.techswivel.qthemusic.models
 
+import android.annotation.SuppressLint
 import android.os.Build
 import android.widget.ImageView
 import android.widget.TextView
@@ -12,6 +13,13 @@ object BindingAdapter {
     @BindingAdapter("setTextToTextView")
     fun setTextToTextView(textView: TextView, text: String?) {
         textView.text = text
+    }
+
+    @SuppressLint("SetTextI18n")
+    @JvmStatic
+    @BindingAdapter("setPlan")
+    fun setPlan(textView: TextView, subscription: Subscription?) {
+        textView.text = "$" + subscription?.planPrice.toString() + "/" + subscription?.planDuration
     }
 
     @JvmStatic

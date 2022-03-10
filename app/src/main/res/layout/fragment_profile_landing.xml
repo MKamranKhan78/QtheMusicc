@@ -3,6 +3,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="obj"
+            type="com.techswivel.qthemusic.models.AuthModel" />
+
+        <variable
+            name="viewModel"
+            type="com.techswivel.qthemusic.ui.fragments.underDevelopmentMessageFragment.profile_landing_screen.ProfileLandingViewModel" />
+
+    </data>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -23,6 +37,7 @@
                 android:src="@drawable/ic_setting_white"
                 tools:ignore="ContentDescription" />
 
+
             <LinearLayout
                 android:id="@+id/profileViewLinearLayout"
                 android:layout_width="match_parent"
@@ -37,6 +52,7 @@
                 <com.google.android.material.imageview.ShapeableImageView
                     android:layout_width="@dimen/_110dp"
                     android:layout_height="@dimen/_110dp"
+                    setImageViewImage="@{viewModel.authModel.avatar}"
                     android:layout_gravity="center_horizontal"
                     app:shapeAppearanceOverlay="@style/circleImageView"
                     app:srcCompat="@drawable/ic_launcher_background"
@@ -45,9 +61,10 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:id="@+id/userNameIdProfileLanding"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="@dimen/_10dp"
-                    android:text="Kamran khan"
+                    android:text="@{viewModel.authModel.name}"
                     android:textColor="@color/color_white_text"
                     android:textSize="@dimen/_20sp"
                     android:textStyle="bold" />
@@ -56,7 +73,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
+                    android:id="@+id/profileLandingPremiumButton"
                     android:layout_marginTop="@dimen/_10dp"
+                    android:visibility="@{viewModel.authModel.subscription == null ? View.VISIBLE: View.GONE}"
                     android:background="@drawable/capsule_shape_button"
                     android:gravity="center_horizontal"
                     android:orientation="horizontal">
@@ -95,6 +114,7 @@
                     app:cardBackgroundColor="#303033"
                     app:cardCornerRadius="20dp"
                     app:cardElevation="10dp"
+                    android:visibility="@{viewModel.authModel.subscription == null ? View.GONE: View.VISIBLE}"
                     app:cardMaxElevation="12dp"
                     app:cardPreventCornerOverlap="true">
 
@@ -120,7 +140,7 @@
                             android:layout_below="@id/currentPlanTextview"
                             android:layout_alignParentStart="true"
                             android:layout_marginTop="@dimen/_20dp"
-                            android:text="Standard plan"
+                            android:text="@{viewModel.authModel.subscription.planTitle}"
                             android:textColor="@color/color_white_text_profile"
                             android:textSize="@dimen/_14sp" />
 
@@ -130,7 +150,7 @@
                             android:layout_below="@id/pricePerMonthTextview"
                             android:layout_alignParentStart="true"
                             android:layout_marginTop="@dimen/_2dp"
-                            android:text="0.5 / month"
+                            setPlan="@{viewModel.authModel.subscription}"
                             android:textColor="@color/color_white_text_profile"
                             android:textSize="@dimen/_10sp" />
 
@@ -168,6 +188,7 @@
                     android:drawablePadding="@dimen/_10dp"
                     android:padding="@dimen/_10dp"
                     android:text="@string/playlists"
+                    android:id="@+id/playListTextView"
                     android:textColor="@color/color_white"
                     android:textSize="@dimen/_15sp"
                     app:drawableEndCompat="@drawable/ic_icon_ionic_ios_arrow_down"
@@ -181,6 +202,7 @@
                     android:layout_marginEnd="@dimen/_10dp"
                     android:drawablePadding="@dimen/_10dp"
                     android:padding="@dimen/_10dp"
+                    android:id="@+id/favoriteSongTextview"
                     android:text="@string/favorite_songs"
                     android:textColor="@color/color_white"
                     android:textSize="@dimen/_15sp"
@@ -194,6 +216,7 @@
                     android:layout_marginTop="@dimen/_10dp"
                     android:layout_marginEnd="@dimen/_10dp"
                     android:drawablePadding="@dimen/_10dp"
+                    android:id="@+id/purchasedAldumTextview"
                     android:padding="@dimen/_10dp"
                     android:text="@string/purchased_albums"
                     android:textColor="@color/color_white"
@@ -211,6 +234,7 @@
                     android:padding="@dimen/_10dp"
                     android:text="@string/purchased_songs"
                     android:textColor="@color/color_white"
+                    android:id="@+id/purchaseSongTextView"
                     android:textSize="@dimen/_15sp"
                     app:drawableEndCompat="@drawable/ic_icon_ionic_ios_arrow_down"
                     app:drawableStartCompat="@drawable/ic_album" />
@@ -223,6 +247,7 @@
                     android:layout_marginEnd="@dimen/_10dp"
                     android:drawablePadding="@dimen/_10dp"
                     android:padding="@dimen/_10dp"
+                    android:id="@+id/followingArtistTextview"
                     android:text="@string/following_artist"
                     android:textColor="@color/color_white"
                     android:textSize="@dimen/_15sp"
@@ -236,6 +261,7 @@
                     android:layout_marginTop="@dimen/_10dp"
                     android:layout_marginEnd="@dimen/_10dp"
                     android:drawablePadding="@dimen/_10dp"
+                    android:id="@+id/listeningHistoryTextview"
                     android:padding="@dimen/_10dp"
                     android:text="@string/listening_history"
                     android:textColor="@color/color_white"
@@ -252,6 +278,7 @@
                     android:drawablePadding="@dimen/_10dp"
                     android:padding="@dimen/_10dp"
                     android:text="@string/downloaded"
+                    android:id="@+id/downloadedTextview"
                     android:textColor="@color/color_white"
                     android:textSize="@dimen/_15sp"
                     app:drawableEndCompat="@drawable/ic_icon_ionic_ios_arrow_down"
@@ -266,6 +293,7 @@
                     android:drawablePadding="@dimen/_10dp"
                     android:padding="@dimen/_10dp"
                     android:text="@string/buying_history"
+                    android:id="@+id/buyingHistoryTextview"
                     android:textColor="@color/color_white"
                     android:textSize="@dimen/_15sp"
                     app:drawableEndCompat="@drawable/ic_icon_ionic_ios_arrow_down"
@@ -282,11 +310,12 @@
                     android:text="@string/your_interests"
                     android:textColor="@color/color_white"
                     android:textSize="@dimen/_15sp"
+                    android:id="@+id/yourIntrestTextview"
                     app:drawableEndCompat="@drawable/ic_icon_ionic_ios_arrow_down"
                     app:drawableStartCompat="@drawable/ic_album" />
             </LinearLayout>
-
         </RelativeLayout>
     </ScrollView>
+
 
 </layout>

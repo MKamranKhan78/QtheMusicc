@@ -3,6 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="obj"
+            type="com.techswivel.qthemusic.models.AuthModel" />
+
+        <variable
+            name="viewModel"
+            type="com.techswivel.qthemusic.ui.activities.profile_setting_screen.ProfileSettingViewModel" />
+
+    </data>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -20,6 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/activityToolbar"
+            android:visibility="@{viewModel.authModel.subscription == null ? View.VISIBLE: View.GONE}"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/_30dp"
             android:text="@string/free_account"
@@ -30,6 +45,7 @@
         <LinearLayout
             android:id="@+id/premiumButtonId"
             android:layout_width="wrap_content"
+            android:visibility="@{viewModel.authModel.subscription == null ? View.VISIBLE: View.GONE}"
             android:layout_height="wrap_content"
             android:layout_below="@id/freeAccountText"
             android:layout_centerHorizontal="true"
@@ -70,6 +86,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/premiumButtonId"
             android:layout_marginStart="@dimen/_20dp"
+            android:visibility="@{viewModel.authModel.subscription == null ? View.GONE: View.VISIBLE}"
             android:layout_marginTop="@dimen/_10dp"
             android:layout_marginEnd="@dimen/_20dp"
             app:cardBackgroundColor="#303033"

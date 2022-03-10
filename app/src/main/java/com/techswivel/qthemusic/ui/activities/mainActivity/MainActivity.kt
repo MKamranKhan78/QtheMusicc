@@ -5,6 +5,7 @@ import android.os.Build
 import android.os.Bundle
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.techswivel.dfaktfahrerapp.ui.fragments.underDevelopmentMessageFragment.UnderDevelopmentMessageFragment
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.databinding.ActivityMainBinding
@@ -16,6 +17,7 @@ import com.techswivel.qthemusic.utils.ActivityUtils
 class MainActivity : BaseActivity() {
 
     private lateinit var mBinding: ActivityMainBinding
+    private lateinit var viewModel: MainActivityViewModel
     private var mFragment: Fragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,8 +25,10 @@ class MainActivity : BaseActivity() {
         mBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
         openUnderDevelopmentFragment()
+        initView()
         setBottomNavigationSelector()
         changeStatusBarColor()
+        setDataInSharePrefrence()
     }
 
     override fun onBackPressed() {
@@ -68,6 +72,15 @@ class MainActivity : BaseActivity() {
             window.statusBarColor = ContextCompat.getColor(this, R.color.color_black)
         }
     }
+
+    private fun initView() {
+        viewModel = ViewModelProvider(this).get(MainActivityViewModel::class.java)
+    }
+
+    private fun setDataInSharePrefrence() {
+        viewModel.setDataInSharedPrefrence(this)
+    }
+
 
     private fun openLandingProfileFragment() {
         openFragment(ProfileLandingFragment())
