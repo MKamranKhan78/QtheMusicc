@@ -251,4 +251,5 @@ class HomeFragment : RecyclerViewBaseFragment(), BaseInterface {
             recommendedSongsBodyModel
         )
     }
+
 }
