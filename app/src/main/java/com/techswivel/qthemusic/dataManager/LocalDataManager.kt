@@ -1,21 +1,10 @@
 package com.techswivel.qthemusic.dataManager
 
 import com.techswivel.qthemusic.application.QTheMusicApplication
-import com.techswivel.qthemusic.models.GoogleResponseModel
-import com.techswivel.qthemusic.models.ResponseMain
 import com.techswivel.qthemusic.source.local.database.AppRoomDatabase
-import io.reactivex.Observable
-import retrofit2.Response
 
 
-object LocalDataManager : BaseDataManager() {
-    override fun getGoogleAccessToken(serverAuthCode: String): Observable<Response<GoogleResponseModel>> {
-        TODO("Not yet implemented")
-    }
-
-    override fun sendOTP(email: String): Observable<Response<ResponseMain>> {
-        TODO("Not yet implemented")
-    }
+object LocalDataManager : BaseDataManager(), LocalDataManagerImp {
 
     /** -------------- Database Instance method ---------------------- */
 

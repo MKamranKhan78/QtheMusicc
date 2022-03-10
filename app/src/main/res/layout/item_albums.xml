@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="click"
+            type="com.techswivel.qthemusic.customData.interfaces.AdapterOnClick" />
+
+        <variable
+            name="obj"
+            type="com.techswivel.qthemusic.models.Album" />
+
+        <variable
+            name="albumStatus"
+            type="com.techswivel.qthemusic.customData.enums.AlbumStatus" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_8dp"
+        android:background="@android:color/transparent">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cv_main_image"
+            android:layout_width="@dimen/_120dp"
+            android:layout_height="@dimen/_120dp"
+            android:background="@android:color/transparent"
+            app:cardCornerRadius="@dimen/_10dp"
+            app:cardElevation="@dimen/_8dp">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                app:setImageViewImage="@{obj.albumCoverImageUrl}"
+                tools:src="@drawable/no_image_palce_holder" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_margin="@dimen/_10dp"
+                android:src="@drawable/ic_icon_crown_white"
+                android:visibility="@{obj.albumStatus == albumStatus.PREMIUM ? View.VISIBLE : View.GONE}" />
+
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:layout_width="@dimen/_120dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/cv_main_image"
+            android:layout_marginTop="@dimen/_10dp"
+            android:ellipsize="end"
+            android:fontFamily="@font/manrope_regular"
+            android:maxLines="1"
+            android:text="@{obj.albumTitle}"
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/_14sp" />
+
+    </RelativeLayout>
+</layout>

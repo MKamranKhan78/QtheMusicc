@@ -1,9 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
+        <import type="android.view.View" />
+
+        <variable
+            name="click"
+            type="com.techswivel.qthemusic.customData.interfaces.AdapterOnClick" />
+
+        <variable
+            name="obj"
+            type="com.techswivel.qthemusic.models.Song" />
+
+        <variable
+            name="songStatus"
+            type="com.techswivel.qthemusic.customData.enums.SongStatus" />
     </data>
 
     <RelativeLayout
@@ -24,14 +38,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="fitXY"
-                android:src="@drawable/no_image_palce_holder" />
+                app:setImageViewImage="@{obj.coverImageUrl}"
+                tools:src="@drawable/no_image_palce_holder" />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:layout_margin="@dimen/_10dp"
-                android:src="@drawable/ic_icon_crown_white" />
+                android:src="@drawable/ic_icon_crown_white"
+                android:visibility="@{obj.songStatus == songStatus.PREMIUM ? View.VISIBLE : View.GONE}" />
 
         </androidx.cardview.widget.CardView>
 
@@ -43,7 +59,7 @@
             android:ellipsize="end"
             android:fontFamily="@font/manrope_regular"
             android:maxLines="1"
-            android:text="Life On Mars sfsadfsdafsdaf"
+            android:text="@{obj.songTitle}"
             android:textColor="@color/color_white"
             android:textSize="@dimen/_14sp" />
 

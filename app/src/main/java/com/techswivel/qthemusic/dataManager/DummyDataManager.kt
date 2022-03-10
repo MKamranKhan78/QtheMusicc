@@ -3,16 +3,11 @@ package com.techswivel.qthemusic.dataManager
 import com.techswivel.qthemusic.customData.enums.AlbumStatus
 import com.techswivel.qthemusic.customData.enums.SongStatus
 import com.techswivel.qthemusic.models.*
-import io.reactivex.Observable
 import retrofit2.Response
 
 class DummyDataManager {
 
     companion object {
-        fun getRecommendedSongsData(recommendedSongsBodyModel: RecommendedSongsBodyModel): Observable<Response<ResponseMain>> {
-            return Observable.create { getResponseDummyData() }
-        }
-
         fun getResponseDummyData(): Response<ResponseMain> {
             return Response.success(
                 ResponseMain(
@@ -52,7 +47,7 @@ class DummyDataManager {
                         1, "Ed Sheeran"
                     ),
                     Artist(
-                        "https://cdnb.artstation.com/p/assets/images/images/018/313/091/large/akshay-soni-screenshot-20190310-142448-whatsapp.jpg?1558920648",
+                        "https://assets.bluethumb.com.au/media/image/fill/766/766/eyJpZCI6InVwbG9hZHMvbGlzdGluZy8zNDU2NTQvZGFuZS1pa2luLWZhbWUtYmx1ZXRodW1iLWE2YWYuanBnIiwic3RvcmFnZSI6InN0b3JlIiwibWV0YWRhdGEiOnsiZmlsZW5hbWUiOiJkYW5lLWlraW4tZmFtZS1ibHVldGh1bWItYTZhZi5qcGciLCJtaW1lX3R5cGUiOm51bGx9fQ?signature=798375b6cfc354d89abaa74cab9379008e641123895397a97daf0728604361c8",
                         2, "Selena gomez"
                     ),
                     Artist(

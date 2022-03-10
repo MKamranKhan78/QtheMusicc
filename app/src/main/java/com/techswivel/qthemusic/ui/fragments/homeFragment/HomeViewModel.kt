@@ -4,7 +4,8 @@ import androidx.lifecycle.MutableLiveData
 import com.techswivel.qthemusic.Data.RemoteRepository.ServerRepository.CustomObserver
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.application.QTheMusicApplication
-import com.techswivel.qthemusic.dataManager.DummyDataManager
+import com.techswivel.qthemusic.customData.enums.RecommendedSongsType
+import com.techswivel.qthemusic.dataManager.RemoteDataManager
 import com.techswivel.qthemusic.models.ApiResponse
 import com.techswivel.qthemusic.models.ErrorResponse
 import com.techswivel.qthemusic.models.RecommendedSongsBodyModel
@@ -15,7 +16,10 @@ import com.techswivel.qthemusic.ui.base.BaseViewModel
 import retrofit2.Response
 
 class HomeViewModel : BaseViewModel() {
+    var selectedTab: RecommendedSongsType? = null
     var recommendedSongsDataList: MutableList<Any> = ArrayList()
+    var whatsYourMoodDataList: MutableList<Any> = ArrayList()
+    var trendingSongsDataList: MutableList<Any> = ArrayList()
     private var mRecommendedSongsResponse: MutableLiveData<ApiResponse> = MutableLiveData()
 
     var recommendedSongsResponse: MutableLiveData<ApiResponse>
@@ -25,14 +29,15 @@ class HomeViewModel : BaseViewModel() {
         }
 
     fun getRecommendedSongsDataFromServer(recommendedSongsBodyModel: RecommendedSongsBodyModel) {
-        DummyDataManager.getRecommendedSongsData(recommendedSongsBodyModel).doOnSubscribe {
+        RemoteDataManager.getRecommendedSongsData(recommendedSongsBodyModel).doOnSubscribe {
             mRecommendedSongsResponse.value = ApiResponse.loading()
         }?.subscribe(object : CustomObserver<Response<ResponseMain>>() {
             override fun onSuccess(t: Response<ResponseMain>) {
                 when {
                     t.isSuccessful -> {
-                        mRecommendedSongsResponse.value =
+                        mRecommendedSongsResponse.postValue(
                             ApiResponse.success(t.body()?.response)
+                        )
                     }
                     t.code() == 403 -> {
                         val error: ResponseMain? = ErrorUtils.parseError(t)

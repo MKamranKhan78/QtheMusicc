@@ -4,22 +4,24 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.customData.adapter.RecyclerViewAdapter
+import com.techswivel.qthemusic.customData.enums.AdapterType
 import com.techswivel.qthemusic.customData.enums.NetworkStatus
 import com.techswivel.qthemusic.customData.enums.RecommendedSongsType
 import com.techswivel.qthemusic.customData.interfaces.BaseInterface
 import com.techswivel.qthemusic.databinding.FragmentHomeBinding
-import com.techswivel.qthemusic.models.RecommendedSongsBodyModel
+import com.techswivel.qthemusic.models.RecommendedSongsBodyBuilder
 import com.techswivel.qthemusic.models.ResponseModel
 import com.techswivel.qthemusic.source.local.preference.DataStoreUtils
 import com.techswivel.qthemusic.ui.base.RecyclerViewBaseFragment
 import com.techswivel.qthemusic.utils.DialogUtils
 import kotlinx.coroutines.runBlocking
 
-class HomeFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.CallBack, BaseInterface {
+class HomeFragment : RecyclerViewBaseFragment(), BaseInterface {
 
     companion object {
         @JvmStatic
@@ -28,7 +30,9 @@ class HomeFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.CallBack, B
 
     private lateinit var binding: FragmentHomeBinding
     private lateinit var viewModel: HomeViewModel
-    private lateinit var mAdapter: RecyclerViewAdapter
+    private lateinit var mRecommendedForYouAdapter: RecyclerViewAdapter
+    private lateinit var mWhatsYourMoodAdapter: RecyclerViewAdapter
+    private lateinit var mTrendingSongsAdapter: RecyclerViewAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,31 +45,74 @@ class HomeFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.CallBack, B
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
-        setObserver()
-        viewModel.getRecommendedSongsDataFromServer(
-            RecommendedSongsBodyModel(
-                null, null,
-                isListeningHistory = false,
-                isRecommendedForYou = true,
-                type = RecommendedSongsType.SONGS
-            )
+        viewModel.selectedTab = RecommendedSongsType.SONGS
+        setUpHorizentalRecyclerView(
+            binding.recyclerViewRecommendedMedia,
+            0,
+            AdapterType.RECOMMENDED_FOR_YOU
         )
+        setObserver()
+        setListeners()
+        getRecommendedSongs()
     }
 
-    override fun onPrepareAdapter(): RecyclerView.Adapter<*> {
-        return mAdapter
-    }
+    override fun onPrepareAdapter(adapterType: AdapterType?): RecyclerView.Adapter<*> {
+        return when (adapterType) {
+            AdapterType.RECOMMENDED_FOR_YOU -> {
+                mRecommendedForYouAdapter =
+                    RecyclerViewAdapter(object : RecyclerViewAdapter.CallBack {
+                        override fun inflateLayoutFromId(position: Int, data: Any?): Int {
+                            return when (viewModel.selectedTab) {
+                                RecommendedSongsType.SONGS -> {
+                                    R.layout.item_songs
+                                }
+                                RecommendedSongsType.ALBUM -> {
+                                    R.layout.item_albums
+                                }
+                                else -> {
+                                    R.layout.item_artist
+                                }
+                            }
+                        }
 
-    override fun inflateLayoutFromId(position: Int, data: Any?): Int {
-        return R.layout.item_recommended_media
-    }
+                        override fun onNoDataFound() {
 
-    override fun onNoDataFound() {
+                        }
+                    }, viewModel.recommendedSongsDataList)
 
-    }
+                mRecommendedForYouAdapter
+            }
 
-    override fun onViewClicked(view: View, data: Any?) {
+            AdapterType.WHATS_YOUR_MOOD -> {
+                mWhatsYourMoodAdapter =
+                    RecyclerViewAdapter(object : RecyclerViewAdapter.CallBack {
+                        override fun inflateLayoutFromId(position: Int, data: Any?): Int {
+                            return R.layout.item_whats_your_mood
+                        }
 
+                        override fun onNoDataFound() {
+
+                        }
+                    }, viewModel.whatsYourMoodDataList)
+
+                mWhatsYourMoodAdapter
+            }
+
+            else -> {
+                mTrendingSongsAdapter =
+                    RecyclerViewAdapter(object : RecyclerViewAdapter.CallBack {
+                        override fun inflateLayoutFromId(position: Int, data: Any?): Int {
+                            return R.layout.item_trending_songs
+                        }
+
+                        override fun onNoDataFound() {
+
+                        }
+                    }, viewModel.trendingSongsDataList)
+
+                mTrendingSongsAdapter
+            }
+        }
     }
 
     override fun showProgressBar() {
@@ -84,22 +131,22 @@ class HomeFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.CallBack, B
                 }
                 NetworkStatus.SUCCESS -> {
                     hideProgressBar()
-                    val response = recommendedSongsDataResponse.t as ResponseModel
-
                     viewModel.recommendedSongsDataList.clear()
-                    val list = response.data.recommendedSongsResponse
+                    val response = recommendedSongsDataResponse.t as ResponseModel
+                    val songsList = response.data.recommendedSongsResponse?.songs
+                    val albumsList = response.data.recommendedSongsResponse?.albums
+                    val artistsList = response.data.recommendedSongsResponse?.artist
 
-//                    if (list) {
-//                        textNoData.visibility = View.GONE
-//                        for (an: Any in list) {
-//                            viewModel.routeList.add(an)
-//                        }
-//
-//                    } else {
-//                        textNoData.visibility = View.VISIBLE
-//                    }
-//                    if (::mAdapter.isInitialized)
-//                        mAdapter.notifyDataSetChanged()
+                    if (!songsList.isNullOrEmpty() && viewModel.selectedTab == RecommendedSongsType.SONGS) {
+                        viewModel.recommendedSongsDataList.addAll(songsList)
+                    } else if (!albumsList.isNullOrEmpty() && viewModel.selectedTab == RecommendedSongsType.ALBUM) {
+                        viewModel.recommendedSongsDataList.addAll(albumsList)
+                    } else if (!artistsList.isNullOrEmpty() && viewModel.selectedTab == RecommendedSongsType.ARTIST) {
+                        viewModel.recommendedSongsDataList.addAll(artistsList)
+                    }
+
+                    if (::mRecommendedForYouAdapter.isInitialized)
+                        mRecommendedForYouAdapter.notifyDataSetChanged()
 
                 }
                 NetworkStatus.ERROR -> {
@@ -137,5 +184,71 @@ class HomeFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.CallBack, B
                 }
             }
         }
+    }
+
+    private fun setListeners() {
+        binding.btnSongs.setOnClickListener {
+            binding.recyclerViewRecommendedMedia.smoothScrollToPosition(0)
+            viewModel.selectedTab = RecommendedSongsType.SONGS
+            updateSelectedTabBackground(binding.btnSongs, binding.btnAlbums, binding.btnArtists)
+            getRecommendedSongs()
+        }
+
+        binding.btnAlbums.setOnClickListener {
+            binding.recyclerViewRecommendedMedia.smoothScrollToPosition(0)
+            viewModel.selectedTab = RecommendedSongsType.ALBUM
+            updateSelectedTabBackground(binding.btnAlbums, binding.btnSongs, binding.btnArtists)
+            getRecommendedAlbums()
+        }
+
+        binding.btnArtists.setOnClickListener {
+            binding.recyclerViewRecommendedMedia.smoothScrollToPosition(0)
+            viewModel.selectedTab = RecommendedSongsType.ARTIST
+            updateSelectedTabBackground(binding.btnArtists, binding.btnAlbums, binding.btnSongs)
+            getRecommendedArtists()
+        }
+    }
+
+    private fun updateSelectedTabBackground(
+        selectedTab: Button,
+        unselectedTab1: Button,
+        unselectedTab2: Button
+    ) {
+        selectedTab.setBackgroundResource(R.drawable.selected_tab_background)
+        unselectedTab1.setBackgroundResource(R.drawable.unselected_tab_background)
+        unselectedTab2.setBackgroundResource(R.drawable.unselected_tab_background)
+    }
+
+    private fun getRecommendedSongs() {
+        val recommendedSongsBuilder = RecommendedSongsBodyBuilder()
+        recommendedSongsBuilder.isListeningHistory = false
+        recommendedSongsBuilder.isRecommendedForYou = true
+        recommendedSongsBuilder.type = RecommendedSongsType.SONGS
+        val recommendedSongsBodyModel = RecommendedSongsBodyBuilder.build(recommendedSongsBuilder)
+        viewModel.getRecommendedSongsDataFromServer(
+            recommendedSongsBodyModel
+        )
+    }
+
+    private fun getRecommendedAlbums() {
+        val recommendedSongsBuilder = RecommendedSongsBodyBuilder()
+        recommendedSongsBuilder.isListeningHistory = false
+        recommendedSongsBuilder.isRecommendedForYou = true
+        recommendedSongsBuilder.type = RecommendedSongsType.ALBUM
+        val recommendedSongsBodyModel = RecommendedSongsBodyBuilder.build(recommendedSongsBuilder)
+        viewModel.getRecommendedSongsDataFromServer(
+            recommendedSongsBodyModel
+        )
+    }
+
+    private fun getRecommendedArtists() {
+        val recommendedSongsBuilder = RecommendedSongsBodyBuilder()
+        recommendedSongsBuilder.isListeningHistory = false
+        recommendedSongsBuilder.isRecommendedForYou = true
+        recommendedSongsBuilder.type = RecommendedSongsType.ARTIST
+        val recommendedSongsBodyModel = RecommendedSongsBodyBuilder.build(recommendedSongsBuilder)
+        viewModel.getRecommendedSongsDataFromServer(
+            recommendedSongsBodyModel
+        )
     }
 }

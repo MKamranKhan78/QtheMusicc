@@ -28,7 +28,7 @@
             android:layout_width="@dimen/_100dp"
             android:layout_height="wrap_content"
             android:layout_below="@id/tv_recommended_for_you"
-            android:layout_marginStart="@dimen/_12dp"
+            android:layout_marginStart="@dimen/_14dp"
             android:layout_marginTop="@dimen/_10dp"
             android:background="@drawable/selected_tab_background"
             android:text="@string/str_songs" />
@@ -65,7 +65,7 @@
             android:orientation="horizontal"
             android:padding="@dimen/_16dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/item_recommended_media" />
+            tools:listitem="@layout/item_songs" />
 
         <TextView
             android:id="@+id/tv_whats_your_mood"
