@@ -16,7 +16,7 @@ class MainActivityViewModel : BaseViewModel() {
             "https://ca.slack-edge.com/TH6CHMP7Z-U01RL9JUJG1-0a9af450bd4f-512"
         )
         PrefUtils.setBoolean(activity, CommonKeys.KEY_USER_ENABLE_NOTIFICATION, true)
-        PrefUtils.setBoolean(activity, CommonKeys.KEY_ARTIST_UPDATE, false)
+        PrefUtils.setBoolean(activity, CommonKeys.KEY_ARTIST_UPDATE, true)
         PrefUtils.setString(activity, CommonKeys.KEY_SUBSRIPTION, null)
         PrefUtils.setString(activity, CommonKeys.KEY_USER_PHONE, "003030223")
         PrefUtils.setInt(activity, CommonKeys.KEY_USER_DOB, 123445)

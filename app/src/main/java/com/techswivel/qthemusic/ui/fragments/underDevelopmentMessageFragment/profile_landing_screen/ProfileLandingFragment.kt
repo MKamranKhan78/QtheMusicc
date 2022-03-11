@@ -115,7 +115,7 @@ class ProfileLandingFragment : BaseFragment() {
         val bundle = Bundle()
 
         bundle.putSerializable(
-            CommonKeys.KEY_DATA,
+            CommonKeys.PROFILE_LANDING_DATA,
             viewModel.authModel
         )
         ActivityUtils.startNewActivity(

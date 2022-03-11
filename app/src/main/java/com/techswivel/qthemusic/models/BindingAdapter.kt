@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Build
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.widget.SwitchCompat
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 
@@ -20,6 +21,18 @@ object BindingAdapter {
     @BindingAdapter("setPlan")
     fun setPlan(textView: TextView, subscription: Subscription?) {
         textView.text = "$" + subscription?.planPrice.toString() + "/" + subscription?.planDuration
+    }
+
+    @JvmStatic
+    @BindingAdapter(value = ["isChecked", "isArtistChecked"])
+    fun isChecked(view: SwitchCompat, enabled: Boolean, artistChecked: Boolean) {
+        if (enabled == false) {
+            view.isEnabled = false
+            view.isChecked = false
+        } else {
+            view.isEnabled = true
+            view.isChecked = artistChecked
+        }
     }
 
     @JvmStatic

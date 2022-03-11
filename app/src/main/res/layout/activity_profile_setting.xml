@@ -34,18 +34,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/activityToolbar"
-            android:visibility="@{viewModel.authModel.subscription == null ? View.VISIBLE: View.GONE}"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/_30dp"
             android:text="@string/free_account"
             android:textColor="@color/color_white_text"
-            android:textSize="@dimen/_20sp" />
+            android:textSize="@dimen/_20sp"
+            android:visibility="@{viewModel.authModel.subscription == null ? View.VISIBLE: View.GONE}" />
 
 
         <LinearLayout
             android:id="@+id/premiumButtonId"
             android:layout_width="wrap_content"
-            android:visibility="@{viewModel.authModel.subscription == null ? View.VISIBLE: View.GONE}"
             android:layout_height="wrap_content"
             android:layout_below="@id/freeAccountText"
             android:layout_centerHorizontal="true"
@@ -53,7 +52,8 @@
             android:layout_marginTop="@dimen/_10dp"
             android:background="@drawable/capsule_shape_button"
             android:gravity="center_horizontal"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="@{viewModel.authModel.subscription == null ? View.VISIBLE: View.GONE}">
 
             <RelativeLayout
                 android:layout_width="wrap_content"
@@ -247,9 +247,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="19dp"
                 android:layout_alignParentEnd="true"
+                android:checked="@{viewModel.authModel.notification.isNotificationEnabled()}"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="@dimen/_10dp"
-                android:checked="true"
                 android:thumb="@drawable/thumb"
                 app:track="@drawable/track" />
 
@@ -284,10 +284,10 @@
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="@dimen/_10dp"
-                android:checked="true"
+                isArtistChecked="@{viewModel.authModel.notification.isArtistUpdateEnabled()}"
+                isChecked="@{viewModel.authModel.notification.isNotificationEnabled()}"
                 android:thumb="@drawable/thumb"
                 app:track="@drawable/track" />
-
         </RelativeLayout>
 
         <TextView
