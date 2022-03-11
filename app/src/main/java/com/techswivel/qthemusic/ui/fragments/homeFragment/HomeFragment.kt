@@ -240,7 +240,6 @@ class HomeFragment : RecyclerViewBaseFragment(), BaseInterface {
             recommendedSongsBodyModel
         )
     }
-
     private fun getRecommendedArtists() {
         val recommendedSongsBuilder = RecommendedSongsBodyBuilder()
         recommendedSongsBuilder.isListeningHistory = false
