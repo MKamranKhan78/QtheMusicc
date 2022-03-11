@@ -1,33 +1,30 @@
 package com.techswivel.qthemusic.ui.fragments.otpVerificationFragment
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.Fragment
 import com.techswivel.qthemusic.R
+import com.techswivel.qthemusic.databinding.FragmentOtpVerificationBinding
+import com.techswivel.qthemusic.ui.fragments.setPasswordFragmetnt.SetPassword
+import com.techswivel.qthemusic.utils.Log
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [OtpVerification.newInstance] factory method to
- * create an instance of this fragment.
- */
 class OtpVerification : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    val TAG = "OtpVerification"
+    private lateinit var viewBinding: FragmentOtpVerificationBinding
+    var etOtpOne = ""
+    var etOtpTwo = ""
+    var etOtpThree = ""
+    var etOtpFour = ""
+    var etOtpFive = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+
     }
 
     override fun onCreateView(
@@ -35,26 +32,183 @@ class OtpVerification : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_otp_verification, container, false)
+        viewBinding = FragmentOtpVerificationBinding.inflate(layoutInflater, container, false)
+
+
+        return viewBinding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment OtpVerification.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            OtpVerification().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        clickListeners()
+        getUserOtp()
+
+    }
+
+    private fun clickListeners() {
+
+        viewBinding.btnConfirmCode.setOnClickListener {
+            val otpCode = etOtpOne + etOtpTwo + etOtpThree + etOtpFour + etOtpFive
+            Log.d(TAG, "ottp si $otpCode")
+            if (otpCode == "11111") {
+                Toast.makeText(requireContext(), "Code Is Valid", Toast.LENGTH_SHORT).show()
+                val transaction = requireActivity().supportFragmentManager.beginTransaction()
+                transaction.replace(R.id.auth_container, SetPassword())
+                    .addToBackStack(TAG)
+                transaction.commit()
+            } else {
+                Toast.makeText(requireContext(), "Code Is In Valid", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun getUserOtp() {
+        val sb = StringBuilder()
+        val number = ""
+        viewBinding.otp1Id.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                if (sb.length == 1) {
+                    sb.deleteCharAt(0);
+
                 }
             }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                if (sb.length == 0 && viewBinding.otp1Id.text.length == 1) {
+                    sb.append(p0)
+                    etOtpOne = p0.toString()
+                    viewBinding.otp1Id.clearFocus()
+                    viewBinding.otp2Id.requestFocus()
+                    viewBinding.otp2Id.setCursorVisible(true)
+                }
+                if (viewBinding.otp1Id.isFocused) {
+                    viewBinding.otp1Id.setBackgroundResource(R.drawable.otp_selected_box_bg)
+                } else {
+                    viewBinding.otp1Id.setBackgroundResource(R.drawable.otp_background)
+                }
+
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+                if (sb.length == 0) {
+                    viewBinding.otp1Id.requestFocus()
+                }
+            }
+
+        })
+
+        viewBinding.otp2Id.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                if (sb.length == 1) {
+                    sb.deleteCharAt(0);
+                }
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                if (sb.length == 0 && viewBinding.otp2Id.text.length == 1) {
+                    etOtpTwo = p0.toString()
+                    sb.append(p0)
+                    number + p0
+                    viewBinding.otp2Id.clearFocus()
+                    viewBinding.otp3Id.requestFocus()
+                    viewBinding.otp3Id.setCursorVisible(true)
+                }
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+                if (viewBinding.otp2Id.text.length == 0) {
+                    viewBinding.otp2Id.clearFocus()
+                    viewBinding.otp1Id.requestFocus()
+                    viewBinding.otp1Id.setCursorVisible(true)
+
+                }
+                if (viewBinding.otp2Id.isFocused) {
+                    viewBinding.otp2Id.setBackgroundResource(R.drawable.otp_selected_box_bg)
+                } else {
+                    viewBinding.otp2Id.setBackgroundResource(R.drawable.otp_background)
+                }
+            }
+
+        })
+
+        viewBinding.otp3Id.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                if (sb.length == 1) {
+                    sb.deleteCharAt(0);
+                }
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                if (sb.length == 0 && viewBinding.otp3Id.text.length == 1) {
+                    etOtpThree = p0.toString()
+                    viewBinding.otp3Id.clearFocus()
+                    viewBinding.otp4Id.requestFocus()
+                    viewBinding.otp4Id.setCursorVisible(true)
+
+                    sb.append(p0)
+                }
+                if (viewBinding.otp3Id.isFocused) {
+                    viewBinding.otp3Id.setBackgroundResource(R.drawable.otp_selected_box_bg)
+                } else {
+                    viewBinding.otp3Id.setBackgroundResource(R.drawable.otp_background)
+                }
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+                if (viewBinding.otp3Id.text.length == 0) {
+                    viewBinding.otp3Id.clearFocus()
+                    viewBinding.otp2Id.requestFocus()
+                    viewBinding.otp2Id.setCursorVisible(true)
+
+                }
+            }
+        })
+        viewBinding.otp4Id.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                if (sb.length == 1) {
+                    sb.deleteCharAt(0);
+                }
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                if (sb.length == 0 && viewBinding.otp4Id.text.length == 1) {
+                    etOtpFour = p0.toString()
+                    viewBinding.otp4Id.clearFocus()
+                    viewBinding.otp5Id.requestFocus()
+                    viewBinding.otp5Id.setCursorVisible(true)
+                }
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+                if (viewBinding.otp4Id.text.length == 0) {
+                    viewBinding.otp4Id.clearFocus()
+                    viewBinding.otp3Id.requestFocus()
+                    viewBinding.otp3Id.setCursorVisible(true)
+                }
+            }
+        })
+
+        viewBinding.otp5Id.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                if (sb.length == 1) {
+                    sb.deleteCharAt(0);
+                }
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                if (sb.length == 0 && viewBinding.otp4Id.text.length == 1) {
+                    etOtpFive = p0.toString()
+
+                }
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+                if (viewBinding.otp5Id.text.length == 0) {
+                    viewBinding.otp5Id.clearFocus()
+                    viewBinding.otp4Id.requestFocus()
+                    viewBinding.otp4Id.setCursorVisible(true)
+                }
+            }
+        })
     }
 }

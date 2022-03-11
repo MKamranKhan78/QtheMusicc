@@ -1,4 +1,9 @@
 package com.techswivel.qthemusic.ui.fragments.signInFragment
 
-class SignInViewModel {
+import androidx.lifecycle.ViewModel
+
+class SignInViewModel : ViewModel() {
+    var emailFromUser = ""
+    var passwordFromUser = ""
+
 }
