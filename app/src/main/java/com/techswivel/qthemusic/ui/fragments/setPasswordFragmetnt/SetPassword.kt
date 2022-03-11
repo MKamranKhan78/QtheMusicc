@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.techswivel.qthemusic.databinding.FragmentSetPasswordBinding
 
+
 class SetPassword : Fragment() {
     lateinit var passwordBinding: FragmentSetPasswordBinding
 
@@ -22,5 +23,16 @@ class SetPassword : Fragment() {
         passwordBinding = FragmentSetPasswordBinding.inflate(layoutInflater, container, false)
 
         return passwordBinding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        widgetInitialization()
+    }
+
+    private fun widgetInitialization() {
+
+        passwordBinding.etSetPasswordLayout.passwordVisibilityToggleRequested(false)
+        passwordBinding.etSetConfirmPasswordLayout.passwordVisibilityToggleRequested(false)
     }
 }

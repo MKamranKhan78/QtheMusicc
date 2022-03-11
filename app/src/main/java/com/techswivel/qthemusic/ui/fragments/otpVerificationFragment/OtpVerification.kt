@@ -6,7 +6,6 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.databinding.FragmentOtpVerificationBinding
@@ -50,15 +49,10 @@ class OtpVerification : Fragment() {
         viewBinding.btnConfirmCode.setOnClickListener {
             val otpCode = etOtpOne + etOtpTwo + etOtpThree + etOtpFour + etOtpFive
             Log.d(TAG, "ottp si $otpCode")
-            if (otpCode == "11111") {
-                Toast.makeText(requireContext(), "Code Is Valid", Toast.LENGTH_SHORT).show()
-                val transaction = requireActivity().supportFragmentManager.beginTransaction()
-                transaction.replace(R.id.auth_container, SetPassword())
-                    .addToBackStack(TAG)
-                transaction.commit()
-            } else {
-                Toast.makeText(requireContext(), "Code Is In Valid", Toast.LENGTH_SHORT).show()
-            }
+            val transaction = requireActivity().supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.auth_container, SetPassword())
+                .addToBackStack(TAG)
+            transaction.commit()
         }
     }
 

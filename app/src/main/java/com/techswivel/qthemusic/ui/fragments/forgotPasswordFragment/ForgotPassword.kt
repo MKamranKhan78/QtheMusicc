@@ -1,5 +1,6 @@
 package com.techswivel.qthemusic.ui.fragments.forgotPasswordFragment
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -34,15 +35,26 @@ class ForgotPassword : Fragment() {
         val animationFadeOut =
             AnimationUtils.loadAnimation(requireContext(), R.anim.bottom_to_top_anim)
         forgotbingding.btnSendCodeForgot.animation = animationFadeOut
-        forgotbingding.etForgotEmailId.requestFocus()
+
     }
 
+    @SuppressLint("ResourceAsColor", "UseCompatLoadingForDrawables")
     private fun onClickListener() {
+
         forgotbingding.btnSendCodeForgot.setOnClickListener {
             val transaction = requireActivity().supportFragmentManager.beginTransaction()
             transaction.replace(R.id.auth_container, OtpVerification())
                 .addToBackStack(TAG)
             transaction.commit()
+        }
+        forgotbingding.etEmailForgotLayout.setOnClickListener {
+
+            if (forgotbingding.etForgotEmailId.isFocused) {
+                forgotbingding.etEmailForgotLayout.boxStrokeColor = R.color.sign_up_btn
+            } else {
+                forgotbingding.etForgotEmailId.background =
+                    resources.getDrawable(R.drawable.otp_background)
+            }
         }
     }
 }
