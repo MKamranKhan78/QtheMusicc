@@ -1,9 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
+        <import type="android.view.View" />
+
+        <variable
+            name="click"
+            type="com.techswivel.qthemusic.customData.interfaces.AdapterOnClick" />
+
+        <variable
+            name="obj"
+            type="com.techswivel.qthemusic.models.Category" />
     </data>
 
     <androidx.cardview.widget.CardView
@@ -19,7 +29,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="fitXY"
-            android:src="@drawable/no_image_palce_holder" />
+            app:setImageViewImage="@{obj.categoryImageUrl}"
+            tools:src="@drawable/no_image_palce_holder" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -32,7 +43,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:fontFamily="@font/manrope_regular"
-                android:text="HIP - HOP"
+                android:text="@{obj.categoryTitle}"
                 android:textColor="@color/color_white"
                 android:textSize="@dimen/_14sp" />
 

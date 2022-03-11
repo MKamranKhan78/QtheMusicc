@@ -9,13 +9,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.customData.adapter.RecyclerViewAdapter
-import com.techswivel.qthemusic.customData.enums.AdapterType
-import com.techswivel.qthemusic.customData.enums.NetworkStatus
-import com.techswivel.qthemusic.customData.enums.RecommendedSongsType
+import com.techswivel.qthemusic.customData.enums.*
 import com.techswivel.qthemusic.customData.interfaces.BaseInterface
 import com.techswivel.qthemusic.databinding.FragmentHomeBinding
 import com.techswivel.qthemusic.models.RecommendedSongsBodyBuilder
 import com.techswivel.qthemusic.models.ResponseModel
+import com.techswivel.qthemusic.models.SongsBodyBuilder
 import com.techswivel.qthemusic.source.local.preference.DataStoreUtils
 import com.techswivel.qthemusic.ui.base.RecyclerViewBaseFragment
 import com.techswivel.qthemusic.utils.DialogUtils
@@ -51,9 +50,20 @@ class HomeFragment : RecyclerViewBaseFragment(), BaseInterface {
             0,
             AdapterType.RECOMMENDED_FOR_YOU
         )
+        setUpHorizentalRecyclerView(
+            binding.recyclerViewWhatsYourMood,
+            0,
+            AdapterType.WHATS_YOUR_MOOD
+        )
+        setUpRecyclerView(
+            binding.recyclerViewTrendingSongs,
+            AdapterType.TRENDING_SONGS
+        )
         setObserver()
         setListeners()
         getRecommendedSongs()
+        viewModel.getCategoriesDataFromServer(CategoryType.RECOMMENDED)
+        getSongs()
     }
 
     override fun onPrepareAdapter(adapterType: AdapterType?): RecyclerView.Adapter<*> {
@@ -93,7 +103,7 @@ class HomeFragment : RecyclerViewBaseFragment(), BaseInterface {
                         override fun onNoDataFound() {
 
                         }
-                    }, viewModel.whatsYourMoodDataList)
+                    }, viewModel.categoriesDataList)
 
                 mWhatsYourMoodAdapter
             }
@@ -184,6 +194,118 @@ class HomeFragment : RecyclerViewBaseFragment(), BaseInterface {
                 }
             }
         }
+
+        viewModel.categoriesResponse.observe(viewLifecycleOwner) { categoriesDataResponse ->
+            when (categoriesDataResponse.status) {
+                NetworkStatus.LOADING -> {
+                    showProgressBar()
+                }
+                NetworkStatus.SUCCESS -> {
+                    hideProgressBar()
+                    viewModel.categoriesDataList.clear()
+                    val response = categoriesDataResponse.t as ResponseModel
+                    val categoriesList = response.data.category
+
+                    if (!categoriesList.isNullOrEmpty()) {
+                        viewModel.categoriesDataList.addAll(categoriesList)
+                    }
+
+                    if (::mWhatsYourMoodAdapter.isInitialized)
+                        mWhatsYourMoodAdapter.notifyDataSetChanged()
+
+                }
+                NetworkStatus.ERROR -> {
+                    hideProgressBar()
+                    categoriesDataResponse.error?.message?.let { it1 ->
+                        DialogUtils.errorAlert(
+                            requireContext(),
+                            categoriesDataResponse.error.code.toString(),
+                            categoriesDataResponse.error.message
+                        )
+                    }
+                }
+                NetworkStatus.EXPIRE -> {
+                    hideProgressBar()
+                    DialogUtils.sessionExpireAlert(requireContext(),
+                        object : DialogUtils.CallBack {
+                            override fun onPositiveCallBack() {
+                                runBlocking {
+                                    DataStoreUtils.clearAllPreference()
+                                }
+//                                viewModel.deleteAllLocalData()
+//                                ActivityUtils.startNewActivity(
+//                                    requireActivity(),
+//                                    RegistrationActivity::class.java,
+//                                    Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+//                                )
+                            }
+
+                            override fun onNegativeCallBack() {
+                            }
+                        })
+                }
+                NetworkStatus.COMPLETED -> {
+                    hideProgressBar()
+                }
+            }
+        }
+
+        viewModel.songsResponse.observe(viewLifecycleOwner) { songsDataResponse ->
+            when (songsDataResponse.status) {
+                NetworkStatus.LOADING -> {
+                    showProgressBar()
+                }
+                NetworkStatus.SUCCESS -> {
+                    hideProgressBar()
+                    viewModel.trendingSongsDataList.clear()
+                    val response = songsDataResponse.t as ResponseModel
+                    val songsList = response.data.songsResponse?.songs
+
+                    if (!songsList.isNullOrEmpty()) {
+                        viewModel.trendingSongsDataList.addAll(songsList)
+                        binding.tvTotalSongs.text =
+                            viewModel.trendingSongsDataList.size.toString().plus(" songs")
+                    }
+
+                    if (::mTrendingSongsAdapter.isInitialized)
+                        mTrendingSongsAdapter.notifyDataSetChanged()
+
+                }
+                NetworkStatus.ERROR -> {
+                    hideProgressBar()
+                    songsDataResponse.error?.message?.let { it1 ->
+                        DialogUtils.errorAlert(
+                            requireContext(),
+                            songsDataResponse.error.code.toString(),
+                            songsDataResponse.error.message
+                        )
+                    }
+                }
+                NetworkStatus.EXPIRE -> {
+                    hideProgressBar()
+                    DialogUtils.sessionExpireAlert(requireContext(),
+                        object : DialogUtils.CallBack {
+                            override fun onPositiveCallBack() {
+                                runBlocking {
+                                    DataStoreUtils.clearAllPreference()
+                                }
+//                                viewModel.deleteAllLocalData()
+//                                ActivityUtils.startNewActivity(
+//                                    requireActivity(),
+//                                    RegistrationActivity::class.java,
+//                                    Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+//                                )
+                            }
+
+                            override fun onNegativeCallBack() {
+                            }
+                        })
+                }
+                NetworkStatus.COMPLETED -> {
+                    hideProgressBar()
+                }
+            }
+        }
     }
 
     private fun setListeners() {
@@ -240,6 +362,7 @@ class HomeFragment : RecyclerViewBaseFragment(), BaseInterface {
             recommendedSongsBodyModel
         )
     }
+
     private fun getRecommendedArtists() {
         val recommendedSongsBuilder = RecommendedSongsBodyBuilder()
         recommendedSongsBuilder.isListeningHistory = false
@@ -251,4 +374,12 @@ class HomeFragment : RecyclerViewBaseFragment(), BaseInterface {
         )
     }
 
+    private fun getSongs() {
+        val songsBuilder = SongsBodyBuilder()
+        songsBuilder.type = SongType.TRENDING
+        val songsBodyModel = SongsBodyBuilder.build(songsBuilder)
+        viewModel.getSongsDataFromServer(
+            songsBodyModel
+        )
+    }
 }

@@ -8,8 +8,13 @@ class MyDataClass(
     @SerializedName("auth")
     val authModel: User?,
     val recommendedSongsResponse: RecommendedSongsResponse?,
+    @SerializedName("category")
+    var category: List<Category>?,
+    var songsResponse: SongsResponse?
 ) {
     constructor() : this(
+        null,
+        null,
         null,
         null
     )

@@ -32,4 +32,13 @@ object BindingAdapter {
                 .into(pImageView)
         }
     }
+
+    @JvmStatic
+    @BindingAdapter("setSongTime")
+    fun setSongTime(pTextView: TextView, duration: Int) {
+        val minutes = (duration % 3600) / 60
+        val seconds = duration % 60
+
+        pTextView.text = String.format("%02d:%02d", minutes, seconds);
+    }
 }

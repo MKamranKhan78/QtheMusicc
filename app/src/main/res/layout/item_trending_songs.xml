@@ -1,9 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
+        <import type="android.view.View" />
+
+        <variable
+            name="click"
+            type="com.techswivel.qthemusic.customData.interfaces.AdapterOnClick" />
+
+        <variable
+            name="obj"
+            type="com.techswivel.qthemusic.models.Song" />
+
+        <variable
+            name="songStatus"
+            type="com.techswivel.qthemusic.customData.enums.SongStatus" />
     </data>
 
     <RelativeLayout
@@ -24,7 +38,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="fitXY"
-                android:src="@drawable/no_image_palce_holder" />
+                app:setImageViewImage="@{obj.coverImageUrl}"
+                tools:src="@drawable/no_image_palce_holder" />
 
         </androidx.cardview.widget.CardView>
 
@@ -33,26 +48,26 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_10dp"
-            android:layout_marginTop="@dimen/_5dp"
             android:layout_marginEnd="@dimen/_10dp"
             android:layout_toStartOf="@id/rl_play_crown"
             android:layout_toEndOf="@id/cv_cover_image"
             android:ellipsize="end"
             android:fontFamily="@font/manrope_regular"
             android:maxLines="1"
-            android:text="Life On Mars sfsadfsdafsdafsdfdsafdsafsadfsadfsdaf"
+            android:text="@{obj.songTitle}"
             android:textColor="@color/color_white"
             android:textSize="@dimen/_14sp" />
 
         <TextView
+            setSongTime="@{obj.songDuration}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/tv_song_title"
             android:layout_marginStart="@dimen/_10dp"
+            android:layout_marginTop="@dimen/_5dp"
             android:layout_marginEnd="@dimen/_10dp"
             android:layout_toEndOf="@id/cv_cover_image"
             android:fontFamily="@font/manrope_regular"
-            android:text="6:11"
             android:textColor="@color/color_light_grey"
             android:textSize="@dimen/_14sp" />
 
@@ -68,14 +83,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_icon_crown_white"
-                android:visibility="gone" />
+                android:src="@drawable/ic_icon_crown_black"
+                android:visibility="@{obj.songStatus == songStatus.PREMIUM ? View.VISIBLE : View.GONE}" />
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/_30dp"
+                android:layout_height="@dimen/_30dp"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_icon_crown_white" />
+                android:src="@drawable/ic_icon_play"
+                android:visibility="@{obj.songStatus != songStatus.PREMIUM ? View.VISIBLE : View.GONE}" />
 
         </RelativeLayout>
 

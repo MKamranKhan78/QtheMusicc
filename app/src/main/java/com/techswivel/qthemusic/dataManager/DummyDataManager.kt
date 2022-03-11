@@ -14,7 +14,8 @@ class DummyDataManager {
                     ResponseModel(
                         true,
                         "",
-                        getDataList()
+                        getDataList(),
+                        null
                     )
                 )
             )
@@ -23,7 +24,9 @@ class DummyDataManager {
         private fun getDataList(): MyDataClass {
             return MyDataClass(
                 null,
-                getRecommendedSongsDummyData()
+                getRecommendedSongsDummyData(),
+                getCategoriesDummyData(),
+                getSongsDummyData()
             )
         }
 
@@ -112,6 +115,106 @@ class DummyDataManager {
                     )
                 ),
                 58
+            )
+        }
+
+        private fun getCategoriesDummyData(): List<Category> {
+            return arrayListOf(
+                Category(
+                    1,
+                    "https://media.timeout.com/images/101659805/image.jpg",
+                    "HIP-HOP"
+                ),
+                Category(
+                    2,
+                    "https://cdn.lifehack.org/wp-content/uploads/2015/09/rock-music-wallpapers.jpg",
+                    "ROCK"
+                ),
+                Category(
+                    1,
+                    "https://cdn5.vectorstock.com/i/1000x1000/77/09/colorful-detailed-pop-music-can-vector-19847709.jpg",
+                    "POP"
+                ),
+            )
+        }
+
+        private fun getSongsDummyData(): SongsResponse {
+            return SongsResponse(
+                null,
+                listOf(
+                    Song(
+                        1,
+                        "Risk It All",
+                        "Eminem",
+                        3,
+                        1,
+                        "https://upload.wikimedia.org/wikipedia/commons/0/06/Eminem_performing_on_April_2013_%28cropped%29.jpg",
+                        true,
+                        false,
+                        "No Lyrics Available",
+                        4,
+                        "",
+                        120,
+                        1,
+                        SongStatus.FREE,
+                        "Lose Yourself",
+                        ""
+                    ),
+                    Song(
+                        12,
+                        "The Weeknd",
+                        "Star Boy",
+                        31,
+                        3,
+                        "https://i.ytimg.com/vi/XXYlFuWEuKI/maxresdefault.jpg",
+                        true,
+                        false,
+                        "No Lyrics Available",
+                        24,
+                        "",
+                        150,
+                        2,
+                        SongStatus.PREMIUM,
+                        "Save Your Tears",
+                        ""
+                    ),
+                    Song(
+                        33,
+                        "RCA Records",
+                        "Sabrina and Farruko",
+                        5,
+                        10,
+                        "https://cdn.smehost.net/rcarecordscom-usrcaprod/wp-content/uploads/2019/04/alanwalkeromwvic.jpg",
+                        true,
+                        false,
+                        "No Lyrics Available",
+                        19,
+                        "",
+                        175,
+                        3,
+                        SongStatus.PREMIUM,
+                        "On My Way",
+                        ""
+                    ),
+                    Song(
+                        5,
+                        "ABC Records",
+                        "Charlie Puth and Selena Gomez",
+                        7,
+                        9,
+                        "https://m.media-amazon.com/images/M/MV5BOWQyYmJiOWUtNzkzYS00YWJlLWI5YjgtYTg4MjI0MmM1N2ZkXkEyXkFqcGdeQXVyNjE0ODc0MDc@._V1_.jpg",
+                        true,
+                        false,
+                        "No Lyrics Available",
+                        6,
+                        "",
+                        193,
+                        4,
+                        SongStatus.FREE,
+                        "We Don't Talk Anymore",
+                        ""
+                    )
+                )
             )
         }
 

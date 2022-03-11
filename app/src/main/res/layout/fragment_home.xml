@@ -63,7 +63,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/btn_songs"
             android:orientation="horizontal"
-            android:padding="@dimen/_16dp"
+            android:padding="@dimen/_14dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/item_songs" />
 
@@ -85,7 +85,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/tv_whats_your_mood"
             android:orientation="horizontal"
-            android:padding="@dimen/_16dp"
+            android:padding="@dimen/_14dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/item_whats_your_mood" />
 
@@ -95,7 +95,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/recycler_view_whats_your_mood"
             android:layout_marginStart="@dimen/_20dp"
-            android:layout_marginTop="@dimen/_20dp"
+            android:layout_marginTop="@dimen/_10dp"
             android:fontFamily="@font/manrope_bold"
             android:text="@string/str_trending_songs"
             android:textColor="@color/color_white"
@@ -107,10 +107,10 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/recycler_view_whats_your_mood"
             android:layout_alignParentEnd="true"
-            android:layout_marginTop="@dimen/_20dp"
+            android:layout_marginTop="@dimen/_10dp"
             android:layout_marginEnd="@dimen/_20dp"
             android:fontFamily="@font/manrope_regular"
-            android:text="30 songs"
+            tools:text="30 songs"
             android:textColor="@color/color_light_grey"
             android:textSize="@dimen/_14sp" />
 
@@ -119,7 +119,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/tv_total_songs"
-            android:padding="@dimen/_16dp"
+            android:padding="@dimen/_14dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/item_trending_songs" />
 
