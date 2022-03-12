@@ -57,4 +57,5 @@ class ForgotPassword : Fragment() {
             }
         }
     }
+
 }
