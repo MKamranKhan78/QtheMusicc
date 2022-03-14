@@ -7,8 +7,6 @@ import retrofit2.Response
 
 interface DataManagerImp {
     //Remote calls
-    fun getGoogleAccessToken(serverAuthCode: String): Observable<Response<GoogleResponseModel>>
 
-    fun sendOTP(email: String): Observable<Response<ResponseMain>>
 
 }

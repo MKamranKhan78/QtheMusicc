@@ -4,10 +4,11 @@ import com.techswivel.qthemusic.BuildConfig
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.application.QTheMusicApplication
 import com.techswivel.qthemusic.constant.Constants
-import com.techswivel.qthemusic.dataManager.DummyDataManager.Companion.getResponseDummyData
-import com.techswivel.qthemusic.models.GoogleAuthModel
-import com.techswivel.qthemusic.models.GoogleResponseModel
-import com.techswivel.qthemusic.models.ResponseMain
+import com.techswivel.qthemusic.dataManager.DummyDataManager.Companion.getUserLoginDummyData
+import com.techswivel.qthemusic.dataManager.DummyDataManager.Companion.getUserOtpDummyData
+import com.techswivel.qthemusic.dataManager.DummyDataManager.Companion.getVerifyOtpDummyData
+import com.techswivel.qthemusic.dataManager.DummyDataManager.Companion.newPasswordOtpDummyData
+import com.techswivel.qthemusic.models.*
 import com.techswivel.qthemusic.source.remote.retrofit.ApiService
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -15,7 +16,7 @@ import io.reactivex.schedulers.Schedulers
 import retrofit2.Response
 
 
-object RemoteDataManager : BaseDataManager() {
+object RemoteDataManager : BaseDataManager(), RemoteDataManagerImp {
 
     private lateinit var data: GoogleAuthModel
 
@@ -76,14 +77,30 @@ object RemoteDataManager : BaseDataManager() {
             .observeOn(AndroidSchedulers.mainThread())
     }
 
-
-    /**
-     * This is example code for success dummy response now you don't need to pass data directly from doOnSubscribe.
-     * After that all apis are called same as this. */
-    override fun sendOTP(email: String): Observable<Response<ResponseMain>> {
+    override fun userLogin(authRequestBuilder: AuthRequestModel): Observable<Response<ResponseMain>> {
         return Observable.create { observer ->
-            // observer.onError(Throwable("This is dummy thorwable if you want to test failed case."))
-            observer.onNext(getResponseDummyData())
+            observer.onNext(getUserLoginDummyData())
+            observer.onComplete()
+        }
+    }
+
+    override fun sendOtpRequest(authRequestModel: AuthRequestModel): Observable<Response<ResponseMain>> {
+        return Observable.create { observer ->
+            observer.onNext(getUserOtpDummyData())
+            observer.onComplete()
+        }
+    }
+
+    override fun sendVerifyOtpRequest(authRequestModel: AuthRequestModel): Observable<Response<ResponseMain>> {
+        return Observable.create { observer ->
+            observer.onNext(getVerifyOtpDummyData())
+            observer.onComplete()
+        }
+    }
+
+    override fun sentNewPasswordRequest(authRequestModel: AuthRequestModel): Observable<Response<ResponseMain>> {
+        return Observable.create{observer->
+            observer.onNext(newPasswordOtpDummyData())
             observer.onComplete()
         }
     }

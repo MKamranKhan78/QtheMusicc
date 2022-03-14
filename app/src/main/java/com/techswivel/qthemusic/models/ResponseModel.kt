@@ -8,5 +8,5 @@ data class ResponseModel(
     @SerializedName("message")
     var message: String,
     @SerializedName("data")
-    var data: MyDataClass
+    var data: MyDataClass?
 )

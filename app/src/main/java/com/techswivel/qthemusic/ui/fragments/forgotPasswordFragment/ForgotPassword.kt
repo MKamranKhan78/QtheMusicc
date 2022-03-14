@@ -7,17 +7,22 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.databinding.FragmentForgotPasswordBinding
+import com.techswivel.qthemusic.models.AuthRequestBuilder
 import com.techswivel.qthemusic.ui.fragments.otpVerificationFragment.OtpVerification
+import com.techswivel.qthemusic.utils.Utilities
 
 
 class ForgotPassword : Fragment() {
     val TAG = "ForgotPassword"
+    private lateinit var forgotVm: ForgotPasswordVM
     private lateinit var forgotbingding: FragmentForgotPasswordBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        forgotVm = ViewModelProvider(this).get(ForgotPasswordVM::class.java)
     }
 
     override fun onCreateView(
@@ -26,9 +31,15 @@ class ForgotPassword : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         forgotbingding = FragmentForgotPasswordBinding.inflate(layoutInflater, container, false)
+
+        return forgotbingding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         initialization()
         onClickListener()
-        return forgotbingding.root
+
     }
 
     private fun initialization() {
@@ -38,24 +49,33 @@ class ForgotPassword : Fragment() {
 
     }
 
-    @SuppressLint("ResourceAsColor", "UseCompatLoadingForDrawables")
     private fun onClickListener() {
 
         forgotbingding.btnSendCodeForgot.setOnClickListener {
-            val transaction = requireActivity().supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.auth_container, OtpVerification())
-                .addToBackStack(TAG)
-            transaction.commit()
+            createAndSendOtpRequest()
         }
-        forgotbingding.etEmailForgotLayout.setOnClickListener {
+    }
 
-            if (forgotbingding.etForgotEmailId.isFocused) {
-                forgotbingding.etEmailForgotLayout.boxStrokeColor = R.color.sign_up_btn
-            } else {
-                forgotbingding.etForgotEmailId.background =
-                    resources.getDrawable(R.drawable.otp_background)
+    private fun createAndSendOtpRequest() {
+        val authModelBilder = AuthRequestBuilder()
+        authModelBilder.otpType = "Email"
+        authModelBilder.email = forgotbingding.etForgotEmailId.toString()
+        authModelBilder.phoneNumber = "03218061143"
+        val otpModel = AuthRequestBuilder.builder(authModelBilder)
+        forgotVm.sendResetOtp(otpModel)
+        observeOtpData()
+    }
+
+    private fun observeOtpData() {
+        forgotVm.observeOtpMutableData.observe(viewLifecycleOwner, Observer {
+            if (it.response.status) {
+                Utilities.showToast(requireContext(), "otp is here")
+                val transaction = requireActivity().supportFragmentManager.beginTransaction()
+                transaction.replace(R.id.auth_container, OtpVerification())
+                    .addToBackStack(TAG)
+                transaction.commit()
             }
-        }
+        })
     }
 
 }

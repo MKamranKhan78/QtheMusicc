@@ -1,29 +1,37 @@
 package com.techswivel.qthemusic.ui.fragments.otpVerificationFragment
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.databinding.FragmentOtpVerificationBinding
+import com.techswivel.qthemusic.models.AuthRequestBuilder
+import com.techswivel.qthemusic.ui.fragments.forgotPasswordFragment.ForgotPassword
 import com.techswivel.qthemusic.ui.fragments.setPasswordFragmetnt.SetPassword
 import com.techswivel.qthemusic.utils.Log
+import com.techswivel.qthemusic.utils.Utilities
 
 class OtpVerification : Fragment() {
     val TAG = "OtpVerification"
     private lateinit var viewBinding: FragmentOtpVerificationBinding
+    private lateinit var verifyOtpVM: OtpVerificationVM
     var etOtpOne = ""
     var etOtpTwo = ""
     var etOtpThree = ""
     var etOtpFour = ""
     var etOtpFive = ""
-
+    private lateinit var countDownTimer: CountDownTimer
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        verifyOtpVM = ViewModelProvider(this).get(OtpVerificationVM::class.java)
     }
 
     override fun onCreateView(
@@ -40,20 +48,51 @@ class OtpVerification : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         clickListeners()
+        observeVerifyOtpRequest()
         getUserOtp()
+        resendOtpTimer()
 
     }
 
     private fun clickListeners() {
-
         viewBinding.btnConfirmCode.setOnClickListener {
+
             val otpCode = etOtpOne + etOtpTwo + etOtpThree + etOtpFour + etOtpFive
-            Log.d(TAG, "ottp si $otpCode")
-            val transaction = requireActivity().supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.auth_container, SetPassword())
-                .addToBackStack(TAG)
-            transaction.commit()
+            if (otpCode.length < 5) {
+                Utilities.showToast(requireContext(), "Enter Valid Otp")
+            } else {
+                createAndSendVerifyOtpRequest(otpCode.toInt(), "")
+            }
         }
+    }
+
+    private fun createAndSendVerifyOtpRequest(otp: Int?, email: String) {
+        val authModelBilder = AuthRequestBuilder()
+        authModelBilder.otpType = "Email"
+        authModelBilder.email = email
+        authModelBilder.phoneNumber = "03218061143"
+        authModelBilder.otp = otp
+        val otpVerifyModel = AuthRequestBuilder.builder(authModelBilder)
+        verifyOtpVM.verifyOtpRequest(otpVerifyModel)
+    }
+
+    private fun observeVerifyOtpRequest() {
+        verifyOtpVM.observeOtpVerification.observe(viewLifecycleOwner, Observer {
+            if (it.response.status) {
+                Log.d(TAG, "data is  ${it.response.data?.authModel}")
+                val transaction = requireActivity().supportFragmentManager.beginTransaction()
+                transaction.replace(R.id.auth_container, SetPassword())
+                    .addToBackStack(TAG)
+                transaction.commit()
+            } else {
+                Utilities.showToast(requireContext(), "otp not match")
+            }
+        })
+    }
+
+    override fun onResume() {
+        super.onResume()
+        countDownTimer.start()
     }
 
     private fun getUserOtp() {
@@ -62,8 +101,7 @@ class OtpVerification : Fragment() {
         viewBinding.otp1Id.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 if (sb.length == 1) {
-                    sb.deleteCharAt(0);
-
+                    sb.deleteCharAt(0)
                 }
             }
 
@@ -75,12 +113,6 @@ class OtpVerification : Fragment() {
                     viewBinding.otp2Id.requestFocus()
                     viewBinding.otp2Id.setCursorVisible(true)
                 }
-                if (viewBinding.otp1Id.isFocused) {
-                    viewBinding.otp1Id.setBackgroundResource(R.drawable.otp_selected_box_bg)
-                } else {
-                    viewBinding.otp1Id.setBackgroundResource(R.drawable.otp_background)
-                }
-
             }
 
             override fun afterTextChanged(p0: Editable?) {
@@ -94,7 +126,7 @@ class OtpVerification : Fragment() {
         viewBinding.otp2Id.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 if (sb.length == 1) {
-                    sb.deleteCharAt(0);
+                    sb.deleteCharAt(0)
                 }
             }
 
@@ -116,13 +148,7 @@ class OtpVerification : Fragment() {
                     viewBinding.otp1Id.setCursorVisible(true)
 
                 }
-                if (viewBinding.otp2Id.isFocused) {
-                    viewBinding.otp2Id.setBackgroundResource(R.drawable.otp_selected_box_bg)
-                } else {
-                    viewBinding.otp2Id.setBackgroundResource(R.drawable.otp_background)
-                }
             }
-
         })
 
         viewBinding.otp3Id.addTextChangedListener(object : TextWatcher {
@@ -140,11 +166,6 @@ class OtpVerification : Fragment() {
                     viewBinding.otp4Id.setCursorVisible(true)
 
                     sb.append(p0)
-                }
-                if (viewBinding.otp3Id.isFocused) {
-                    viewBinding.otp3Id.setBackgroundResource(R.drawable.otp_selected_box_bg)
-                } else {
-                    viewBinding.otp3Id.setBackgroundResource(R.drawable.otp_background)
                 }
             }
 
@@ -204,5 +225,24 @@ class OtpVerification : Fragment() {
                 }
             }
         })
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        countDownTimer.cancel()
+    }
+
+    private fun resendOtpTimer() {
+        countDownTimer = object : CountDownTimer(25000, 1000) {
+            @SuppressLint("SetTextI18n")
+            override fun onTick(millisUntilFinished: Long) {
+                viewBinding.tvOtpResentTimer.setText(getString(R.string.resend_time) + millisUntilFinished / 1000)
+            }
+
+            override fun onFinish() {
+
+            }
+        }
+
     }
 }

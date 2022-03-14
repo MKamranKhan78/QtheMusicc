@@ -7,16 +7,18 @@
     tools:context="com.techswivel.qthemusic.ui.activities.splashActivity.SplashActivity">
 
     <ImageView
+        android:id="@+id/iv_splash"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:alpha="0.4"
+        android:alpha="0.6"
         android:scaleType="fitXY"
-        android:src="@drawable/laura_music" />
+        android:src="@drawable/laura_music"
+         />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#D9000000" />
+        android:background="@color/scrim_background_clr" />
 
     <ImageView
         android:layout_width="wrap_content"

@@ -6,10 +6,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.databinding.FragmentSignInBinding
+import com.techswivel.qthemusic.models.AuthRequestBuilder
 import com.techswivel.qthemusic.ui.fragments.forgotPasswordFragment.ForgotPassword
+import com.techswivel.qthemusic.utils.BlurImageView
+import com.techswivel.qthemusic.utils.Log
 
 class SignInFragment : Fragment() {
     val TAG = "SignInFragment"
@@ -31,13 +36,26 @@ class SignInFragment : Fragment() {
         return signInBinding.root
     }
 
-    fun initialization() {
+    private fun initialization() {
+        Glide.with(requireContext()).load(R.drawable.laura_music)
+            .transform(BlurImageView(requireContext())).into(signInBinding.ivSigninBg)
         signInBinding.etPasLayout.passwordVisibilityToggleRequested(false)
+        observeingData()
+
     }
 
     private fun clickListeners() {
         signInBinding.btnSignIn.setOnClickListener {
             if (isUserLoginDataAuthenticated()) {
+                val authModelBilder = AuthRequestBuilder()
+                authModelBilder.email= signInBinding.etLoginEmail.text.toString()
+                authModelBilder.password=45454
+                authModelBilder.accessToken="jkagsjdgasjgJHGHJGDjhbsjhsbhjas"
+                authModelBilder.loginType="Email"
+                authModelBilder.fcmToken="jkagsjdgasjgJHGHJGDjhbsjhsbhjas"
+                authModelBilder.deviceIdentifier="deviceIdenfier_hammad"
+                val authModel=AuthRequestBuilder.builder(authModelBilder)
+                signInVm.userLogin(authModel)
             }
         }
 
@@ -47,6 +65,13 @@ class SignInFragment : Fragment() {
                 .addToBackStack(TAG)
             transaction.commit()
         }
+    }
+
+    private fun observeingData(){
+        signInVm.observeSignInMutableData.observe(viewLifecycleOwner, Observer {
+           Log.d(TAG,"observer called")
+            Log.d(TAG,"auth data is  ${it.response.data?.authModel}")
+        })
     }
 
     private fun isUserLoginDataAuthenticated(): Boolean {

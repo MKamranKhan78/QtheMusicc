@@ -1,6 +1,5 @@
-package com.techswivel.qthemusic.ui.fragments.signInFragment
+package com.techswivel.qthemusic.ui.fragments.setPasswordFragmetnt
 
-import android.annotation.SuppressLint
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.techswivel.qthemusic.Data.RemoteRepository.ServerRepository.CustomObserver
@@ -11,25 +10,23 @@ import com.techswivel.qthemusic.source.remote.rxjava.CustomError
 import com.techswivel.qthemusic.utils.Log
 import retrofit2.Response
 
-class SignInViewModel : ViewModel() {
-    var emailFromUser = ""
-    var passwordFromUser = ""
-val TAG="SignInViewModel"
-    val mRemoteDataManager= RemoteDataManager
-    var observeSignInMutableData: MutableLiveData<ResponseMain> = MutableLiveData()
-    @SuppressLint("CheckResult")
-    fun userLogin(authRequestBuilder: AuthRequestModel){
-        mRemoteDataManager.userLogin(authRequestBuilder).doOnSubscribe{
+class SetPasswordVM : ViewModel() {
 
-        }?.subscribe(object :CustomObserver<Response<ResponseMain>>(){
+    val TAG="OtpVerificationVM"
+    val mRemoteDataManager= RemoteDataManager
+    val observeSetPassword: MutableLiveData<ResponseMain> = MutableLiveData()
+    fun requestToSetPassword(authRequestModel: AuthRequestModel){
+        mRemoteDataManager.sentNewPasswordRequest(authRequestModel).doOnSubscribe{
+
+        }?.subscribe(object : CustomObserver<Response<ResponseMain>>(){
             override fun onSuccess(t: Response<ResponseMain>) {
                 if (t.isSuccessful){
-                    observeSignInMutableData.value=t.body()
+                    observeSetPassword.value=t.body()
                 }
             }
 
             override fun onError(e: Throwable, isInternetError: Boolean, error: CustomError?) {
-               Log.d(TAG,"eror is ${e.localizedMessage}")
+                Log.d(TAG,"eror is ${e.localizedMessage}")
             }
 
             override fun onRequestComplete() {

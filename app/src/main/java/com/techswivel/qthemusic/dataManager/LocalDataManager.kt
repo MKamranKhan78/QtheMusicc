@@ -9,13 +9,7 @@ import retrofit2.Response
 
 
 object LocalDataManager : BaseDataManager() {
-    override fun getGoogleAccessToken(serverAuthCode: String): Observable<Response<GoogleResponseModel>> {
-        TODO("Not yet implemented")
-    }
 
-    override fun sendOTP(email: String): Observable<Response<ResponseMain>> {
-        TODO("Not yet implemented")
-    }
 
     /** -------------- Database Instance method ---------------------- */
 
