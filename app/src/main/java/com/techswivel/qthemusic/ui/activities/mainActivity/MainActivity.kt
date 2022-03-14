@@ -57,8 +57,6 @@ class MainActivity : BaseActivity() {
                 }
                 R.id.bottom_nav_profile -> {
                     openLandingProfileFragment()
-//                    openServerSettingActivity()
-//                    return@setOnItemSelectedListener false
 
                 }
             }

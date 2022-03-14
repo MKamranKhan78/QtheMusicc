@@ -29,6 +29,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
+        <ProgressBar
+            android:id="@+id/progressBarId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone" />
+
         <TextView
             android:id="@+id/freeAccountText"
             android:layout_width="wrap_content"
@@ -37,6 +44,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/_30dp"
             android:text="@string/free_account"
+            android:fontFamily="@font/manrope_bold"
             android:textColor="@color/color_white_text"
             android:textSize="@dimen/_20sp"
             android:visibility="@{viewModel.authModel.subscription == null ? View.VISIBLE: View.GONE}" />
@@ -73,9 +81,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_10dp"
                     android:layout_toEndOf="@id/premiumButtonIcon"
+                    android:fontFamily="@font/manrope_bold"
                     android:text="@string/listen_with_premium"
                     android:textColor="@color/color_white_text"
-                    android:textStyle="bold" />
+                    android:textSize="@dimen/_14sp" />
             </RelativeLayout>
         </LinearLayout>
 
@@ -90,9 +99,9 @@
             android:layout_marginTop="@dimen/_10dp"
             android:layout_marginEnd="@dimen/_20dp"
             app:cardBackgroundColor="#303033"
-            app:cardCornerRadius="20dp"
-            app:cardElevation="10dp"
-            app:cardMaxElevation="12dp"
+            app:cardCornerRadius="@dimen/_20dp"
+            app:cardElevation="@dimen/_10dp"
+            app:cardMaxElevation="@dimen/_12dp"
             app:cardPreventCornerOverlap="true">
 
             <RelativeLayout
@@ -115,9 +124,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/currentPlanTextview"
+                    android:text="@{viewModel.authModel.subscription.planTitle}"
                     android:layout_alignParentStart="true"
                     android:layout_marginTop="@dimen/_20dp"
-                    android:text="Standard plan"
                     android:textColor="@color/color_white_text_profile"
                     android:textSize="@dimen/_14sp" />
 
@@ -127,7 +136,7 @@
                     android:layout_below="@id/pricePerMonthTextview"
                     android:layout_alignParentStart="true"
                     android:layout_marginTop="@dimen/_2dp"
-                    android:text="0.5 / month"
+                    setPlan="@{viewModel.authModel.subscription}"
                     android:textColor="@color/color_white_text_profile"
                     android:textSize="@dimen/_10sp" />
 
@@ -136,6 +145,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/pricePerMonthTextview"
                     android:layout_alignParentEnd="true"
+                    android:id="@+id/premiumDetailsChangeTvId"
                     android:layout_marginStart="@dimen/_16dp"
                     android:text="@string/change"
                     android:textColor="#BA011A"
@@ -153,14 +163,15 @@
             android:layout_marginTop="@dimen/_10dp"
             android:layout_marginEnd="@dimen/_20dp"
             app:cardBackgroundColor="#303033"
-            app:cardCornerRadius="10dp"
-            app:cardElevation="10dp"
-            app:cardMaxElevation="12dp"
+            app:cardCornerRadius="@dimen/_10dp"
+            app:cardElevation="@dimen/_10dp"
+            app:cardMaxElevation="@dimen/_12dp"
             app:cardPreventCornerOverlap="true">
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:id="@+id/userProfileViewID"
                 android:background="#303033"
                 android:padding="@dimen/_14dp">
 
@@ -169,9 +180,9 @@
                     android:layout_width="@dimen/_36dp"
                     android:layout_height="@dimen/_36dp"
                     android:layout_gravity="center_horizontal"
+                    setImageViewImage="@{viewModel.authModel.avatar}"
                     android:layout_marginStart="@dimen/_4dp"
                     app:shapeAppearanceOverlay="@style/circleImageView"
-                    app:srcCompat="@drawable/ic_launcher_background"
                     tools:ignore="VectorDrawableCompat" />
 
                 <LinearLayout
@@ -186,7 +197,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/kamran_khan"
+                        android:fontFamily="@font/manrope_regular"
+                        android:text="@{viewModel.authModel.name}"
                         android:textColor="@color/color_white"
                         android:textSize="@dimen/_14sp" />
 
@@ -194,6 +206,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/view_profile"
+                        android:fontFamily="@font/manrope_regular"
                         android:textColor="@color/view_profile_text_color"
                         android:textSize="@dimen/_14sp" />
 
@@ -219,8 +232,9 @@
             android:layout_marginTop="@dimen/_20dp"
             android:text="@string/notifications"
             android:textColor="@color/color_white"
-            android:textSize="@dimen/_18sp"
-            android:textStyle="bold" />
+            android:fontFamily="@font/manrope_bold"
+            android:textSize="@dimen/_18sp" />
+
 
         <RelativeLayout
             android:id="@+id/enableNotificationLayout"
@@ -238,6 +252,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
+                android:fontFamily="@font/manrope_regular"
+                android:textSize="@dimen/_14sp"
                 android:layout_marginStart="@dimen/_10dp"
                 android:text="@string/enable_notification"
                 android:textColor="@color/color_white" />
@@ -245,7 +261,7 @@
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/switchEnableNotification"
                 android:layout_width="wrap_content"
-                android:layout_height="19dp"
+                android:layout_height="@dimen/_19dp"
                 android:layout_alignParentEnd="true"
                 android:checked="@{viewModel.authModel.notification.isNotificationEnabled()}"
                 android:layout_centerVertical="true"
@@ -272,6 +288,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
+                android:fontFamily="@font/manrope_regular"
+                android:textSize="@dimen/_14sp"
                 android:layout_marginStart="@dimen/_10dp"
                 android:text="@string/following_artist_updates"
                 android:textColor="@color/color_white" />
@@ -280,7 +298,7 @@
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/customSwitchFollowArtistUpdate"
                 android:layout_width="wrap_content"
-                android:layout_height="19dp"
+                android:layout_height="@dimen/_19dp"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="@dimen/_10dp"
@@ -298,9 +316,9 @@
             android:layout_marginStart="@dimen/_20dp"
             android:layout_marginTop="@dimen/_20dp"
             android:text="@string/about_qmusic"
+            android:fontFamily="@font/manrope_bold"
             android:textColor="@color/color_white"
-            android:textSize="@dimen/_18sp"
-            android:textStyle="bold" />
+            android:textSize="@dimen/_18sp" />
 
         <TextView
             android:id="@+id/termAndConditionText"
@@ -310,12 +328,14 @@
             android:layout_centerVertical="true"
             android:layout_marginStart="@dimen/_10dp"
             android:layout_marginTop="@dimen/_10dp"
+            android:fontFamily="@font/manrope_regular"
             android:paddingStart="@dimen/_10dp"
             android:paddingTop="@dimen/_10dp"
             android:paddingEnd="@dimen/_20dp"
             android:paddingBottom="@dimen/_5dp"
             android:text="@string/terms_and_conditions"
             android:textColor="@color/color_white"
+            android:textSize="@dimen/_14sp"
             app:drawableEndCompat="@drawable/ic_icon_ionic_ios_arrow_down" />
 
         <TextView
@@ -329,6 +349,8 @@
             android:paddingStart="@dimen/_10dp"
             android:paddingTop="@dimen/_5dp"
             android:paddingEnd="@dimen/_20dp"
+            android:fontFamily="@font/manrope_regular"
+            android:textSize="@dimen/_14sp"
             android:paddingBottom="@dimen/_5dp"
             android:text="@string/privacy_policy"
             android:textColor="@color/color_white"
@@ -338,6 +360,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/privacyPolicyText"
+            android:id="@+id/logoutButton"
             android:layout_centerInParent="true"
             android:layout_marginStart="@dimen/_20dp"
             android:layout_marginTop="@dimen/_40dp"
@@ -348,7 +371,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:padding="10dp"
+                android:padding="@dimen/_10dp"
                 android:text="@string/log_out"
                 android:textColor="@color/color_white" />
         </LinearLayout>

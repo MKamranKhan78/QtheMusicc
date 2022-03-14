@@ -21,6 +21,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
         <activity
+            android:name=".ui.activities.profileUpdatingActivity.ProfileUpdatingActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.activities.profile_setting_screen.ProfileSettingActivity"
             android:exported="false" />
         <activity
@@ -35,7 +38,7 @@
         </activity>
         <activity
             android:name=".ui.activities.mainActivity.MainActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activities.serverSettingActivity.ServerSettingActivity"
             android:screenOrientation="portrait" />

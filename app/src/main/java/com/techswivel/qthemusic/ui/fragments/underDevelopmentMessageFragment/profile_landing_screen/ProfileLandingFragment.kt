@@ -49,6 +49,12 @@ class ProfileLandingFragment : BaseFragment() {
         mBinding.profileSettingButton.setOnClickListener {
             openProfileSettingActivity()
         }
+        mBinding.textviewChangeId.setOnClickListener {
+            ActivityUtils.launchFragment(
+                requireContext(),
+                UnderDevelopmentMessageFragment::class.java.name
+            )
+        }
         mBinding.playListTextView.setOnClickListener {
             ActivityUtils.launchFragment(
                 requireContext(),

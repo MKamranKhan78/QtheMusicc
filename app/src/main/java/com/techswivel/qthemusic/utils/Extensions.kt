@@ -88,7 +88,7 @@ fun Context.toDeviceName(): String {
 }
 
 @SuppressLint("HardwareIds")
-private fun Context.toDeviceIdentifier(): String {
+fun Context.toDeviceIdentifier(): String {
     return Settings.Secure.getString(
         this.contentResolver,
         Settings.Secure.ANDROID_ID
