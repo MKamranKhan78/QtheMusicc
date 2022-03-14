@@ -59,4 +59,6 @@
     <string name="str_what_s_your_mood">What\'s your mood?</string>
     <string name="str_trending_songs">Trending Songs</string>
     <string name="something_wrong">Something went wrong!</string>
+    <string name="str_video">Video</string>
+    <string name="str_audio">Audio</string>
 </resources>

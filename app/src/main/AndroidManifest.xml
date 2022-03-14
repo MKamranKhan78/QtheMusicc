@@ -11,7 +11,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
-        android:name="com.techswivel.qthemusic.application.QTheMusicApplication"
+        android:name=".application.QTheMusicApplication"
         android:allowBackup="true"
         android:icon="${appIcon}"
         android:label="@string/app_name"
@@ -21,28 +21,30 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
         <activity
-            android:name="com.techswivel.qthemusic.ui.activities.splashActivity.SplashActivity"
+            android:name=".ui.activities.playerActivity.PlayerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activities.splashActivity.SplashActivity"
             android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name="com.techswivel.qthemusic.ui.activities.mainActivity.MainActivity"
-            android:screenOrientation="portrait">
-
-        </activity>
+            android:name=".ui.activities.mainActivity.MainActivity"
+            android:screenOrientation="portrait"></activity>
         <activity
-            android:name="com.techswivel.qthemusic.ui.activities.serverSettingActivity.ServerSettingActivity"
+            android:name=".ui.activities.serverSettingActivity.ServerSettingActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.techswivel.qthemusic.ui.wrapper.FrameActivity"
+            android:name=".ui.wrapper.FrameActivity"
             android:screenOrientation="portrait" />
 
         <service
-            android:name="com.techswivel.qthemusic.source.remote.firebase.FirebaseNotificationService"
+            android:name=".source.remote.firebase.FirebaseNotificationService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />

@@ -16,7 +16,9 @@ import com.techswivel.qthemusic.models.RecommendedSongsBodyBuilder
 import com.techswivel.qthemusic.models.ResponseModel
 import com.techswivel.qthemusic.models.SongsBodyBuilder
 import com.techswivel.qthemusic.source.local.preference.DataStoreUtils
+import com.techswivel.qthemusic.ui.activities.playerActivity.PlayerActivity
 import com.techswivel.qthemusic.ui.base.RecyclerViewBaseFragment
+import com.techswivel.qthemusic.utils.ActivityUtils
 import com.techswivel.qthemusic.utils.DialogUtils
 import kotlinx.coroutines.runBlocking
 
@@ -87,6 +89,17 @@ class HomeFragment : RecyclerViewBaseFragment(), BaseInterface {
 
                         override fun onNoDataFound() {
 
+                        }
+
+                        override fun onViewClicked(view: View, data: Any?) {
+                            when (view.id) {
+                                R.id.cv_recommended_song -> {
+                                    ActivityUtils.startNewActivity(
+                                        requireActivity(),
+                                        PlayerActivity::class.java
+                                    )
+                                }
+                            }
                         }
                     }, viewModel.recommendedSongsDataList)
 

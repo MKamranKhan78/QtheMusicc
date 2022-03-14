@@ -59,6 +59,7 @@
     <dimen name="_150dp">150dp</dimen>
     <dimen name="_170dp">170dp</dimen>
     <dimen name="_200dp">200dp</dimen>
+    <dimen name="_330dp">330dp</dimen>
 
     <!-- sp values-->
 

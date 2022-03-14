@@ -27,10 +27,11 @@
         android:background="@android:color/transparent">
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/cv_main_image"
+            android:id="@+id/cv_recommended_song"
             android:layout_width="@dimen/_120dp"
             android:layout_height="@dimen/_120dp"
             android:background="@android:color/transparent"
+            android:onClick="@{(view) -> click.onViewClick(view, obj)}"
             app:cardCornerRadius="@dimen/_10dp"
             app:cardElevation="@dimen/_8dp">
 
