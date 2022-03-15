@@ -17,9 +17,6 @@
 
     </data>
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -37,297 +34,309 @@
                 android:src="@drawable/ic_setting_white"
                 tools:ignore="ContentDescription" />
 
-
-            <LinearLayout
-                android:id="@+id/profileViewLinearLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/_70dp"
-                android:orientation="vertical"
-                android:paddingStart="@dimen/_10dp"
-                android:paddingEnd="@dimen/_10dp"
-                android:paddingBottom="@dimen/_10dp">
-
-                <com.google.android.material.imageview.ShapeableImageView
-                    setImageViewImage="@{viewModel.authModel.avatar}"
-                    android:layout_width="@dimen/_110dp"
-                    android:layout_height="@dimen/_110dp"
-                    android:layout_gravity="center_horizontal"
-                    app:shapeAppearanceOverlay="@style/circleImageView"
-                    tools:ignore="VectorDrawableCompat" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/userNameIdProfileLanding"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="@dimen/_10dp"
-                    android:fontFamily="@font/manrope_bold"
-                    android:text="@{viewModel.authModel.name}"
-                    android:textColor="@color/color_white_text"
-                    android:textSize="@dimen/_20sp" />
-
-                <LinearLayout
-                    android:id="@+id/profileLandingPremiumButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="@dimen/_10dp"
-                    android:background="@drawable/capsule_shape_button"
-                    android:gravity="center_horizontal"
-                    android:orientation="horizontal"
-                    android:visibility="@{viewModel.authModel.subscription == null ? View.VISIBLE: View.GONE}">
-
-                    <RelativeLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        tools:ignore="UselessParent">
-
-                        <ImageView
-                            android:id="@+id/premiumButtonIcon"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/ic_setting_white"
-                            tools:ignore="ContentDescription" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/_10dp"
-                            android:layout_toEndOf="@id/premiumButtonIcon"
-                            android:fontFamily="@font/manrope_regular"
-                            android:text="@string/listen_with_premium"
-                            android:textColor="@color/color_white_text" />
-                    </RelativeLayout>
-                </LinearLayout>
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_20dp"
-                    android:layout_marginTop="@dimen/_10dp"
-                    android:layout_marginEnd="@dimen/_20dp"
-                    android:layout_marginBottom="@dimen/_10dp"
-                    app:cardBackgroundColor="#303033"
-                    app:cardCornerRadius="@dimen/_20dp"
-                    app:cardElevation="@dimen/_10dp"
-                    android:visibility="@{viewModel.authModel.subscription == null ? View.GONE: View.VISIBLE}"
-                    app:cardMaxElevation="@dimen/_12dp"
-                    app:cardPreventCornerOverlap="true">
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="#303033"
-                        android:padding="@dimen/_20dp">
-
-                        <TextView
-                            android:id="@+id/currentPlanTextview"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/manrope_regular"
-                            android:layout_alignParentStart="true"
-                            android:text="@string/current_plan"
-                            android:textColor="@color/color_white_text_profile"
-                            android:textSize="@dimen/_10sp" />
-
-                        <TextView
-                            android:id="@+id/pricePerMonthTextview"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/manrope_regular"
-                            android:layout_below="@id/currentPlanTextview"
-                            android:layout_alignParentStart="true"
-                            android:layout_marginTop="@dimen/_20dp"
-                            android:text="@{viewModel.authModel.subscription.planTitle}"
-                            android:textColor="@color/color_white_text_profile"
-                            android:textSize="@dimen/_14sp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/pricePerMonthTextview"
-                            android:layout_alignParentStart="true"
-                            android:layout_marginTop="@dimen/_2dp"
-                            android:fontFamily="@font/manrope_regular"
-                            setPlan="@{viewModel.authModel.subscription}"
-                            android:textColor="@color/color_white_text_profile"
-                            android:textSize="@dimen/_10sp" />
-
-                        <TextView
-                            android:id="@+id/textviewChangeId"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/pricePerMonthTextview"
-                            android:fontFamily="@font/manrope_regular"
-                            android:layout_alignParentEnd="true"
-                            android:layout_marginStart="@dimen/_16dp"
-                            android:text="@string/change"
-                            android:textColor="#BA011A"
-                            android:textSize="@dimen/_14sp" />
-
-                    </RelativeLayout>
-
-                </androidx.cardview.widget.CardView>
-
-            </LinearLayout>
-
-
-            <LinearLayout
+            <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@id/profileViewLinearLayout"
-                android:layout_marginTop="@dimen/_0dp"
-                android:orientation="vertical"
-                android:padding="@dimen/_10dp">
+                android:layout_below="@id/profileSettingButton">
 
-                <TextView
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_10dp"
-                    android:layout_marginTop="@dimen/_10dp"
-                    android:layout_marginEnd="@dimen/_10dp"
-                    android:drawablePadding="@dimen/_10dp"
-                    android:padding="@dimen/_10dp"
-                    android:text="@string/playlists"
-                    android:fontFamily="@font/manrope_regular"
-                    android:id="@+id/playListTextView"
-                    android:textColor="@color/color_white"
-                    android:textSize="@dimen/_14sp"
-                    app:drawableEndCompat="@drawable/ic_icon_ionic_ios_arrow_down"
-                    app:drawableStartCompat="@drawable/ic_icon_material_playlist_play" />
+                    android:layout_height="wrap_content">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_10dp"
-                    android:layout_marginTop="@dimen/_10dp"
-                    android:layout_marginEnd="@dimen/_10dp"
-                    android:fontFamily="@font/manrope_regular"
-                    android:drawablePadding="@dimen/_10dp"
-                    android:padding="@dimen/_10dp"
-                    android:id="@+id/favoriteSongTextview"
-                    android:text="@string/favorite_songs"
-                    android:textColor="@color/color_white"
-                    android:textSize="@dimen/_14sp"
-                    app:drawableEndCompat="@drawable/ic_icon_ionic_ios_arrow_down"
-                    app:drawableStartCompat="@drawable/ic_favorite_songs" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_10dp"
-                    android:fontFamily="@font/manrope_regular"
-                    android:layout_marginTop="@dimen/_10dp"
-                    android:layout_marginEnd="@dimen/_10dp"
-                    android:drawablePadding="@dimen/_10dp"
-                    android:id="@+id/purchasedAldumTextview"
-                    android:padding="@dimen/_10dp"
-                    android:text="@string/purchased_albums"
-                    android:textColor="@color/color_white"
-                    android:textSize="@dimen/_14sp"
-                    app:drawableEndCompat="@drawable/ic_icon_ionic_ios_arrow_down"
-                    app:drawableStartCompat="@drawable/ic_album" />
+                    <LinearLayout
+                        android:id="@+id/profileViewLinearLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="@dimen/_40dp"
+                        android:orientation="vertical"
+                        android:paddingStart="@dimen/_10dp"
+                        android:paddingEnd="@dimen/_10dp"
+                        android:paddingBottom="@dimen/_10dp">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_10dp"
-                    android:layout_marginTop="@dimen/_10dp"
-                    android:layout_marginEnd="@dimen/_10dp"
-                    android:drawablePadding="@dimen/_10dp"
-                    android:padding="@dimen/_10dp"
-                    android:text="@string/purchased_songs"
-                    android:textColor="@color/color_white"
-                    android:id="@+id/purchaseSongTextView"
-                    android:fontFamily="@font/manrope_regular"
-                    android:textSize="@dimen/_14sp"
-                    app:drawableEndCompat="@drawable/ic_icon_ionic_ios_arrow_down"
-                    app:drawableStartCompat="@drawable/ic_album" />
+                        <com.google.android.material.imageview.ShapeableImageView
+                            setImageViewImage="@{viewModel.authModel.avatar}"
+                            android:layout_width="@dimen/_110dp"
+                            android:layout_height="@dimen/_110dp"
+                            android:layout_gravity="center_horizontal"
+                            app:shapeAppearanceOverlay="@style/circleImageView"
+                            tools:ignore="VectorDrawableCompat" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_10dp"
-                    android:layout_marginTop="@dimen/_10dp"
-                    android:layout_marginEnd="@dimen/_10dp"
-                    android:drawablePadding="@dimen/_10dp"
-                    android:padding="@dimen/_10dp"
-                    android:id="@+id/followingArtistTextview"
-                    android:text="@string/following_artist"
-                    android:textColor="@color/color_white"
-                    android:fontFamily="@font/manrope_regular"
-                    android:textSize="@dimen/_14sp"
-                    app:drawableEndCompat="@drawable/ic_icon_ionic_ios_arrow_down"
-                    app:drawableStartCompat="@drawable/ic_fav_artist" />
+                        <TextView
+                            android:id="@+id/userNameIdProfileLanding"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="@dimen/_10dp"
+                            android:fontFamily="@font/manrope_bold"
+                            android:text="@{viewModel.authModel.name}"
+                            android:textColor="@color/color_white_text"
+                            android:textSize="@dimen/_20sp" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_10dp"
-                    android:layout_marginTop="@dimen/_10dp"
-                    android:layout_marginEnd="@dimen/_10dp"
-                    android:drawablePadding="@dimen/_10dp"
-                    android:id="@+id/listeningHistoryTextview"
-                    android:fontFamily="@font/manrope_regular"
-                    android:padding="@dimen/_10dp"
-                    android:text="@string/listening_history"
-                    android:textColor="@color/color_white"
-                    android:textSize="@dimen/_14sp"
-                    app:drawableEndCompat="@drawable/ic_icon_ionic_ios_arrow_down"
-                    app:drawableStartCompat="@drawable/ic_listening_history" />
+                        <LinearLayout
+                            android:id="@+id/profileLandingPremiumButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="@dimen/_10dp"
+                            android:background="@drawable/capsule_shape_button"
+                            android:gravity="center_horizontal"
+                            android:orientation="horizontal"
+                            android:visibility="@{viewModel.authModel.subscription == null ? View.VISIBLE: View.GONE}">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_10dp"
-                    android:layout_marginTop="@dimen/_10dp"
-                    android:layout_marginEnd="@dimen/_10dp"
-                    android:drawablePadding="@dimen/_10dp"
-                    android:padding="@dimen/_10dp"
-                    android:text="@string/downloaded"
-                    android:id="@+id/downloadedTextview"
-                    android:fontFamily="@font/manrope_regular"
-                    android:textColor="@color/color_white"
-                    android:textSize="@dimen/_14sp"
-                    app:drawableEndCompat="@drawable/ic_icon_ionic_ios_arrow_down"
-                    app:drawableStartCompat="@drawable/ic_downloaded" />
+                            <RelativeLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                tools:ignore="UselessParent">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_10dp"
-                    android:layout_marginTop="@dimen/_10dp"
-                    android:layout_marginEnd="@dimen/_10dp"
-                    android:drawablePadding="@dimen/_10dp"
-                    android:padding="@dimen/_10dp"
-                    android:text="@string/buying_history"
-                    android:id="@+id/buyingHistoryTextview"
-                    android:fontFamily="@font/manrope_regular"
-                    android:textColor="@color/color_white"
-                    android:textSize="@dimen/_14sp"
-                    app:drawableEndCompat="@drawable/ic_icon_ionic_ios_arrow_down"
-                    app:drawableStartCompat="@drawable/ic_listening_history" />
+                                <ImageView
+                                    android:id="@+id/premiumButtonIcon"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:src="@drawable/ic_setting_white"
+                                    tools:ignore="ContentDescription" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_10dp"
-                    android:layout_marginTop="@dimen/_10dp"
-                    android:layout_marginEnd="@dimen/_10dp"
-                    android:drawablePadding="@dimen/_10dp"
-                    android:padding="@dimen/_10dp"
-                    android:text="@string/your_interests"
-                    android:textColor="@color/color_white"
-                    android:textSize="@dimen/_15sp"
-                    android:id="@+id/yourIntrestTextview"
-                    app:drawableEndCompat="@drawable/ic_icon_ionic_ios_arrow_down"
-                    app:drawableStartCompat="@drawable/ic_album" />
-            </LinearLayout>
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="@dimen/_10dp"
+                                    android:layout_toEndOf="@id/premiumButtonIcon"
+                                    android:fontFamily="@font/manrope_regular"
+                                    android:text="@string/listen_with_premium"
+                                    android:textColor="@color/color_white_text" />
+                            </RelativeLayout>
+                        </LinearLayout>
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_20dp"
+                            android:layout_marginTop="@dimen/_10dp"
+                            android:layout_marginEnd="@dimen/_20dp"
+                            android:layout_marginBottom="@dimen/_10dp"
+                            android:visibility="@{viewModel.authModel.subscription == null ? View.GONE: View.VISIBLE}"
+                            app:cardBackgroundColor="#303033"
+                            app:cardCornerRadius="@dimen/_20dp"
+                            app:cardElevation="@dimen/_10dp"
+                            app:cardMaxElevation="@dimen/_12dp"
+                            app:cardPreventCornerOverlap="true">
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="#303033"
+                                android:padding="@dimen/_20dp">
+
+                                <TextView
+                                    android:id="@+id/currentPlanTextview"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentStart="true"
+                                    android:fontFamily="@font/manrope_regular"
+                                    android:text="@string/current_plan"
+                                    android:textColor="@color/color_white_text_profile"
+                                    android:textSize="@dimen/_10sp" />
+
+                                <TextView
+                                    android:id="@+id/pricePerMonthTextview"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_below="@id/currentPlanTextview"
+                                    android:layout_alignParentStart="true"
+                                    android:layout_marginTop="@dimen/_20dp"
+                                    android:fontFamily="@font/manrope_regular"
+                                    android:text="@{viewModel.authModel.subscription.planTitle}"
+                                    android:textColor="@color/color_white_text_profile"
+                                    android:textSize="@dimen/_14sp" />
+
+                                <TextView
+                                    setPlan="@{viewModel.authModel.subscription}"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_below="@id/pricePerMonthTextview"
+                                    android:layout_alignParentStart="true"
+                                    android:layout_marginTop="@dimen/_2dp"
+                                    android:fontFamily="@font/manrope_regular"
+                                    android:textColor="@color/color_white_text_profile"
+                                    android:textSize="@dimen/_10sp" />
+
+                                <TextView
+                                    android:id="@+id/textviewChangeId"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_below="@id/pricePerMonthTextview"
+                                    android:layout_alignParentEnd="true"
+                                    android:layout_marginStart="@dimen/_16dp"
+                                    android:fontFamily="@font/manrope_regular"
+                                    android:text="@string/change"
+                                    android:textColor="#BA011A"
+                                    android:textSize="@dimen/_14sp" />
+
+                            </RelativeLayout>
+
+                        </androidx.cardview.widget.CardView>
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_below="@id/profileViewLinearLayout"
+                        android:layout_marginTop="@dimen/_0dp"
+                        android:orientation="vertical"
+                        android:padding="@dimen/_10dp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_10dp"
+                            android:layout_marginTop="@dimen/_10dp"
+                            android:layout_marginEnd="@dimen/_10dp"
+                            android:drawablePadding="@dimen/_10dp"
+                            android:padding="@dimen/_10dp"
+                            android:text="@string/playlists"
+                            android:fontFamily="@font/manrope_regular"
+                            android:id="@+id/playListTextView"
+                            android:textColor="@color/color_white"
+                            android:textSize="@dimen/_14sp"
+                            app:drawableEndCompat="@drawable/ic_icon_ionic_ios_arrow_down"
+                            app:drawableStartCompat="@drawable/ic_icon_material_playlist_play" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_10dp"
+                            android:layout_marginTop="@dimen/_10dp"
+                            android:layout_marginEnd="@dimen/_10dp"
+                            android:fontFamily="@font/manrope_regular"
+                            android:drawablePadding="@dimen/_10dp"
+                            android:padding="@dimen/_10dp"
+                            android:id="@+id/favoriteSongTextview"
+                            android:text="@string/favorite_songs"
+                            android:textColor="@color/color_white"
+                            android:textSize="@dimen/_14sp"
+                            app:drawableEndCompat="@drawable/ic_icon_ionic_ios_arrow_down"
+                            app:drawableStartCompat="@drawable/ic_favorite_songs" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_10dp"
+                            android:fontFamily="@font/manrope_regular"
+                            android:layout_marginTop="@dimen/_10dp"
+                            android:layout_marginEnd="@dimen/_10dp"
+                            android:drawablePadding="@dimen/_10dp"
+                            android:id="@+id/purchasedAldumTextview"
+                            android:padding="@dimen/_10dp"
+                            android:text="@string/purchased_albums"
+                            android:textColor="@color/color_white"
+                            android:textSize="@dimen/_14sp"
+                            app:drawableEndCompat="@drawable/ic_icon_ionic_ios_arrow_down"
+                            app:drawableStartCompat="@drawable/ic_album" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_10dp"
+                            android:layout_marginTop="@dimen/_10dp"
+                            android:layout_marginEnd="@dimen/_10dp"
+                            android:drawablePadding="@dimen/_10dp"
+                            android:padding="@dimen/_10dp"
+                            android:text="@string/purchased_songs"
+                            android:textColor="@color/color_white"
+                            android:id="@+id/purchaseSongTextView"
+                            android:fontFamily="@font/manrope_regular"
+                            android:textSize="@dimen/_14sp"
+                            app:drawableEndCompat="@drawable/ic_icon_ionic_ios_arrow_down"
+                            app:drawableStartCompat="@drawable/ic_album" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_10dp"
+                            android:layout_marginTop="@dimen/_10dp"
+                            android:layout_marginEnd="@dimen/_10dp"
+                            android:drawablePadding="@dimen/_10dp"
+                            android:padding="@dimen/_10dp"
+                            android:id="@+id/followingArtistTextview"
+                            android:text="@string/following_artist"
+                            android:textColor="@color/color_white"
+                            android:fontFamily="@font/manrope_regular"
+                            android:textSize="@dimen/_14sp"
+                            app:drawableEndCompat="@drawable/ic_icon_ionic_ios_arrow_down"
+                            app:drawableStartCompat="@drawable/ic_fav_artist" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_10dp"
+                            android:layout_marginTop="@dimen/_10dp"
+                            android:layout_marginEnd="@dimen/_10dp"
+                            android:drawablePadding="@dimen/_10dp"
+                            android:id="@+id/listeningHistoryTextview"
+                            android:fontFamily="@font/manrope_regular"
+                            android:padding="@dimen/_10dp"
+                            android:text="@string/listening_history"
+                            android:textColor="@color/color_white"
+                            android:textSize="@dimen/_14sp"
+                            app:drawableEndCompat="@drawable/ic_icon_ionic_ios_arrow_down"
+                            app:drawableStartCompat="@drawable/ic_listening_history" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_10dp"
+                            android:layout_marginTop="@dimen/_10dp"
+                            android:layout_marginEnd="@dimen/_10dp"
+                            android:drawablePadding="@dimen/_10dp"
+                            android:padding="@dimen/_10dp"
+                            android:text="@string/downloaded"
+                            android:id="@+id/downloadedTextview"
+                            android:fontFamily="@font/manrope_regular"
+                            android:textColor="@color/color_white"
+                            android:textSize="@dimen/_14sp"
+                            app:drawableEndCompat="@drawable/ic_icon_ionic_ios_arrow_down"
+                            app:drawableStartCompat="@drawable/ic_downloaded" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_10dp"
+                            android:layout_marginTop="@dimen/_10dp"
+                            android:layout_marginEnd="@dimen/_10dp"
+                            android:drawablePadding="@dimen/_10dp"
+                            android:padding="@dimen/_10dp"
+                            android:text="@string/buying_history"
+                            android:id="@+id/buyingHistoryTextview"
+                            android:fontFamily="@font/manrope_regular"
+                            android:textColor="@color/color_white"
+                            android:textSize="@dimen/_14sp"
+                            app:drawableEndCompat="@drawable/ic_icon_ionic_ios_arrow_down"
+                            app:drawableStartCompat="@drawable/ic_listening_history" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_10dp"
+                            android:layout_marginTop="@dimen/_10dp"
+                            android:layout_marginEnd="@dimen/_10dp"
+                            android:drawablePadding="@dimen/_10dp"
+                            android:padding="@dimen/_10dp"
+                            android:text="@string/your_interests"
+                            android:textColor="@color/color_white"
+                            android:textSize="@dimen/_15sp"
+                            android:id="@+id/yourIntrestTextview"
+                            app:drawableEndCompat="@drawable/ic_icon_ionic_ios_arrow_down"
+                            app:drawableStartCompat="@drawable/ic_album" />
+                    </LinearLayout>
+
+                </RelativeLayout>
+            </ScrollView>
+
         </RelativeLayout>
-    </ScrollView>
 
 
 </layout>

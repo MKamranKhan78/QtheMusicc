@@ -42,9 +42,9 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/activityToolbar"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/_30dp"
-            android:text="@string/free_account"
+            android:layout_marginTop="@dimen/_60dp"
             android:fontFamily="@font/manrope_bold"
+            android:text="@string/free_account"
             android:textColor="@color/color_white_text"
             android:textSize="@dimen/_20sp"
             android:visibility="@{viewModel.authModel.subscription == null ? View.VISIBLE: View.GONE}" />
@@ -92,11 +92,12 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/planViewId"
             android:layout_width="match_parent"
+
             android:layout_height="wrap_content"
             android:layout_below="@id/premiumButtonId"
             android:layout_marginStart="@dimen/_20dp"
             android:visibility="@{viewModel.authModel.subscription == null ? View.GONE: View.VISIBLE}"
-            android:layout_marginTop="@dimen/_10dp"
+            android:layout_marginTop="@dimen/_50dp"
             android:layout_marginEnd="@dimen/_20dp"
             app:cardBackgroundColor="#303033"
             app:cardCornerRadius="@dimen/_20dp"
@@ -160,7 +161,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/planViewId"
             android:layout_marginStart="@dimen/_20dp"
-            android:layout_marginTop="@dimen/_10dp"
+            android:layout_marginTop="@dimen/_30dp"
             android:layout_marginEnd="@dimen/_20dp"
             app:cardBackgroundColor="#303033"
             app:cardCornerRadius="@dimen/_10dp"
@@ -229,10 +230,10 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/profileCardViewID"
             android:layout_marginStart="@dimen/_20dp"
-            android:layout_marginTop="@dimen/_20dp"
+            android:layout_marginTop="@dimen/_30dp"
+            android:fontFamily="@font/manrope_bold"
             android:text="@string/notifications"
             android:textColor="@color/color_white"
-            android:fontFamily="@font/manrope_bold"
             android:textSize="@dimen/_18sp" />
 
 
@@ -314,9 +315,9 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/followingArtistLayout"
             android:layout_marginStart="@dimen/_20dp"
-            android:layout_marginTop="@dimen/_20dp"
-            android:text="@string/about_qmusic"
+            android:layout_marginTop="@dimen/_30dp"
             android:fontFamily="@font/manrope_bold"
+            android:text="@string/about_qmusic"
             android:textColor="@color/color_white"
             android:textSize="@dimen/_18sp" />
 
@@ -346,14 +347,14 @@
             android:layout_centerVertical="true"
             android:layout_marginStart="@dimen/_10dp"
             android:layout_marginTop="@dimen/_10dp"
+            android:fontFamily="@font/manrope_regular"
             android:paddingStart="@dimen/_10dp"
             android:paddingTop="@dimen/_5dp"
             android:paddingEnd="@dimen/_20dp"
-            android:fontFamily="@font/manrope_regular"
-            android:textSize="@dimen/_14sp"
             android:paddingBottom="@dimen/_5dp"
             android:text="@string/privacy_policy"
             android:textColor="@color/color_white"
+            android:textSize="@dimen/_14sp"
             app:drawableEndCompat="@drawable/ic_icon_ionic_ios_arrow_down" />
 
         <LinearLayout

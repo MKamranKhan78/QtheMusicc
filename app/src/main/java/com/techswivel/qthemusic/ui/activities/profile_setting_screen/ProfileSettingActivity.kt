@@ -3,7 +3,6 @@ package com.techswivel.qthemusic.ui.activities.profile_setting_screen
 import android.os.Build
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.techswivel.dfaktfahrerapp.ui.fragments.underDevelopmentMessageFragment.UnderDevelopmentMessageFragment
@@ -43,6 +42,11 @@ class ProfileSettingActivity : BaseActivity() {
 
     }
 
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return super.onSupportNavigateUp()
+    }
+
     private fun setObserver() {
         netWorkViewModel.profileUpdationResponse.observe(this) { updateProfileResponse ->
             when (updateProfileResponse.status) {
@@ -51,8 +55,6 @@ class ProfileSettingActivity : BaseActivity() {
                 }
                 NetworkStatus.SUCCESS -> {
                     hideProgressBar()
-                    Toast.makeText(applicationContext, "successfully update", Toast.LENGTH_SHORT)
-                        .show()
                 }
                 NetworkStatus.ERROR -> {
                     hideProgressBar()
