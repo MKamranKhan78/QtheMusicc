@@ -24,7 +24,7 @@
             android:name=".ui.activities.profileUpdatingActivity.ProfileUpdatingActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activities.profile_setting_screen.ProfileSettingActivity"
+            android:name=".ui.activities.profileSettingScreen.ProfileSettingActivity"
             android:exported="false" />
         <activity
             android:name=".ui.activities.splashActivity.SplashActivity"

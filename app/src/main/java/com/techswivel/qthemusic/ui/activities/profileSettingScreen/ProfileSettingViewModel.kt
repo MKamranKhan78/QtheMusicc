@@ -1,4 +1,4 @@
-package com.techswivel.qthemusic.ui.activities.profile_setting_screen
+package com.techswivel.qthemusic.ui.activities.profileSettingScreen
 
 import com.techswivel.qthemusic.models.AuthModel
 import com.techswivel.qthemusic.ui.base.BaseViewModel

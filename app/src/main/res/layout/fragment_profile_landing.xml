@@ -331,6 +331,23 @@
                             android:id="@+id/yourIntrestTextview"
                             app:drawableEndCompat="@drawable/ic_icon_ionic_ios_arrow_down"
                             app:drawableStartCompat="@drawable/ic_album" />
+
+                        <TextView
+                            android:id="@+id/serverSetting"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_10dp"
+                            android:layout_marginTop="@dimen/_10dp"
+                            android:layout_marginEnd="@dimen/_10dp"
+                            android:drawablePadding="@dimen/_10dp"
+                            android:padding="@dimen/_10dp"
+                            android:text="@string/server_setting"
+                            android:textColor="@color/color_white"
+                            android:textSize="@dimen/_15sp"
+                            app:drawableEndCompat="@drawable/ic_icon_ionic_ios_arrow_down"
+                            app:drawableStartCompat="@drawable/ic_setting_white" />
+
+
                     </LinearLayout>
 
                 </RelativeLayout>

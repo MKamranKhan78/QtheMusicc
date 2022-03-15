@@ -13,7 +13,7 @@
 
         <variable
             name="viewModel"
-            type="com.techswivel.qthemusic.ui.activities.profile_setting_screen.ProfileSettingViewModel" />
+            type="com.techswivel.qthemusic.ui.activities.profileSettingScreen.ProfileSettingViewModel" />
 
     </data>
 
@@ -21,20 +21,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/black_gradiant_background"
-        tools:context=".ui.activities.profile_setting_screen.ProfileSettingActivity">
+        tools:context=".ui.activities.profileSettingScreen.ProfileSettingActivity">
 
         <include
             android:id="@+id/activityToolbar"
             layout="@layout/app_bar_blue_center_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-
-        <ProgressBar
-            android:id="@+id/progressBarId"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:visibility="gone" />
 
         <TextView
             android:id="@+id/freeAccountText"
@@ -264,13 +257,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/_19dp"
                 android:layout_alignParentEnd="true"
-                android:checked="@{viewModel.authModel.notification.isNotificationEnabled()}"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="@dimen/_10dp"
                 android:thumb="@drawable/thumb"
                 app:track="@drawable/track" />
 
+            <!--            android:checked="@={viewmodel.rememberMe}"-->
         </RelativeLayout>
+        <!--                android:checked="@{viewModel.authModel.notification.isNotificationEnabled()}"-->
 
 
         <RelativeLayout

@@ -3,6 +3,7 @@ package com.techswivel.qthemusic.ui.activities.mainActivity
 import android.app.Activity
 import android.os.Build
 import android.os.Bundle
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -20,6 +21,7 @@ class MainActivity : BaseActivity() {
     private lateinit var viewModel: MainActivityViewModel
     private var mFragment: Fragment? = null
 
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = ActivityMainBinding.inflate(layoutInflater)
@@ -64,11 +66,10 @@ class MainActivity : BaseActivity() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     private fun changeStatusBarColor() {
-        if (Build.VERSION.SDK_INT >= 21) {
-            val window = this.window
-            window.statusBarColor = ContextCompat.getColor(this, R.color.color_black)
-        }
+        val window = this.window
+        window.statusBarColor = ContextCompat.getColor(this, R.color.color_black)
     }
 
     private fun initView() {

@@ -1,8 +1,8 @@
-package com.techswivel.qthemusic.ui.activities.profile_setting_screen
+package com.techswivel.qthemusic.ui.activities.profileSettingScreen
 
 import android.os.Build
 import android.os.Bundle
-import android.view.View
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.techswivel.dfaktfahrerapp.ui.fragments.underDevelopmentMessageFragment.UnderDevelopmentMessageFragment
@@ -17,7 +17,7 @@ import com.techswivel.qthemusic.ui.base.BaseActivity
 import com.techswivel.qthemusic.utils.ActivityUtils
 import com.techswivel.qthemusic.utils.CommonKeys
 import com.techswivel.qthemusic.utils.DialogUtils
-import com.techswivel.qthemusic.utils.toDeviceIdentifier
+import com.techswivel.qthemusic.utils.Log
 import kotlinx.coroutines.runBlocking
 
 
@@ -28,6 +28,7 @@ class ProfileSettingActivity : BaseActivity() {
     private lateinit var netWorkViewModel: AuthNetworkViewModel
     private var mBundle: Bundle? = null
 
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = ActivityProfileSettingBinding.inflate(layoutInflater)
@@ -51,14 +52,13 @@ class ProfileSettingActivity : BaseActivity() {
         netWorkViewModel.profileUpdationResponse.observe(this) { updateProfileResponse ->
             when (updateProfileResponse.status) {
                 NetworkStatus.LOADING -> {
-                    showProgressBar()
+                    Log.v("Network_status", "success")
                 }
                 NetworkStatus.SUCCESS -> {
-                    hideProgressBar()
+                    Log.v("Network_status", "success")
                 }
                 NetworkStatus.ERROR -> {
-                    hideProgressBar()
-                    updateProfileResponse.error?.message?.let { it1 ->
+                    updateProfileResponse.error?.message?.let { error_message ->
                         DialogUtils.errorAlert(
                             applicationContext,
                             updateProfileResponse.error.code.toString(),
@@ -67,7 +67,6 @@ class ProfileSettingActivity : BaseActivity() {
                     }
                 }
                 NetworkStatus.EXPIRE -> {
-                    hideProgressBar()
                     DialogUtils.sessionExpireAlert(applicationContext,
                         object : DialogUtils.CallBack {
                             override fun onPositiveCallBack() {
@@ -81,7 +80,7 @@ class ProfileSettingActivity : BaseActivity() {
                         })
                 }
                 NetworkStatus.COMPLETED -> {
-                    hideProgressBar()
+                    Log.v("Network_status", "completed")
                 }
             }
         }
@@ -89,14 +88,14 @@ class ProfileSettingActivity : BaseActivity() {
         netWorkViewModel.logoutResponse.observe(this) { logoutResponse ->
             when (logoutResponse.status) {
                 NetworkStatus.LOADING -> {
-                    showProgressBar()
+                    Log.v("Network_status", "Loading")
+
                 }
                 NetworkStatus.SUCCESS -> {
-                    hideProgressBar()
+                    Log.v("Network_status", "success")
                 }
                 NetworkStatus.ERROR -> {
-                    hideProgressBar()
-                    logoutResponse.error?.message?.let { it1 ->
+                    logoutResponse.error?.message?.let { error_message ->
                         DialogUtils.errorAlert(
                             applicationContext,
                             logoutResponse.error.code.toString(),
@@ -105,7 +104,6 @@ class ProfileSettingActivity : BaseActivity() {
                     }
                 }
                 NetworkStatus.EXPIRE -> {
-                    hideProgressBar()
                     DialogUtils.sessionExpireAlert(applicationContext,
                         object : DialogUtils.CallBack {
                             override fun onPositiveCallBack() {
@@ -119,19 +117,12 @@ class ProfileSettingActivity : BaseActivity() {
                         })
                 }
                 NetworkStatus.COMPLETED -> {
-                    hideProgressBar()
+                    Log.v("Network_status", "completed")
                 }
             }
         }
     }
 
-    private fun hideProgressBar() {
-        mBinding.progressBarId.visibility = View.GONE
-    }
-
-    private fun showProgressBar() {
-        mBinding.progressBarId.visibility = View.VISIBLE
-    }
 
     private fun clickListeners() {
 
@@ -143,9 +134,7 @@ class ProfileSettingActivity : BaseActivity() {
         }
 
         mBinding.logoutButton.setOnClickListener {
-            val deviceIdentifier =
-                this.toDeviceIdentifier()
-            logoutUser(deviceIdentifier)
+            logoutUser()
         }
 
         mBinding.userProfileViewID.setOnClickListener {
@@ -211,8 +200,8 @@ class ProfileSettingActivity : BaseActivity() {
         netWorkViewModel.updateProfile(authModel)
     }
 
-    private fun logoutUser(deviceIdentifier: String) {
-        netWorkViewModel.logoutUser(deviceIdentifier)
+    private fun logoutUser() {
+        netWorkViewModel.logoutUser()
     }
 
     private fun initViewModel() {
@@ -240,10 +229,10 @@ class ProfileSettingActivity : BaseActivity() {
         mBinding.activityToolbar.toolbarTitle.text = getString(R.string.settings)
     }
 
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     private fun changeStatusBarColor() {
-        if (Build.VERSION.SDK_INT >= 21) {
-            val window = this.window
-            window.statusBarColor = ContextCompat.getColor(this, R.color.color_black)
-        }
+        val window = this.window
+        window.statusBarColor = ContextCompat.getColor(this, R.color.color_black)
     }
+
 }

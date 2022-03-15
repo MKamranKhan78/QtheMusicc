@@ -11,6 +11,7 @@ import com.techswivel.qthemusic.models.ResponseMain
 import com.techswivel.qthemusic.source.remote.rxjava.CustomError
 import com.techswivel.qthemusic.source.remote.rxjava.ErrorUtils
 import com.techswivel.qthemusic.ui.base.BaseViewModel
+import com.techswivel.qthemusic.utils.toDeviceIdentifier
 import retrofit2.Response
 
 class AuthNetworkViewModel : BaseViewModel() {
@@ -19,11 +20,12 @@ class AuthNetworkViewModel : BaseViewModel() {
     var profileUpdationResponse: MutableLiveData<ApiResponse> = MutableLiveData()
 
 
-    fun logoutUser(deviceIdentifier: String) {
+    fun logoutUser() {
 
-        mRemoteDataManager.logoutUser(deviceIdentifier).doOnSubscribe {
-            logoutResponse.value = ApiResponse.loading()
-        }?.subscribe(object : CustomObserver<Response<ResponseMain>>() {
+        mRemoteDataManager.logoutUser(QTheMusicApplication.getContext().toDeviceIdentifier())
+            .doOnSubscribe {
+                logoutResponse.value = ApiResponse.loading()
+            }?.subscribe(object : CustomObserver<Response<ResponseMain>>() {
             override fun onSuccess(t: Response<ResponseMain>) {
                 when {
                     t.isSuccessful -> {

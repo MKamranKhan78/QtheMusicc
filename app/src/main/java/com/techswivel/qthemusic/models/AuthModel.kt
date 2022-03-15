@@ -1,5 +1,6 @@
 package com.techswivel.qthemusic.models
 
+import androidx.databinding.BaseObservable
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
@@ -26,4 +27,6 @@ data class AuthModel(
     val subscription: Subscription?,
     @SerializedName("notification")
     val notification: Notification?
-) : Serializable
+) : BaseObservable(), Serializable {
+
+}
