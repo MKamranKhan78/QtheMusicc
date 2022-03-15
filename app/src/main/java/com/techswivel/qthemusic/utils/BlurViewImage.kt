@@ -36,11 +36,9 @@ class BlurImageView(context: Context):BitmapTransformation() {
 
         // Set the blur radius
         script.setRadius(20f)
-
         script.forEach(output)
 
         // Copy the output to the blurred bitmap
-
         // Copy the output to the blurred bitmap
         output.copyTo(blurredBitmap)
 

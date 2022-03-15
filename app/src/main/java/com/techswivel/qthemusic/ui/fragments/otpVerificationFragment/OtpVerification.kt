@@ -13,7 +13,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.databinding.FragmentOtpVerificationBinding
+import com.techswivel.qthemusic.enums.Status
 import com.techswivel.qthemusic.models.AuthRequestBuilder
+import com.techswivel.qthemusic.models.ResponseModel
 import com.techswivel.qthemusic.ui.fragments.forgotPasswordFragment.ForgotPassword
 import com.techswivel.qthemusic.ui.fragments.setPasswordFragmetnt.SetPassword
 import com.techswivel.qthemusic.utils.Log
@@ -78,14 +80,29 @@ class OtpVerification : Fragment() {
 
     private fun observeVerifyOtpRequest() {
         verifyOtpVM.observeOtpVerification.observe(viewLifecycleOwner, Observer {
-            if (it.response.status) {
-                Log.d(TAG, "data is  ${it.response.data?.authModel}")
-                val transaction = requireActivity().supportFragmentManager.beginTransaction()
-                transaction.replace(R.id.auth_container, SetPassword())
-                    .addToBackStack(TAG)
-                transaction.commit()
-            } else {
-                Utilities.showToast(requireContext(), "otp not match")
+            when (it.status) {
+                Status.LOADING -> {
+                    Log.d(TAG,"Loading...")
+                    viewBinding.btnConfirmCode.visibility = View.INVISIBLE
+                    viewBinding.pbOtpVerification.visibility = View.VISIBLE
+                }
+                Status.SUCCESS -> {
+                    val data=it.t as ResponseModel
+                    Log.d(TAG,"Success ${data.data}")
+                    viewBinding.btnConfirmCode.visibility  = View.VISIBLE
+                    viewBinding.pbOtpVerification.visibility  = View.INVISIBLE
+                    val transaction = requireActivity().supportFragmentManager.beginTransaction()
+                    transaction.replace(R.id.auth_container, SetPassword())
+                        .addToBackStack(TAG)
+                    transaction.commit()
+                }
+                Status.EXPIRE -> {
+                    Log.d(TAG, "Expire is called")
+                }
+                Status.ERROR -> {
+                    Log.d(TAG, "Error is called")
+                }
+
             }
         })
     }

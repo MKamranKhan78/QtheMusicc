@@ -11,12 +11,15 @@ import androidx.lifecycle.ViewModelProvider
 import com.facebook.login.LoginFragment
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.databinding.FragmentSetPasswordBinding
+import com.techswivel.qthemusic.enums.Status
 import com.techswivel.qthemusic.models.AuthRequestBuilder
+import com.techswivel.qthemusic.models.ResponseModel
 import com.techswivel.qthemusic.ui.fragments.signInFragment.SignInFragment
 import com.techswivel.qthemusic.utils.Log
 
 
 class SetPassword : Fragment() {
+    val TAG = "SetPassword"
     lateinit var passwordBinding: FragmentSetPasswordBinding
     lateinit var setPasswordVm: SetPasswordVM
 
@@ -45,7 +48,8 @@ class SetPassword : Fragment() {
         passwordBinding.etSetPasswordLayout.passwordVisibilityToggleRequested(false)
         passwordBinding.etSetConfirmPasswordLayout.passwordVisibilityToggleRequested(false)
     }
-    private fun onClickListener(){
+
+    private fun onClickListener() {
         passwordBinding.btnDone.setOnClickListener {
             createAndSendSetPasswordRequest("sdfe39k")
         }
@@ -63,14 +67,30 @@ class SetPassword : Fragment() {
 
     private fun observeSetPasswordObserver() {
         setPasswordVm.observeSetPassword.observe(viewLifecycleOwner, Observer {
-            if (it.response.status) {
-                val fragmentManager: FragmentManager =
-                    requireActivity().getSupportFragmentManager()
-                val transaction = requireActivity().supportFragmentManager.beginTransaction()
-                transaction.replace(R.id.auth_container,SignInFragment())
-                fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-                transaction.commit()
-            }else{
+            when (it.status) {
+                Status.LOADING -> {
+                    Log.d(TAG,"Loading...")
+                    passwordBinding.btnDone.visibility = View.INVISIBLE
+                    passwordBinding.pbSetPassword.visibility = View.VISIBLE
+                }
+                Status.SUCCESS -> {
+                    val data = it.t as ResponseModel
+                    Log.d(TAG, "Success ${data.data}")
+                    passwordBinding.btnDone.visibility = View.VISIBLE
+                    passwordBinding.pbSetPassword.visibility = View.INVISIBLE
+                    val fragmentManager: FragmentManager =
+                        requireActivity().getSupportFragmentManager()
+                    val transaction = requireActivity().supportFragmentManager.beginTransaction()
+                    transaction.replace(R.id.auth_container, SignInFragment())
+                    fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                    transaction.commit()
+                }
+                Status.EXPIRE -> {
+                    Log.d(TAG, "Expire is called")
+                }
+                Status.ERROR -> {
+                    Log.d(TAG, "Error is called")
+                }
             }
         })
     }

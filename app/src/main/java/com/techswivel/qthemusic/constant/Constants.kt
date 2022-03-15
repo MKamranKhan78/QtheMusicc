@@ -34,4 +34,5 @@ object Constants {
     const val VIDEO_GALLERY_PICKER_REQUEST_CODE = 2234
 
     const val VIDEO_CAMERA_PICKER_REQUEST_CODE = 22345
+    const val GOOGLE_SIGN_IN_REQUEST_CODE=1001
 }

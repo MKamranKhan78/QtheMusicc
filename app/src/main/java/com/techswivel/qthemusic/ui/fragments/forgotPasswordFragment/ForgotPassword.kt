@@ -11,8 +11,11 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.databinding.FragmentForgotPasswordBinding
+import com.techswivel.qthemusic.enums.Status
 import com.techswivel.qthemusic.models.AuthRequestBuilder
+import com.techswivel.qthemusic.models.ResponseModel
 import com.techswivel.qthemusic.ui.fragments.otpVerificationFragment.OtpVerification
+import com.techswivel.qthemusic.utils.Log
 import com.techswivel.qthemusic.utils.Utilities
 
 
@@ -68,12 +71,30 @@ class ForgotPassword : Fragment() {
 
     private fun observeOtpData() {
         forgotVm.observeOtpMutableData.observe(viewLifecycleOwner, Observer {
-            if (it.response.status) {
-                Utilities.showToast(requireContext(), "otp is here")
-                val transaction = requireActivity().supportFragmentManager.beginTransaction()
-                transaction.replace(R.id.auth_container, OtpVerification())
-                    .addToBackStack(TAG)
-                transaction.commit()
+            when (it.status) {
+                Status.LOADING -> {
+                    Log.d(TAG, "Loading...")
+                    forgotbingding.btnSendCodeForgot.visibility = View.INVISIBLE
+                    forgotbingding.pbForgotPassword.visibility = View.VISIBLE
+                }
+                Status.SUCCESS -> {
+                    val data = it.t as ResponseModel
+                    Log.d(TAG, "Success ${data.data}")
+                    forgotbingding.btnSendCodeForgot.visibility = View.VISIBLE
+                    forgotbingding.pbForgotPassword.visibility = View.INVISIBLE
+                    Utilities.showToast(requireContext(), "otp is here")
+                    val transaction = requireActivity().supportFragmentManager.beginTransaction()
+                    transaction.replace(R.id.auth_container, OtpVerification())
+                        .addToBackStack(TAG)
+                    transaction.commit()
+                }
+                Status.EXPIRE -> {
+                    Log.d(TAG, "Expire is called")
+                }
+                Status.ERROR -> {
+                    Log.d(TAG, "Error is called")
+                }
+
             }
         })
     }

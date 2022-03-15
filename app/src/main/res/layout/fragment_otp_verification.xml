@@ -193,6 +193,16 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_otp_resend_timer_tag" />
-
+        <ProgressBar
+            android:id="@+id/pb_otp_verification"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            app:layout_constraintTop_toTopOf="@+id/btn_confirm_code"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_confirm_code"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:indeterminateTint="@color/sign_up_btn"
+            />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
