@@ -10,9 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
-import com.facebook.CallbackManager
-import com.facebook.FacebookCallback
-import com.facebook.FacebookException
+import com.facebook.*
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -26,10 +24,13 @@ import com.techswivel.qthemusic.constant.Constants
 import com.techswivel.qthemusic.databinding.FragmentSignInBinding
 import com.techswivel.qthemusic.enums.Status
 import com.techswivel.qthemusic.models.AuthRequestBuilder
+import com.techswivel.qthemusic.models.GoogleResponseModel
 import com.techswivel.qthemusic.models.ResponseModel
+import com.techswivel.qthemusic.ui.base.GoogleResponseViewModel
 import com.techswivel.qthemusic.ui.fragments.forgotPasswordFragment.ForgotPassword
 import com.techswivel.qthemusic.utils.BlurImageView
 import com.techswivel.qthemusic.utils.Log
+import com.techswivel.qthemusic.utils.Utilities
 import java.util.*
 
 
@@ -41,9 +42,11 @@ class SignInFragment : Fragment() {
     private lateinit var googleSinInClient: GoogleSignInClient
     private lateinit var callbackManager: CallbackManager
     private lateinit var loginManager: LoginManager
+    private lateinit var googleSignViewModel: GoogleResponseViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         signInVm = ViewModelProvider(this).get(SignInViewModel::class.java)
+        googleSignViewModel = ViewModelProvider(this).get(GoogleResponseViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -59,27 +62,44 @@ class SignInFragment : Fragment() {
     }
 
     private fun initialization() {
+        FacebookSdk.sdkInitialize(requireContext().applicationContext);
         callbackManager = CallbackManager.Factory.create()
         loginManager = LoginManager.getInstance()
+
         Glide.with(requireContext()).load(R.drawable.laura_music)
             .transform(BlurImageView(requireContext())).into(signInBinding.ivSigninBg)
         signInBinding.etPasLayout.passwordVisibilityToggleRequested(false)
         observeingData()
-
+        observerGoogleResponse()
+//        loginManager.retrieveLoginStatus(requireContext(), object : LoginStatusCallback {
+//            override fun onCompleted(accessToken: AccessToken) {
+//                Utilities.showToast(requireContext(),"already login")
+//                // User was previously logged in, can log them in directly here.
+//                // If this callback is called, a popup notification appears that says
+//                // "Logged in as <User Name>"
+//            }
+//
+//            override fun onFailure() {
+//                // No access token could be retrieved for the user
+//            }
+//
+//            override fun onError(exception: Exception) {
+//                // An error occurred
+//            }
+//        })
     }
 
     private fun clickListeners() {
         signInBinding.btnSignIn.setOnClickListener {
             if (isUserLoginDataAuthenticated()) {
-                val authModelBilder = AuthRequestBuilder()
-                authModelBilder.email = signInBinding.etLoginEmail.text.toString()
-                authModelBilder.password = 45454
-                authModelBilder.accessToken = "jkagsjdgasjgJHGHJGDjhbsjhsbhjas"
-                authModelBilder.loginType = "Email"
-                authModelBilder.fcmToken = "jkagsjdgasjgJHGHJGDjhbsjhsbhjas"
-                authModelBilder.deviceIdentifier = "deviceIdenfier_hammad"
-                val authModel = AuthRequestBuilder.builder(authModelBilder)
-                signInVm.userLogin(authModel)
+                createUserAndCallApi(
+                    signInBinding.etLoginEmail.toString(),
+                    1111,
+                    null,
+                    "Email",
+                    "kljsdjklsdfkljsdf",
+                    "wasi_dev"
+                )
             }
         }
 
@@ -95,28 +115,7 @@ class SignInFragment : Fragment() {
         }
 
         signInBinding.signSocialPortion.ivFbId.setOnClickListener {
-            loginManager.logInWithReadPermissions(
-                requireActivity(),
-                Arrays.asList(
-                    "public_profile",
-                )
-            );
-            loginManager.registerCallback(callbackManager,
-                object : FacebookCallback<LoginResult?> {
-                    override fun onSuccess(result: LoginResult?) {
-                        Log.d(TAG, "fb login successfully")
-                    }
-
-                    override fun onCancel() {
-                        Log.d(TAG, "fb login cancle")
-                    }
-
-                    override fun onError(exception: FacebookException) {
-                        Log.d(TAG, "fb exception ${exception.message}")
-                    }
-
-
-                })
+            signInFacebook()
         }
     }
 
@@ -143,6 +142,43 @@ class SignInFragment : Fragment() {
 
             }
         })
+    }
+
+    private fun observerGoogleResponse() {
+        googleSignViewModel.observeGoogleMutableData.observe(viewLifecycleOwner, Observer {
+            when(it.status){
+                Status.LOADING->{
+                    Log.d(TAG,"google is loading")
+                }
+                Status.SUCCESS->{
+                    Log.d(TAG,"google success")
+                    val data=it.t as GoogleResponseModel
+                    Log.d(TAG,"data is $data")
+                }
+            }
+        })
+    }
+
+    private fun createUserAndCallApi(
+        email: String?,
+        password: Int?,
+        accessToken: String?,
+        loginType: String?,
+        fcmToken: String?,
+        deviceIdentifier: String?
+    ) {
+
+        val authModelBilder = AuthRequestBuilder()
+        authModelBilder.email = email
+        authModelBilder.password = password
+        authModelBilder.accessToken = accessToken
+        authModelBilder.loginType = loginType
+        authModelBilder.fcmToken = fcmToken
+        authModelBilder.deviceIdentifier = deviceIdentifier
+        val authModel = AuthRequestBuilder.builder(authModelBilder)
+        signInVm.userLogin(authModel)
+
+
     }
 
     private fun isUserLoginDataAuthenticated(): Boolean {
@@ -176,6 +212,34 @@ class SignInFragment : Fragment() {
         startActivityForResult(signInIntent, Constants.GOOGLE_SIGN_IN_REQUEST_CODE)
     }
 
+    private fun signInFacebook() {
+        loginManager.logInWithReadPermissions(
+            requireActivity(),
+            Arrays.asList(
+                "public_profile",
+            )
+        )
+        loginManager.registerCallback(callbackManager,
+            object : FacebookCallback<LoginResult?> {
+                override fun onSuccess(result: LoginResult?) {
+                    if (result != null) {
+                        Utilities.showToast(requireContext(), "login successfully")
+                    } else {
+                        Utilities.showToast(requireContext(), "no data found")
+                    }
+                }
+
+                override fun onCancel() {
+                    Log.d(TAG, "fb login cancle")
+                }
+
+                override fun onError(exception: FacebookException) {
+                    Log.d(TAG, "fb exception ${exception.message}")
+                }
+            })
+
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         callbackManager.onActivityResult(
@@ -193,12 +257,21 @@ class SignInFragment : Fragment() {
     private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
         try {
             val account: GoogleSignInAccount = completedTask.getResult(ApiException::class.java)
-            Log.d(TAG, "Login Succesfuly")
-            val name = account.displayName
-            val url = account.photoUrl
-            val email = account.email
-            Log.d(TAG, "name $name email $email url $url")
 
+            val name = account.displayName
+            val email = account.email
+            val token = account.idToken
+            if (token != null) {
+                googleSignViewModel.getGoogleToken(token)
+            }
+           // Log.d(TAG, "name $name email $email token $token")
+            val authCode = account.serverAuthCode
+            Log.d(TAG, "handle result called")
+            if (authCode != null) {
+                Log.d(TAG, "authCode $authCode")
+            } else {
+                Log.d(TAG, "sever key not found here $authCode")
+            }
             // Signed in successfully, show authenticated UI.
         } catch (e: ApiException) {
             // The ApiException status code indicates the detailed failure reason.

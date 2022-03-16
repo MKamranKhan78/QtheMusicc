@@ -17,12 +17,13 @@ class ForgotPasswordVM : ViewModel() {
     val mRemoteDataManager = RemoteDataManager
     var observeOtpMutableData: MutableLiveData<ApiResponseObserver> = MutableLiveData()
     fun sendResetOtp(authRequestModel: AuthRequestModel) {
-        mRemoteDataManager.userLogin(authRequestModel).doOnSubscribe {
-            observeOtpMutableData.value= ApiResponseObserver.loading()
-        }?.subscribe(object : CustomObserver<Response<ResponseMain>>() {
+
+        mRemoteDataManager.sendOtpRequest(authRequestModel).doOnSubscribe {
+            observeOtpMutableData.value = ApiResponseObserver.loading()
+        }.subscribe(object : CustomObserver<Response<ResponseMain>>() {
             override fun onSuccess(t: Response<ResponseMain>) {
                 if (t.isSuccessful) {
-                    observeOtpMutableData.value= ApiResponseObserver.success(t.body()?.response)
+                    observeOtpMutableData.value = ApiResponseObserver.success(t.body()?.response)
                 }
             }
 
@@ -39,11 +40,7 @@ class ForgotPasswordVM : ViewModel() {
             }
 
             override fun onRequestComplete() {
-                Log.d(TAG, "request completed")
-            }
 
-            override fun onNext(t: Response<ResponseMain>) {
-                TODO("Not yet implemented")
             }
 
         })

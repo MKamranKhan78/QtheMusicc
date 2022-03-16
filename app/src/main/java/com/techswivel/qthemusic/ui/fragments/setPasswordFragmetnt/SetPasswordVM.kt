@@ -45,7 +45,7 @@ class SetPasswordVM : ViewModel() {
             }
 
             override fun onNext(t: Response<ResponseMain>) {
-                TODO("Not yet implemented")
+
             }
 
         })

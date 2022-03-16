@@ -6,6 +6,15 @@ import retrofit2.Response
 class DummyDataManager {
 
     companion object {
+        fun getGoogleResponse():Response<GoogleResponseModel>{
+            return Response.success(
+                GoogleResponseModel(
+
+                )
+            )
+        }
+
+
         fun newPasswordOtpDummyData(): Response<ResponseMain> {
             return Response.success(
                 ResponseMain(
@@ -71,7 +80,7 @@ class DummyDataManager {
                 notification
             )
             return MyDataClass(
-                authModel
+                authModel,
             )
         }
 

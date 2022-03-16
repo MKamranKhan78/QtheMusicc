@@ -18,7 +18,7 @@
     <string name="google_client_redirect_uri_staging">abcd</string> <!-- https://udeoglobe-staging.firebaseapp.com/__/auth/handler -->
     <string name="facebook_app_id">348614333948475</string>
     <string name="fb_login_protocol_scheme">fb1234</string>
-    <string name="facebook_client_token">56789</string>
+    <string name="facebook_client_token">527db1c05e0c2c1ce9b40deabd02d582</string>
     <string name="no_internet">No Internet Connection</string>
     <string name="call_not_supported">Call Not Supported</string>
     <string name="pick_image_intent_text">Pick Image</string>
@@ -76,5 +76,7 @@
     <string name="password">Password</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="done">Done</string>
-    <string name="token_request_id">345540049924-j2pgaphe6hhoios3oag2g7ktpdo1crrb.apps.googleusercontent.com</string>
+    <string name="token_request_id">74605093159-funodu4lv47i9u57h2meqahlcan5elo3.apps.googleusercontent.com</string>
+
+
 </resources>

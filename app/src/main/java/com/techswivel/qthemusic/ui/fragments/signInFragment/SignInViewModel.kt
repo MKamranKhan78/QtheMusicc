@@ -21,9 +21,10 @@ class SignInViewModel : ViewModel() {
     var observeSignInMutableData: MutableLiveData<ApiResponseObserver> = MutableLiveData()
     @SuppressLint("CheckResult")
     fun userLogin(authRequestBuilder: AuthRequestModel) {
+
         mRemoteDataManager.userLogin(authRequestBuilder).doOnSubscribe {
-            observeSignInMutableData.value = ApiResponseObserver.loading()
-        }?.subscribe(object : CustomObserver<Response<ResponseMain>>() {
+            observeSignInMutableData.value= ApiResponseObserver.loading()
+        }.subscribe(object :CustomObserver<Response<ResponseMain>>(){
             override fun onSuccess(t: Response<ResponseMain>) {
                 if (t.isSuccessful) {
                     observeSignInMutableData.value = ApiResponseObserver.success(t.body()?.response)
@@ -39,17 +40,14 @@ class SignInViewModel : ViewModel() {
                             it
                         )
                     }
+
                 )
             }
 
             override fun onRequestComplete() {
-                Log.d(TAG, "request completed")
-            }
 
-            override fun onNext(t: Response<ResponseMain>) {
-                TODO("Not yet implemented")
             }
 
         })
-    }
+}
 }

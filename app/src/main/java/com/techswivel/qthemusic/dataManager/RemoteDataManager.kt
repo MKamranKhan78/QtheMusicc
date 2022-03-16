@@ -1,5 +1,4 @@
 package com.techswivel.qthemusic.dataManager
-
 import com.techswivel.qthemusic.BuildConfig
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.application.QTheMusicApplication
