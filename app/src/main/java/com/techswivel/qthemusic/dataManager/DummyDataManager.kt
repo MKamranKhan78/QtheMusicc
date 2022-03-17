@@ -70,12 +70,12 @@ class DummyDataManager {
                         false,
                         "No Lyrics Available",
                         4,
-                        "",
+                        "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
                         3233,
                         1,
                         SongStatus.FREE,
                         "Lose Yourself",
-                        ""
+                        "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
                     ),
                     Song(
                         12,
@@ -88,12 +88,12 @@ class DummyDataManager {
                         false,
                         "No Lyrics Available",
                         24,
-                        "",
+                        "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
                         3213,
                         2,
                         SongStatus.PREMIUM,
                         "Save Your Tears",
-                        ""
+                        null
                     ),
                     Song(
                         33,
@@ -106,12 +106,12 @@ class DummyDataManager {
                         false,
                         "No Lyrics Available",
                         19,
-                        "",
+                        "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
                         4533,
                         3,
-                        SongStatus.PREMIUM,
+                        SongStatus.FREE,
                         "On My Way",
-                        ""
+                        null
                     )
                 ),
                 58

@@ -61,4 +61,6 @@
     <string name="something_wrong">Something went wrong!</string>
     <string name="str_video">Video</string>
     <string name="str_audio">Audio</string>
+    <string name="str_underdevelopment_feature">Underdevelopment feature</string>
+    <string name="str_playing_from">PLAYING FROM</string>
 </resources>

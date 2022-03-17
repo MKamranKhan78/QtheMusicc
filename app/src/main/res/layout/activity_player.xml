@@ -151,7 +151,7 @@
             app:layout_constraintTop_toBottomOf="@id/tv_audio_player_song_name" />
 
         <ImageView
-            android:id="@+id/iv_empty_heart"
+            android:id="@+id/iv_audio_player_empty_heart"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_20dp"
@@ -161,13 +161,17 @@
             app:layout_constraintTop_toBottomOf="@id/cv_song_cover" />
 
         <SeekBar
-            android:id="@+id/sb_audio_progress"
+            android:id="@+id/sb_audio_player"
+            style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_marginStart="@dimen/_5dp"
             android:layout_marginTop="@dimen/_20dp"
-            android:padding="@dimen/_20dp"
+            android:layout_marginEnd="@dimen/_5dp"
             android:progressBackgroundTint="@color/color_white"
+            android:progressBackgroundTintMode="src_over"
+            android:progressTint="@color/color_red"
+            android:thumb="@drawable/custom_thumb"
             app:layout_constraintEnd_toEndOf="@id/layout_audio_player"
             app:layout_constraintTop_toBottomOf="@id/tv_audio_player_artist_name" />
 
@@ -175,80 +179,80 @@
             android:id="@+id/song_current_duration"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_25dp"
+            android:layout_marginStart="@dimen/_20dp"
             android:fontFamily="@font/manrope_regular"
-            android:text="1:48"
+            android:text="00:00"
             android:textColor="@color/color_white"
             android:textSize="@dimen/_12sp"
             app:layout_constraintStart_toStartOf="@id/layout_audio_player"
-            app:layout_constraintTop_toBottomOf="@id/sb_audio_progress" />
+            app:layout_constraintTop_toBottomOf="@id/sb_audio_player" />
 
         <TextView
             android:id="@+id/max_song_duration"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/_25dp"
+            android:layout_marginEnd="@dimen/_20dp"
             android:fontFamily="@font/manrope_regular"
-            android:text="3:40"
+            android:text="00:00"
             android:textColor="@color/color_white"
             android:textSize="@dimen/_12sp"
             app:layout_constraintEnd_toEndOf="@id/layout_audio_player"
-            app:layout_constraintTop_toBottomOf="@id/sb_audio_progress" />
+            app:layout_constraintTop_toBottomOf="@id/sb_audio_player" />
 
         <ImageView
-            android:id="@+id/exo_prev"
+            android:id="@+id/iv_previous"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="50dp"
             android:layout_marginTop="@dimen/_30dp"
             android:src="@drawable/ic_previous"
-            app:layout_constraintEnd_toStartOf="@+id/exo_rew"
+            app:layout_constraintEnd_toStartOf="@+id/iv_rewind"
             app:layout_constraintStart_toStartOf="@id/layout_audio_player"
             app:layout_constraintTop_toBottomOf="@id/song_current_duration" />
 
         <ImageView
-            android:id="@+id/exo_rew"
+            android:id="@+id/iv_rewind"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_20dp"
             android:layout_marginTop="@dimen/_30dp"
             android:src="@drawable/ic_rewind"
-            app:layout_constraintEnd_toStartOf="@+id/exo_play_pause"
-            app:layout_constraintStart_toEndOf="@id/exo_prev"
+            app:layout_constraintEnd_toStartOf="@+id/iv_play_pause"
+            app:layout_constraintStart_toEndOf="@id/iv_previous"
             app:layout_constraintTop_toBottomOf="@id/song_current_duration" />
 
         <ImageView
-            android:id="@+id/exo_play_pause"
+            android:id="@+id/iv_play_pause"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_30dp"
             android:layout_marginTop="@dimen/_7dp"
             android:layout_marginEnd="30dp"
             android:src="@drawable/ic_red_pause"
-            app:layout_constraintEnd_toStartOf="@+id/exo_ffwd"
-            app:layout_constraintStart_toEndOf="@id/exo_rew"
+            app:layout_constraintEnd_toStartOf="@+id/iv_forward"
+            app:layout_constraintStart_toEndOf="@id/iv_rewind"
             app:layout_constraintTop_toBottomOf="@id/song_current_duration" />
 
         <ImageView
-            android:id="@+id/exo_ffwd"
+            android:id="@+id/iv_forward"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_30dp"
             android:layout_marginEnd="20dp"
             android:src="@drawable/ic_forward"
-            app:layout_constraintEnd_toStartOf="@+id/exo_next"
-            app:layout_constraintStart_toEndOf="@id/exo_play_pause"
+            app:layout_constraintEnd_toStartOf="@+id/iv_next"
+            app:layout_constraintStart_toEndOf="@id/iv_play_pause"
             app:layout_constraintTop_toBottomOf="@id/max_song_duration" />
 
         <ImageView
-            android:id="@+id/exo_next"
+            android:id="@+id/iv_next"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_30dp"
             android:layout_marginEnd="50dp"
             android:src="@drawable/ic_next"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/exo_ffwd"
+            app:layout_constraintStart_toEndOf="@id/iv_forward"
             app:layout_constraintTop_toBottomOf="@id/max_song_duration" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

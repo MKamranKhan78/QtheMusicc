@@ -11,5 +11,7 @@ class CommonKeys {
         const val KEY_IS_LOGGED_IN = "_key_is_logged_in"
         const val TYPE_VIDEO = 1
         const val TYPE_PHOTO = 2
+        const val KEY_DATA_MODEL = "_key_data_model_"
+        const val KEY_SONG_TYPE = "_key_song_type_"
     }
 }

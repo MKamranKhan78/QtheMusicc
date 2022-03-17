@@ -3,6 +3,7 @@ package com.techswivel.qthemusic.models
 
 import com.google.gson.annotations.SerializedName
 import com.techswivel.qthemusic.customData.enums.SongStatus
+import java.io.Serializable
 
 data class Song(
     @SerializedName("albumId")
@@ -37,4 +38,4 @@ data class Song(
     var songTitle: String?,
     @SerializedName("songVideoUrl")
     var songVideoUrl: String?
-)
+) : Serializable

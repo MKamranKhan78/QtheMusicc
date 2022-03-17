@@ -6,16 +6,22 @@ import android.os.Handler
 import android.os.Looper
 import android.view.View
 import android.widget.SeekBar
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.audio.AudioAttributes
 import com.google.android.exoplayer2.source.DefaultMediaSourceFactory
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.util.Util
+import com.techswivel.qthemusic.R
+import com.techswivel.qthemusic.constant.Constants
 import com.techswivel.qthemusic.databinding.ActivityPlayerBinding
+import com.techswivel.qthemusic.models.Song
 import com.techswivel.qthemusic.ui.base.BaseActivity
+import com.techswivel.qthemusic.utils.CommonKeys
 import com.techswivel.qthemusic.utils.PlayerUtils
 import com.techswivel.qthemusic.utils.Utilities.formatSongDuration
+import com.techswivel.qthemusic.utils.loadImg
 
 class PlayerActivity : BaseActivity(), Player.Listener {
 
@@ -23,12 +29,24 @@ class PlayerActivity : BaseActivity(), Player.Listener {
     private lateinit var viewModel: PlayerActivityViewModel
     private val playbackStateListener: Player.Listener = playbackStateListener()
     private val handler: Handler = Handler(Looper.getMainLooper())
+    private val updateSongProgress = object : Runnable {
+        override fun run() {
+            if (viewModel.audioPlayer != null) {
+                binding.sbAudioPlayer.progress =
+                    (viewModel.audioPlayer?.currentPosition?.div(1000))?.toInt() ?: 0
+                binding.songCurrentDuration.text =
+                    formatSongDuration(viewModel.audioPlayer?.currentPosition ?: 0)
+                handler.postDelayed(this, Constants.SEEK_BAR_DELAY.toLong())
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
         viewModel = ViewModelProvider(this)[PlayerActivityViewModel::class.java]
+        initViews()
         setListeners()
     }
 
@@ -60,7 +78,26 @@ class PlayerActivity : BaseActivity(), Player.Listener {
         }
     }
 
+    private fun initViews() {
+        val bundle = intent.extras?.getBundle(CommonKeys.KEY_DATA)
+        viewModel.songModel = bundle?.getSerializable(CommonKeys.KEY_DATA_MODEL) as Song
+        if (viewModel.songModel.songVideoUrl == null) {
+            binding.toggleButtonGroup.visibility = View.GONE
+        }
+        binding.tvPlayingFrom.text = getString(R.string.str_playing_from).plus(" ").plus(
+            bundle.getString(CommonKeys.KEY_SONG_TYPE)
+        )
+        binding.ivSongCover.loadImg(viewModel.songModel.coverImageUrl ?: "")
+        binding.tvAlbumName.text = viewModel.songModel.albumName
+        binding.tvAudioPlayerSongName.text = viewModel.songModel.songTitle
+        binding.tvAudioPlayerArtistName.text = viewModel.songModel.artist
+    }
+
     private fun setListeners() {
+        binding.ivArrowDown.setOnClickListener {
+            finish()
+        }
+
         binding.btnAudio.setOnClickListener {
             if (binding.layoutAudioPlayer.visibility == View.GONE) {
                 binding.layoutAudioPlayer.visibility = View.VISIBLE
@@ -70,6 +107,10 @@ class PlayerActivity : BaseActivity(), Player.Listener {
 
         binding.btnVideo.setOnClickListener {
             if (binding.layoutVideoPlayer.visibility == View.GONE) {
+                if (viewModel.audioPlayer?.isPlaying == true) {
+                    handler.removeCallbacks(updateSongProgress)
+                    viewModel.audioPlayer?.playWhenReady = false
+                }
                 binding.layoutAudioPlayer.visibility = View.GONE
                 binding.layoutVideoPlayer.visibility = View.VISIBLE
                 viewModel.dataSourceFactory = PlayerUtils.getDataSourceFactory(this)
@@ -84,13 +125,50 @@ class PlayerActivity : BaseActivity(), Player.Listener {
             }
         }
 
-        binding.sbAudioProgress.setOnSeekBarChangeListener(object :
+        binding.ivPlayPause.setOnClickListener {
+            if (viewModel.audioPlayer?.isPlaying == true) {
+                handler.removeCallbacks(updateSongProgress)
+                viewModel.audioPlayer?.playWhenReady = false
+            } else {
+                handler.postDelayed(updateSongProgress, Constants.SEEK_BAR_DELAY.toLong())
+                viewModel.audioPlayer?.playWhenReady = true
+            }
+        }
+
+        binding.ivForward.setOnClickListener {
+            viewModel.audioPlayer?.seekTo(
+                (viewModel.audioPlayer?.currentPosition?.plus(10000) ?: 0)
+            )
+        }
+
+        binding.ivRewind.setOnClickListener {
+            viewModel.audioPlayer?.seekTo(
+                (viewModel.audioPlayer?.currentPosition?.minus(10000) ?: 0)
+            )
+        }
+
+        binding.ivNext.setOnClickListener {
+            Toast.makeText(
+                this,
+                getString(R.string.str_underdevelopment_feature),
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+
+        binding.ivPrevious.setOnClickListener {
+            Toast.makeText(
+                this,
+                getString(R.string.str_underdevelopment_feature),
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+
+        binding.sbAudioPlayer.setOnSeekBarChangeListener(object :
             SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                if (!fromUser) {
-                    return
+                if (fromUser) {
+                    viewModel.audioPlayer?.seekTo((progress * 1000).toLong())
                 }
-                viewModel.audioPlayer?.seekTo((progress * 1000).toLong())
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
@@ -134,9 +212,9 @@ class PlayerActivity : BaseActivity(), Player.Listener {
             .build()
             .also { exoPlayer ->
                 viewModel.mediaItem =
-                    MediaItem.fromUri("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3")
+                    MediaItem.fromUri(viewModel.songModel.songAudioUrl ?: "")
                 exoPlayer.setMediaItem(viewModel.mediaItem)
-                exoPlayer.playWhenReady = viewModel.playWhenReady
+                exoPlayer.playWhenReady = true
                 exoPlayer.seekTo(viewModel.playbackPosition)
                 exoPlayer.addListener(playbackStateListener)
                 exoPlayer.prepare()
@@ -146,7 +224,6 @@ class PlayerActivity : BaseActivity(), Player.Listener {
     private fun releasePlayer() {
         viewModel.audioPlayer?.run {
             viewModel.playbackPosition = this.currentPosition
-            viewModel.playWhenReady = this.playWhenReady
             release()
         }
         viewModel.audioPlayer = null
@@ -162,7 +239,15 @@ class PlayerActivity : BaseActivity(), Player.Listener {
 
                 }
                 ExoPlayer.STATE_READY -> {
-                    setAudioProgress()
+                    binding.sbAudioPlayer.max =
+                        (viewModel.audioPlayer?.duration?.div(1000))?.toInt() ?: 0
+
+                    binding.songCurrentDuration.text =
+                        formatSongDuration(viewModel.audioPlayer?.currentPosition ?: 0)
+                    binding.maxSongDuration.text =
+                        formatSongDuration(viewModel.audioPlayer?.duration ?: 0)
+
+                    handler.postDelayed(updateSongProgress, Constants.SEEK_BAR_DELAY.toLong())
                 }
                 ExoPlayer.STATE_ENDED -> {
 
@@ -172,24 +257,5 @@ class PlayerActivity : BaseActivity(), Player.Listener {
                 }
             }
         }
-    }
-
-    private fun setAudioProgress() {
-        binding.sbAudioProgress.max = (viewModel.audioPlayer?.duration?.div(1000))?.toInt() ?: 0
-        binding.songCurrentDuration.text =
-            formatSongDuration(viewModel.audioPlayer?.currentPosition ?: 0)
-        binding.maxSongDuration.text = formatSongDuration(viewModel.audioPlayer?.duration ?: 0)
-
-        handler.post(object : Runnable {
-            override fun run() {
-                if (viewModel.audioPlayer != null && viewModel.playWhenReady) {
-                    binding.sbAudioProgress.progress =
-                        (viewModel.audioPlayer?.currentPosition?.div(1000))?.toInt() ?: 0
-                    binding.songCurrentDuration.text =
-                        formatSongDuration(viewModel.audioPlayer?.currentPosition ?: 0)
-                    handler.postDelayed(this, 1000)
-                }
-            }
-        })
     }
 }

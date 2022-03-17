@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.techswivel.qthemusic.R
@@ -14,11 +15,13 @@ import com.techswivel.qthemusic.customData.interfaces.BaseInterface
 import com.techswivel.qthemusic.databinding.FragmentHomeBinding
 import com.techswivel.qthemusic.models.RecommendedSongsBodyBuilder
 import com.techswivel.qthemusic.models.ResponseModel
+import com.techswivel.qthemusic.models.Song
 import com.techswivel.qthemusic.models.SongsBodyBuilder
 import com.techswivel.qthemusic.source.local.preference.DataStoreUtils
 import com.techswivel.qthemusic.ui.activities.playerActivity.PlayerActivity
 import com.techswivel.qthemusic.ui.base.RecyclerViewBaseFragment
 import com.techswivel.qthemusic.utils.ActivityUtils
+import com.techswivel.qthemusic.utils.CommonKeys
 import com.techswivel.qthemusic.utils.DialogUtils
 import kotlinx.coroutines.runBlocking
 
@@ -92,12 +95,29 @@ class HomeFragment : RecyclerViewBaseFragment(), BaseInterface {
                         }
 
                         override fun onViewClicked(view: View, data: Any?) {
+                            val songModel = data as Song
                             when (view.id) {
                                 R.id.cv_recommended_song -> {
-                                    ActivityUtils.startNewActivity(
-                                        requireActivity(),
-                                        PlayerActivity::class.java
-                                    )
+                                    if (songModel.songStatus == SongStatus.PREMIUM) {
+                                        Toast.makeText(
+                                            requireContext(),
+                                            getString(R.string.str_underdevelopment_feature),
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    } else {
+                                        val bundle = Bundle().apply {
+                                            putSerializable(CommonKeys.KEY_DATA_MODEL, songModel)
+                                            putString(
+                                                CommonKeys.KEY_SONG_TYPE,
+                                                SongType.RECOMMENDED.value
+                                            )
+                                        }
+                                        ActivityUtils.startNewActivity(
+                                            requireActivity(),
+                                            PlayerActivity::class.java,
+                                            bundle
+                                        )
+                                    }
                                 }
                             }
                         }
