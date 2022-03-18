@@ -20,10 +20,12 @@ class OtpVerificationVM :ViewModel(){
     fun verifyOtpRequest(authRequestModel: AuthRequestModel){
         mRemoteDataManager.userLogin(authRequestModel).doOnSubscribe{
             observeOtpVerification.value= ApiResponseObserver.loading()
+            Log.d(TAG,"data is loading")
         }?.subscribe(object : CustomObserver<Response<ResponseMain>>(){
             override fun onSuccess(t: Response<ResponseMain>) {
                 if (t.isSuccessful){
                  observeOtpVerification.value= ApiResponseObserver.success(t.body()?.response)
+                    Log.d(TAG,"data is in success")
                 }
             }
 
@@ -43,9 +45,7 @@ class OtpVerificationVM :ViewModel(){
                 Log.d(TAG,"request completed")
             }
 
-            override fun onNext(t: Response<ResponseMain>) {
-                TODO("Not yet implemented")
-            }
+
 
         })
     }

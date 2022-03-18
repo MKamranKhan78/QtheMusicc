@@ -1,6 +1,5 @@
 package com.techswivel.qthemusic.ui.fragments.forgotPasswordFragment
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,17 +9,22 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.techswivel.qthemusic.R
+import com.techswivel.qthemusic.customData.enums.SignupForgotPassword
 import com.techswivel.qthemusic.databinding.FragmentForgotPasswordBinding
 import com.techswivel.qthemusic.enums.Status
 import com.techswivel.qthemusic.models.AuthRequestBuilder
+import com.techswivel.qthemusic.models.BindingValidationClass
 import com.techswivel.qthemusic.models.ResponseModel
 import com.techswivel.qthemusic.ui.fragments.otpVerificationFragment.OtpVerification
+import com.techswivel.qthemusic.utils.CommonKeys
 import com.techswivel.qthemusic.utils.Log
 import com.techswivel.qthemusic.utils.Utilities
+import java.io.Serializable
 
 
 class ForgotPassword : Fragment() {
     val TAG = "ForgotPassword"
+    var fragmentFlow:Serializable?=""
     private lateinit var forgotVm: ForgotPasswordVM
     private lateinit var forgotbingding: FragmentForgotPasswordBinding
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,7 +38,8 @@ class ForgotPassword : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         forgotbingding = FragmentForgotPasswordBinding.inflate(layoutInflater, container, false)
-
+        val twoWayBindingObj=BindingValidationClass()
+        forgotbingding.myObj = twoWayBindingObj
         return forgotbingding.root
     }
 
@@ -46,6 +51,12 @@ class ForgotPassword : Fragment() {
     }
 
     private fun initialization() {
+        fragmentFlow = arguments?.getSerializable(CommonKeys.FORGOT_TYPE)
+        if (fragmentFlow == SignupForgotPassword.ForgotPasswordFlow) {
+            Log.d(TAG, "data is here $fragmentFlow")
+            forgotbingding.tvPolicyTag.visibility = View.INVISIBLE
+            forgotbingding.socialPortion.visibility = View.INVISIBLE
+        }
         val animationFadeOut =
             AnimationUtils.loadAnimation(requireContext(), R.anim.bottom_to_top_anim)
         forgotbingding.btnSendCodeForgot.animation = animationFadeOut
@@ -57,6 +68,8 @@ class ForgotPassword : Fragment() {
         forgotbingding.btnSendCodeForgot.setOnClickListener {
             createAndSendOtpRequest()
         }
+
+
     }
 
     private fun createAndSendOtpRequest() {
@@ -83,8 +96,12 @@ class ForgotPassword : Fragment() {
                     forgotbingding.btnSendCodeForgot.visibility = View.VISIBLE
                     forgotbingding.pbForgotPassword.visibility = View.INVISIBLE
                     Utilities.showToast(requireContext(), "otp is here")
+                    val bundle=Bundle()
+                    bundle.putSerializable(CommonKeys.FORGOT_TYPE,fragmentFlow)
+                    val otpVerification=OtpVerification()
+                    otpVerification.arguments=bundle
                     val transaction = requireActivity().supportFragmentManager.beginTransaction()
-                    transaction.replace(R.id.auth_container, OtpVerification())
+                    transaction.replace(R.id.auth_container, otpVerification)
                         .addToBackStack(TAG)
                     transaction.commit()
                 }

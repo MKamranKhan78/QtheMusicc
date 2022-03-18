@@ -64,17 +64,15 @@
             app:layout_constraintEnd_toStartOf="@+id/iv_apple_id"
             app:layout_constraintTop_toTopOf="@+id/iv_apple_id" />
 
-        <ImageView
+        <View
             android:id="@+id/iv_apple_id"
-            android:layout_width="@dimen/_50dp"
+            android:layout_width="@dimen/_1dp"
             android:layout_height="@dimen/_50dp"
             android:layout_marginTop="32dp"
-            android:background="@drawable/shape_social_icons_bg"
             android:padding="@dimen/_12dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_or_box_id"
-            app:srcCompat="@drawable/ic_apple" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_or_box_id" />
 
         <ImageView
             android:id="@+id/iv_fb_id"

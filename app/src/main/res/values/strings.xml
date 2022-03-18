@@ -77,6 +77,8 @@
     <string name="confirm_password">Confirm Password</string>
     <string name="done">Done</string>
     <string name="token_request_id">74605093159-funodu4lv47i9u57h2meqahlcan5elo3.apps.googleusercontent.com</string>
+    <string name="invalid_password">enter valid email</string>
+    <string name="enter_valid_password">enter valid password</string>
 
 
 </resources>

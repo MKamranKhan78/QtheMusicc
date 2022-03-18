@@ -18,8 +18,10 @@ import com.techswivel.qthemusic.models.AuthRequestBuilder
 import com.techswivel.qthemusic.models.ResponseModel
 import com.techswivel.qthemusic.ui.fragments.forgotPasswordFragment.ForgotPassword
 import com.techswivel.qthemusic.ui.fragments.setPasswordFragmetnt.SetPassword
+import com.techswivel.qthemusic.utils.CommonKeys
 import com.techswivel.qthemusic.utils.Log
 import com.techswivel.qthemusic.utils.Utilities
+import java.io.Serializable
 
 class OtpVerification : Fragment() {
     val TAG = "OtpVerification"
@@ -30,6 +32,8 @@ class OtpVerification : Fragment() {
     var etOtpThree = ""
     var etOtpFour = ""
     var etOtpFive = ""
+    var fragmentFlow: Serializable? = ""
+
     private lateinit var countDownTimer: CountDownTimer
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,18 +53,23 @@ class OtpVerification : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewsInitialization()
         clickListeners()
-        observeVerifyOtpRequest()
         getUserOtp()
         resendOtpTimer()
 
+    }
+
+    private fun viewsInitialization() {
+        fragmentFlow = arguments?.getSerializable(CommonKeys.FORGOT_TYPE)
+        Log.d(TAG, "fragment flow $fragmentFlow")
     }
 
     private fun clickListeners() {
         viewBinding.btnConfirmCode.setOnClickListener {
 
             val otpCode = etOtpOne + etOtpTwo + etOtpThree + etOtpFour + etOtpFive
-            if (otpCode.length < 5) {
+            if (otpCode.length < 5 || otpCode != "11111") {
                 Utilities.showToast(requireContext(), "Enter Valid Otp")
             } else {
                 createAndSendVerifyOtpRequest(otpCode.toInt(), "")
@@ -76,23 +85,29 @@ class OtpVerification : Fragment() {
         authModelBilder.otp = otp
         val otpVerifyModel = AuthRequestBuilder.builder(authModelBilder)
         verifyOtpVM.verifyOtpRequest(otpVerifyModel)
+        observeVerifyOtpRequest()
     }
 
     private fun observeVerifyOtpRequest() {
         verifyOtpVM.observeOtpVerification.observe(viewLifecycleOwner, Observer {
             when (it.status) {
                 Status.LOADING -> {
-                    Log.d(TAG,"Loading...")
+                    Log.d(TAG, "Loading...")
                     viewBinding.btnConfirmCode.visibility = View.INVISIBLE
                     viewBinding.pbOtpVerification.visibility = View.VISIBLE
                 }
                 Status.SUCCESS -> {
-                    val data=it.t as ResponseModel
-                    Log.d(TAG,"Success ${data.data}")
-                    viewBinding.btnConfirmCode.visibility  = View.VISIBLE
-                    viewBinding.pbOtpVerification.visibility  = View.INVISIBLE
+                    val data = it.t as ResponseModel
+                    Log.d(TAG, "Success ${data.data}")
+                    viewBinding.btnConfirmCode.visibility = View.VISIBLE
+                    viewBinding.pbOtpVerification.visibility = View.INVISIBLE
+                    val bundle = Bundle()
+                    bundle.putSerializable(CommonKeys.FORGOT_TYPE, fragmentFlow)
+                    val setPassword = SetPassword()
+                    setPassword.arguments = bundle
+
                     val transaction = requireActivity().supportFragmentManager.beginTransaction()
-                    transaction.replace(R.id.auth_container, SetPassword())
+                    transaction.replace(R.id.auth_container, setPassword)
                         .addToBackStack(TAG)
                     transaction.commit()
                 }

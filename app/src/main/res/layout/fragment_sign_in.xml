@@ -4,7 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <import type="android.view.View"/>
+        <import type="android.view.View" />
+        <variable
+            name="obj"
+            type="com.techswivel.qthemusic.models.BindingValidationClass" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -16,7 +19,7 @@
             android:id="@+id/iv_signin_bg"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="fitXY"/>
+            android:scaleType="fitXY" />
 
         <View
             android:layout_width="match_parent"
@@ -67,6 +70,7 @@
                 android:id="@+id/et_login_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:addTextChangedListener="@{obj.emailwatcher}"
                 android:background="@null"
                 android:drawableLeft="@drawable/ic_message"
                 android:drawablePadding="@dimen/_16dp"
@@ -80,9 +84,21 @@
                 android:paddingEnd="@dimen/_8dp"
                 android:paddingBottom="@dimen/_16dp"
                 android:scrollHorizontally="true"
+                android:text="@{obj.text}"
                 android:textColor="@color/color_white"
                 android:textColorHint="@color/color_white"
                 android:textSize="@dimen/_16sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_40dp"
+                android:fontFamily="@font/manrope_medium"
+                android:paddingBottom="@dimen/_2dp"
+                android:text="@string/invalid_password"
+                android:textColor="@color/sign_up_btn"
+                android:textSize="@dimen/_12sp"
+                android:visibility="@{obj.isEmailTextValid? View.GONE:View.VISIBLE}"/>
 
             <View
                 android:layout_width="match_parent"
@@ -102,15 +118,14 @@
                 app:boxStrokeWidthFocused="@dimen/_0dp"
                 app:hintEnabled="false"
                 app:passwordToggleEnabled="true"
-                app:passwordToggleTint="@color/gray_color_design"
-                textInputCheck=""
-                >
+                app:passwordToggleTint="@color/gray_color_design">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_login_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_4dp"
+                    android:addTextChangedListener="@{obj.passwordWatcher}"
                     android:backgroundTint="@android:color/transparent"
                     android:drawableStart="@drawable/ic_lock"
                     android:drawablePadding="@dimen/_16dp"
@@ -121,11 +136,22 @@
                     android:paddingTop="@dimen/_16dp"
                     android:paddingEnd="@dimen/_36dp"
                     android:paddingBottom="@dimen/_16dp"
+                    android:text="@{obj.passwordText}"
                     android:textColor="@color/color_white"
                     android:textColorHighlight="@color/color_white"
                     android:textColorHint="@color/color_white"
                     android:textSize="@dimen/_15sp" />
             </com.google.android.material.textfield.TextInputLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_40dp"
+                android:fontFamily="@font/manrope_medium"
+                android:paddingBottom="@dimen/_4dp"
+                android:text="@string/invalid_password"
+                android:textColor="@color/sign_up_btn"
+                android:textSize="@dimen/_12sp"
+                android:visibility="@{obj.isPasswordTextValid? View.GONE:View.VISIBLE}"/>
         </LinearLayout>
 
         <TextView
@@ -150,13 +176,12 @@
             android:id="@+id/pb_"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:indeterminateTint="@color/sign_up_btn"
             android:visibility="invisible"
-            app:layout_constraintTop_toTopOf="@+id/btn_sign_in"
             app:layout_constraintBottom_toBottomOf="@+id/btn_sign_in"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:indeterminateTint="@color/sign_up_btn"
-            />
+            app:layout_constraintTop_toTopOf="@+id/btn_sign_in" />
 
         <TextView
             android:id="@+id/tv_forgot_password"
@@ -208,7 +233,5 @@
             app:layout_constraintBottom_toBottomOf="@+id/tv_tag_dont_have_account"
             app:layout_constraintStart_toEndOf="@+id/tv_tag_dont_have_account"
             app:layout_constraintTop_toTopOf="@+id/tv_tag_dont_have_account" />
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

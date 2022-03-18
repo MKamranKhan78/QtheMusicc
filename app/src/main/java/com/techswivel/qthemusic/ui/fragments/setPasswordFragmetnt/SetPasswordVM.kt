@@ -44,9 +44,6 @@ class SetPasswordVM : ViewModel() {
                 Log.d(TAG, "request completed")
             }
 
-            override fun onNext(t: Response<ResponseMain>) {
-
-            }
 
         })
     }

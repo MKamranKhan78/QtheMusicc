@@ -21,16 +21,16 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.constant.Constants
+import com.techswivel.qthemusic.customData.enums.LoginType
+import com.techswivel.qthemusic.customData.enums.SignupForgotPassword
+import com.techswivel.qthemusic.customData.enums.SocialSites
 import com.techswivel.qthemusic.databinding.FragmentSignInBinding
 import com.techswivel.qthemusic.enums.Status
-import com.techswivel.qthemusic.models.AuthRequestBuilder
-import com.techswivel.qthemusic.models.GoogleResponseModel
-import com.techswivel.qthemusic.models.ResponseModel
+import com.techswivel.qthemusic.models.*
+import com.techswivel.qthemusic.ui.activities.mainActivity.MainActivity
 import com.techswivel.qthemusic.ui.base.GoogleResponseViewModel
 import com.techswivel.qthemusic.ui.fragments.forgotPasswordFragment.ForgotPassword
-import com.techswivel.qthemusic.utils.BlurImageView
-import com.techswivel.qthemusic.utils.Log
-import com.techswivel.qthemusic.utils.Utilities
+import com.techswivel.qthemusic.utils.*
 import java.util.*
 
 
@@ -47,6 +47,24 @@ class SignInFragment : Fragment() {
         super.onCreate(savedInstanceState)
         signInVm = ViewModelProvider(this).get(SignInViewModel::class.java)
         googleSignViewModel = ViewModelProvider(this).get(GoogleResponseViewModel::class.java)
+        callbackManager = CallbackManager.Factory.create()
+        loginManager = LoginManager.getInstance()
+        loginManager.registerCallback(callbackManager,
+            object : FacebookCallback<LoginResult?> {
+                override fun onSuccess(result: LoginResult?) {
+
+                    Utilities.showToast(requireContext(), "login successfully")
+                }
+
+                override fun onCancel() {
+                    Log.d(TAG, "fb login cancle")
+                }
+
+                override fun onError(exception: FacebookException) {
+                    Log.d(TAG, "fb exception ${exception.message}")
+                }
+            })
+
     }
 
     override fun onCreateView(
@@ -57,22 +75,25 @@ class SignInFragment : Fragment() {
         signInBinding = FragmentSignInBinding.inflate(layoutInflater, container, false)
         initialization()
         clickListeners()
-
+        val twoWayBindingObj = BindingValidationClass()
+        signInBinding.obj = twoWayBindingObj
         return signInBinding.root
     }
 
     private fun initialization() {
-        FacebookSdk.sdkInitialize(requireContext().applicationContext);
-        callbackManager = CallbackManager.Factory.create()
-        loginManager = LoginManager.getInstance()
+        FacebookSdk.sdkInitialize(requireContext());
+
+
 
         Glide.with(requireContext()).load(R.drawable.laura_music)
             .transform(BlurImageView(requireContext())).into(signInBinding.ivSigninBg)
         signInBinding.etPasLayout.passwordVisibilityToggleRequested(false)
         observeingData()
         observerGoogleResponse()
+
 //        loginManager.retrieveLoginStatus(requireContext(), object : LoginStatusCallback {
 //            override fun onCompleted(accessToken: AccessToken) {
+//                Log.d(TAG,"login ${accessToken.token}")
 //                Utilities.showToast(requireContext(),"already login")
 //                // User was previously logged in, can log them in directly here.
 //                // If this callback is called, a popup notification appears that says
@@ -80,10 +101,12 @@ class SignInFragment : Fragment() {
 //            }
 //
 //            override fun onFailure() {
+//                Utilities.showToast(requireContext(),"fail")
 //                // No access token could be retrieved for the user
 //            }
 //
 //            override fun onError(exception: Exception) {
+//                Utilities.showToast(requireContext(),"exception")
 //                // An error occurred
 //            }
 //        })
@@ -96,16 +119,22 @@ class SignInFragment : Fragment() {
                     signInBinding.etLoginEmail.toString(),
                     1111,
                     null,
-                    "Email",
+                    LoginType.SIMPLE.name,
                     "kljsdjklsdfkljsdf",
-                    "wasi_dev"
+                    "wasi_dev",
+                    null
                 )
             }
         }
 
         signInBinding.tvForgotPassword.setOnClickListener {
+            val bundle = Bundle()
+            bundle.putSerializable(CommonKeys.FORGOT_TYPE, SignupForgotPassword.ForgotPasswordFlow)
+            val fortgotPasword = ForgotPassword()
+            fortgotPasword.arguments = bundle
+
             val transaction = requireActivity().supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.auth_container, ForgotPassword())
+            transaction.replace(R.id.auth_container, fortgotPasword)
                 .addToBackStack(TAG)
             transaction.commit()
         }
@@ -117,6 +146,7 @@ class SignInFragment : Fragment() {
         signInBinding.signSocialPortion.ivFbId.setOnClickListener {
             signInFacebook()
         }
+
     }
 
     private fun observeingData() {
@@ -132,6 +162,11 @@ class SignInFragment : Fragment() {
                     Log.d(TAG, "Success ${data.data?.authModel}")
                     signInBinding.btnSignIn.visibility = View.VISIBLE
                     signInBinding.pb.visibility = View.INVISIBLE
+                    activity.let {
+                        val intent = Intent(it, MainActivity::class.java)
+                        it?.startActivity(intent)
+                        it?.finish()
+                    }
                 }
                 Status.EXPIRE -> {
                     Log.d(TAG, "Expire is called")
@@ -146,14 +181,21 @@ class SignInFragment : Fragment() {
 
     private fun observerGoogleResponse() {
         googleSignViewModel.observeGoogleMutableData.observe(viewLifecycleOwner, Observer {
-            when(it.status){
-                Status.LOADING->{
-                    Log.d(TAG,"google is loading")
+            when (it.status) {
+                Status.LOADING -> {
+                    Log.d(TAG, "google is loading")
                 }
-                Status.SUCCESS->{
-                    Log.d(TAG,"google success")
-                    val data=it.t as GoogleResponseModel
-                    Log.d(TAG,"data is $data")
+                Status.SUCCESS -> {
+                    Log.d(TAG, "google success")
+                    val data = it.t as GoogleResponseModel
+                    Log.d(TAG, "data is $data")
+                }
+                Status.EXPIRE -> {
+
+                }
+                Status.ERROR -> {
+                    val error = it.error
+                    Log.d(TAG, "Error is ${error?.message}")
                 }
             }
         })
@@ -165,7 +207,8 @@ class SignInFragment : Fragment() {
         accessToken: String?,
         loginType: String?,
         fcmToken: String?,
-        deviceIdentifier: String?
+        deviceIdentifier: String?,
+        socialSites:String?
     ) {
 
         val authModelBilder = AuthRequestBuilder()
@@ -173,6 +216,7 @@ class SignInFragment : Fragment() {
         authModelBilder.password = password
         authModelBilder.accessToken = accessToken
         authModelBilder.loginType = loginType
+        authModelBilder.socialSite=socialSites
         authModelBilder.fcmToken = fcmToken
         authModelBilder.deviceIdentifier = deviceIdentifier
         val authModel = AuthRequestBuilder.builder(authModelBilder)
@@ -213,30 +257,14 @@ class SignInFragment : Fragment() {
     }
 
     private fun signInFacebook() {
+
         loginManager.logInWithReadPermissions(
             requireActivity(),
             Arrays.asList(
-                "public_profile",
+                "email",
             )
         )
-        loginManager.registerCallback(callbackManager,
-            object : FacebookCallback<LoginResult?> {
-                override fun onSuccess(result: LoginResult?) {
-                    if (result != null) {
-                        Utilities.showToast(requireContext(), "login successfully")
-                    } else {
-                        Utilities.showToast(requireContext(), "no data found")
-                    }
-                }
 
-                override fun onCancel() {
-                    Log.d(TAG, "fb login cancle")
-                }
-
-                override fun onError(exception: FacebookException) {
-                    Log.d(TAG, "fb exception ${exception.message}")
-                }
-            })
 
     }
 
@@ -257,14 +285,13 @@ class SignInFragment : Fragment() {
     private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
         try {
             val account: GoogleSignInAccount = completedTask.getResult(ApiException::class.java)
-
             val name = account.displayName
             val email = account.email
             val token = account.idToken
             if (token != null) {
                 googleSignViewModel.getGoogleToken(token)
             }
-           // Log.d(TAG, "name $name email $email token $token")
+            // Log.d(TAG, "name $name email $email token $token")
             val authCode = account.serverAuthCode
             Log.d(TAG, "handle result called")
             if (authCode != null) {

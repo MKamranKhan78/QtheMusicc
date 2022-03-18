@@ -8,21 +8,25 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.facebook.login.LoginFragment
 import com.techswivel.qthemusic.R
+import com.techswivel.qthemusic.customData.enums.SignupForgotPassword
 import com.techswivel.qthemusic.databinding.FragmentSetPasswordBinding
 import com.techswivel.qthemusic.enums.Status
 import com.techswivel.qthemusic.models.AuthRequestBuilder
+import com.techswivel.qthemusic.models.BindingValidationClass
 import com.techswivel.qthemusic.models.ResponseModel
 import com.techswivel.qthemusic.ui.fragments.signInFragment.SignInFragment
+import com.techswivel.qthemusic.utils.CommonKeys
 import com.techswivel.qthemusic.utils.Log
+import com.techswivel.qthemusic.utils.Utilities
+import java.io.Serializable
 
 
 class SetPassword : Fragment() {
     val TAG = "SetPassword"
     lateinit var passwordBinding: FragmentSetPasswordBinding
     lateinit var setPasswordVm: SetPasswordVM
-
+    var fragmentFlow: Serializable? = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setPasswordVm = ViewModelProvider(this).get(SetPasswordVM::class.java)
@@ -40,6 +44,10 @@ class SetPassword : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        fragmentFlow = arguments?.getSerializable(CommonKeys.FORGOT_TYPE)
+        Log.d(TAG, "flow is $fragmentFlow")
+        val twoWayBindingObj = BindingValidationClass()
+        passwordBinding.obj = twoWayBindingObj
         widgetInitialization()
         onClickListener()
     }
@@ -51,7 +59,12 @@ class SetPassword : Fragment() {
 
     private fun onClickListener() {
         passwordBinding.btnDone.setOnClickListener {
-            createAndSendSetPasswordRequest("sdfe39k")
+            if (passwordBinding.etSetPasswordId.text.isNotEmpty() || passwordBinding.etSetPasswordConfirmId.text.isNotEmpty()) {
+                if (passwordBinding.etSetPasswordId.text.toString() == passwordBinding.etSetPasswordConfirmId.text.toString()) {
+                    createAndSendSetPasswordRequest("sdfe39k")
+                }
+            }
+
         }
     }
 
@@ -69,7 +82,7 @@ class SetPassword : Fragment() {
         setPasswordVm.observeSetPassword.observe(viewLifecycleOwner, Observer {
             when (it.status) {
                 Status.LOADING -> {
-                    Log.d(TAG,"Loading...")
+                    Log.d(TAG, "Loading...")
                     passwordBinding.btnDone.visibility = View.INVISIBLE
                     passwordBinding.pbSetPassword.visibility = View.VISIBLE
                 }
@@ -78,12 +91,19 @@ class SetPassword : Fragment() {
                     Log.d(TAG, "Success ${data.data}")
                     passwordBinding.btnDone.visibility = View.VISIBLE
                     passwordBinding.pbSetPassword.visibility = View.INVISIBLE
-                    val fragmentManager: FragmentManager =
-                        requireActivity().getSupportFragmentManager()
-                    val transaction = requireActivity().supportFragmentManager.beginTransaction()
-                    transaction.replace(R.id.auth_container, SignInFragment())
-                    fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-                    transaction.commit()
+                    if (fragmentFlow == SignupForgotPassword.ForgotPasswordFlow) {
+                        val fragmentManager: FragmentManager =
+                            requireActivity().getSupportFragmentManager()
+                        val transaction =
+                            requireActivity().supportFragmentManager.beginTransaction()
+                        transaction.replace(R.id.auth_container, SignInFragment())
+                        fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                        transaction.commit()
+                    } else {
+                        Utilities.showToast(requireContext(), "singup flow ")
+                    }
+
+
                 }
                 Status.EXPIRE -> {
                     Log.d(TAG, "Expire is called")
