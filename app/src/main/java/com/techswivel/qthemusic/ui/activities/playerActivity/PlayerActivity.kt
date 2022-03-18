@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.View
+import android.widget.ImageView
 import android.widget.SeekBar
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
@@ -12,7 +13,6 @@ import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.audio.AudioAttributes
 import com.google.android.exoplayer2.source.DefaultMediaSourceFactory
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
-import com.google.android.exoplayer2.util.Util
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.constant.Constants
 import com.techswivel.qthemusic.databinding.ActivityPlayerBinding
@@ -23,7 +23,7 @@ import com.techswivel.qthemusic.utils.PlayerUtils
 import com.techswivel.qthemusic.utils.Utilities.formatSongDuration
 import com.techswivel.qthemusic.utils.loadImg
 
-class PlayerActivity : BaseActivity(), Player.Listener {
+class PlayerActivity : BaseActivity() {
 
     private lateinit var binding: ActivityPlayerBinding
     private lateinit var viewModel: PlayerActivityViewModel
@@ -48,34 +48,17 @@ class PlayerActivity : BaseActivity(), Player.Listener {
         viewModel = ViewModelProvider(this)[PlayerActivityViewModel::class.java]
         initViews()
         setListeners()
-    }
-
-    override fun onStart() {
-        super.onStart()
-        if (Util.SDK_INT >= 24) {
-            initializePlayer()
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if ((Util.SDK_INT < 24 || viewModel.audioPlayer == null)) {
-            initializePlayer()
-        }
-    }
-
-    override fun onPause() {
-        super.onPause()
-        if (Util.SDK_INT < 24) {
-            releasePlayer()
-        }
+        initializePlayers()
     }
 
     override fun onStop() {
         super.onStop()
-        if (Util.SDK_INT >= 24) {
-            releasePlayer()
-        }
+        stopPlayer()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        releasePlayers()
     }
 
     private fun initViews() {
@@ -83,6 +66,9 @@ class PlayerActivity : BaseActivity(), Player.Listener {
         viewModel.songModel = bundle?.getSerializable(CommonKeys.KEY_DATA_MODEL) as Song
         if (viewModel.songModel.songVideoUrl == null) {
             binding.toggleButtonGroup.visibility = View.GONE
+        } else {
+            binding.tvVideoPlayerSongName.text = viewModel.songModel.songTitle
+            binding.tvVideoPlayerArtistName.text = viewModel.songModel.artist
         }
         binding.tvPlayingFrom.text = getString(R.string.str_playing_from).plus(" ").plus(
             bundle.getString(CommonKeys.KEY_SONG_TYPE)
@@ -102,6 +88,9 @@ class PlayerActivity : BaseActivity(), Player.Listener {
             if (binding.layoutAudioPlayer.visibility == View.GONE) {
                 binding.layoutAudioPlayer.visibility = View.VISIBLE
                 binding.layoutVideoPlayer.visibility = View.GONE
+                if ((binding.videoPlayer.player as ExoPlayer?)?.isPlaying == true) {
+                    (binding.videoPlayer.player as ExoPlayer?)?.playWhenReady = false
+                }
             }
         }
 
@@ -113,16 +102,35 @@ class PlayerActivity : BaseActivity(), Player.Listener {
                 }
                 binding.layoutAudioPlayer.visibility = View.GONE
                 binding.layoutVideoPlayer.visibility = View.VISIBLE
-                viewModel.dataSourceFactory = PlayerUtils.getDataSourceFactory(this)
-                viewModel.trackSelectionParameters =
-                    DefaultTrackSelector.ParametersBuilder(this).setMaxVideoSizeSd().build()
-                viewModel.mediaItem = PlayerUtils.prepare(
-                    Uri.parse("http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"),
-                    "SONG NAME"
-                )
-                playVideo()
-                binding.videoPlayer.player?.playWhenReady = true
             }
+        }
+
+        val videoPlayerPlayIcon = findViewById<ImageView>(R.id.iv_video_player_play)
+        videoPlayerPlayIcon.setOnClickListener {
+            (binding.videoPlayer.player as ExoPlayer?)?.playWhenReady = true
+        }
+
+        val videoPlayerPauseIcon = findViewById<ImageView>(R.id.iv_video_player_pause)
+        videoPlayerPauseIcon.setOnClickListener {
+            (binding.videoPlayer.player as ExoPlayer?)?.playWhenReady = false
+        }
+
+        val videoPlayerSoundIcon = findViewById<ImageView>(R.id.iv_video_player_sound)
+        videoPlayerSoundIcon.setOnClickListener {
+            Toast.makeText(
+                this,
+                getString(R.string.str_underdevelopment_feature),
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+
+        val videoPlayerFullScreenIcon = findViewById<ImageView>(R.id.iv_video_player_full_screen)
+        videoPlayerFullScreenIcon.setOnClickListener {
+            Toast.makeText(
+                this,
+                getString(R.string.str_underdevelopment_feature),
+                Toast.LENGTH_SHORT
+            ).show()
         }
 
         binding.ivPlayPause.setOnClickListener {
@@ -176,38 +184,10 @@ class PlayerActivity : BaseActivity(), Player.Listener {
         })
     }
 
-    private fun playVideo() {
-        try {
-            val renderersFactory: RenderersFactory =
-                PlayerUtils.buildRenderersFactory(this, false)
-            val mediaSourceFactory: DefaultMediaSourceFactory =
-                DefaultMediaSourceFactory(viewModel.dataSourceFactory)
-                    .setAdViewProvider(binding.videoPlayer)
-
-            viewModel.trackSelector = DefaultTrackSelector(this)
-            viewModel.lastSeenTracksInfo = TracksInfo.EMPTY
-
-            binding.videoPlayer.player = ExoPlayer.Builder(this)
-                .setRenderersFactory(renderersFactory)
-                .setMediaSourceFactory(mediaSourceFactory)
-                .setTrackSelector(viewModel.trackSelector)
-                .build()
-            (binding.videoPlayer.player as ExoPlayer?)?.trackSelectionParameters =
-                viewModel.trackSelectionParameters
-            (binding.videoPlayer.player as ExoPlayer?)?.setAudioAttributes(
-                AudioAttributes.DEFAULT,
-                true
-            )
-            (binding.videoPlayer.player as ExoPlayer?)?.setMediaItem(viewModel.mediaItem)
-            (binding.videoPlayer.player as ExoPlayer?)?.prepare()
-            (binding.videoPlayer.player as ExoPlayer?)?.playWhenReady = true
-            (binding.videoPlayer.player as ExoPlayer?)?.addListener(this)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
-
-    private fun initializePlayer() {
+    private fun initializePlayers() {
+        /**
+         * Audio Player Initialization
+         */
         viewModel.audioPlayer = ExoPlayer.Builder(this)
             .build()
             .also { exoPlayer ->
@@ -219,14 +199,75 @@ class PlayerActivity : BaseActivity(), Player.Listener {
                 exoPlayer.addListener(playbackStateListener)
                 exoPlayer.prepare()
             }
+
+        /**
+         * Video Player Initialization
+         */
+        if (viewModel.songModel.songVideoUrl != null) {
+            viewModel.dataSourceFactory = PlayerUtils.getDataSourceFactory(this)
+            viewModel.trackSelectionParameters =
+                DefaultTrackSelector.ParametersBuilder(this).setMaxVideoSizeSd().build()
+            viewModel.mediaItem = PlayerUtils.prepare(
+                Uri.parse(viewModel.songModel.songVideoUrl),
+                viewModel.songModel.songTitle ?: ""
+            )
+            try {
+                val renderersFactory: RenderersFactory =
+                    PlayerUtils.buildRenderersFactory(this, false)
+                val mediaSourceFactory: DefaultMediaSourceFactory =
+                    DefaultMediaSourceFactory(viewModel.dataSourceFactory)
+                        .setAdViewProvider(binding.videoPlayer)
+
+                viewModel.trackSelector = DefaultTrackSelector(this)
+                viewModel.lastSeenTracksInfo = TracksInfo.EMPTY
+
+                binding.videoPlayer.player = ExoPlayer.Builder(this)
+                    .setRenderersFactory(renderersFactory)
+                    .setMediaSourceFactory(mediaSourceFactory)
+                    .setTrackSelector(viewModel.trackSelector)
+                    .build()
+                (binding.videoPlayer.player as ExoPlayer?)?.trackSelectionParameters =
+                    viewModel.trackSelectionParameters
+                (binding.videoPlayer.player as ExoPlayer?)?.setAudioAttributes(
+                    AudioAttributes.DEFAULT,
+                    true
+                )
+                (binding.videoPlayer.player as ExoPlayer?)?.setMediaItem(viewModel.mediaItem)
+                (binding.videoPlayer.player as ExoPlayer?)?.prepare()
+                (binding.videoPlayer.player as ExoPlayer?)?.playWhenReady = false
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
     }
 
-    private fun releasePlayer() {
+    private fun stopPlayer() {
+        if ((binding.videoPlayer.player as ExoPlayer?)?.isPlaying == true) {
+            (binding.videoPlayer.player as ExoPlayer?)?.playWhenReady = false
+        } else if (viewModel.audioPlayer?.isPlaying == true) {
+            handler.removeCallbacks(updateSongProgress)
+            viewModel.audioPlayer?.playWhenReady = false
+        }
+    }
+
+    private fun releasePlayers() {
+        /**
+         * Releasing Audio Player
+         */
         viewModel.audioPlayer?.run {
             viewModel.playbackPosition = this.currentPosition
             release()
         }
         viewModel.audioPlayer = null
+
+        /**
+         * Releasing Video Player
+         */
+        (binding.videoPlayer.player as ExoPlayer?)?.run {
+            viewModel.playbackPosition = this.currentPosition
+            release()
+        }
+        binding.videoPlayer.player = null
     }
 
     private fun playbackStateListener() = object : Player.Listener {
@@ -252,9 +293,7 @@ class PlayerActivity : BaseActivity(), Player.Listener {
                 ExoPlayer.STATE_ENDED -> {
 
                 }
-                else -> {
-
-                }
+                else -> {}
             }
         }
     }
