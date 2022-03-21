@@ -10,6 +10,7 @@ import com.techswivel.qthemusic.models.GoogleResponseModel
 import com.techswivel.qthemusic.source.remote.retrofit.ErrorResponse
 import com.techswivel.qthemusic.source.remote.rxjava.CustomError
 import com.techswivel.qthemusic.utils.Log
+import org.json.JSONObject
 import retrofit2.Response
 
 
@@ -29,8 +30,18 @@ class GoogleResponseViewModel : ViewModel() {
                     observeGoogleMutableData.value = ApiResponseObserver.success(t.body())
                 } else {
                     if (t.code() == 400) {
-                        Log.d(TAG, "eror is ${t.errorBody().toString()}")
+                        val obj = JSONObject(t.errorBody()!!.string())
+                        Log.d(TAG,"data is ${obj}")
+                        observeGoogleMutableData.value = ApiResponseObserver.error(
+                            ErrorResponse(
+                                false,
+                               obj.toString(),
+                                t.code()
+                            )
+                        )
 
+                    } else {
+                        Log.d(TAG, "error is ${t.errorBody().toString()}")
                     }
                 }
 

@@ -15,8 +15,11 @@ import com.techswivel.qthemusic.enums.Status
 import com.techswivel.qthemusic.models.AuthRequestBuilder
 import com.techswivel.qthemusic.models.BindingValidationClass
 import com.techswivel.qthemusic.models.ResponseModel
+import com.techswivel.qthemusic.source.local.preference.PrefUtils
+import com.techswivel.qthemusic.source.remote.retrofit.ErrorResponse
 import com.techswivel.qthemusic.ui.fragments.otpVerificationFragment.OtpVerification
 import com.techswivel.qthemusic.utils.CommonKeys
+import com.techswivel.qthemusic.utils.DialogUtils
 import com.techswivel.qthemusic.utils.Log
 import com.techswivel.qthemusic.utils.Utilities
 import java.io.Serializable
@@ -53,7 +56,6 @@ class ForgotPassword : Fragment() {
     private fun initialization() {
         fragmentFlow = arguments?.getSerializable(CommonKeys.FORGOT_TYPE)
         if (fragmentFlow == SignupForgotPassword.ForgotPasswordFlow) {
-            Log.d(TAG, "data is here $fragmentFlow")
             forgotbingding.tvPolicyTag.visibility = View.INVISIBLE
             forgotbingding.socialPortion.visibility = View.INVISIBLE
         }
@@ -86,17 +88,15 @@ class ForgotPassword : Fragment() {
         forgotVm.observeOtpMutableData.observe(viewLifecycleOwner, Observer {
             when (it.status) {
                 Status.LOADING -> {
-                    Log.d(TAG, "Loading...")
                     forgotbingding.btnSendCodeForgot.visibility = View.INVISIBLE
                     forgotbingding.pbForgotPassword.visibility = View.VISIBLE
                 }
                 Status.SUCCESS -> {
                     val data = it.t as ResponseModel
-                    Log.d(TAG, "Success ${data.data}")
                     forgotbingding.btnSendCodeForgot.visibility = View.VISIBLE
                     forgotbingding.pbForgotPassword.visibility = View.INVISIBLE
-                    Utilities.showToast(requireContext(), "otp is here")
                     val bundle=Bundle()
+                   PrefUtils.setBoolean(requireContext(),CommonKeys.START_TIMER,true)
                     bundle.putSerializable(CommonKeys.FORGOT_TYPE,fragmentFlow)
                     val otpVerification=OtpVerification()
                     otpVerification.arguments=bundle
@@ -106,10 +106,12 @@ class ForgotPassword : Fragment() {
                     transaction.commit()
                 }
                 Status.EXPIRE -> {
-                    Log.d(TAG, "Expire is called")
+                    val error = it.error as ErrorResponse
+                    DialogUtils.errorAlert(requireContext(),getString(R.string.error_occurred),error.message)
                 }
                 Status.ERROR -> {
-                    Log.d(TAG, "Error is called")
+                    val error = it.error as ErrorResponse
+                    DialogUtils.errorAlert(requireContext(),getString(R.string.error_occurred),error.message)
                 }
 
             }

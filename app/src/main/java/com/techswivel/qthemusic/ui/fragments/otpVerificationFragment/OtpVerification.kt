@@ -16,24 +16,23 @@ import com.techswivel.qthemusic.databinding.FragmentOtpVerificationBinding
 import com.techswivel.qthemusic.enums.Status
 import com.techswivel.qthemusic.models.AuthRequestBuilder
 import com.techswivel.qthemusic.models.ResponseModel
+import com.techswivel.qthemusic.source.local.preference.PrefUtils
+import com.techswivel.qthemusic.source.remote.retrofit.ErrorResponse
 import com.techswivel.qthemusic.ui.fragments.forgotPasswordFragment.ForgotPassword
 import com.techswivel.qthemusic.ui.fragments.setPasswordFragmetnt.SetPassword
 import com.techswivel.qthemusic.utils.CommonKeys
+import com.techswivel.qthemusic.utils.DialogUtils
 import com.techswivel.qthemusic.utils.Log
 import com.techswivel.qthemusic.utils.Utilities
 import java.io.Serializable
 
 class OtpVerification : Fragment() {
     val TAG = "OtpVerification"
+    var startTimer:Boolean?=false
+    var otpCode=""
     private lateinit var viewBinding: FragmentOtpVerificationBinding
     private lateinit var verifyOtpVM: OtpVerificationVM
-    var etOtpOne = ""
-    var etOtpTwo = ""
-    var etOtpThree = ""
-    var etOtpFour = ""
-    var etOtpFive = ""
     var fragmentFlow: Serializable? = ""
-
     private lateinit var countDownTimer: CountDownTimer
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,7 +45,12 @@ class OtpVerification : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         viewBinding = FragmentOtpVerificationBinding.inflate(layoutInflater, container, false)
+        val startTime=PrefUtils.getBoolean(requireContext(),CommonKeys.START_TIMER)
+        if (startTime){
+            resendOtpTimer()
+            countDownTimer.start()
 
+        }
 
         return viewBinding.root
     }
@@ -56,21 +60,31 @@ class OtpVerification : Fragment() {
         viewsInitialization()
         clickListeners()
         getUserOtp()
-        resendOtpTimer()
 
+
+    }
+    override fun onResume() {
+        super.onResume()
+
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+       countDownTimer.cancel()
     }
 
     private fun viewsInitialization() {
         fragmentFlow = arguments?.getSerializable(CommonKeys.FORGOT_TYPE)
+        startTimer= arguments?.getBoolean(CommonKeys.START_TIMER)
         Log.d(TAG, "fragment flow $fragmentFlow")
     }
 
     private fun clickListeners() {
         viewBinding.btnConfirmCode.setOnClickListener {
 
-            val otpCode = etOtpOne + etOtpTwo + etOtpThree + etOtpFour + etOtpFive
+            otpCode =verifyOtpVM.etOtpOne + verifyOtpVM.etOtpTwo + verifyOtpVM.etOtpThree + verifyOtpVM.etOtpFour + verifyOtpVM.etOtpFive
             if (otpCode.length < 5 || otpCode != "11111") {
-                Utilities.showToast(requireContext(), "Enter Valid Otp")
+                Utilities.showToast(requireContext(), getString(R.string.enter_valid_otp))
             } else {
                 createAndSendVerifyOtpRequest(otpCode.toInt(), "")
             }
@@ -92,13 +106,11 @@ class OtpVerification : Fragment() {
         verifyOtpVM.observeOtpVerification.observe(viewLifecycleOwner, Observer {
             when (it.status) {
                 Status.LOADING -> {
-                    Log.d(TAG, "Loading...")
                     viewBinding.btnConfirmCode.visibility = View.INVISIBLE
                     viewBinding.pbOtpVerification.visibility = View.VISIBLE
                 }
                 Status.SUCCESS -> {
                     val data = it.t as ResponseModel
-                    Log.d(TAG, "Success ${data.data}")
                     viewBinding.btnConfirmCode.visibility = View.VISIBLE
                     viewBinding.pbOtpVerification.visibility = View.INVISIBLE
                     val bundle = Bundle()
@@ -106,27 +118,24 @@ class OtpVerification : Fragment() {
                     val setPassword = SetPassword()
                     setPassword.arguments = bundle
 
+                  PrefUtils.setBoolean(requireContext(),CommonKeys.START_TIMER,false)
                     val transaction = requireActivity().supportFragmentManager.beginTransaction()
                     transaction.replace(R.id.auth_container, setPassword)
                         .addToBackStack(TAG)
                     transaction.commit()
                 }
                 Status.EXPIRE -> {
-                    Log.d(TAG, "Expire is called")
+                    val error = it.error as ErrorResponse
+                    DialogUtils.errorAlert(requireContext(),getString(R.string.error_occurred),error.message)
                 }
                 Status.ERROR -> {
-                    Log.d(TAG, "Error is called")
+                    val error = it.error as ErrorResponse
+                    DialogUtils.errorAlert(requireContext(),getString(R.string.error_occurred),error.message)
                 }
 
             }
         })
     }
-
-    override fun onResume() {
-        super.onResume()
-        countDownTimer.start()
-    }
-
     private fun getUserOtp() {
         val sb = StringBuilder()
         val number = ""
@@ -140,7 +149,7 @@ class OtpVerification : Fragment() {
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 if (sb.length == 0 && viewBinding.otp1Id.text.length == 1) {
                     sb.append(p0)
-                    etOtpOne = p0.toString()
+                    verifyOtpVM.etOtpOne = p0.toString()
                     viewBinding.otp1Id.clearFocus()
                     viewBinding.otp2Id.requestFocus()
                     viewBinding.otp2Id.setCursorVisible(true)
@@ -164,7 +173,7 @@ class OtpVerification : Fragment() {
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 if (sb.length == 0 && viewBinding.otp2Id.text.length == 1) {
-                    etOtpTwo = p0.toString()
+                    verifyOtpVM.etOtpTwo = p0.toString()
                     sb.append(p0)
                     number + p0
                     viewBinding.otp2Id.clearFocus()
@@ -192,7 +201,7 @@ class OtpVerification : Fragment() {
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 if (sb.length == 0 && viewBinding.otp3Id.text.length == 1) {
-                    etOtpThree = p0.toString()
+                    verifyOtpVM.etOtpThree = p0.toString()
                     viewBinding.otp3Id.clearFocus()
                     viewBinding.otp4Id.requestFocus()
                     viewBinding.otp4Id.setCursorVisible(true)
@@ -219,7 +228,7 @@ class OtpVerification : Fragment() {
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 if (sb.length == 0 && viewBinding.otp4Id.text.length == 1) {
-                    etOtpFour = p0.toString()
+                    verifyOtpVM.etOtpFour = p0.toString()
                     viewBinding.otp4Id.clearFocus()
                     viewBinding.otp5Id.requestFocus()
                     viewBinding.otp5Id.setCursorVisible(true)
@@ -244,7 +253,7 @@ class OtpVerification : Fragment() {
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 if (sb.length == 0 && viewBinding.otp4Id.text.length == 1) {
-                    etOtpFive = p0.toString()
+                    verifyOtpVM.etOtpFive = p0.toString()
 
                 }
             }
@@ -259,18 +268,14 @@ class OtpVerification : Fragment() {
         })
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        countDownTimer.cancel()
-    }
+
 
     private fun resendOtpTimer() {
-        countDownTimer = object : CountDownTimer(25000, 1000) {
+        countDownTimer = object : CountDownTimer(30000, 1000) {
             @SuppressLint("SetTextI18n")
             override fun onTick(millisUntilFinished: Long) {
                 viewBinding.tvOtpResentTimer.setText(getString(R.string.resend_time) + millisUntilFinished / 1000)
             }
-
             override fun onFinish() {
 
             }

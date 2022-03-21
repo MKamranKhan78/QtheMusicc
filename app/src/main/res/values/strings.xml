@@ -13,7 +13,7 @@
     <string name="google_client_secret_production">abcd</string>
     <string name="google_client_redirect_uri_production">abcd</string>
 
-    <string name="google_client_id_staging">abcd</string> <!-- 586601826954-bf3rmcj9dbhii39tpu9negagt85ebfjg.apps.googleusercontent.com -->
+    <string name="google_client_id_staging">74605093159-funodu4lv47i9u57h2meqahlcan5elo3.apps.googleusercontent.com</string> <!-- 586601826954-bf3rmcj9dbhii39tpu9negagt85ebfjg.apps.googleusercontent.com -->
     <string name="google_client_secret_staging">abcd</string> <!-- q25W9B3-pqWebWZ1ZY6Za6op -->
     <string name="google_client_redirect_uri_staging">abcd</string> <!-- https://udeoglobe-staging.firebaseapp.com/__/auth/handler -->
     <string name="facebook_app_id">348614333948475</string>
@@ -76,9 +76,11 @@
     <string name="password">Password</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="done">Done</string>
-    <string name="token_request_id">74605093159-funodu4lv47i9u57h2meqahlcan5elo3.apps.googleusercontent.com</string>
     <string name="invalid_password">enter valid email</string>
     <string name="enter_valid_password">enter valid password</string>
+    <string name="error_occurred">Error Occurred</string>
+    <string name="get_email_fb">email</string>
+    <string name="enter_valid_otp">Enter Valid Otp</string>
 
 
 </resources>

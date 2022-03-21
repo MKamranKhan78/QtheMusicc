@@ -12,5 +12,6 @@ class CommonKeys {
         const val TYPE_VIDEO = 1
         const val TYPE_PHOTO = 2
         const val FORGOT_TYPE="key_forgot_password"
+        const val START_TIMER="Start_Timer"
     }
 }

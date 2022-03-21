@@ -15,8 +15,10 @@ import com.techswivel.qthemusic.enums.Status
 import com.techswivel.qthemusic.models.AuthRequestBuilder
 import com.techswivel.qthemusic.models.BindingValidationClass
 import com.techswivel.qthemusic.models.ResponseModel
+import com.techswivel.qthemusic.source.remote.retrofit.ErrorResponse
 import com.techswivel.qthemusic.ui.fragments.signInFragment.SignInFragment
 import com.techswivel.qthemusic.utils.CommonKeys
+import com.techswivel.qthemusic.utils.DialogUtils
 import com.techswivel.qthemusic.utils.Log
 import com.techswivel.qthemusic.utils.Utilities
 import java.io.Serializable
@@ -82,13 +84,11 @@ class SetPassword : Fragment() {
         setPasswordVm.observeSetPassword.observe(viewLifecycleOwner, Observer {
             when (it.status) {
                 Status.LOADING -> {
-                    Log.d(TAG, "Loading...")
                     passwordBinding.btnDone.visibility = View.INVISIBLE
                     passwordBinding.pbSetPassword.visibility = View.VISIBLE
                 }
                 Status.SUCCESS -> {
                     val data = it.t as ResponseModel
-                    Log.d(TAG, "Success ${data.data}")
                     passwordBinding.btnDone.visibility = View.VISIBLE
                     passwordBinding.pbSetPassword.visibility = View.INVISIBLE
                     if (fragmentFlow == SignupForgotPassword.ForgotPasswordFlow) {
@@ -102,17 +102,16 @@ class SetPassword : Fragment() {
                     } else {
                         Utilities.showToast(requireContext(), "singup flow ")
                     }
-
-
                 }
                 Status.EXPIRE -> {
-                    Log.d(TAG, "Expire is called")
+                    val error = it.error as ErrorResponse
+                    DialogUtils.errorAlert(requireContext(),getString(R.string.error_occurred),error.message)
                 }
                 Status.ERROR -> {
-                    Log.d(TAG, "Error is called")
+                    val error = it.error as ErrorResponse
+                    DialogUtils.errorAlert(requireContext(),getString(R.string.error_occurred),error.message)
                 }
             }
         })
     }
-
 }

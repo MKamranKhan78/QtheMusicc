@@ -81,7 +81,7 @@ class QTheMusicApplication : Application(), LifecycleObserver {
         // app moved to background
         isInBackground = true
     }
-
+    //private external fun getGoogleClientIdStaging(): String
     companion object {
 
         private lateinit var mContext: Context
@@ -90,6 +90,9 @@ class QTheMusicApplication : Application(), LifecycleObserver {
         private lateinit var firestoreDB: FirebaseFirestore
         private var isInBackground = false
 
+//        init {
+//            System.loadLibrary("native-lib")
+//        }
         fun getContext(): Context {
             return mContext
         }

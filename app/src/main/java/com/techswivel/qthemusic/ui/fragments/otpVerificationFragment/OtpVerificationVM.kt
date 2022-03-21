@@ -14,6 +14,11 @@ import com.techswivel.qthemusic.utils.Log
 import retrofit2.Response
 
 class OtpVerificationVM :ViewModel(){
+    var etOtpOne = ""
+    var etOtpTwo = ""
+    var etOtpThree = ""
+    var etOtpFour = ""
+    var etOtpFive = ""
     val TAG="OtpVerificationVM"
     val mRemoteDataManager= RemoteDataManager
     val observeOtpVerification:MutableLiveData<ApiResponseObserver> = MutableLiveData()

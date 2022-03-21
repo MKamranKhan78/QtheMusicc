@@ -4,6 +4,8 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Base64
 import androidx.appcompat.app.AppCompatActivity
+import com.facebook.FacebookSdk
+import com.facebook.appevents.AppEventsLogger
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.databinding.ActivityAuthBinding
 import com.techswivel.qthemusic.ui.fragments.signInFragment.SignInFragment
@@ -23,6 +25,12 @@ class AuthActivity : AppCompatActivity() {
             .beginTransaction()
             .replace(R.id.auth_container, SignInFragment())
             .commit()
+
+
+        FacebookSdk.sdkInitialize(this);
+        AppEventsLogger.activateApp(this.application);
+
+
         setContentView(authBinding.root)
 
     }
