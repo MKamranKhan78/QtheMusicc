@@ -10,10 +10,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.techswivel.dfaktfahrerapp.ui.fragments.underDevelopmentMessageFragment.UnderDevelopmentMessageFragment
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.databinding.ActivityMainBinding
-import com.techswivel.qthemusic.ui.activities.serverSettingActivity.ServerSettingActivity
 import com.techswivel.qthemusic.ui.base.BaseActivity
 import com.techswivel.qthemusic.ui.fragments.underDevelopmentMessageFragment.profile_landing_screen.ProfileLandingFragment
-import com.techswivel.qthemusic.utils.ActivityUtils
 
 class MainActivity : BaseActivity() {
 
@@ -30,7 +28,13 @@ class MainActivity : BaseActivity() {
         initView()
         setBottomNavigationSelector()
         changeStatusBarColor()
-        setDataInSharePrefrence()
+        getDummyDataAndSaveInPrefrences()
+
+    }
+
+    private fun getDummyDataAndSaveInPrefrences() {
+        val auth = viewModel.getDummyData()
+        viewModel.setDataInSharedPrefrence(auth, this)
     }
 
     override fun onBackPressed() {
@@ -76,10 +80,6 @@ class MainActivity : BaseActivity() {
         viewModel = ViewModelProvider(this).get(MainActivityViewModel::class.java)
     }
 
-    private fun setDataInSharePrefrence() {
-        viewModel.setDataInSharedPrefrence(this)
-    }
-
 
     private fun openLandingProfileFragment() {
         openFragment(ProfileLandingFragment())
@@ -90,12 +90,6 @@ class MainActivity : BaseActivity() {
         openFragment(UnderDevelopmentMessageFragment.newInstance())
     }
 
-    private fun openServerSettingActivity() {
-        ActivityUtils.startNewActivity(
-            this,
-            ServerSettingActivity::class.java
-        )
-    }
 
     private fun openFragment(fragment: Fragment) {
         ::mFragment.set(fragment)

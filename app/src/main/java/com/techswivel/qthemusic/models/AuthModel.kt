@@ -1,32 +1,29 @@
 package com.techswivel.qthemusic.models
 
-import androidx.databinding.BaseObservable
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
 data class AuthModel(
     @SerializedName("name")
-    val name: String?,
+    var name: String?,
     @SerializedName("email")
-    val email: String?,
+    var email: String?,
     @SerializedName("avatar")
-    val avatar: String?,
+    var avatar: String?,
     @SerializedName("jwt")
-    val jwt: String?,
+    var jwt: String?,
     @SerializedName("dOB")
-    val dOB: Int?,
+    var dOB: Int?,
     @SerializedName("phoneNumber")
-    val phoneNumber: String?,
+    var phoneNumber: String?,
     @SerializedName("gender")
-    val gender: String?,
+    var gender: String?,
     @SerializedName("isInterestsSet")
-    val isInterestsSet: Boolean?,
+    var isInterestsSet: Boolean?,
     @SerializedName("address")
-    val address: Address?,
+    var address: Address?,
     @SerializedName("subscription")
-    val subscription: Subscription?,
+    var subscription: Subscription?,
     @SerializedName("notification")
-    val notification: Notification?
-) : BaseObservable(), Serializable {
-
-}
+    var notification: Notification?
+) : Serializable

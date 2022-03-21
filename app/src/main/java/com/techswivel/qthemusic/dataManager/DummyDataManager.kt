@@ -20,21 +20,20 @@ class DummyDataManager {
 
         private fun getDataList(): MyDataClass {
             return MyDataClass(
-                getDummyAuthDetails()
             )
         }
 
-        private fun getDummyAuthDetails(): AuthModel {
-            val address = Address(
-                "house129street18",
-                "lahore",
-                "punjab",
-                "pakistan",
-                33000
-            )
-            val notification = Notification(
-                true,
-                false
+         fun getDummyAuthDetails(): AuthModel {
+             val address = Address(
+                 "house129street18",
+                 "lahore",
+                 "punjab",
+                 "pakistan",
+                 33000
+             )
+             val notification = Notification(
+                 true,
+                 true
             )
 
             val subscription = Subscription(
@@ -44,9 +43,9 @@ class DummyDataManager {
                 "Month"
             )
             val authModel = AuthModel(
-                "Kamran Khan",
+                "Usman Khan",
                 "kamran@gmail.com",
-                "",
+                "https://ca.slack-edge.com/TH6CHMP7Z-U01RL9JUJG1-0a9af450bd4f-512",
                 "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9",
                 76475859,
                 "03034949594",

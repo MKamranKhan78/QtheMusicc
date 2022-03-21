@@ -8,7 +8,7 @@
         <import type="android.view.View" />
 
         <variable
-            name="obj"
+            name="authModel"
             type="com.techswivel.qthemusic.models.AuthModel" />
 
         <variable
@@ -56,10 +56,11 @@
                         android:paddingBottom="@dimen/_10dp">
 
                         <com.google.android.material.imageview.ShapeableImageView
-                            setImageViewImage="@{viewModel.authModel.avatar}"
                             android:layout_width="@dimen/_110dp"
                             android:layout_height="@dimen/_110dp"
+                            setImageViewImage="@{authModel.avatar}"
                             android:layout_gravity="center_horizontal"
+                            android:src="@drawable/ic_round_account_circle_24"
                             app:shapeAppearanceOverlay="@style/circleImageView"
                             tools:ignore="VectorDrawableCompat" />
 
@@ -70,7 +71,7 @@
                             android:layout_gravity="center_horizontal"
                             android:layout_marginTop="@dimen/_10dp"
                             android:fontFamily="@font/manrope_bold"
-                            android:text="@{viewModel.authModel.name}"
+                            android:text="@{authModel.name}"
                             android:textColor="@color/color_white_text"
                             android:textSize="@dimen/_20sp" />
 
@@ -83,7 +84,7 @@
                             android:background="@drawable/capsule_shape_button"
                             android:gravity="center_horizontal"
                             android:orientation="horizontal"
-                            android:visibility="@{viewModel.authModel.subscription == null ? View.VISIBLE: View.GONE}">
+                            android:visibility="@{authModel.subscription.planTitle != null ? View.GONE:View.VISIBLE }">
 
                             <RelativeLayout
                                 android:layout_width="wrap_content"
@@ -116,7 +117,7 @@
                             android:layout_marginTop="@dimen/_10dp"
                             android:layout_marginEnd="@dimen/_20dp"
                             android:layout_marginBottom="@dimen/_10dp"
-                            android:visibility="@{viewModel.authModel.subscription == null ? View.GONE: View.VISIBLE}"
+                            android:visibility="@{authModel.subscription.planTitle != null ? View.VISIBLE : View.GONE }"
                             app:cardBackgroundColor="#303033"
                             app:cardCornerRadius="@dimen/_20dp"
                             app:cardElevation="@dimen/_10dp"
@@ -147,12 +148,12 @@
                                     android:layout_alignParentStart="true"
                                     android:layout_marginTop="@dimen/_20dp"
                                     android:fontFamily="@font/manrope_regular"
-                                    android:text="@{viewModel.authModel.subscription.planTitle}"
+                                    android:text="@{authModel.subscription.planTitle}"
                                     android:textColor="@color/color_white_text_profile"
                                     android:textSize="@dimen/_14sp" />
 
                                 <TextView
-                                    setPlan="@{viewModel.authModel.subscription}"
+                                    setPlan="@{authModel.subscription}"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_below="@id/pricePerMonthTextview"

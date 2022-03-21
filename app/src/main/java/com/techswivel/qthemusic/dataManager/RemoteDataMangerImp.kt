@@ -16,5 +16,6 @@ interface RemoteDataMangerImp {
 
     fun profileUpdate(authModel: AuthModel?): Observable<Response<ResponseMain>>
 
+    fun getAuthDetails(): AuthModel?
 
 }

@@ -5,11 +5,11 @@ import java.io.Serializable
 
 data class Subscription(
     @SerializedName("planId")
-    val planId: Int?,
+    var planId: Int?,
     @SerializedName("planTitle")
-    val planTitle: String?,
+    var planTitle: String?,
     @SerializedName("planPrice")
-    val planPrice: Int?,
+    var planPrice: Int?,
     @SerializedName("planDuration")
-    val planDuration: String?
+    var planDuration: String?
 ) : Serializable
