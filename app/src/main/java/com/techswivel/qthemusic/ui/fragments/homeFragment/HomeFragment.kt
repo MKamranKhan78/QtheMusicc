@@ -117,6 +117,10 @@ class HomeFragment : RecyclerViewBaseFragment(), BaseInterface {
                                             PlayerActivity::class.java,
                                             bundle
                                         )
+                                        requireActivity().overridePendingTransition(
+                                            R.anim.bottom_up,
+                                            R.anim.null_transition
+                                        )
                                     }
                                 }
                             }

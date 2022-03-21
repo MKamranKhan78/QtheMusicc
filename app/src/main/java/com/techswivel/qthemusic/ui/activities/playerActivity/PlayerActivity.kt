@@ -61,6 +61,11 @@ class PlayerActivity : BaseActivity() {
         releasePlayers()
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        overridePendingTransition(R.anim.null_transition, R.anim.bottom_down)
+    }
+
     private fun initViews() {
         val bundle = intent.extras?.getBundle(CommonKeys.KEY_DATA)
         viewModel.songModel = bundle?.getSerializable(CommonKeys.KEY_DATA_MODEL) as Song
@@ -82,27 +87,28 @@ class PlayerActivity : BaseActivity() {
     private fun setListeners() {
         binding.ivArrowDown.setOnClickListener {
             finish()
+            overridePendingTransition(R.anim.null_transition, R.anim.bottom_down)
         }
 
         binding.btnAudio.setOnClickListener {
-            if (binding.layoutAudioPlayer.visibility == View.GONE) {
-                binding.layoutAudioPlayer.visibility = View.VISIBLE
-                binding.layoutVideoPlayer.visibility = View.GONE
-                if ((binding.videoPlayer.player as ExoPlayer?)?.isPlaying == true) {
-                    (binding.videoPlayer.player as ExoPlayer?)?.playWhenReady = false
-                }
-            }
+//            if (binding.layoutAudioPlayer.visibility == View.GONE) {
+//                binding.layoutAudioPlayer.visibility = View.VISIBLE
+//                binding.layoutVideoPlayer.visibility = View.GONE
+//                if ((binding.videoPlayer.player as ExoPlayer?)?.isPlaying == true) {
+//                    (binding.videoPlayer.player as ExoPlayer?)?.playWhenReady = false
+//                }
+//            }
         }
 
         binding.btnVideo.setOnClickListener {
-            if (binding.layoutVideoPlayer.visibility == View.GONE) {
-                if (viewModel.audioPlayer?.isPlaying == true) {
-                    handler.removeCallbacks(updateSongProgress)
-                    viewModel.audioPlayer?.playWhenReady = false
-                }
-                binding.layoutAudioPlayer.visibility = View.GONE
-                binding.layoutVideoPlayer.visibility = View.VISIBLE
-            }
+//            if (binding.layoutVideoPlayer.visibility == View.GONE) {
+//                if (viewModel.audioPlayer?.isPlaying == true) {
+//                    handler.removeCallbacks(updateSongProgress)
+//                    viewModel.audioPlayer?.playWhenReady = false
+//                }
+//                binding.layoutAudioPlayer.visibility = View.GONE
+//                binding.layoutVideoPlayer.visibility = View.VISIBLE
+//            }
         }
 
         val videoPlayerPlayIcon = findViewById<ImageView>(R.id.iv_video_player_play)
