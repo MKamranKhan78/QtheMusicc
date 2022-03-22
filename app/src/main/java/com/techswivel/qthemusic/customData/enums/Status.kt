@@ -1,4 +1,4 @@
-package com.techswivel.qthemusic.enums;
+package com.techswivel.qthemusic.customData.enums;
 
 enum class Status {
     SUCCESS,

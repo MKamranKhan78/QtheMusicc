@@ -13,7 +13,8 @@ import com.techswivel.qthemusic.utils.Log
 import retrofit2.Response
 
 class SetPasswordVM : ViewModel() {
-
+    var userEmail=""
+    var userOtp=""
     val TAG = "OtpVerificationVM"
     val mRemoteDataManager = RemoteDataManager
     val observeSetPassword: MutableLiveData<ApiResponseObserver> = MutableLiveData()

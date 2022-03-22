@@ -9,30 +9,29 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.techswivel.qthemusic.R
+import com.techswivel.qthemusic.customData.enums.OtpType
 import com.techswivel.qthemusic.customData.enums.SignupForgotPassword
 import com.techswivel.qthemusic.databinding.FragmentForgotPasswordBinding
-import com.techswivel.qthemusic.enums.Status
+import com.techswivel.qthemusic.customData.enums.Status
 import com.techswivel.qthemusic.models.AuthRequestBuilder
 import com.techswivel.qthemusic.models.BindingValidationClass
 import com.techswivel.qthemusic.models.ResponseModel
-import com.techswivel.qthemusic.source.local.preference.PrefUtils
 import com.techswivel.qthemusic.source.remote.retrofit.ErrorResponse
 import com.techswivel.qthemusic.ui.fragments.otpVerificationFragment.OtpVerification
 import com.techswivel.qthemusic.utils.CommonKeys
 import com.techswivel.qthemusic.utils.DialogUtils
-import com.techswivel.qthemusic.utils.Log
-import com.techswivel.qthemusic.utils.Utilities
 import java.io.Serializable
 
 
 class ForgotPassword : Fragment() {
     val TAG = "ForgotPassword"
-    var fragmentFlow:Serializable?=""
+    var fragmentFlow: Serializable? = ""
     private lateinit var forgotVm: ForgotPasswordVM
     private lateinit var forgotbingding: FragmentForgotPasswordBinding
+    private lateinit var twoWayBindingObj:BindingValidationClass
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        forgotVm = ViewModelProvider(this).get(ForgotPasswordVM::class.java)
+        forgotVm = ViewModelProvider(requireActivity()).get(ForgotPasswordVM::class.java)
     }
 
     override fun onCreateView(
@@ -41,8 +40,10 @@ class ForgotPassword : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         forgotbingding = FragmentForgotPasswordBinding.inflate(layoutInflater, container, false)
-        val twoWayBindingObj=BindingValidationClass()
+         twoWayBindingObj = BindingValidationClass()
         forgotbingding.myObj = twoWayBindingObj
+
+
         return forgotbingding.root
     }
 
@@ -50,35 +51,36 @@ class ForgotPassword : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initialization()
         onClickListener()
-
     }
 
     private fun initialization() {
-        fragmentFlow = arguments?.getSerializable(CommonKeys.FORGOT_TYPE)
+        fragmentFlow = arguments?.getSerializable(CommonKeys.APP_FLOW)
         if (fragmentFlow == SignupForgotPassword.ForgotPasswordFlow) {
             forgotbingding.tvPolicyTag.visibility = View.INVISIBLE
             forgotbingding.socialPortion.visibility = View.INVISIBLE
         }
-        val animationFadeOut =
+        val animationDownToUp =
             AnimationUtils.loadAnimation(requireContext(), R.anim.bottom_to_top_anim)
-        forgotbingding.btnSendCodeForgot.animation = animationFadeOut
+        forgotbingding.btnSendCodeForgot.animation = animationDownToUp
 
+        forgotbingding.ivBackForgotId.setOnClickListener {
+
+            requireActivity().onBackPressed()
+        }
     }
 
     private fun onClickListener() {
-
         forgotbingding.btnSendCodeForgot.setOnClickListener {
-            createAndSendOtpRequest()
+            if (!forgotbingding.etForgotEmailId.text.toString().isNullOrEmpty()&& twoWayBindingObj.isEmailTextValid.get()==true){
+                createAndSendOtpRequest()
+            }
         }
-
-
     }
 
     private fun createAndSendOtpRequest() {
         val authModelBilder = AuthRequestBuilder()
-        authModelBilder.otpType = "Email"
+        authModelBilder.otpType = OtpType.EMAIL.name
         authModelBilder.email = forgotbingding.etForgotEmailId.toString()
-        authModelBilder.phoneNumber = "03218061143"
         val otpModel = AuthRequestBuilder.builder(authModelBilder)
         forgotVm.sendResetOtp(otpModel)
         observeOtpData()
@@ -95,11 +97,14 @@ class ForgotPassword : Fragment() {
                     val data = it.t as ResponseModel
                     forgotbingding.btnSendCodeForgot.visibility = View.VISIBLE
                     forgotbingding.pbForgotPassword.visibility = View.INVISIBLE
-                    val bundle=Bundle()
-                   PrefUtils.setBoolean(requireContext(),CommonKeys.START_TIMER,true)
-                    bundle.putSerializable(CommonKeys.FORGOT_TYPE,fragmentFlow)
-                    val otpVerification=OtpVerification()
-                    otpVerification.arguments=bundle
+                    val bundle = Bundle()
+                    bundle.putString(
+                        CommonKeys.USER_EMAIL,
+                        forgotbingding.etForgotEmailId.text.toString()
+                    )
+                    bundle.putSerializable(CommonKeys.APP_FLOW,SignupForgotPassword.ForgotPasswordFlow)
+                    val otpVerification = OtpVerification()
+                    otpVerification.arguments = bundle
                     val transaction = requireActivity().supportFragmentManager.beginTransaction()
                     transaction.replace(R.id.auth_container, otpVerification)
                         .addToBackStack(TAG)
@@ -107,13 +112,20 @@ class ForgotPassword : Fragment() {
                 }
                 Status.EXPIRE -> {
                     val error = it.error as ErrorResponse
-                    DialogUtils.errorAlert(requireContext(),getString(R.string.error_occurred),error.message)
+                    DialogUtils.errorAlert(
+                        requireContext(),
+                        getString(R.string.error_occurred),
+                        error.message
+                    )
                 }
                 Status.ERROR -> {
                     val error = it.error as ErrorResponse
-                    DialogUtils.errorAlert(requireContext(),getString(R.string.error_occurred),error.message)
+                    DialogUtils.errorAlert(
+                        requireContext(),
+                        getString(R.string.error_occurred),
+                        error.message
+                    )
                 }
-
             }
         })
     }

@@ -14,7 +14,7 @@
         tools:context=".ui.fragments.forgotPasswordFragment.ForgotPassword">
 
         <ImageView
-            android:id="@+id/iv_back_forgot_id"
+            android:id="@+id/iv_back_btn_otp_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
@@ -34,8 +34,8 @@
             android:textColor="@color/color_white"
             android:textSize="@dimen/_18sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/iv_back_forgot_id"
-            app:layout_constraintTop_toBottomOf="@+id/iv_back_forgot_id" />
+            app:layout_constraintStart_toStartOf="@+id/iv_back_btn_otp_id"
+            app:layout_constraintTop_toBottomOf="@+id/iv_back_btn_otp_id" />
 
         <TextView
             android:id="@+id/code_has_been_tag"
@@ -159,6 +159,18 @@
             android:text="@string/resend_tag"
             android:textColor="@color/otp_resend_tag_gray_clr"
             android:textSize="@dimen/_14sp"
+            app:layout_constraintStart_toStartOf="@+id/otp_1_id"
+            app:layout_constraintTop_toBottomOf="@+id/otp_1_id" />
+        <TextView
+            android:id="@+id/tv_resend_btn"
+            android:layout_width="@dimen/_0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_20dp"
+            android:fontFamily="@font/manrope_medium"
+            android:text="@string/resend"
+            android:visibility="invisible"
+            android:textColor="@color/sign_up_btn"
+            android:textSize="@dimen/_16sp"
             app:layout_constraintStart_toStartOf="@+id/otp_1_id"
             app:layout_constraintTop_toBottomOf="@+id/otp_1_id" />
 

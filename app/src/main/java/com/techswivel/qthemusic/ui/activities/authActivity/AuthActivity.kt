@@ -8,7 +8,9 @@ import com.facebook.FacebookSdk
 import com.facebook.appevents.AppEventsLogger
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.databinding.ActivityAuthBinding
+import com.techswivel.qthemusic.source.local.preference.PrefUtils
 import com.techswivel.qthemusic.ui.fragments.signInFragment.SignInFragment
+import com.techswivel.qthemusic.utils.CommonKeys
 import com.techswivel.qthemusic.utils.Log
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
@@ -33,6 +35,11 @@ class AuthActivity : AppCompatActivity() {
 
         setContentView(authBinding.root)
 
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        PrefUtils.removeValue(this,CommonKeys.SIGNIN_BTN_ANIMATION)
     }
 
 }

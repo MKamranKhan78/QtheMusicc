@@ -1,5 +1,5 @@
 import com.techswivel.qthemusic.source.remote.retrofit.ErrorResponse
-import com.techswivel.qthemusic.enums.Status
+import com.techswivel.qthemusic.customData.enums.Status
 
 class ApiResponseObserver private constructor(
     val status: Status,

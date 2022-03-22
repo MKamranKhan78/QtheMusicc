@@ -14,6 +14,7 @@ import com.techswivel.qthemusic.utils.Log
 import retrofit2.Response
 
 class SignInViewModel : ViewModel() {
+    var showAnimation=false
     var emailFromUser = ""
     var passwordFromUser = ""
     val TAG = "SignInViewModel"

@@ -6,7 +6,7 @@
         <item name="colorPrimary">@color/color_white</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:statusBarColor" tools:ignore="NewApi">@color/main_background_color
+        <item name="android:statusBarColor" tools:ignore="NewApi">@color/app_bar_clr
         </item>
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
     </style>

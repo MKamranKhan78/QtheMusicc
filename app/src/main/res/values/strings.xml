@@ -81,6 +81,7 @@
     <string name="error_occurred">Error Occurred</string>
     <string name="get_email_fb">email</string>
     <string name="enter_valid_otp">Enter Valid Otp</string>
+    <string name="resend">Resend</string>
 
 
 </resources>

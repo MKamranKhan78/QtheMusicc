@@ -4,7 +4,7 @@ import java.io.Serializable
 
 class AuthRequestBuilder : Serializable {
     var email: String? = null
-    var password: Int? = null
+    var password: String? = null
     var loginType: String? = null
     var socialSite: String? = null
     var fcmToken: String? = null
@@ -14,7 +14,7 @@ class AuthRequestBuilder : Serializable {
     var phoneNumber: String? = null
     var otp: Int? = null
 
-    fun productId(password: Int?) = apply { this.password = password }
+    fun productId(password: String?) = apply { this.password = password }
     fun email(email: String?) = apply { this.email = email }
     fun loginType(loginType: String?) = apply { this.loginType = loginType }
     fun socialSite(socialSite: String?) = apply { this.socialSite = socialSite }

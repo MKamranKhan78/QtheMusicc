@@ -14,6 +14,8 @@ import com.techswivel.qthemusic.utils.Log
 import retrofit2.Response
 
 class OtpVerificationVM :ViewModel(){
+    var otpCode = ""
+    var email = ""
     var etOtpOne = ""
     var etOtpTwo = ""
     var etOtpThree = ""

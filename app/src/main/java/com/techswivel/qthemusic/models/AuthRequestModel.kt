@@ -8,7 +8,7 @@ class AuthRequestModel(
     @SerializedName("email")
     var email: String?,
     @SerializedName("password")
-    var password: Int?,
+    var password: String?,
     @SerializedName("loginType")
     var loginType: String?,
     @SerializedName("socialSite")

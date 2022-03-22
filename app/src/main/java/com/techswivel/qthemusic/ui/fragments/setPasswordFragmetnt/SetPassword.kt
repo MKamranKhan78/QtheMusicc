@@ -11,7 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.customData.enums.SignupForgotPassword
 import com.techswivel.qthemusic.databinding.FragmentSetPasswordBinding
-import com.techswivel.qthemusic.enums.Status
+import com.techswivel.qthemusic.customData.enums.Status
 import com.techswivel.qthemusic.models.AuthRequestBuilder
 import com.techswivel.qthemusic.models.BindingValidationClass
 import com.techswivel.qthemusic.models.ResponseModel
@@ -20,7 +20,6 @@ import com.techswivel.qthemusic.ui.fragments.signInFragment.SignInFragment
 import com.techswivel.qthemusic.utils.CommonKeys
 import com.techswivel.qthemusic.utils.DialogUtils
 import com.techswivel.qthemusic.utils.Log
-import com.techswivel.qthemusic.utils.Utilities
 import java.io.Serializable
 
 
@@ -29,6 +28,7 @@ class SetPassword : Fragment() {
     lateinit var passwordBinding: FragmentSetPasswordBinding
     lateinit var setPasswordVm: SetPasswordVM
     var fragmentFlow: Serializable? = ""
+    private lateinit var twoWayBindingObj: BindingValidationClass
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setPasswordVm = ViewModelProvider(this).get(SetPasswordVM::class.java)
@@ -46,37 +46,53 @@ class SetPassword : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        fragmentFlow = arguments?.getSerializable(CommonKeys.FORGOT_TYPE)
+        fragmentFlow = arguments?.getSerializable(CommonKeys.APP_FLOW)
         Log.d(TAG, "flow is $fragmentFlow")
-        val twoWayBindingObj = BindingValidationClass()
-        passwordBinding.obj = twoWayBindingObj
+
         widgetInitialization()
         onClickListener()
     }
 
     private fun widgetInitialization() {
+
+        setPasswordVm.userEmail = arguments?.getString(CommonKeys.USER_EMAIL).toString()
+        setPasswordVm.userOtp = arguments?.getString(CommonKeys.USER_OTP).toString()
+        twoWayBindingObj = BindingValidationClass()
+        passwordBinding.obj = twoWayBindingObj
         passwordBinding.etSetPasswordLayout.passwordVisibilityToggleRequested(false)
         passwordBinding.etSetConfirmPasswordLayout.passwordVisibilityToggleRequested(false)
     }
 
     private fun onClickListener() {
         passwordBinding.btnDone.setOnClickListener {
-            if (passwordBinding.etSetPasswordId.text.isNotEmpty() || passwordBinding.etSetPasswordConfirmId.text.isNotEmpty()) {
+            if (
+                passwordBinding.etSetPasswordId.text.isNotEmpty() &&
+                passwordBinding.etSetPasswordConfirmId.text.isNotEmpty() &&
+                twoWayBindingObj.isPasswordTextValid.get() == true &&
+                twoWayBindingObj.isRepeatPasswordTextValid.get() == true
+            ) {
                 if (passwordBinding.etSetPasswordId.text.toString() == passwordBinding.etSetPasswordConfirmId.text.toString()) {
-                    createAndSendSetPasswordRequest("sdfe39k")
+                    createAndSendSetPasswordRequest()
+
                 }
             }
-
+        }
+        passwordBinding.ivBackBtnSetPasId.setOnClickListener {
+            requireActivity().onBackPressed()
         }
     }
 
-    private fun createAndSendSetPasswordRequest(password: String) {
+    private fun createAndSendSetPasswordRequest() {
         val authModelBilder = AuthRequestBuilder()
-        authModelBilder.email = ""
-        authModelBilder.otp = 45454
-        authModelBilder.password
+        authModelBilder.email = setPasswordVm.userEmail
+        authModelBilder.otp = setPasswordVm.userOtp.toInt()
+        authModelBilder.password = passwordBinding.etSetPasswordConfirmId.text.toString()
         val setPasswordModel = AuthRequestBuilder.builder(authModelBilder)
         setPasswordVm.requestToSetPassword(setPasswordModel)
+        Log.d(
+            TAG,
+            "email ${setPasswordVm.userEmail},'\' otp ${setPasswordVm.userOtp} '\' password ${passwordBinding.etSetPasswordConfirmId.text.toString()} "
+        )
         observeSetPasswordObserver()
     }
 
@@ -99,17 +115,23 @@ class SetPassword : Fragment() {
                         transaction.replace(R.id.auth_container, SignInFragment())
                         fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
                         transaction.commit()
-                    } else {
-                        Utilities.showToast(requireContext(), "singup flow ")
                     }
                 }
                 Status.EXPIRE -> {
                     val error = it.error as ErrorResponse
-                    DialogUtils.errorAlert(requireContext(),getString(R.string.error_occurred),error.message)
+                    DialogUtils.errorAlert(
+                        requireContext(),
+                        getString(R.string.error_occurred),
+                        error.message
+                    )
                 }
                 Status.ERROR -> {
                     val error = it.error as ErrorResponse
-                    DialogUtils.errorAlert(requireContext(),getString(R.string.error_occurred),error.message)
+                    DialogUtils.errorAlert(
+                        requireContext(),
+                        getString(R.string.error_occurred),
+                        error.message
+                    )
                 }
             }
         })

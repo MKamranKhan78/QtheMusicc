@@ -12,13 +12,14 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.techswivel.qthemusic.R
+import com.techswivel.qthemusic.customData.enums.OtpType
 import com.techswivel.qthemusic.databinding.FragmentOtpVerificationBinding
-import com.techswivel.qthemusic.enums.Status
+import com.techswivel.qthemusic.customData.enums.Status
 import com.techswivel.qthemusic.models.AuthRequestBuilder
 import com.techswivel.qthemusic.models.ResponseModel
 import com.techswivel.qthemusic.source.local.preference.PrefUtils
 import com.techswivel.qthemusic.source.remote.retrofit.ErrorResponse
-import com.techswivel.qthemusic.ui.fragments.forgotPasswordFragment.ForgotPassword
+import com.techswivel.qthemusic.ui.fragments.forgotPasswordFragment.ForgotPasswordVM
 import com.techswivel.qthemusic.ui.fragments.setPasswordFragmetnt.SetPassword
 import com.techswivel.qthemusic.utils.CommonKeys
 import com.techswivel.qthemusic.utils.DialogUtils
@@ -28,15 +29,16 @@ import java.io.Serializable
 
 class OtpVerification : Fragment() {
     val TAG = "OtpVerification"
-    var startTimer:Boolean?=false
-    var otpCode=""
+
     private lateinit var viewBinding: FragmentOtpVerificationBinding
     private lateinit var verifyOtpVM: OtpVerificationVM
+    private lateinit var forgotVm: ForgotPasswordVM
     var fragmentFlow: Serializable? = ""
     private lateinit var countDownTimer: CountDownTimer
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         verifyOtpVM = ViewModelProvider(this).get(OtpVerificationVM::class.java)
+        forgotVm = ViewModelProvider(requireActivity()).get(ForgotPasswordVM::class.java)
     }
 
     override fun onCreateView(
@@ -45,13 +47,6 @@ class OtpVerification : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         viewBinding = FragmentOtpVerificationBinding.inflate(layoutInflater, container, false)
-        val startTime=PrefUtils.getBoolean(requireContext(),CommonKeys.START_TIMER)
-        if (startTime){
-            resendOtpTimer()
-            countDownTimer.start()
-
-        }
-
         return viewBinding.root
     }
 
@@ -60,42 +55,58 @@ class OtpVerification : Fragment() {
         viewsInitialization()
         clickListeners()
         getUserOtp()
-
-
-    }
-    override fun onResume() {
-        super.onResume()
-
+        resendOtpTimer()
+        countDownTimer.start()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-       countDownTimer.cancel()
+
+
     }
 
     private fun viewsInitialization() {
-        fragmentFlow = arguments?.getSerializable(CommonKeys.FORGOT_TYPE)
-        startTimer= arguments?.getBoolean(CommonKeys.START_TIMER)
+
+        fragmentFlow = arguments?.getSerializable(CommonKeys.APP_FLOW)
+        verifyOtpVM.email = arguments?.getString(CommonKeys.USER_EMAIL).toString()
         Log.d(TAG, "fragment flow $fragmentFlow")
+        Log.d(TAG, "email is ${verifyOtpVM.email}")
+        viewBinding.tvEmailWhereSndOtp.text = verifyOtpVM.email
     }
 
     private fun clickListeners() {
         viewBinding.btnConfirmCode.setOnClickListener {
 
-            otpCode =verifyOtpVM.etOtpOne + verifyOtpVM.etOtpTwo + verifyOtpVM.etOtpThree + verifyOtpVM.etOtpFour + verifyOtpVM.etOtpFive
-            if (otpCode.length < 5 || otpCode != "11111") {
+            verifyOtpVM.otpCode =
+                verifyOtpVM.etOtpOne + verifyOtpVM.etOtpTwo + verifyOtpVM.etOtpThree + verifyOtpVM.etOtpFour + verifyOtpVM.etOtpFive
+            if (verifyOtpVM.otpCode.length < 5 || verifyOtpVM.otpCode != "11111") {
                 Utilities.showToast(requireContext(), getString(R.string.enter_valid_otp))
             } else {
-                createAndSendVerifyOtpRequest(otpCode.toInt(), "")
+                countDownTimer.cancel()
+                createAndSendVerifyOtpRequest(verifyOtpVM.otpCode.toInt(), verifyOtpVM.email)
             }
+        }
+        viewBinding.tvResendBtn.setOnClickListener {
+            val authModelBilder = AuthRequestBuilder()
+            authModelBilder.otpType = OtpType.EMAIL.name
+            authModelBilder.email = verifyOtpVM.email
+            val otpModel = AuthRequestBuilder.builder(authModelBilder)
+            forgotVm.sendResetOtp(otpModel)
+            viewBinding.tvResendBtn.visibility = View.INVISIBLE
+            viewBinding.tvOtpResendTimerTag.visibility = View.VISIBLE
+            viewBinding.tvOtpResentTimer.visibility = View.VISIBLE
+            countDownTimer.start()
+
+        }
+        viewBinding.ivBackBtnOtpId.setOnClickListener {
+            requireActivity().onBackPressed()
         }
     }
 
     private fun createAndSendVerifyOtpRequest(otp: Int?, email: String) {
         val authModelBilder = AuthRequestBuilder()
-        authModelBilder.otpType = "Email"
+        authModelBilder.otpType = OtpType.EMAIL.name
         authModelBilder.email = email
-        authModelBilder.phoneNumber = "03218061143"
         authModelBilder.otp = otp
         val otpVerifyModel = AuthRequestBuilder.builder(authModelBilder)
         verifyOtpVM.verifyOtpRequest(otpVerifyModel)
@@ -114,28 +125,39 @@ class OtpVerification : Fragment() {
                     viewBinding.btnConfirmCode.visibility = View.VISIBLE
                     viewBinding.pbOtpVerification.visibility = View.INVISIBLE
                     val bundle = Bundle()
-                    bundle.putSerializable(CommonKeys.FORGOT_TYPE, fragmentFlow)
+                    bundle.putSerializable(CommonKeys.APP_FLOW, fragmentFlow)
+                    bundle.putString(CommonKeys.USER_OTP, verifyOtpVM.otpCode)
+                    bundle.putString(CommonKeys.USER_EMAIL, verifyOtpVM.email)
                     val setPassword = SetPassword()
                     setPassword.arguments = bundle
 
-                  PrefUtils.setBoolean(requireContext(),CommonKeys.START_TIMER,false)
+                    PrefUtils.setBoolean(requireContext(), CommonKeys.START_TIMER, false)
                     val transaction = requireActivity().supportFragmentManager.beginTransaction()
-                    transaction.replace(R.id.auth_container, setPassword)
+                    transaction.add(R.id.auth_container, setPassword)
                         .addToBackStack(TAG)
                     transaction.commit()
                 }
                 Status.EXPIRE -> {
                     val error = it.error as ErrorResponse
-                    DialogUtils.errorAlert(requireContext(),getString(R.string.error_occurred),error.message)
+                    DialogUtils.errorAlert(
+                        requireContext(),
+                        getString(R.string.error_occurred),
+                        error.message
+                    )
                 }
                 Status.ERROR -> {
                     val error = it.error as ErrorResponse
-                    DialogUtils.errorAlert(requireContext(),getString(R.string.error_occurred),error.message)
+                    DialogUtils.errorAlert(
+                        requireContext(),
+                        getString(R.string.error_occurred),
+                        error.message
+                    )
                 }
 
             }
         })
     }
+
     private fun getUserOtp() {
         val sb = StringBuilder()
         val number = ""
@@ -268,16 +290,17 @@ class OtpVerification : Fragment() {
         })
     }
 
-
-
     private fun resendOtpTimer() {
         countDownTimer = object : CountDownTimer(30000, 1000) {
             @SuppressLint("SetTextI18n")
             override fun onTick(millisUntilFinished: Long) {
                 viewBinding.tvOtpResentTimer.setText(getString(R.string.resend_time) + millisUntilFinished / 1000)
             }
-            override fun onFinish() {
 
+            override fun onFinish() {
+                viewBinding.tvOtpResendTimerTag.visibility = View.INVISIBLE
+                viewBinding.tvOtpResentTimer.visibility = View.INVISIBLE
+                viewBinding.tvResendBtn.visibility = View.VISIBLE
             }
         }
 

@@ -159,7 +159,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/_47dp"
             android:layout_marginStart="@dimen/_24dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="@dimen/_24dp"
             android:layout_marginEnd="@dimen/_24dp"
             android:background="@drawable/shape_sigin_btn"
             android:fontFamily="@font/europa_bold"

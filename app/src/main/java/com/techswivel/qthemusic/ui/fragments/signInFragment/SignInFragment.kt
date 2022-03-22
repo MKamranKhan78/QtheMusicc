@@ -6,6 +6,7 @@ import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -13,15 +14,11 @@ import com.bumptech.glide.Glide
 import com.facebook.*
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
-import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.Scopes
 import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.common.api.GoogleApiClient
-import com.google.android.gms.common.api.Scope
 import com.google.android.gms.tasks.Task
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.constant.Constants
@@ -29,8 +26,9 @@ import com.techswivel.qthemusic.customData.enums.LoginType
 import com.techswivel.qthemusic.customData.enums.SignupForgotPassword
 import com.techswivel.qthemusic.customData.enums.SocialSites
 import com.techswivel.qthemusic.databinding.FragmentSignInBinding
-import com.techswivel.qthemusic.enums.Status
+import com.techswivel.qthemusic.customData.enums.Status
 import com.techswivel.qthemusic.models.*
+import com.techswivel.qthemusic.source.local.preference.PrefUtils
 import com.techswivel.qthemusic.source.remote.retrofit.ErrorResponse
 import com.techswivel.qthemusic.ui.activities.mainActivity.MainActivity
 import com.techswivel.qthemusic.ui.base.GoogleResponseViewModel
@@ -48,6 +46,8 @@ class SignInFragment : Fragment() {
     private lateinit var callbackManager: CallbackManager
     private lateinit var loginManager: LoginManager
     private lateinit var googleSignViewModel: GoogleResponseViewModel
+    private lateinit var twoWayBindingObj: BindingValidationClass
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         signInVm = ViewModelProvider(this).get(SignInViewModel::class.java)
@@ -62,13 +62,13 @@ class SignInFragment : Fragment() {
         signInBinding = FragmentSignInBinding.inflate(layoutInflater, container, false)
         initialization()
         clickListeners()
-        val twoWayBindingObj = BindingValidationClass()
-        signInBinding.obj = twoWayBindingObj
+
         return signInBinding.root
     }
 
     private fun initialization() {
-
+        twoWayBindingObj = BindingValidationClass()
+        signInBinding.obj = twoWayBindingObj
         callbackManager = CallbackManager.Factory.create()
         loginManager = LoginManager.getInstance()
         Glide.with(requireContext()).load(R.drawable.laura_music)
@@ -78,12 +78,27 @@ class SignInFragment : Fragment() {
         observerGoogleResponse()
     }
 
+    override fun onResume() {
+        super.onResume()
+      signInVm.showAnimation=PrefUtils.getBoolean(requireContext(),CommonKeys.SIGNIN_BTN_ANIMATION)
+        val animationSignInBtn =
+            AnimationUtils.loadAnimation(requireContext(), R.anim.top_to_bottom_sign_in_btn)
+        if (signInVm.showAnimation){
+            signInBinding.btnSignIn.animation=animationSignInBtn
+        }
+    }
+
     private fun clickListeners() {
         signInBinding.btnSignIn.setOnClickListener {
-            if (isUserLoginDataAuthenticated()) {
+            if (
+                !signInBinding.etLoginEmail.text.isNullOrEmpty() &&
+                !signInBinding.etLoginPassword.text.isNullOrEmpty() &&
+                twoWayBindingObj.isEmailTextValid.get() == true &&
+                twoWayBindingObj.isPasswordTextValid.get() == true
+            ) {
                 createUserAndCallApi(
                     signInBinding.etLoginEmail.toString(),
-                    1111,
+                    signInBinding.etLoginPassword.text.toString(),
                     null,
                     LoginType.SIMPLE.name,
                     "kljsdjklsdfkljsdf",
@@ -94,8 +109,9 @@ class SignInFragment : Fragment() {
         }
 
         signInBinding.tvForgotPassword.setOnClickListener {
+            PrefUtils.setBoolean(requireContext(),CommonKeys.SIGNIN_BTN_ANIMATION,true)
             val bundle = Bundle()
-            bundle.putSerializable(CommonKeys.FORGOT_TYPE, SignupForgotPassword.ForgotPasswordFlow)
+            bundle.putSerializable(CommonKeys.APP_FLOW, SignupForgotPassword.ForgotPasswordFlow)
             val fortgotPasword = ForgotPassword()
             fortgotPasword.arguments = bundle
 
@@ -178,7 +194,7 @@ class SignInFragment : Fragment() {
 
     private fun createUserAndCallApi(
         email: String?,
-        password: Int?,
+        password: String?,
         accessToken: String?,
         loginType: String?,
         fcmToken: String?,
