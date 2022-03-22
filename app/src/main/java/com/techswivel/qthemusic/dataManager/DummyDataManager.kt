@@ -44,17 +44,17 @@ class DummyDataManager {
              )
              val authModel = AuthModel(
                  "Usman Khan",
-                "kamran@gmail.com",
-                "https://ca.slack-edge.com/TH6CHMP7Z-U01RL9JUJG1-0a9af450bd4f-512",
-                "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9",
-                76475859,
-                "03034949594",
-                "MALE",
-                false,
-                address,
-                subscription,
-                notification
-            )
+                 "kamran@gmail.com",
+                 "https://ca.slack-edge.com/TH6CHMP7Z-U01RL9JUJG1-0a9af450bd4f-512",
+                 "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9",
+                 76475859,
+                 "03034949594",
+                 "MALE",
+                 false,
+                 address,
+                 subscription,
+                 notification
+             )
             return authModel
         }
 

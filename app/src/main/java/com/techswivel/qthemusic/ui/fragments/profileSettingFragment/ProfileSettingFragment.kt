@@ -15,6 +15,7 @@ import com.techswivel.qthemusic.models.AuthModelBuilder
 import com.techswivel.qthemusic.source.local.preference.DataStoreUtils
 import com.techswivel.qthemusic.source.remote.networkViewModel.AuthNetworkViewModel
 import com.techswivel.qthemusic.ui.base.BaseFragment
+import com.techswivel.qthemusic.ui.fragments.profileUpdatingFragment.ProfileUpdatingFragment
 import com.techswivel.qthemusic.utils.ActivityUtils
 import com.techswivel.qthemusic.utils.DialogUtils
 import com.techswivel.qthemusic.utils.Log
@@ -149,7 +150,7 @@ class ProfileSettingFragment : BaseFragment() {
         mBinding.userProfileViewID.setOnClickListener {
             ActivityUtils.launchFragment(
                 requireContext(),
-                UnderDevelopmentMessageFragment::class.java.name
+                ProfileUpdatingFragment::class.java.name
             )
         }
 

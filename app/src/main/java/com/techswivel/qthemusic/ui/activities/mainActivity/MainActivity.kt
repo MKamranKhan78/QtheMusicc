@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.techswivel.dfaktfahrerapp.ui.fragments.underDevelopmentMessageFragment.UnderDevelopmentMessageFragment
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.databinding.ActivityMainBinding
+import com.techswivel.qthemusic.source.local.preference.PrefUtils
 import com.techswivel.qthemusic.ui.base.BaseActivity
 import com.techswivel.qthemusic.ui.fragments.underDevelopmentMessageFragment.profile_landing_screen.ProfileLandingFragment
 
@@ -34,6 +35,7 @@ class MainActivity : BaseActivity() {
 
     private fun getDummyDataAndSaveInPrefrences() {
         val auth = viewModel.getDummyData()
+        PrefUtils.clearAllPrefData(this)
         viewModel.setDataInSharedPrefrence(auth, this)
     }
 
