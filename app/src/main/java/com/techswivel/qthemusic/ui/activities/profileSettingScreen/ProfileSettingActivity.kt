@@ -43,7 +43,6 @@ class ProfileSettingActivity : BaseActivity() {
     override fun onBackPressed() {
         finish()
     }
-
     override fun onSupportNavigateUp(): Boolean {
         finish()
         return super.onSupportNavigateUp()
