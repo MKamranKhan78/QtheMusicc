@@ -174,4 +174,10 @@ dependencies {
     implementation "androidx.room:room-ktx:$roomVersion"
     kapt "androidx.room:room-compiler:$roomVersion"
     androidTestImplementation "androidx.room:room-testing:$roomVersion"
+
+    //Coroutines and LifeCycle Libraries
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.5.0-alpha04"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.4.1"
+
 }

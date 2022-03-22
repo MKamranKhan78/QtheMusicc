@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName
 class MyDataClass(
     @Expose
     @SerializedName("auth")
-    val authModel: User?,
+    val authModel: AuthModel?,
 ) {
     constructor() : this(
         null

@@ -5,8 +5,18 @@
     <color name="colorAccent">#03DAC5</color>
     <color name="color_white">#ffff</color>
     <color name="color_black">#000</color>
+    <color name="color_white_text_profile">#FFFFFF</color>
     <color name="color_enable_button">#1F72A3</color>
     <color name="color_disable_button">#AFAFAF</color>
     <color name="ic_launcher_background">#040404</color>
     <color name="bottom_nav_background">#1E1E21</color>
+    <color name="color_gray_end_gradiant">#474646</color>
+    <color name="view_profile_text_color">#99999F</color>
+    <color name="color_black_landing_background">#000000</color>
+    <color name="color_center_black_landing_background">#313131</color>
+    <color name="color_white_text">#ffffffff</color>
+    <color name="premium_button_color">#D3A42E</color>
+    <color name="logout_button_color">#BA011A</color>
 </resources>
+
+

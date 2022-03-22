@@ -1,8 +1,6 @@
 package com.techswivel.qthemusic.dataManager
 
-import com.techswivel.qthemusic.models.MyDataClass
-import com.techswivel.qthemusic.models.ResponseMain
-import com.techswivel.qthemusic.models.ResponseModel
+import com.techswivel.qthemusic.models.*
 import retrofit2.Response
 
 class DummyDataManager {
@@ -22,8 +20,42 @@ class DummyDataManager {
 
         private fun getDataList(): MyDataClass {
             return MyDataClass(
-                null
             )
+        }
+
+         fun getDummyAuthDetails(): AuthModel {
+             val address = Address(
+                 "house129street18",
+                 "lahore",
+                 "punjab",
+                 "pakistan",
+                 33000
+             )
+             val notification = Notification(
+                 true,
+                 true
+             )
+
+             val subscription = Subscription(
+                 1,
+                 "Standard Plan",
+                 10,
+                 "Month"
+             )
+             val authModel = AuthModel(
+                 "Usman Khan",
+                "kamran@gmail.com",
+                "https://ca.slack-edge.com/TH6CHMP7Z-U01RL9JUJG1-0a9af450bd4f-512",
+                "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9",
+                76475859,
+                "03034949594",
+                "MALE",
+                false,
+                address,
+                subscription,
+                notification
+            )
+            return authModel
         }
 
 
