@@ -71,17 +71,14 @@ class PlayerActivity : BaseActivity() {
         viewModel.songModel = bundle?.getSerializable(CommonKeys.KEY_DATA_MODEL) as Song
         if (viewModel.songModel.songVideoUrl == null) {
             binding.toggleButtonGroup.visibility = View.GONE
-        } else {
-            binding.tvVideoPlayerSongName.text = viewModel.songModel.songTitle
-            binding.tvVideoPlayerArtistName.text = viewModel.songModel.artist
         }
         binding.tvPlayingFrom.text = getString(R.string.str_playing_from).plus(" ").plus(
             bundle.getString(CommonKeys.KEY_SONG_TYPE)
         )
         binding.ivSongCover.loadImg(viewModel.songModel.coverImageUrl ?: "")
         binding.tvAlbumName.text = viewModel.songModel.albumName
-        binding.tvAudioPlayerSongName.text = viewModel.songModel.songTitle
-        binding.tvAudioPlayerArtistName.text = viewModel.songModel.artist
+        binding.tvSongName.text = viewModel.songModel.songTitle
+        binding.tvArtistName.text = viewModel.songModel.artist
     }
 
     private fun setListeners() {
@@ -91,24 +88,18 @@ class PlayerActivity : BaseActivity() {
         }
 
         binding.btnAudio.setOnClickListener {
-//            if (binding.layoutAudioPlayer.visibility == View.GONE) {
-//                binding.layoutAudioPlayer.visibility = View.VISIBLE
-//                binding.layoutVideoPlayer.visibility = View.GONE
-//                if ((binding.videoPlayer.player as ExoPlayer?)?.isPlaying == true) {
-//                    (binding.videoPlayer.player as ExoPlayer?)?.playWhenReady = false
-//                }
-//            }
+            binding.mlParent.transitionToStart()
+            if ((binding.videoPlayer.player as ExoPlayer?)?.isPlaying == true) {
+                (binding.videoPlayer.player as ExoPlayer?)?.playWhenReady = false
+            }
         }
 
         binding.btnVideo.setOnClickListener {
-//            if (binding.layoutVideoPlayer.visibility == View.GONE) {
-//                if (viewModel.audioPlayer?.isPlaying == true) {
-//                    handler.removeCallbacks(updateSongProgress)
-//                    viewModel.audioPlayer?.playWhenReady = false
-//                }
-//                binding.layoutAudioPlayer.visibility = View.GONE
-//                binding.layoutVideoPlayer.visibility = View.VISIBLE
-//            }
+            binding.mlParent.transitionToEnd()
+            if (viewModel.audioPlayer?.isPlaying == true) {
+                handler.removeCallbacks(updateSongProgress)
+                viewModel.audioPlayer?.playWhenReady = false
+            }
         }
 
         val videoPlayerPlayIcon = findViewById<ImageView>(R.id.iv_video_player_play)
