@@ -14,6 +14,10 @@ import com.techswivel.qthemusic.application.QTheMusicApplication
 import com.techswivel.qthemusic.databinding.FragmentProfileUpdatingBinding
 import com.techswivel.qthemusic.source.remote.networkViewModel.AuthNetworkViewModel
 import com.techswivel.qthemusic.ui.base.BaseFragment
+import com.techswivel.qthemusic.ui.fragments.addAddressDialogFragment.AddAddressDialogFragment
+import com.techswivel.qthemusic.ui.fragments.addGenderDialogFragment.AddGenderDialogFragment
+import com.techswivel.qthemusic.ui.fragments.addNameDialogFragment.AddNameDialogFragment
+import com.techswivel.qthemusic.ui.fragments.addPhoneNumberDialogFragment.AddPhoneNumberDialogFragment
 import com.techswivel.qthemusic.utils.ActivityUtils
 
 
@@ -46,17 +50,28 @@ class ProfileUpdatingFragment : BaseFragment() {
 
     private fun clickListeners() {
         mBinding.textviewChangeNameID.setOnClickListener {
-            ActivityUtils.launchFragment(
-                requireContext(),
-                UnderDevelopmentMessageFragment::class.java.name
-            )
+            val fragmentTransaction =
+                requireActivity().supportFragmentManager.beginTransaction()
+            val dialogFragment = AddNameDialogFragment.newInstance()
+            dialogFragment.show(fragmentTransaction, TAG)
+
         }
+
+        mBinding.addPhoneNumberTextviewID.setOnClickListener {
+            val fragmentTransaction =
+                requireActivity().supportFragmentManager.beginTransaction()
+            val dialogFragment = AddPhoneNumberDialogFragment.newInstance()
+            dialogFragment.show(fragmentTransaction, TAG)
+
+        }
+
         mBinding.textviewChangeGenderID.setOnClickListener {
-            ActivityUtils.launchFragment(
-                requireContext(),
-                UnderDevelopmentMessageFragment::class.java.name
-            )
+            val fragmentTransaction =
+                requireActivity().supportFragmentManager.beginTransaction()
+            val dialogFragment = AddGenderDialogFragment.newInstance()
+            dialogFragment.show(fragmentTransaction, TAG)
         }
+
         mBinding.textviewChangeDobID.setOnClickListener {
             ActivityUtils.launchFragment(
                 requireContext(),
@@ -64,10 +79,10 @@ class ProfileUpdatingFragment : BaseFragment() {
             )
         }
         mBinding.textviewChangeAddressID.setOnClickListener {
-            ActivityUtils.launchFragment(
-                requireContext(),
-                UnderDevelopmentMessageFragment::class.java.name
-            )
+            val fragmentTransaction =
+                requireActivity().supportFragmentManager.beginTransaction()
+            val dialogFragment = AddAddressDialogFragment.newInstance()
+            dialogFragment.show(fragmentTransaction, TAG)
         }
     }
 

@@ -16,7 +16,9 @@
     <color name="color_center_black_landing_background">#313131</color>
     <color name="color_white_text">#ffffffff</color>
     <color name="premium_button_color">#D3A42E</color>
+    <color name="light_gray_color">#84818A66</color>
     <color name="logout_button_color">#BA011A</color>
+    <color name="mtrl_textinput_default_box_stroke_color">#84818AA1</color>
 </resources>
 
 

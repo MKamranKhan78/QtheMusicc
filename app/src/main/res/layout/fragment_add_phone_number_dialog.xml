@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/_5dp"
+    android:background="@color/color_white"
+    app:cardCornerRadius="@dimen/_10dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/color_black"
+        android:orientation="vertical"
+        android:padding="@dimen/_15dp">
+
+        <ImageView
+            android:id="@+id/imageviewCancelDialog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:src="@drawable/ic_baseline_clear_24"
+            android:textColor="@color/color_black"
+            android:textSize="@dimen/_16sp" />
+
+        <TextView
+            android:id="@+id/textMainTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_30dp"
+            android:fontFamily="@font/manrope_bold"
+            android:text="@string/what_s_your_number"
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/_18sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_5dp"
+            android:fontFamily="@font/manrope_medium"
+            android:text="@string/we_ll_send_a_code_to_verify_provided_number"
+            android:textColor="#84818A"
+            android:textSize="@dimen/_14sp" />
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/lyLoginWithMobile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="visible"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvSignUp">
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/numberLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_20dp"
+                android:background="@drawable/border_red"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <com.rilixtech.CountryCodePicker
+                    android:id="@+id/country_code_picker_id"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/_2dp"
+                    android:layout_weight="1.4"
+                    android:gravity="center"
+                    android:paddingStart="@dimen/_10dp"
+                    app:ccp_textColor="@color/color_white"
+                    app:ccp_textSize="14sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/ic_icon_ionic_ios_arrow_down" />
+
+                <View
+                    android:layout_width="@dimen/_2dp"
+                    android:layout_height="@dimen/_20dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="@dimen/_5dp"
+                    android:background="@color/light_gray_color" />
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etMobileNumber"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_weight="0.6"
+                    android:background="@android:color/transparent"
+                    android:hint="@string/phone_number"
+                    android:inputType="number"
+                    android:maxLength="10"
+                    android:paddingStart="@dimen/_10dp"
+                    android:paddingEnd="@dimen/_5dp"
+                    android:textColorHint="@color/light_gray_color"
+                    android:textSize="@dimen/_14sp"
+                    tools:ignore="RtlSymmetry" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <LinearLayout
+            android:id="@+id/logoutButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_40dp"
+            android:background="@drawable/logout_button_drawable">
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="@dimen/_10dp"
+                android:text="@string/send_code"
+                android:textColor="@color/color_white" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:indeterminate="true"
+        android:indeterminateTint="@color/logout_button_color"
+        android:progressTint="@color/logout_button_color"
+        android:visibility="gone" />
+</androidx.cardview.widget.CardView>

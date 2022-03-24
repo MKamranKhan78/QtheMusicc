@@ -29,19 +29,33 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/imageviewProfileUpdatingScreen"
-            setImageViewImage="@{viewModel.authModel.avatar}"
+        <FrameLayout
             android:layout_width="@dimen/_110dp"
             android:layout_height="@dimen/_110dp"
+            android:id="@+id/imageviewProfileUpdatingScreen"
             android:layout_below="@id/fragmentToolbar"
             android:layout_centerHorizontal="true"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/_50dp"
-            android:src="@drawable/ic_round_account_circle_24"
-            app:shapeAppearanceOverlay="@style/circleImageView"
-            tools:ignore="VectorDrawableCompat" />
+            android:layout_marginTop="@dimen/_10dp">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/profilePic"
+                setImageViewImage="@{viewModel.authModel.avatar}"
+                android:layout_width="@dimen/_110dp"
+                android:layout_height="@dimen/_110dp"
+                android:layout_gravity="center|center_horizontal"
+                app:shapeAppearanceOverlay="@style/circleImageView" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/addPhotoImageviewId"
+                android:layout_width="@dimen/_22dp"
+                android:layout_height="@dimen/_22dp"
+                android:layout_gravity="bottom|right"
+                android:layout_marginTop="@dimen/_30dp"
+                android:layout_marginEnd="@dimen/_5dp"
+                android:layout_marginBottom="@dimen/_5dp"
+                android:src="@drawable/ic_add_story" />
+        </FrameLayout>
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardEmailId"
@@ -150,6 +164,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_centerInParent="true"
+                    android:id="@+id/addPhoneNumberTextviewID"
                     android:layout_marginStart="@dimen/_16dp"
                     android:layout_marginEnd="@dimen/_10dp"
                     android:fontFamily="@font/manrope_regular"
