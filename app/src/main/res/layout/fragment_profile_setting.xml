@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="obj"
+            type="com.techswivel.qthemusic.models.AuthModel" />
+
+        <variable
+            name="viewModel"
+            type="com.techswivel.qthemusic.ui.fragments.underDevelopmentMessageFragment.profile_setting_fragment.ProfileSettingFragmentViewModel" />
+
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/black_gradiant_background">
+
+        <TextView
+            android:id="@+id/freeAccountText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/_60dp"
+            android:fontFamily="@font/manrope_bold"
+            android:text="@string/free_account"
+            android:textColor="@color/color_white_text"
+            android:textSize="@dimen/_20sp"
+            android:visibility="@{viewModel.authModel.subscription.planTitle == null ? View.VISIBLE: View.GONE}" />
+
+
+        <LinearLayout
+            android:id="@+id/premiumButtonId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/freeAccountText"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/_10dp"
+            android:background="@drawable/capsule_shape_button"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:visibility="@{viewModel.authModel.subscription.planTitle == null ? View.VISIBLE: View.GONE}">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                tools:ignore="UselessParent">
+
+                <ImageView
+                    android:id="@+id/premiumButtonIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_setting_white"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_10dp"
+                    android:layout_toEndOf="@id/premiumButtonIcon"
+                    android:fontFamily="@font/manrope_bold"
+                    android:text="@string/listen_with_premium"
+                    android:textColor="@color/color_white_text"
+                    android:textSize="@dimen/_14sp" />
+            </RelativeLayout>
+        </LinearLayout>
+
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/planViewId"
+            android:layout_width="match_parent"
+
+            android:layout_height="wrap_content"
+            android:layout_below="@id/premiumButtonId"
+            android:layout_marginStart="@dimen/_20dp"
+            android:layout_marginTop="@dimen/_50dp"
+            android:layout_marginEnd="@dimen/_20dp"
+            android:visibility="@{viewModel.authModel.subscription.planTitle == null ? View.GONE: View.VISIBLE}"
+            app:cardBackgroundColor="#303033"
+            app:cardCornerRadius="@dimen/_20dp"
+            app:cardElevation="@dimen/_10dp"
+            app:cardMaxElevation="@dimen/_12dp"
+            app:cardPreventCornerOverlap="true">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#303033"
+                android:padding="@dimen/_20dp">
+
+                <TextView
+                    android:id="@+id/currentPlanTextview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:text="@string/current_plan"
+                    android:textColor="@color/color_white_text_profile"
+                    android:textSize="@dimen/_10sp" />
+
+                <TextView
+                    android:id="@+id/pricePerMonthTextview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/currentPlanTextview"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginTop="@dimen/_20dp"
+                    android:text="@{viewModel.authModel.subscription.planTitle}"
+                    android:textColor="@color/color_white_text_profile"
+                    android:textSize="@dimen/_14sp" />
+
+                <TextView
+                    setPlan="@{viewModel.authModel.subscription}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/pricePerMonthTextview"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginTop="@dimen/_2dp"
+                    android:textColor="@color/color_white_text_profile"
+                    android:textSize="@dimen/_10sp" />
+
+                <TextView
+                    android:id="@+id/premiumDetailsChangeTvId"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/pricePerMonthTextview"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginStart="@dimen/_16dp"
+                    android:text="@string/change"
+                    android:textColor="#BA011A"
+                    android:textSize="@dimen/_14sp" />
+
+            </RelativeLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/profileCardViewID"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/planViewId"
+            android:layout_marginStart="@dimen/_20dp"
+            android:layout_marginTop="@dimen/_30dp"
+            android:layout_marginEnd="@dimen/_20dp"
+            app:cardBackgroundColor="#303033"
+            app:cardCornerRadius="@dimen/_10dp"
+            app:cardElevation="@dimen/_10dp"
+            app:cardMaxElevation="@dimen/_12dp"
+            app:cardPreventCornerOverlap="true">
+
+            <RelativeLayout
+                android:id="@+id/userProfileViewID"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#303033"
+                android:padding="@dimen/_14dp">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/profileImageviewProfileSettingScreen"
+                    setImageViewImage="@{viewModel.authModel.avatar}"
+                    android:layout_width="@dimen/_36dp"
+                    android:layout_height="@dimen/_36dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginStart="@dimen/_4dp"
+                    app:shapeAppearanceOverlay="@style/circleImageView"
+                    tools:ignore="VectorDrawableCompat" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_marginStart="@dimen/_10dp"
+                    android:layout_toEndOf="@id/profileImageviewProfileSettingScreen"
+                    android:orientation="vertical"
+                    tools:ignore="RelativeOverlap">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/manrope_regular"
+                        android:text="@{viewModel.authModel.name}"
+                        android:textColor="@color/color_white"
+                        android:textSize="@dimen/_14sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/manrope_regular"
+                        android:text="@string/view_profile"
+                        android:textColor="@color/view_profile_text_color"
+                        android:textSize="@dimen/_14sp" />
+
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerInParent="true"
+                    android:layout_marginEnd="@dimen/_10dp"
+                    android:src="@drawable/ic_icon_ionic_ios_arrow_down"
+                    tools:ignore="ContentDescription" />
+            </RelativeLayout>
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/notificationText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/profileCardViewID"
+            android:layout_marginStart="@dimen/_20dp"
+            android:layout_marginTop="@dimen/_30dp"
+            android:fontFamily="@font/manrope_bold"
+            android:text="@string/notifications"
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/_18sp" />
+
+
+        <RelativeLayout
+            android:id="@+id/enableNotificationLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/notificationText"
+            android:layout_marginTop="@dimen/_15dp"
+            android:paddingStart="@dimen/_10dp"
+            android:paddingTop="@dimen/_5dp"
+            android:paddingEnd="@dimen/_10dp"
+            android:paddingBottom="@dimen/_5dp">
+
+            <TextView
+                android:id="@+id/enableNotificationText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/_10dp"
+                android:fontFamily="@font/manrope_regular"
+                android:text="@string/enable_notification"
+                android:textColor="@color/color_white"
+                android:textSize="@dimen/_14sp" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/switchEnableNotification"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/_19dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="@dimen/_10dp"
+                android:checked="@{viewModel.authModel.notification.isNotificationEnabled()}"
+                android:thumb="@drawable/thumb"
+                app:track="@drawable/track" />
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/followingArtistLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/enableNotificationLayout"
+            android:layout_marginTop="@dimen/_10dp"
+            android:paddingStart="@dimen/_10dp"
+            android:paddingTop="@dimen/_5dp"
+            android:paddingEnd="@dimen/_10dp"
+            android:paddingBottom="@dimen/_5dp">
+
+            <TextView
+                android:id="@+id/followingArtistUpdatesId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/_10dp"
+                android:fontFamily="@font/manrope_regular"
+                android:text="@string/following_artist_updates"
+                android:textColor="@color/color_white"
+                android:textSize="@dimen/_14sp" />
+
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/customSwitchFollowArtistUpdate"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/_19dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="@dimen/_10dp"
+                android:checked="@{viewModel.authModel.notification.isArtistUpdateEnabled()}"
+                android:thumb="@drawable/thumb"
+                app:track="@drawable/track" />
+
+            <!--isArtistChecked="@{viewModel.authModel.notification.isArtistUpdateEnabled()}"
+            isChecked="@{viewModel.authModel.notification.isNotificationEnabled()}"
+            -->
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/aboutQMusicText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/followingArtistLayout"
+            android:layout_marginStart="@dimen/_20dp"
+            android:layout_marginTop="@dimen/_30dp"
+            android:fontFamily="@font/manrope_bold"
+            android:text="@string/about_qmusic"
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/_18sp" />
+
+        <TextView
+            android:id="@+id/termAndConditionText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/aboutQMusicText"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/_10dp"
+            android:layout_marginTop="@dimen/_10dp"
+            android:fontFamily="@font/manrope_regular"
+            android:paddingStart="@dimen/_10dp"
+            android:paddingTop="@dimen/_10dp"
+            android:paddingEnd="@dimen/_20dp"
+            android:paddingBottom="@dimen/_5dp"
+            android:text="@string/terms_and_conditions"
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/_14sp"
+            app:drawableEndCompat="@drawable/ic_icon_ionic_ios_arrow_down" />
+
+        <TextView
+            android:id="@+id/privacyPolicyText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/termAndConditionText"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/_10dp"
+            android:layout_marginTop="@dimen/_10dp"
+            android:fontFamily="@font/manrope_regular"
+            android:paddingStart="@dimen/_10dp"
+            android:paddingTop="@dimen/_5dp"
+            android:paddingEnd="@dimen/_20dp"
+            android:paddingBottom="@dimen/_5dp"
+            android:text="@string/privacy_policy"
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/_14sp"
+            app:drawableEndCompat="@drawable/ic_icon_ionic_ios_arrow_down" />
+
+        <LinearLayout
+            android:id="@+id/logoutButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/privacyPolicyText"
+            android:layout_centerInParent="true"
+            android:layout_marginStart="@dimen/_20dp"
+            android:layout_marginTop="@dimen/_40dp"
+            android:layout_marginEnd="@dimen/_20dp"
+            android:background="@drawable/logout_button_drawable">
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="@dimen/_10dp"
+                android:text="@string/log_out"
+                android:textColor="@color/color_white" />
+        </LinearLayout>
+
+    </RelativeLayout>
+</layout>
+

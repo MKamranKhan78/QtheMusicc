@@ -5,13 +5,13 @@ import java.io.Serializable
 
 data class Address(
     @SerializedName("completeAddress")
-    val completeAddress: String?,
+    var completeAddress: String?,
     @SerializedName("city")
-    val city: String?,
+    var city: String?,
     @SerializedName("state")
-    val state: String?,
+    var state: String?,
     @SerializedName("country")
-    val country: String?,
+    var country: String?,
     @SerializedName("zipCode")
-    val zipCode: Int?
+    var zipCode: Int?
 ) : Serializable
