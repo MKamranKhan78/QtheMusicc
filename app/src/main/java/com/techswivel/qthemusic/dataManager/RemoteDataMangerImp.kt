@@ -1,6 +1,7 @@
 package com.techswivel.qthemusic.dataManager
 
 import com.techswivel.qthemusic.models.AuthModel
+import com.techswivel.qthemusic.models.AuthRequestModel
 import com.techswivel.qthemusic.models.GoogleResponseModel
 import com.techswivel.qthemusic.models.ResponseMain
 import io.reactivex.Observable
@@ -17,5 +18,12 @@ interface RemoteDataMangerImp {
     fun profileUpdate(authModel: AuthModel?): Observable<Response<ResponseMain>>
 
     fun getAuthDetails(): AuthModel?
+    fun userLogin(authRequestModel: AuthRequestModel): Observable<Response<ResponseMain>>
+
+    fun sendOtpRequest(authRequestModel: AuthRequestModel): Observable<Response<ResponseMain>>
+
+    fun sendVerifyOtpRequest(authRequestModel: AuthRequestModel): Observable<Response<ResponseMain>>
+
+    fun sentNewPasswordRequest(authRequestModel: AuthRequestModel): Observable<Response<ResponseMain>>
 
 }

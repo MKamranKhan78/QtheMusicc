@@ -5,10 +5,11 @@ import com.techswivel.qthemusic.application.QTheMusicApplication
 import com.techswivel.qthemusic.constant.Constants
 import com.techswivel.qthemusic.dataManager.DummyDataManager.Companion.getDummyAuthDetails
 import com.techswivel.qthemusic.dataManager.DummyDataManager.Companion.getResponseDummyData
-import com.techswivel.qthemusic.models.AuthModel
-import com.techswivel.qthemusic.models.GoogleAuthModel
-import com.techswivel.qthemusic.models.GoogleResponseModel
-import com.techswivel.qthemusic.models.ResponseMain
+import com.techswivel.qthemusic.dataManager.DummyDataManager.Companion.getUserLoginDummyData
+import com.techswivel.qthemusic.dataManager.DummyDataManager.Companion.getUserOtpDummyData
+import com.techswivel.qthemusic.dataManager.DummyDataManager.Companion.getVerifyOtpDummyData
+import com.techswivel.qthemusic.dataManager.DummyDataManager.Companion.newPasswordOtpDummyData
+import com.techswivel.qthemusic.models.*
 import com.techswivel.qthemusic.source.remote.retrofit.ApiService
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -75,6 +76,10 @@ object RemoteDataManager : BaseDataManager(), RemoteDataMangerImp {
         }
         return ApiService.getGoogleResponse().getGoogleToken(data).subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    override fun sendOTP(email: String): Observable<Response<ResponseMain>> {
+        TODO("Not yet implemented")
     }
 
     override fun userLogin(authRequestBuilder: AuthRequestModel): Observable<Response<ResponseMain>> {

@@ -6,6 +6,21 @@ import retrofit2.Response
 class DummyDataManager {
 
     companion object {
+        fun getResponseDummyData(): Response<ResponseMain> {
+            return Response.success(
+                ResponseMain(
+                    ResponseModel(
+                        true,
+                        "",
+                        getDataList()
+                    )
+                )
+            )
+        }
+
+
+
+
         fun getGoogleResponse():Response<GoogleResponseModel>{
             return Response.success(
                 GoogleResponseModel(

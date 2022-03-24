@@ -13,8 +13,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.customData.enums.OtpType
-import com.techswivel.qthemusic.databinding.FragmentOtpVerificationBinding
 import com.techswivel.qthemusic.customData.enums.Status
+import com.techswivel.qthemusic.databinding.FragmentOtpVerificationBinding
+
 import com.techswivel.qthemusic.models.AuthRequestBuilder
 import com.techswivel.qthemusic.models.ResponseModel
 import com.techswivel.qthemusic.source.local.preference.PrefUtils

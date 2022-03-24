@@ -6,8 +6,8 @@ import java.io.Serializable
 data class Notification(
     @SerializedName
         ("isNotificationEnabled")
-    val isNotificationEnabled: Boolean?,
+    var isNotificationEnabled: Boolean?,
     @SerializedName
         ("isArtistUpdateEnabled")
-    val isArtistUpdateEnabled: Boolean?
+    var isArtistUpdateEnabled: Boolean?
 ) : Serializable

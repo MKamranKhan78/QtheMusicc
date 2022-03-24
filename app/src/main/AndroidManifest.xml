@@ -26,10 +26,6 @@
             android:name=".ui.activities.authActivity.AuthActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activities.splashActivity.SplashActivity"
-            android:name=".ui.activities.profileUpdatingActivity.ProfileUpdatingActivity"
-            android:exported="false" />
-        <activity
             android:name=".ui.activities.profileSettingScreen.ProfileSettingActivity"
             android:exported="false" />
         <activity
