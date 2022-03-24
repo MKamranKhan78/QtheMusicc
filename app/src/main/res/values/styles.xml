@@ -12,6 +12,12 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="circleImageView" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
+
     <style name="TabButtonTextStyle">
         <item name="fontFamily">@font/manrope_bold</item>
         <item name="android:textSize">@dimen/_12sp</item>

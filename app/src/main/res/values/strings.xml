@@ -63,4 +63,30 @@
     <string name="str_audio">Audio</string>
     <string name="str_underdevelopment_feature">Underdevelopment feature</string>
     <string name="str_playing_from">PLAYING FROM</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="log_out">Log Out</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="terms_and_conditions">Terms and Conditions</string>
+    <string name="about_qmusic">About QMusic</string>
+    <string name="following_artist_updates">Following Artist Updates</string>
+    <string name="enable_notification">Enable Notification</string>
+    <string name="notifications">Notifications</string>
+    <string name="view_profile">view profile</string>
+    <string name="kamran_khan">Kamran Khan</string>
+    <string name="change">Change</string>
+    <string name="current_plan">current plan</string>
+    <string name="listen_with_premium">Listen With Premium</string>
+    <string name="free_account">Free Account</string>
+    <string name="your_interests">Your Interests</string>
+    <string name="buying_history">Buying History</string>
+    <string name="downloaded">Downloaded</string>
+    <string name="listening_history">Listening History</string>
+    <string name="following_artist">Following Artist</string>
+    <string name="purchased_songs">Purchased Songs</string>
+    <string name="purchased_albums">Purchased Albums</string>
+    <string name="favorite_songs">Favorite Songs</string>
+    <string name="playlists">Playlists</string>
+    <string name="settings">settings</string>
+    <string name="something_wrong">Something went wrong.</string>
 </resources>

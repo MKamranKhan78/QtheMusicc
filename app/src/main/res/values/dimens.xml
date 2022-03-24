@@ -24,6 +24,7 @@
     <dimen name="_20dp">20dp</dimen>
     <dimen name="_21dp">21dp</dimen>
     <dimen name="_22dp">22dp</dimen>
+    <dimen name="_220dp">220dp</dimen>
     <dimen name="_23dp">23dp</dimen>
     <dimen name="_24dp">24dp</dimen>
     <dimen name="_25dp">25dp</dimen>
@@ -68,6 +69,9 @@
     <dimen name="_200dp">200dp</dimen>
     <dimen name="_320dp">320dp</dimen>
     <dimen name="_330dp">330dp</dimen>
+    <dimen name="_110dp">110dp</dimen>
+    <dimen name="_120dp">120dp</dimen>
+    <dimen name="_90dp">90dp</dimen>
 
     <!-- sp values-->
 
@@ -100,4 +104,6 @@
     <dimen name="recycler_vertical_spacing">10dp</dimen>
     <dimen name="recycler_horizental_spacing_20">20dp</dimen>
     <dimen name="recycler_horizental_spacing_2">2dp</dimen>
+    <dimen name="_60dp">60dp</dimen>
+    <dimen name="_70dp">70dp</dimen>
 </resources>

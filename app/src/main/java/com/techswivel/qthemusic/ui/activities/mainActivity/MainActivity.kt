@@ -1,27 +1,42 @@
 package com.techswivel.qthemusic.ui.activities.mainActivity
 
 import android.app.Activity
+import android.os.Build
 import android.os.Bundle
+import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.techswivel.dfaktfahrerapp.ui.fragments.underDevelopmentMessageFragment.UnderDevelopmentMessageFragment
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.databinding.ActivityMainBinding
-import com.techswivel.qthemusic.ui.activities.serverSettingActivity.ServerSettingActivity
 import com.techswivel.qthemusic.ui.base.BaseActivity
 import com.techswivel.qthemusic.ui.fragments.homeFragment.HomeFragment
 import com.techswivel.qthemusic.utils.ActivityUtils
+import com.techswivel.qthemusic.ui.fragments.underDevelopmentMessageFragment.profile_landing_screen.ProfileLandingFragment
 
 class MainActivity : BaseActivity() {
 
     private lateinit var mBinding: ActivityMainBinding
+    private lateinit var viewModel: MainActivityViewModel
     private var mFragment: Fragment? = null
 
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
         openHomeFragment()
+        initView()
         setBottomNavigationSelector()
+        changeStatusBarColor()
+        getDummyDataAndSaveInPrefrences()
+
+    }
+
+    private fun getDummyDataAndSaveInPrefrences() {
+        val auth = viewModel.getDummyData()
+        viewModel.setDataInSharedPrefrence(auth, this)
     }
 
     override fun onBackPressed() {
@@ -49,8 +64,8 @@ class MainActivity : BaseActivity() {
                     openUnderDevelopmentFragment()
                 }
                 R.id.bottom_nav_profile -> {
-                    openServerSettingActivity()
-                    return@setOnItemSelectedListener false
+                    openLandingProfileFragment()
+
                 }
             }
             return@setOnItemSelectedListener true
@@ -62,17 +77,26 @@ class MainActivity : BaseActivity() {
         openFragment(HomeFragment.newInstance())
     }
 
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+    private fun changeStatusBarColor() {
+        val window = this.window
+        window.statusBarColor = ContextCompat.getColor(this, R.color.color_black)
+    }
+
+    private fun initView() {
+        viewModel = ViewModelProvider(this).get(MainActivityViewModel::class.java)
+    }
+
+
+    private fun openLandingProfileFragment() {
+        openFragment(ProfileLandingFragment())
+    }
+
     private fun openUnderDevelopmentFragment() {
         popUpAllFragmentIncludeThis(UnderDevelopmentMessageFragment::class.java.name)
         openFragment(UnderDevelopmentMessageFragment.newInstance())
     }
 
-    private fun openServerSettingActivity() {
-        ActivityUtils.startNewActivity(
-            this,
-            ServerSettingActivity::class.java
-        )
-    }
 
     private fun openFragment(fragment: Fragment) {
         ::mFragment.set(fragment)

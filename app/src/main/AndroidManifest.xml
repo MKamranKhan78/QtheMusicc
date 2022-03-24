@@ -24,6 +24,12 @@
             android:name=".ui.activities.playerActivity.PlayerActivity"
             android:exported="false" />
         <activity
+            android:name=".ui.activities.profileUpdatingActivity.ProfileUpdatingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activities.profileSettingScreen.ProfileSettingActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.activities.splashActivity.SplashActivity"
             android:exported="true"
             android:screenOrientation="portrait">
@@ -35,7 +41,7 @@
         </activity>
         <activity
             android:name=".ui.activities.mainActivity.MainActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activities.serverSettingActivity.ServerSettingActivity"
             android:screenOrientation="portrait" />
