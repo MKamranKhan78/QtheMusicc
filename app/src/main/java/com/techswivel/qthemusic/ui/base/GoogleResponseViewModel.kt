@@ -62,6 +62,10 @@ class GoogleResponseViewModel : ViewModel() {
             override fun onRequestComplete() {
 
             }
+
+            override fun onNext(t: Response<GoogleResponseModel>) {
+                TODO("Not yet implemented")
+            }
         })
 
     }

@@ -10,10 +10,11 @@ import com.techswivel.qthemusic.models.AuthRequestModel
 import com.techswivel.qthemusic.models.ResponseMain
 import com.techswivel.qthemusic.source.remote.retrofit.ErrorResponse
 import com.techswivel.qthemusic.source.remote.rxjava.CustomError
+import com.techswivel.qthemusic.ui.base.BaseViewModel
 import com.techswivel.qthemusic.utils.Log
 import retrofit2.Response
 
-class OtpVerificationVM :ViewModel(){
+class OtpVerificationViewModel :BaseViewModel(){
     var otpCode = ""
     var email = ""
     var etOtpOne = ""
@@ -22,7 +23,7 @@ class OtpVerificationVM :ViewModel(){
     var etOtpFour = ""
     var etOtpFive = ""
     val TAG="OtpVerificationVM"
-    val mRemoteDataManager= RemoteDataManager
+  //  val mRemoteDataManager= RemoteDataManager
     val observeOtpVerification:MutableLiveData<ApiResponseObserver> = MutableLiveData()
     fun verifyOtpRequest(authRequestModel: AuthRequestModel){
         mRemoteDataManager.userLogin(authRequestModel).doOnSubscribe{

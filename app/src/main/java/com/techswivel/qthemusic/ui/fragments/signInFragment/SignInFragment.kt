@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
@@ -21,25 +20,25 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.techswivel.qthemusic.R
+import com.techswivel.qthemusic.application.QTheMusicApplication
 import com.techswivel.qthemusic.constant.Constants
-import com.techswivel.qthemusic.customData.enums.LoginType
-import com.techswivel.qthemusic.customData.enums.SignupForgotPassword
-import com.techswivel.qthemusic.customData.enums.SocialSites
+import com.techswivel.qthemusic.customData.enums.*
 import com.techswivel.qthemusic.databinding.FragmentSignInBinding
-import com.techswivel.qthemusic.customData.enums.Status
 import com.techswivel.qthemusic.models.*
+import com.techswivel.qthemusic.source.local.preference.DataStoreUtils
 import com.techswivel.qthemusic.source.local.preference.PrefUtils
 import com.techswivel.qthemusic.source.remote.retrofit.ErrorResponse
-import com.techswivel.qthemusic.ui.activities.mainActivity.MainActivity
+import com.techswivel.qthemusic.ui.base.BaseFragment
 import com.techswivel.qthemusic.ui.base.GoogleResponseViewModel
 import com.techswivel.qthemusic.ui.fragments.forgotPasswordFragment.ForgotPassword
 import com.techswivel.qthemusic.utils.*
+import kotlinx.coroutines.runBlocking
 import java.util.*
 
 
-class SignInFragment : Fragment() {
+class SignInFragment : BaseFragment() {
     val TAG = "SignInFragment"
-    private lateinit var signInVm: SignInViewModel
+    private lateinit var signInViewModel: SignInViewModel
     private lateinit var signInBinding: FragmentSignInBinding
     private lateinit var googleSignInOptions: GoogleSignInOptions
     private lateinit var googleSinInClient: GoogleSignInClient
@@ -50,7 +49,7 @@ class SignInFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        signInVm = ViewModelProvider(this).get(SignInViewModel::class.java)
+        signInViewModel = ViewModelProvider(this).get(SignInViewModel::class.java)
         googleSignViewModel = ViewModelProvider(this).get(GoogleResponseViewModel::class.java)
     }
 
@@ -62,7 +61,6 @@ class SignInFragment : Fragment() {
         signInBinding = FragmentSignInBinding.inflate(layoutInflater, container, false)
         initialization()
         clickListeners()
-
         return signInBinding.root
     }
 
@@ -80,10 +78,10 @@ class SignInFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-      signInVm.showAnimation=PrefUtils.getBoolean(requireContext(),CommonKeys.SIGNIN_BTN_ANIMATION)
+      signInViewModel.showAnimation=PrefUtils.getBoolean(requireContext(),CommonKeys.SIGNIN_BTN_ANIMATION)
         val animationSignInBtn =
             AnimationUtils.loadAnimation(requireContext(), R.anim.top_to_bottom_sign_in_btn)
-        if (signInVm.showAnimation){
+        if (signInViewModel.showAnimation){
             signInBinding.btnSignIn.animation=animationSignInBtn
         }
     }
@@ -132,41 +130,65 @@ class SignInFragment : Fragment() {
     }
 
     private fun observeingData() {
-        signInVm.observeSignInMutableData.observe(viewLifecycleOwner, Observer {
-            when (it.status) {
-                Status.LOADING -> {
-                    signInBinding.btnSignIn.visibility = View.INVISIBLE
-                    signInBinding.pb.visibility = View.VISIBLE
-                }
-                Status.SUCCESS -> {
-                    val data = it.t as ResponseModel
-                    signInBinding.btnSignIn.visibility = View.VISIBLE
-                    signInBinding.pb.visibility = View.INVISIBLE
-                    activity.let {
-                        val intent = Intent(it, MainActivity::class.java)
-                        it?.startActivity(intent)
-                        it?.finish()
-                    }
-                }
-                Status.EXPIRE -> {
-                    val error = it.error as ErrorResponse
-                    DialogUtils.errorAlert(
-                        requireContext(),
-                        getString(R.string.error_occurred),
-                        error.message
-                    )
-                }
-                Status.ERROR -> {
-                    val error = it.error as ErrorResponse
-                    DialogUtils.errorAlert(
-                        requireContext(),
-                        getString(R.string.error_occurred),
-                        error.message
-                    )
-                }
+        signInViewModel.observeSignInMutableData.observe(viewLifecycleOwner, Observer { signInResponse->
 
+            when(signInResponse.status){
+
+                NetworkStatus.LOADING -> {
+                    Log.v(TAG, "loading")
+                }
+                NetworkStatus.SUCCESS -> {
+                    Log.v(TAG, "success")
+                }
+                NetworkStatus.ERROR -> {
+                    Log.v(TAG, "error")
+                }
+                NetworkStatus.EXPIRE -> {
+                    Log.v(TAG, "EXPIRE")
+                }
+                NetworkStatus.COMPLETED -> {
+                    Log.v("Network_status", "completed")
+                }
             }
         })
+
+//        signInVm.observeSignInMutableData.observe(viewLifecycleOwner, Observer {
+//            when (it.status) {
+//                Status.LOADING -> {
+//                    Log.d(TAG,"Loading")
+//                    signInBinding.btnSignIn.visibility = View.INVISIBLE
+//                    signInBinding.pb.visibility = View.VISIBLE
+//                }
+//                Status.SUCCESS -> {
+//                    val data = it.t as ResponseModel
+//                    Log.d(TAG,"Success")
+//                    signInBinding.btnSignIn.visibility = View.VISIBLE
+//                    signInBinding.pb.visibility = View.INVISIBLE
+//                    activity.let {
+//                        val intent = Intent(it, MainActivity::class.java)
+//                        it?.startActivity(intent)
+//                        it?.finish()
+//                    }
+//                }
+//                Status.EXPIRE -> {
+//                    val error = it.error as ErrorResponse
+//                    DialogUtils.errorAlert(
+//                        requireContext(),
+//                        getString(R.string.error_occurred),
+//                        error.message
+//                    )
+//                }
+//                Status.ERROR -> {
+//                    val error = it.error as ErrorResponse
+//                    DialogUtils.errorAlert(
+//                        requireContext(),
+//                        getString(R.string.error_occurred),
+//                        error.message
+//                    )
+//                }
+//
+//            }
+//        })
     }
 
     private fun observerGoogleResponse() {
@@ -211,7 +233,7 @@ class SignInFragment : Fragment() {
         authModelBilder.fcmToken = fcmToken
         authModelBilder.deviceIdentifier = deviceIdentifier
         val authModel = AuthRequestBuilder.builder(authModelBilder)
-        signInVm.userLogin(authModel)
+        signInViewModel.userLogin(authModel)
     }
 
     private fun isUserLoginDataAuthenticated(): Boolean {
@@ -224,13 +246,13 @@ class SignInFragment : Fragment() {
             signInBinding.etLoginEmail.error = getString(R.string.error_invalid_email)
             return false
         } else {
-            signInVm.emailFromUser = signInBinding.etLoginEmail.text.toString()
+            signInViewModel.emailFromUser = signInBinding.etLoginEmail.text.toString()
         }
         if (signInBinding.etLoginPassword.text.isNullOrEmpty()) {
             signInBinding.etLoginPassword.error = resources.getString(R.string.required)
             return false
         } else {
-            signInVm.passwordFromUser = signInBinding.etLoginPassword.text.toString()
+            signInViewModel.passwordFromUser = signInBinding.etLoginPassword.text.toString()
         }
         return true
     }

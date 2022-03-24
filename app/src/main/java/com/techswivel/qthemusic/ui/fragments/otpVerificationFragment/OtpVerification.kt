@@ -8,7 +8,6 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.techswivel.qthemusic.R
@@ -20,7 +19,8 @@ import com.techswivel.qthemusic.models.AuthRequestBuilder
 import com.techswivel.qthemusic.models.ResponseModel
 import com.techswivel.qthemusic.source.local.preference.PrefUtils
 import com.techswivel.qthemusic.source.remote.retrofit.ErrorResponse
-import com.techswivel.qthemusic.ui.fragments.forgotPasswordFragment.ForgotPasswordVM
+import com.techswivel.qthemusic.ui.base.BaseFragment
+import com.techswivel.qthemusic.ui.fragments.forgotPasswordFragment.ForgotPasswordViewModel
 import com.techswivel.qthemusic.ui.fragments.setPasswordFragmetnt.SetPassword
 import com.techswivel.qthemusic.utils.CommonKeys
 import com.techswivel.qthemusic.utils.DialogUtils
@@ -28,18 +28,18 @@ import com.techswivel.qthemusic.utils.Log
 import com.techswivel.qthemusic.utils.Utilities
 import java.io.Serializable
 
-class OtpVerification : Fragment() {
+class OtpVerification : BaseFragment() {
     val TAG = "OtpVerification"
 
     private lateinit var viewBinding: FragmentOtpVerificationBinding
-    private lateinit var verifyOtpVM: OtpVerificationVM
-    private lateinit var forgotVm: ForgotPasswordVM
+    private lateinit var verifyOtpViewModel: OtpVerificationViewModel
+    private lateinit var forgotViewModel: ForgotPasswordViewModel
     var fragmentFlow: Serializable? = ""
     private lateinit var countDownTimer: CountDownTimer
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        verifyOtpVM = ViewModelProvider(this).get(OtpVerificationVM::class.java)
-        forgotVm = ViewModelProvider(requireActivity()).get(ForgotPasswordVM::class.java)
+        verifyOtpViewModel = ViewModelProvider(this).get(OtpVerificationViewModel::class.java)
+        forgotViewModel = ViewModelProvider(requireActivity()).get(ForgotPasswordViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -62,37 +62,36 @@ class OtpVerification : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-
-
+        countDownTimer.cancel()
     }
 
     private fun viewsInitialization() {
 
         fragmentFlow = arguments?.getSerializable(CommonKeys.APP_FLOW)
-        verifyOtpVM.email = arguments?.getString(CommonKeys.USER_EMAIL).toString()
+        verifyOtpViewModel.email = arguments?.getString(CommonKeys.USER_EMAIL).toString()
         Log.d(TAG, "fragment flow $fragmentFlow")
-        Log.d(TAG, "email is ${verifyOtpVM.email}")
-        viewBinding.tvEmailWhereSndOtp.text = verifyOtpVM.email
+        Log.d(TAG, "email is ${verifyOtpViewModel.email}")
+        viewBinding.tvEmailWhereSndOtp.text = verifyOtpViewModel.email
     }
 
     private fun clickListeners() {
         viewBinding.btnConfirmCode.setOnClickListener {
 
-            verifyOtpVM.otpCode =
-                verifyOtpVM.etOtpOne + verifyOtpVM.etOtpTwo + verifyOtpVM.etOtpThree + verifyOtpVM.etOtpFour + verifyOtpVM.etOtpFive
-            if (verifyOtpVM.otpCode.length < 5 || verifyOtpVM.otpCode != "11111") {
+            verifyOtpViewModel.otpCode =
+                verifyOtpViewModel.etOtpOne + verifyOtpViewModel.etOtpTwo + verifyOtpViewModel.etOtpThree + verifyOtpViewModel.etOtpFour + verifyOtpViewModel.etOtpFive
+            if (verifyOtpViewModel.otpCode.length < 5 || verifyOtpViewModel.otpCode != "11111") {
                 Utilities.showToast(requireContext(), getString(R.string.enter_valid_otp))
             } else {
                 countDownTimer.cancel()
-                createAndSendVerifyOtpRequest(verifyOtpVM.otpCode.toInt(), verifyOtpVM.email)
+                createAndSendVerifyOtpRequest(verifyOtpViewModel.otpCode.toInt(), verifyOtpViewModel.email)
             }
         }
         viewBinding.tvResendBtn.setOnClickListener {
             val authModelBilder = AuthRequestBuilder()
             authModelBilder.otpType = OtpType.EMAIL.name
-            authModelBilder.email = verifyOtpVM.email
+            authModelBilder.email = verifyOtpViewModel.email
             val otpModel = AuthRequestBuilder.builder(authModelBilder)
-            forgotVm.sendResetOtp(otpModel)
+            forgotViewModel.sendResetOtp(otpModel)
             viewBinding.tvResendBtn.visibility = View.INVISIBLE
             viewBinding.tvOtpResendTimerTag.visibility = View.VISIBLE
             viewBinding.tvOtpResentTimer.visibility = View.VISIBLE
@@ -110,12 +109,12 @@ class OtpVerification : Fragment() {
         authModelBilder.email = email
         authModelBilder.otp = otp
         val otpVerifyModel = AuthRequestBuilder.builder(authModelBilder)
-        verifyOtpVM.verifyOtpRequest(otpVerifyModel)
+        verifyOtpViewModel.verifyOtpRequest(otpVerifyModel)
         observeVerifyOtpRequest()
     }
 
     private fun observeVerifyOtpRequest() {
-        verifyOtpVM.observeOtpVerification.observe(viewLifecycleOwner, Observer {
+        verifyOtpViewModel.observeOtpVerification.observe(viewLifecycleOwner, Observer {
             when (it.status) {
                 Status.LOADING -> {
                     viewBinding.btnConfirmCode.visibility = View.INVISIBLE
@@ -127,8 +126,8 @@ class OtpVerification : Fragment() {
                     viewBinding.pbOtpVerification.visibility = View.INVISIBLE
                     val bundle = Bundle()
                     bundle.putSerializable(CommonKeys.APP_FLOW, fragmentFlow)
-                    bundle.putString(CommonKeys.USER_OTP, verifyOtpVM.otpCode)
-                    bundle.putString(CommonKeys.USER_EMAIL, verifyOtpVM.email)
+                    bundle.putString(CommonKeys.USER_OTP, verifyOtpViewModel.otpCode)
+                    bundle.putString(CommonKeys.USER_EMAIL, verifyOtpViewModel.email)
                     val setPassword = SetPassword()
                     setPassword.arguments = bundle
 
@@ -172,7 +171,7 @@ class OtpVerification : Fragment() {
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 if (sb.length == 0 && viewBinding.otp1Id.text.length == 1) {
                     sb.append(p0)
-                    verifyOtpVM.etOtpOne = p0.toString()
+                    verifyOtpViewModel.etOtpOne = p0.toString()
                     viewBinding.otp1Id.clearFocus()
                     viewBinding.otp2Id.requestFocus()
                     viewBinding.otp2Id.setCursorVisible(true)
@@ -196,7 +195,7 @@ class OtpVerification : Fragment() {
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 if (sb.length == 0 && viewBinding.otp2Id.text.length == 1) {
-                    verifyOtpVM.etOtpTwo = p0.toString()
+                    verifyOtpViewModel.etOtpTwo = p0.toString()
                     sb.append(p0)
                     number + p0
                     viewBinding.otp2Id.clearFocus()
@@ -224,7 +223,7 @@ class OtpVerification : Fragment() {
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 if (sb.length == 0 && viewBinding.otp3Id.text.length == 1) {
-                    verifyOtpVM.etOtpThree = p0.toString()
+                    verifyOtpViewModel.etOtpThree = p0.toString()
                     viewBinding.otp3Id.clearFocus()
                     viewBinding.otp4Id.requestFocus()
                     viewBinding.otp4Id.setCursorVisible(true)
@@ -251,7 +250,7 @@ class OtpVerification : Fragment() {
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 if (sb.length == 0 && viewBinding.otp4Id.text.length == 1) {
-                    verifyOtpVM.etOtpFour = p0.toString()
+                    verifyOtpViewModel.etOtpFour = p0.toString()
                     viewBinding.otp4Id.clearFocus()
                     viewBinding.otp5Id.requestFocus()
                     viewBinding.otp5Id.setCursorVisible(true)
@@ -276,7 +275,7 @@ class OtpVerification : Fragment() {
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 if (sb.length == 0 && viewBinding.otp4Id.text.length == 1) {
-                    verifyOtpVM.etOtpFive = p0.toString()
+                    verifyOtpViewModel.etOtpFive = p0.toString()
 
                 }
             }

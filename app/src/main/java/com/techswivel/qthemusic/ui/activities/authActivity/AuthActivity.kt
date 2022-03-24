@@ -9,6 +9,7 @@ import com.facebook.appevents.AppEventsLogger
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.databinding.ActivityAuthBinding
 import com.techswivel.qthemusic.source.local.preference.PrefUtils
+import com.techswivel.qthemusic.ui.base.BaseActivity
 import com.techswivel.qthemusic.ui.fragments.signInFragment.SignInFragment
 import com.techswivel.qthemusic.utils.CommonKeys
 import com.techswivel.qthemusic.utils.Log
@@ -16,7 +17,7 @@ import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 
 
-class AuthActivity : AppCompatActivity() {
+class AuthActivity : BaseActivity() {
     val TAG = "AuthActivity"
     private lateinit var authBinding: ActivityAuthBinding
     override fun onCreate(savedInstanceState: Bundle?) {

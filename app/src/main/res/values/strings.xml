@@ -14,7 +14,7 @@
     <string name="google_client_redirect_uri_production">abcd</string>
 
     <string name="google_client_id_staging">74605093159-funodu4lv47i9u57h2meqahlcan5elo3.apps.googleusercontent.com</string> <!-- 586601826954-bf3rmcj9dbhii39tpu9negagt85ebfjg.apps.googleusercontent.com -->
-    <string name="google_client_secret_staging">abcd</string> <!-- q25W9B3-pqWebWZ1ZY6Za6op -->
+    <string name="google_client_secret_staging">74605093159-60ljph0roat315fhm95226ceji0oi7nl.apps.googleusercontent.com</string> <!-- q25W9B3-pqWebWZ1ZY6Za6op -->
     <string name="google_client_redirect_uri_staging">abcd</string> <!-- https://udeoglobe-staging.firebaseapp.com/__/auth/handler -->
     <string name="facebook_app_id">348614333948475</string>
     <string name="fb_login_protocol_scheme">fb1234</string>

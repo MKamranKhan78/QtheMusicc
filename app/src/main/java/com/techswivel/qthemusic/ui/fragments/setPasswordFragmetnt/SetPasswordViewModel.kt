@@ -9,14 +9,15 @@ import com.techswivel.qthemusic.models.AuthRequestModel
 import com.techswivel.qthemusic.models.ResponseMain
 import com.techswivel.qthemusic.source.remote.retrofit.ErrorResponse
 import com.techswivel.qthemusic.source.remote.rxjava.CustomError
+import com.techswivel.qthemusic.ui.base.BaseViewModel
 import com.techswivel.qthemusic.utils.Log
 import retrofit2.Response
 
-class SetPasswordVM : ViewModel() {
+class SetPasswordViewModel : BaseViewModel() {
     var userEmail=""
     var userOtp=""
     val TAG = "OtpVerificationVM"
-    val mRemoteDataManager = RemoteDataManager
+   // val mRemoteDataManager = RemoteDataManager
     val observeSetPassword: MutableLiveData<ApiResponseObserver> = MutableLiveData()
     fun requestToSetPassword(authRequestModel: AuthRequestModel) {
         mRemoteDataManager.sentNewPasswordRequest(authRequestModel).doOnSubscribe {

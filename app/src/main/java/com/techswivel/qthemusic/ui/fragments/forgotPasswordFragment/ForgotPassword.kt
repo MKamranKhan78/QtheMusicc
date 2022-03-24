@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.techswivel.qthemusic.R
@@ -17,21 +16,22 @@ import com.techswivel.qthemusic.models.AuthRequestBuilder
 import com.techswivel.qthemusic.models.BindingValidationClass
 import com.techswivel.qthemusic.models.ResponseModel
 import com.techswivel.qthemusic.source.remote.retrofit.ErrorResponse
+import com.techswivel.qthemusic.ui.base.BaseFragment
 import com.techswivel.qthemusic.ui.fragments.otpVerificationFragment.OtpVerification
 import com.techswivel.qthemusic.utils.CommonKeys
 import com.techswivel.qthemusic.utils.DialogUtils
 import java.io.Serializable
 
 
-class ForgotPassword : Fragment() {
+class ForgotPassword : BaseFragment() {
     val TAG = "ForgotPassword"
     var fragmentFlow: Serializable? = ""
-    private lateinit var forgotVm: ForgotPasswordVM
+    private lateinit var forgotViewModel: ForgotPasswordViewModel
     private lateinit var forgotbingding: FragmentForgotPasswordBinding
     private lateinit var twoWayBindingObj:BindingValidationClass
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        forgotVm = ViewModelProvider(requireActivity()).get(ForgotPasswordVM::class.java)
+        forgotViewModel = ViewModelProvider(requireActivity()).get(ForgotPasswordViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -82,12 +82,12 @@ class ForgotPassword : Fragment() {
         authModelBilder.otpType = OtpType.EMAIL.name
         authModelBilder.email = forgotbingding.etForgotEmailId.toString()
         val otpModel = AuthRequestBuilder.builder(authModelBilder)
-        forgotVm.sendResetOtp(otpModel)
+        forgotViewModel.sendResetOtp(otpModel)
         observeOtpData()
     }
 
     private fun observeOtpData() {
-        forgotVm.observeOtpMutableData.observe(viewLifecycleOwner, Observer {
+        forgotViewModel.observeOtpMutableData.observe(viewLifecycleOwner, Observer {
             when (it.status) {
                 Status.LOADING -> {
                     forgotbingding.btnSendCodeForgot.visibility = View.INVISIBLE

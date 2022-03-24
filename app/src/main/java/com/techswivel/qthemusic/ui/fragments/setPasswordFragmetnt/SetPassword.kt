@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -16,6 +15,7 @@ import com.techswivel.qthemusic.models.AuthRequestBuilder
 import com.techswivel.qthemusic.models.BindingValidationClass
 import com.techswivel.qthemusic.models.ResponseModel
 import com.techswivel.qthemusic.source.remote.retrofit.ErrorResponse
+import com.techswivel.qthemusic.ui.base.BaseFragment
 import com.techswivel.qthemusic.ui.fragments.signInFragment.SignInFragment
 import com.techswivel.qthemusic.utils.CommonKeys
 import com.techswivel.qthemusic.utils.DialogUtils
@@ -23,15 +23,15 @@ import com.techswivel.qthemusic.utils.Log
 import java.io.Serializable
 
 
-class SetPassword : Fragment() {
+class SetPassword : BaseFragment() {
     val TAG = "SetPassword"
     lateinit var passwordBinding: FragmentSetPasswordBinding
-    lateinit var setPasswordVm: SetPasswordVM
+    lateinit var setPasswordViewModel: SetPasswordViewModel
     var fragmentFlow: Serializable? = ""
     private lateinit var twoWayBindingObj: BindingValidationClass
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setPasswordVm = ViewModelProvider(this).get(SetPasswordVM::class.java)
+        setPasswordViewModel = ViewModelProvider(this).get(SetPasswordViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -55,8 +55,8 @@ class SetPassword : Fragment() {
 
     private fun widgetInitialization() {
 
-        setPasswordVm.userEmail = arguments?.getString(CommonKeys.USER_EMAIL).toString()
-        setPasswordVm.userOtp = arguments?.getString(CommonKeys.USER_OTP).toString()
+        setPasswordViewModel.userEmail = arguments?.getString(CommonKeys.USER_EMAIL).toString()
+        setPasswordViewModel.userOtp = arguments?.getString(CommonKeys.USER_OTP).toString()
         twoWayBindingObj = BindingValidationClass()
         passwordBinding.obj = twoWayBindingObj
         passwordBinding.etSetPasswordLayout.passwordVisibilityToggleRequested(false)
@@ -84,20 +84,20 @@ class SetPassword : Fragment() {
 
     private fun createAndSendSetPasswordRequest() {
         val authModelBilder = AuthRequestBuilder()
-        authModelBilder.email = setPasswordVm.userEmail
-        authModelBilder.otp = setPasswordVm.userOtp.toInt()
+        authModelBilder.email = setPasswordViewModel.userEmail
+        authModelBilder.otp = setPasswordViewModel.userOtp.toInt()
         authModelBilder.password = passwordBinding.etSetPasswordConfirmId.text.toString()
         val setPasswordModel = AuthRequestBuilder.builder(authModelBilder)
-        setPasswordVm.requestToSetPassword(setPasswordModel)
+        setPasswordViewModel.requestToSetPassword(setPasswordModel)
         Log.d(
             TAG,
-            "email ${setPasswordVm.userEmail},'\' otp ${setPasswordVm.userOtp} '\' password ${passwordBinding.etSetPasswordConfirmId.text.toString()} "
+            "email ${setPasswordViewModel.userEmail},'\' otp ${setPasswordViewModel.userOtp} '\' password ${passwordBinding.etSetPasswordConfirmId.text.toString()} "
         )
         observeSetPasswordObserver()
     }
 
     private fun observeSetPasswordObserver() {
-        setPasswordVm.observeSetPassword.observe(viewLifecycleOwner, Observer {
+        setPasswordViewModel.observeSetPassword.observe(viewLifecycleOwner, Observer {
             when (it.status) {
                 Status.LOADING -> {
                     passwordBinding.btnDone.visibility = View.INVISIBLE

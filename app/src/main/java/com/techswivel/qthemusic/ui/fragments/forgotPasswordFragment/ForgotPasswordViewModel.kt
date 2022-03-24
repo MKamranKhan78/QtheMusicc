@@ -9,12 +9,13 @@ import com.techswivel.qthemusic.models.AuthRequestModel
 import com.techswivel.qthemusic.models.ResponseMain
 import com.techswivel.qthemusic.source.remote.retrofit.ErrorResponse
 import com.techswivel.qthemusic.source.remote.rxjava.CustomError
+import com.techswivel.qthemusic.ui.base.BaseViewModel
 import com.techswivel.qthemusic.utils.Log
 import retrofit2.Response
 
-class ForgotPasswordVM : ViewModel() {
+class ForgotPasswordViewModel : BaseViewModel() {
     val TAG = "ForgotPasswordVM"
-    val mRemoteDataManager = RemoteDataManager
+    //val mRemoteDataManager = RemoteDataManager
     var observeOtpMutableData: MutableLiveData<ApiResponseObserver> = MutableLiveData()
     fun sendResetOtp(authRequestModel: AuthRequestModel) {
 
@@ -41,6 +42,10 @@ class ForgotPasswordVM : ViewModel() {
 
             override fun onRequestComplete() {
 
+            }
+
+            override fun onNext(t: Response<ResponseMain>) {
+                TODO("Not yet implemented")
             }
 
         })
