@@ -1,5 +1,7 @@
 package com.techswivel.qthemusic.dataManager
 
+import com.techswivel.qthemusic.customData.enums.AlbumStatus
+import com.techswivel.qthemusic.customData.enums.SongStatus
 import com.techswivel.qthemusic.models.*
 import retrofit2.Response
 

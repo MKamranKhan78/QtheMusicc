@@ -70,8 +70,6 @@
     <dimen name="_320dp">320dp</dimen>
     <dimen name="_330dp">330dp</dimen>
     <dimen name="_110dp">110dp</dimen>
-    <dimen name="_120dp">120dp</dimen>
-    <dimen name="_90dp">90dp</dimen>
 
     <!-- sp values-->
 
@@ -104,6 +102,4 @@
     <dimen name="recycler_vertical_spacing">10dp</dimen>
     <dimen name="recycler_horizental_spacing_20">20dp</dimen>
     <dimen name="recycler_horizental_spacing_2">2dp</dimen>
-    <dimen name="_60dp">60dp</dimen>
-    <dimen name="_70dp">70dp</dimen>
 </resources>
