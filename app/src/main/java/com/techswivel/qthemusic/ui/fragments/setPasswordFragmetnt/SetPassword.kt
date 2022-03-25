@@ -8,13 +8,14 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.techswivel.qthemusic.R
-import com.techswivel.qthemusic.customData.enums.SignupForgotPassword
+import com.techswivel.qthemusic.customData.enums.NetworkStatus
+import com.techswivel.qthemusic.customData.enums.OtpType
 import com.techswivel.qthemusic.databinding.FragmentSetPasswordBinding
-import com.techswivel.qthemusic.customData.enums.Status
 import com.techswivel.qthemusic.models.AuthRequestBuilder
 import com.techswivel.qthemusic.models.BindingValidationClass
+import com.techswivel.qthemusic.models.ErrorResponce
 import com.techswivel.qthemusic.models.ResponseModel
-import com.techswivel.qthemusic.source.remote.retrofit.ErrorResponse
+import com.techswivel.qthemusic.source.remote.networkViewModel.SetPasswordNetworkViewModel
 import com.techswivel.qthemusic.ui.base.BaseFragment
 import com.techswivel.qthemusic.ui.fragments.signInFragment.SignInFragment
 import com.techswivel.qthemusic.utils.CommonKeys
@@ -27,11 +28,13 @@ class SetPassword : BaseFragment() {
     val TAG = "SetPassword"
     lateinit var passwordBinding: FragmentSetPasswordBinding
     lateinit var setPasswordViewModel: SetPasswordViewModel
+    private lateinit var setPasswordNetworkViewModel: SetPasswordNetworkViewModel
     var fragmentFlow: Serializable? = ""
     private lateinit var twoWayBindingObj: BindingValidationClass
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setPasswordViewModel = ViewModelProvider(this).get(SetPasswordViewModel::class.java)
+
+
     }
 
     override fun onCreateView(
@@ -48,9 +51,10 @@ class SetPassword : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         fragmentFlow = arguments?.getSerializable(CommonKeys.APP_FLOW)
         Log.d(TAG, "flow is $fragmentFlow")
-
+        initViewModel()
         widgetInitialization()
         onClickListener()
+        setPasswordObserver()
     }
 
     private fun widgetInitialization() {
@@ -88,45 +92,41 @@ class SetPassword : BaseFragment() {
         authModelBilder.otp = setPasswordViewModel.userOtp.toInt()
         authModelBilder.password = passwordBinding.etSetPasswordConfirmId.text.toString()
         val setPasswordModel = AuthRequestBuilder.builder(authModelBilder)
-        setPasswordViewModel.requestToSetPassword(setPasswordModel)
-        Log.d(
-            TAG,
-            "email ${setPasswordViewModel.userEmail},'\' otp ${setPasswordViewModel.userOtp} '\' password ${passwordBinding.etSetPasswordConfirmId.text.toString()} "
-        )
-        observeSetPasswordObserver()
+        setPasswordNetworkViewModel.requestToSetPassword(setPasswordModel)
+
     }
 
-    private fun observeSetPasswordObserver() {
-        setPasswordViewModel.observeSetPassword.observe(viewLifecycleOwner, Observer {
+    private fun setPasswordObserver() {
+      setPasswordNetworkViewModel.setPasswordResponse.observe(viewLifecycleOwner, Observer {
             when (it.status) {
-                Status.LOADING -> {
+                NetworkStatus.LOADING -> {
                     passwordBinding.btnDone.visibility = View.INVISIBLE
                     passwordBinding.pbSetPassword.visibility = View.VISIBLE
                 }
-                Status.SUCCESS -> {
+                NetworkStatus.SUCCESS -> {
                     val data = it.t as ResponseModel
                     passwordBinding.btnDone.visibility = View.VISIBLE
                     passwordBinding.pbSetPassword.visibility = View.INVISIBLE
-                    if (fragmentFlow == SignupForgotPassword.ForgotPasswordFlow) {
+                    if (fragmentFlow == OtpType.FORGET_PASSWORD) {
                         val fragmentManager: FragmentManager =
                             requireActivity().getSupportFragmentManager()
                         val transaction =
                             requireActivity().supportFragmentManager.beginTransaction()
-                        transaction.replace(R.id.auth_container, SignInFragment())
+                        transaction.add(R.id.auth_container, SignInFragment())
                         fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
                         transaction.commit()
                     }
                 }
-                Status.EXPIRE -> {
-                    val error = it.error as ErrorResponse
+                NetworkStatus.EXPIRE -> {
+                    val error = it.error as ErrorResponce
                     DialogUtils.errorAlert(
                         requireContext(),
                         getString(R.string.error_occurred),
                         error.message
                     )
                 }
-                Status.ERROR -> {
-                    val error = it.error as ErrorResponse
+                NetworkStatus.ERROR -> {
+                    val error = it.error as ErrorResponce
                     DialogUtils.errorAlert(
                         requireContext(),
                         getString(R.string.error_occurred),
@@ -135,5 +135,10 @@ class SetPassword : BaseFragment() {
                 }
             }
         })
+    }
+
+    private fun initViewModel() {
+        setPasswordViewModel = ViewModelProvider(this).get(SetPasswordViewModel::class.java)
+        setPasswordNetworkViewModel=ViewModelProvider(this).get(SetPasswordNetworkViewModel::class.java)
     }
 }

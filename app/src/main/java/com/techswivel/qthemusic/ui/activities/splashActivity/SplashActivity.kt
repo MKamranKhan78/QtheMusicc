@@ -51,6 +51,6 @@ class SplashActivity : BaseActivity() {
         }
         mHandler = Handler(Looper.getMainLooper())
         mHandler!!.postDelayed(mRunnable, Constants.SPLASHDELAY.toLong())
-//        mViewModel.setServerName(mBinding.textServerName)
+       mViewModel.setServerName(mBinding.textServerName)
     }
 }

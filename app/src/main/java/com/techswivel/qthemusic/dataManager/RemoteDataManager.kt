@@ -84,28 +84,28 @@ object RemoteDataManager : BaseDataManager(), RemoteDataMangerImp {
 
     override fun userLogin(authRequestBuilder: AuthRequestModel): Observable<Response<ResponseMain>> {
         return Observable.create { observer ->
-            observer.onNext(getUserLoginDummyData())
+            observer.onNext(getResponseDummyData())
             observer.onComplete()
         }
     }
 
     override fun sendOtpRequest(authRequestModel: AuthRequestModel): Observable<Response<ResponseMain>> {
         return Observable.create { observer ->
-            observer.onNext(getUserOtpDummyData())
+            observer.onNext(getResponseDummyData())
             observer.onComplete()
         }
     }
 
     override fun sendVerifyOtpRequest(authRequestModel: AuthRequestModel): Observable<Response<ResponseMain>> {
         return Observable.create { observer ->
-            observer.onNext(getVerifyOtpDummyData())
+            observer.onNext(getResponseDummyData())
             observer.onComplete()
         }
     }
 
     override fun sentNewPasswordRequest(authRequestModel: AuthRequestModel): Observable<Response<ResponseMain>> {
         return Observable.create{observer->
-            observer.onNext(newPasswordOtpDummyData())
+            observer.onNext(getResponseDummyData())
             observer.onComplete()
         }
     }

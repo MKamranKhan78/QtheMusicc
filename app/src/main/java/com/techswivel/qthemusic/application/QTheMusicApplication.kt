@@ -6,6 +6,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 import androidx.multidex.MultiDex
+import com.facebook.FacebookSdk
+import com.facebook.appevents.AppEventsLogger
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -19,10 +21,7 @@ class QTheMusicApplication : Application(), LifecycleObserver {
     override fun onCreate() {
         super.onCreate()
         MultiDex.install(this)
-        //    mAuth = FirebaseAuth.getInstance()
-        //  firestoreDB = FirebaseFirestore.getInstance()
-        // FacebookSdk.sdkInitialize(this)
-        //   AppEventsLogger.activateApp(this)
+        AppEventsLogger.activateApp(this)
         when {
             BuildConfig.FLAVOR.equals(Constants.STAGING) -> {
                 mGso =
@@ -81,6 +80,7 @@ class QTheMusicApplication : Application(), LifecycleObserver {
         // app moved to background
         isInBackground = true
     }
+
     //private external fun getGoogleClientIdStaging(): String
     companion object {
 
@@ -90,7 +90,7 @@ class QTheMusicApplication : Application(), LifecycleObserver {
         private lateinit var firestoreDB: FirebaseFirestore
         private var isInBackground = false
 
-//        init {
+        //        init {
 //            System.loadLibrary("native-lib")
 //        }
         fun getContext(): Context {

@@ -6,6 +6,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.techswivel.qthemusic.ui.activities.splashActivity.SplashActivity">
 
+    <TextView
+        android:id="@+id/text_server_name"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
     <ImageView
         android:id="@+id/iv_splash"
         android:layout_width="match_parent"

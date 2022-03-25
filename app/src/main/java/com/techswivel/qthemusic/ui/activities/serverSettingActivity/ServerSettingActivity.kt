@@ -73,8 +73,23 @@ class ServerSettingActivity : BaseActivity() {
     }
 
     private fun setUrlText() {
-//        mBinding.textServerName.text = BuildConfig.FLAVOR.toUpperCase()
-//        mBinding.textServerName.visibility = View.VISIBLE
+        when {
+            BuildConfig.FLAVOR.equals(Constants.STAGING) -> {
+                mBinding.textServerName.text = BuildConfig.FLAVOR.toUpperCase()
+                mBinding.textServerName.visibility = View.INVISIBLE
+
+            }
+            BuildConfig.FLAVOR.equals(Constants.DEVELOPMENT) -> {
+                mBinding.textServerName.text = BuildConfig.FLAVOR.toUpperCase()
+                mBinding.textServerName.visibility = View.VISIBLE
+
+            }
+            BuildConfig.FLAVOR.equals(Constants.ACCEPTANCE) -> {
+                mBinding.textServerName.text = BuildConfig.FLAVOR.toUpperCase()
+                mBinding.textServerName.visibility = View.VISIBLE
+
+            }
+        }
     }
 
     private fun initializeComponents() {

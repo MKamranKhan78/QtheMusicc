@@ -2,7 +2,6 @@ package com.techswivel.qthemusic.ui.fragments.signInFragment
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,50 +19,72 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.techswivel.qthemusic.R
-import com.techswivel.qthemusic.application.QTheMusicApplication
 import com.techswivel.qthemusic.constant.Constants
 import com.techswivel.qthemusic.customData.enums.*
 import com.techswivel.qthemusic.databinding.FragmentSignInBinding
 import com.techswivel.qthemusic.models.*
-import com.techswivel.qthemusic.source.local.preference.DataStoreUtils
 import com.techswivel.qthemusic.source.local.preference.PrefUtils
-import com.techswivel.qthemusic.source.remote.retrofit.ErrorResponse
+import com.techswivel.qthemusic.source.remote.networkViewModel.SignInNetworkViewModel
+import com.techswivel.qthemusic.ui.activities.mainActivity.MainActivity
 import com.techswivel.qthemusic.ui.base.BaseFragment
-import com.techswivel.qthemusic.ui.base.GoogleResponseViewModel
 import com.techswivel.qthemusic.ui.fragments.forgotPasswordFragment.ForgotPassword
 import com.techswivel.qthemusic.utils.*
-import kotlinx.coroutines.runBlocking
 import java.util.*
 
 
 class SignInFragment : BaseFragment() {
-    val TAG = "SignInFragment"
+    private  val TAG = "SignInFragment"
     private lateinit var signInViewModel: SignInViewModel
+    private lateinit var sigInNetworkViewModel: SignInNetworkViewModel
     private lateinit var signInBinding: FragmentSignInBinding
     private lateinit var googleSignInOptions: GoogleSignInOptions
     private lateinit var googleSinInClient: GoogleSignInClient
     private lateinit var callbackManager: CallbackManager
     private lateinit var loginManager: LoginManager
-    private lateinit var googleSignViewModel: GoogleResponseViewModel
     private lateinit var twoWayBindingObj: BindingValidationClass
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        signInViewModel = ViewModelProvider(this).get(SignInViewModel::class.java)
-        googleSignViewModel = ViewModelProvider(this).get(GoogleResponseViewModel::class.java)
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         signInBinding = FragmentSignInBinding.inflate(layoutInflater, container, false)
-        initialization()
-        clickListeners()
+
         return signInBinding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initViewModel()
+        initialization()
+        clickListeners()
+        setViewModelObserver()
+    }
+    override fun onResume() {
+        super.onResume()
+        signInViewModel.showAnimation =
+            PrefUtils.getBoolean(requireContext(), CommonKeys.SIGNIN_BTN_ANIMATION)
+        val animationSignInBtn =
+            AnimationUtils.loadAnimation(requireContext(), R.anim.top_to_bottom_sign_in_btn)
+        if (signInViewModel.showAnimation) {
+            signInBinding.btnSignIn.animation = animationSignInBtn
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        callbackManager.onActivityResult(
+            requestCode,
+            resultCode,
+            data
+        )
+        if (requestCode == Constants.GOOGLE_SIGN_IN_REQUEST_CODE) {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            handleGoogleSignInResult(task)
+        }
+    }
     private fun initialization() {
         twoWayBindingObj = BindingValidationClass()
         signInBinding.obj = twoWayBindingObj
@@ -72,18 +93,70 @@ class SignInFragment : BaseFragment() {
         Glide.with(requireContext()).load(R.drawable.laura_music)
             .transform(BlurImageView(requireContext())).into(signInBinding.ivSigninBg)
         signInBinding.etPasLayout.passwordVisibilityToggleRequested(false)
-        observeingData()
-        observerGoogleResponse()
+
     }
 
-    override fun onResume() {
-        super.onResume()
-      signInViewModel.showAnimation=PrefUtils.getBoolean(requireContext(),CommonKeys.SIGNIN_BTN_ANIMATION)
-        val animationSignInBtn =
-            AnimationUtils.loadAnimation(requireContext(), R.anim.top_to_bottom_sign_in_btn)
-        if (signInViewModel.showAnimation){
-            signInBinding.btnSignIn.animation=animationSignInBtn
-        }
+    private fun setViewModelObserver() {
+        sigInNetworkViewModel.signinUserResponse.observe(
+            viewLifecycleOwner,
+            Observer { signInResponse ->
+
+                when (signInResponse.status) {
+
+                    NetworkStatus.LOADING -> {
+                        signInBinding.btnSignIn.visibility = View.INVISIBLE
+                        signInBinding.pb.visibility = View.VISIBLE
+                    }
+                    NetworkStatus.SUCCESS -> {
+                        Log.v(TAG, "success")
+                        val data = signInResponse.t as ResponseModel
+                        Log.d(TAG, "data${data.data?.authModel}")
+                        signInBinding.btnSignIn.visibility = View.VISIBLE
+                        signInBinding.pb.visibility = View.INVISIBLE
+                        activity.let {
+                            val intent = Intent(it, MainActivity::class.java)
+                            it?.startActivity(intent)
+                            it?.finish()
+                        }
+                    }
+                    NetworkStatus.ERROR -> {
+                        val error = signInResponse.error as ErrorResponce
+                        DialogUtils.errorAlert(
+                            requireContext(),
+                            getString(R.string.error_occurred),
+                            error.message
+                        )
+                    }
+                    NetworkStatus.EXPIRE -> {
+                        Log.v(TAG, "EXPIRE")
+                    }
+                    NetworkStatus.COMPLETED -> {
+                        Log.v("Network_status", "completed")
+                    }
+                }
+            })
+
+
+        sigInNetworkViewModel.signinUserResponse.observe(viewLifecycleOwner, Observer {
+            when (it.status) {
+                NetworkStatus.LOADING -> {
+                }
+                NetworkStatus.SUCCESS -> {
+                    val data = it.t as GoogleResponseModel
+                }
+                NetworkStatus.EXPIRE -> {
+
+                }
+                NetworkStatus.ERROR -> {
+                    val error = it.error as ErrorResponce
+                    DialogUtils.errorAlert(
+                        requireContext(),
+                        getString(R.string.error_occurred),
+                        error.message
+                    )
+                }
+            }
+        })
     }
 
     private fun clickListeners() {
@@ -107,12 +180,11 @@ class SignInFragment : BaseFragment() {
         }
 
         signInBinding.tvForgotPassword.setOnClickListener {
-            PrefUtils.setBoolean(requireContext(),CommonKeys.SIGNIN_BTN_ANIMATION,true)
+            PrefUtils.setBoolean(requireContext(), CommonKeys.SIGNIN_BTN_ANIMATION, true)
             val bundle = Bundle()
-            bundle.putSerializable(CommonKeys.APP_FLOW, SignupForgotPassword.ForgotPasswordFlow)
+            bundle.putSerializable(CommonKeys.APP_FLOW, OtpType.FORGET_PASSWORD)
             val fortgotPasword = ForgotPassword()
             fortgotPasword.arguments = bundle
-
             val transaction = requireActivity().supportFragmentManager.beginTransaction()
             transaction.replace(R.id.auth_container, fortgotPasword)
                 .addToBackStack(TAG)
@@ -127,91 +199,6 @@ class SignInFragment : BaseFragment() {
             signInFacebook()
         }
 
-    }
-
-    private fun observeingData() {
-        signInViewModel.observeSignInMutableData.observe(viewLifecycleOwner, Observer { signInResponse->
-
-            when(signInResponse.status){
-
-                NetworkStatus.LOADING -> {
-                    Log.v(TAG, "loading")
-                }
-                NetworkStatus.SUCCESS -> {
-                    Log.v(TAG, "success")
-                }
-                NetworkStatus.ERROR -> {
-                    Log.v(TAG, "error")
-                }
-                NetworkStatus.EXPIRE -> {
-                    Log.v(TAG, "EXPIRE")
-                }
-                NetworkStatus.COMPLETED -> {
-                    Log.v("Network_status", "completed")
-                }
-            }
-        })
-
-//        signInVm.observeSignInMutableData.observe(viewLifecycleOwner, Observer {
-//            when (it.status) {
-//                Status.LOADING -> {
-//                    Log.d(TAG,"Loading")
-//                    signInBinding.btnSignIn.visibility = View.INVISIBLE
-//                    signInBinding.pb.visibility = View.VISIBLE
-//                }
-//                Status.SUCCESS -> {
-//                    val data = it.t as ResponseModel
-//                    Log.d(TAG,"Success")
-//                    signInBinding.btnSignIn.visibility = View.VISIBLE
-//                    signInBinding.pb.visibility = View.INVISIBLE
-//                    activity.let {
-//                        val intent = Intent(it, MainActivity::class.java)
-//                        it?.startActivity(intent)
-//                        it?.finish()
-//                    }
-//                }
-//                Status.EXPIRE -> {
-//                    val error = it.error as ErrorResponse
-//                    DialogUtils.errorAlert(
-//                        requireContext(),
-//                        getString(R.string.error_occurred),
-//                        error.message
-//                    )
-//                }
-//                Status.ERROR -> {
-//                    val error = it.error as ErrorResponse
-//                    DialogUtils.errorAlert(
-//                        requireContext(),
-//                        getString(R.string.error_occurred),
-//                        error.message
-//                    )
-//                }
-//
-//            }
-//        })
-    }
-
-    private fun observerGoogleResponse() {
-        googleSignViewModel.observeGoogleMutableData.observe(viewLifecycleOwner, Observer {
-            when (it.status) {
-                Status.LOADING -> {
-                }
-                Status.SUCCESS -> {
-                    val data = it.t as GoogleResponseModel
-                }
-                Status.EXPIRE -> {
-
-                }
-                Status.ERROR -> {
-                    val error = it.error as ErrorResponse
-                    DialogUtils.errorAlert(
-                        requireContext(),
-                        getString(R.string.error_occurred),
-                        error.message
-                    )
-                }
-            }
-        })
     }
 
     private fun createUserAndCallApi(
@@ -233,28 +220,7 @@ class SignInFragment : BaseFragment() {
         authModelBilder.fcmToken = fcmToken
         authModelBilder.deviceIdentifier = deviceIdentifier
         val authModel = AuthRequestBuilder.builder(authModelBilder)
-        signInViewModel.userLogin(authModel)
-    }
-
-    private fun isUserLoginDataAuthenticated(): Boolean {
-        if (signInBinding.etLoginEmail.text.isNullOrEmpty()) {
-            signInBinding.etLoginEmail.error = resources.getString(R.string.required)
-            return false
-        } else if (!Patterns.EMAIL_ADDRESS.matcher(signInBinding.etLoginEmail.text.toString())
-                .matches()
-        ) {
-            signInBinding.etLoginEmail.error = getString(R.string.error_invalid_email)
-            return false
-        } else {
-            signInViewModel.emailFromUser = signInBinding.etLoginEmail.text.toString()
-        }
-        if (signInBinding.etLoginPassword.text.isNullOrEmpty()) {
-            signInBinding.etLoginPassword.error = resources.getString(R.string.required)
-            return false
-        } else {
-            signInViewModel.passwordFromUser = signInBinding.etLoginPassword.text.toString()
-        }
-        return true
+        sigInNetworkViewModel.userLogin(authModel)
     }
 
     private fun signInFacebook() {
@@ -301,17 +267,6 @@ class SignInFragment : BaseFragment() {
         startActivityForResult(signInIntent, Constants.GOOGLE_SIGN_IN_REQUEST_CODE)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        callbackManager.onActivityResult(
-            requestCode,
-            resultCode,
-            data
-        )
-        if (requestCode == Constants.GOOGLE_SIGN_IN_REQUEST_CODE) {
-            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-            handleGoogleSignInResult(task)
-        }
-    }
 
     private fun handleGoogleSignInResult(completedTask: Task<GoogleSignInAccount>) {
         try {
@@ -334,5 +289,11 @@ class SignInFragment : BaseFragment() {
         } catch (e: ApiException) {
             Log.w(TAG, "signInResult:failed code=" + e.statusCode)
         }
+    }
+
+    private fun initViewModel() {
+        sigInNetworkViewModel = ViewModelProvider(this).get(SignInNetworkViewModel::class.java)
+        signInViewModel = ViewModelProvider(this).get(SignInViewModel::class.java)
+
     }
 }

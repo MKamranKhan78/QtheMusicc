@@ -17,19 +17,6 @@ class DummyDataManager {
                 )
             )
         }
-
-
-
-
-        fun getGoogleResponse():Response<GoogleResponseModel>{
-            return Response.success(
-                GoogleResponseModel(
-
-                )
-            )
-        }
-
-
         fun newPasswordOtpDummyData(): Response<ResponseMain> {
             return Response.success(
                 ResponseMain(
@@ -76,6 +63,7 @@ class DummyDataManager {
                 )
             )
         }
+
 
         private fun getDataList(): MyDataClass {
             val address=Address("Mughalpura, Lahore","Lahore","Punjab","Pakistan",5552)

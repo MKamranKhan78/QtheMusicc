@@ -11,14 +11,16 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.techswivel.qthemusic.R
+import com.techswivel.qthemusic.customData.enums.NetworkStatus
 import com.techswivel.qthemusic.customData.enums.OtpType
-import com.techswivel.qthemusic.customData.enums.Status
 import com.techswivel.qthemusic.databinding.FragmentOtpVerificationBinding
 
 import com.techswivel.qthemusic.models.AuthRequestBuilder
+import com.techswivel.qthemusic.models.ErrorResponce
 import com.techswivel.qthemusic.models.ResponseModel
 import com.techswivel.qthemusic.source.local.preference.PrefUtils
-import com.techswivel.qthemusic.source.remote.retrofit.ErrorResponse
+import com.techswivel.qthemusic.source.remote.networkViewModel.ForgotPasswordNetworkViewModel
+import com.techswivel.qthemusic.source.remote.networkViewModel.OtpVerificationNetworkViewModel
 import com.techswivel.qthemusic.ui.base.BaseFragment
 import com.techswivel.qthemusic.ui.fragments.forgotPasswordFragment.ForgotPasswordViewModel
 import com.techswivel.qthemusic.ui.fragments.setPasswordFragmetnt.SetPassword
@@ -33,13 +35,13 @@ class OtpVerification : BaseFragment() {
 
     private lateinit var viewBinding: FragmentOtpVerificationBinding
     private lateinit var verifyOtpViewModel: OtpVerificationViewModel
-    private lateinit var forgotViewModel: ForgotPasswordViewModel
+    private lateinit var otpVerificationNetworkViewModel: OtpVerificationNetworkViewModel
+    private lateinit var forgotPasswordNetworkViewModel: ForgotPasswordNetworkViewModel
     var fragmentFlow: Serializable? = ""
     private lateinit var countDownTimer: CountDownTimer
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        verifyOtpViewModel = ViewModelProvider(this).get(OtpVerificationViewModel::class.java)
-        forgotViewModel = ViewModelProvider(requireActivity()).get(ForgotPasswordViewModel::class.java)
+
     }
 
     override fun onCreateView(
@@ -53,10 +55,12 @@ class OtpVerification : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewsInitialization()
+        initViewModels()
+        initialization()
         clickListeners()
         getUserOtp()
         resendOtpTimer()
+        setVerifyOtpResponseObserver()
         countDownTimer.start()
     }
 
@@ -65,15 +69,13 @@ class OtpVerification : BaseFragment() {
         countDownTimer.cancel()
     }
 
-    private fun viewsInitialization() {
-
+    private fun initialization() {
         fragmentFlow = arguments?.getSerializable(CommonKeys.APP_FLOW)
         verifyOtpViewModel.email = arguments?.getString(CommonKeys.USER_EMAIL).toString()
         Log.d(TAG, "fragment flow $fragmentFlow")
         Log.d(TAG, "email is ${verifyOtpViewModel.email}")
         viewBinding.tvEmailWhereSndOtp.text = verifyOtpViewModel.email
     }
-
     private fun clickListeners() {
         viewBinding.btnConfirmCode.setOnClickListener {
 
@@ -83,7 +85,10 @@ class OtpVerification : BaseFragment() {
                 Utilities.showToast(requireContext(), getString(R.string.enter_valid_otp))
             } else {
                 countDownTimer.cancel()
-                createAndSendVerifyOtpRequest(verifyOtpViewModel.otpCode.toInt(), verifyOtpViewModel.email)
+                createAndSendVerifyOtpRequest(
+                    verifyOtpViewModel.otpCode.toInt(),
+                    verifyOtpViewModel.email
+                )
             }
         }
         viewBinding.tvResendBtn.setOnClickListener {
@@ -91,7 +96,7 @@ class OtpVerification : BaseFragment() {
             authModelBilder.otpType = OtpType.EMAIL.name
             authModelBilder.email = verifyOtpViewModel.email
             val otpModel = AuthRequestBuilder.builder(authModelBilder)
-            forgotViewModel.sendResetOtp(otpModel)
+            forgotPasswordNetworkViewModel.sendOtpRequest(otpModel)
             viewBinding.tvResendBtn.visibility = View.INVISIBLE
             viewBinding.tvOtpResendTimerTag.visibility = View.VISIBLE
             viewBinding.tvOtpResentTimer.visibility = View.VISIBLE
@@ -109,18 +114,18 @@ class OtpVerification : BaseFragment() {
         authModelBilder.email = email
         authModelBilder.otp = otp
         val otpVerifyModel = AuthRequestBuilder.builder(authModelBilder)
-        verifyOtpViewModel.verifyOtpRequest(otpVerifyModel)
-        observeVerifyOtpRequest()
+       otpVerificationNetworkViewModel.verifyOtpResponse(otpVerifyModel)
+
     }
 
-    private fun observeVerifyOtpRequest() {
-        verifyOtpViewModel.observeOtpVerification.observe(viewLifecycleOwner, Observer {
+    private fun setVerifyOtpResponseObserver() {
+      otpVerificationNetworkViewModel.otpVerificationResponse.observe(viewLifecycleOwner, Observer {
             when (it.status) {
-                Status.LOADING -> {
+                NetworkStatus.LOADING -> {
                     viewBinding.btnConfirmCode.visibility = View.INVISIBLE
                     viewBinding.pbOtpVerification.visibility = View.VISIBLE
                 }
-                Status.SUCCESS -> {
+                NetworkStatus.SUCCESS -> {
                     val data = it.t as ResponseModel
                     viewBinding.btnConfirmCode.visibility = View.VISIBLE
                     viewBinding.pbOtpVerification.visibility = View.INVISIBLE
@@ -137,16 +142,16 @@ class OtpVerification : BaseFragment() {
                         .addToBackStack(TAG)
                     transaction.commit()
                 }
-                Status.EXPIRE -> {
-                    val error = it.error as ErrorResponse
+                NetworkStatus.EXPIRE -> {
+                    val error = it.error as ErrorResponce
                     DialogUtils.errorAlert(
                         requireContext(),
                         getString(R.string.error_occurred),
                         error.message
                     )
                 }
-                Status.ERROR -> {
-                    val error = it.error as ErrorResponse
+                NetworkStatus.ERROR -> {
+                    val error = it.error as ErrorResponce
                     DialogUtils.errorAlert(
                         requireContext(),
                         getString(R.string.error_occurred),
@@ -303,6 +308,12 @@ class OtpVerification : BaseFragment() {
                 viewBinding.tvResendBtn.visibility = View.VISIBLE
             }
         }
+    }
 
+    private fun initViewModels() {
+        forgotPasswordNetworkViewModel =
+            ViewModelProvider(requireActivity()).get(ForgotPasswordNetworkViewModel::class.java)
+        verifyOtpViewModel = ViewModelProvider(this).get(OtpVerificationViewModel::class.java)
+        otpVerificationNetworkViewModel = ViewModelProvider(requireActivity()).get(OtpVerificationNetworkViewModel::class.java)
     }
 }

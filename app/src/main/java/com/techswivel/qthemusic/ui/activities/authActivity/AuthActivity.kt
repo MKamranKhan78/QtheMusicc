@@ -4,6 +4,7 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Base64
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import com.facebook.FacebookSdk
 import com.facebook.appevents.AppEventsLogger
 import com.techswivel.qthemusic.R
@@ -24,16 +25,12 @@ class AuthActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         authBinding = ActivityAuthBinding.inflate(layoutInflater)
 
-        supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.auth_container, SignInFragment())
-            .commit()
 
-
-        FacebookSdk.sdkInitialize(this);
-        AppEventsLogger.activateApp(this.application);
-
-
+        replaceFragment(R.id.auth_container,SignInFragment())
+//        supportFragmentManager
+//            .beginTransaction()
+//            .replace(R.id.auth_container, SignInFragment())
+//            .commit()
         setContentView(authBinding.root)
 
     }
@@ -42,5 +39,4 @@ class AuthActivity : BaseActivity() {
         super.onDestroy()
         PrefUtils.removeValue(this,CommonKeys.SIGNIN_BTN_ANIMATION)
     }
-
 }
