@@ -30,6 +30,7 @@ class CommonKeys {
         const val KEY_USER_ADRESS = "_key_user_address"
         const val KEY_USER_PLAN_PRIZE = "_key_user_plan_prize"
         const val KEY_USER_PLAN_DURATION = "_key_user_plan_duration"
+        const val KEY_TERM_AND_CONDITION_PRIVACY = "_key_term_and_condition_privacy_policy"
 
 
     }

@@ -16,7 +16,9 @@ import com.techswivel.qthemusic.source.local.preference.DataStoreUtils
 import com.techswivel.qthemusic.source.remote.networkViewModel.AuthNetworkViewModel
 import com.techswivel.qthemusic.ui.base.BaseFragment
 import com.techswivel.qthemusic.ui.fragments.profileUpdatingFragment.ProfileUpdatingFragment
+import com.techswivel.qthemusic.ui.fragments.termAndConditionFragment.TermAndConditionFragment
 import com.techswivel.qthemusic.utils.ActivityUtils
+import com.techswivel.qthemusic.utils.CommonKeys
 import com.techswivel.qthemusic.utils.DialogUtils
 import com.techswivel.qthemusic.utils.Log
 import kotlinx.coroutines.runBlocking
@@ -162,18 +164,24 @@ class ProfileSettingFragment : BaseFragment() {
         }
 
         mBinding.termAndConditionText.setOnClickListener {
+            val bundle = Bundle()
+            bundle.putBoolean(CommonKeys.KEY_TERM_AND_CONDITION_PRIVACY, true)
             ActivityUtils.launchFragment(
                 requireContext(),
-                UnderDevelopmentMessageFragment::class.java.name
+                TermAndConditionFragment::class.java.name,
+                bundle
             )
         }
 
 
 
         mBinding.privacyPolicyText.setOnClickListener {
+            val bundle = Bundle()
+            bundle.putBoolean(CommonKeys.KEY_TERM_AND_CONDITION_PRIVACY, false)
             ActivityUtils.launchFragment(
                 requireContext(),
-                UnderDevelopmentMessageFragment::class.java.name
+                TermAndConditionFragment::class.java.name,
+                bundle
             )
         }
 

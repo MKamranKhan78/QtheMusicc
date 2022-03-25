@@ -22,421 +22,431 @@
         android:layout_height="match_parent"
         android:background="@drawable/black_gradiant_background">
 
-
-        <include
-            android:id="@+id/fragmentToolbar"
-            layout="@layout/app_bar_blue_center_title"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="match_parent">
 
-        <FrameLayout
-            android:layout_width="@dimen/_110dp"
-            android:layout_height="@dimen/_110dp"
-            android:id="@+id/imageviewProfileUpdatingScreen"
-            android:layout_below="@id/fragmentToolbar"
-            android:layout_centerHorizontal="true"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/_10dp">
+            <include
+                android:id="@+id/fragmentToolbar"
+                layout="@layout/app_bar_blue_center_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/profilePic"
-                setImageViewImage="@{viewModel.authModel.avatar}"
+            <FrameLayout
                 android:layout_width="@dimen/_110dp"
                 android:layout_height="@dimen/_110dp"
-                android:layout_gravity="center|center_horizontal"
-                app:shapeAppearanceOverlay="@style/circleImageView" />
+                android:id="@+id/imageviewProfileUpdatingScreen"
+                android:layout_below="@id/fragmentToolbar"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/_10dp">
 
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/addPhotoImageviewId"
-                android:layout_width="@dimen/_22dp"
-                android:layout_height="@dimen/_22dp"
-                android:layout_gravity="bottom|right"
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/profilePic"
+                    setImageViewImage="@{viewModel.authModel.avatar}"
+                    android:layout_width="@dimen/_110dp"
+                    android:layout_height="@dimen/_110dp"
+                    android:layout_gravity="center|center_horizontal"
+                    app:shapeAppearanceOverlay="@style/circleImageView" />
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/addPhotoImageviewId"
+                    android:layout_width="@dimen/_22dp"
+                    android:layout_height="@dimen/_22dp"
+                    android:layout_gravity="bottom|right"
+                    android:layout_marginTop="@dimen/_30dp"
+                    android:layout_marginEnd="@dimen/_5dp"
+                    android:layout_marginBottom="@dimen/_5dp"
+                    android:src="@drawable/ic_add_story" />
+            </FrameLayout>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardEmailId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/imageviewProfileUpdatingScreen"
+                android:layout_marginStart="@dimen/_20dp"
                 android:layout_marginTop="@dimen/_30dp"
-                android:layout_marginEnd="@dimen/_5dp"
-                android:layout_marginBottom="@dimen/_5dp"
-                android:src="@drawable/ic_add_story" />
-        </FrameLayout>
+                android:layout_marginEnd="@dimen/_20dp"
+                app:cardBackgroundColor="#303033"
+                app:cardCornerRadius="@dimen/_10dp"
+                app:cardElevation="@dimen/_10dp"
+                app:cardMaxElevation="@dimen/_12dp"
+                app:cardPreventCornerOverlap="true">
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardEmailId"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/imageviewProfileUpdatingScreen"
-            android:layout_marginStart="@dimen/_20dp"
-            android:layout_marginTop="@dimen/_30dp"
-            android:layout_marginEnd="@dimen/_20dp"
-            app:cardBackgroundColor="#303033"
-            app:cardCornerRadius="@dimen/_10dp"
-            app:cardElevation="@dimen/_10dp"
-            app:cardMaxElevation="@dimen/_12dp"
-            app:cardPreventCornerOverlap="true">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#303033"
+                    android:padding="@dimen/_14dp">
 
-            <RelativeLayout
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_10dp"
+                        android:orientation="vertical"
+                        tools:ignore="RelativeOverlap">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/manrope_regular"
+                            android:text="@string/email"
+                            android:textColor="@color/color_white"
+                            android:textSize="@dimen/_14sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/manrope_regular"
+                            android:text="@{viewModel.authModel.email}"
+                            android:textColor="@color/view_profile_text_color"
+                            android:textSize="@dimen/_14sp" />
+
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerInParent="true"
+                        android:layout_marginEnd="@dimen/_10dp"
+                        android:src="@drawable/ic_green_verified_circular_tick"
+                        tools:ignore="ContentDescription" />
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
+
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardPhoneNumberID"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#303033"
-                android:padding="@dimen/_14dp">
+                android:layout_height="wrap_content"
+                android:layout_below="@id/cardEmailId"
+                android:layout_marginStart="@dimen/_20dp"
+                android:layout_marginTop="@dimen/_10dp"
+                android:layout_marginEnd="@dimen/_20dp"
+                app:cardBackgroundColor="#303033"
+                app:cardCornerRadius="@dimen/_10dp"
+                app:cardElevation="@dimen/_10dp"
+                app:cardMaxElevation="@dimen/_12dp"
+                app:cardPreventCornerOverlap="true">
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_10dp"
-                    android:orientation="vertical"
-                    tools:ignore="RelativeOverlap">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#303033"
+                    android:padding="@dimen/_14dp">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_10dp"
+                        android:orientation="vertical"
+                        tools:ignore="RelativeOverlap">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/manrope_regular"
+                            android:text="@string/phone"
+                            android:textColor="@color/color_white"
+                            android:textSize="@dimen/_14sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/manrope_regular"
+                            android:text="@{viewModel.authModel.phoneNumber == null ? @string/not_added : viewModel.authModel.phoneNumber}"
+                            android:textColor="@color/view_profile_text_color"
+                            android:textSize="@dimen/_14sp" />
+
+                    </LinearLayout>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerInParent="true"
+                        android:id="@+id/addPhoneNumberTextviewID"
+                        android:layout_marginStart="@dimen/_16dp"
+                        android:layout_marginEnd="@dimen/_10dp"
                         android:fontFamily="@font/manrope_regular"
-                        android:text="@string/email"
-                        android:textColor="@color/color_white"
-                        android:textSize="@dimen/_14sp" />
+                        android:text="@{viewModel.authModel.phoneNumber == null ? @string/add : null}"
+                        android:textColor="#BA011A"
+                        android:textSize="@dimen/_14sp"
+                        android:visibility="@{viewModel.authModel.phoneNumber == null ? View.VISIBLE : View.GONE}" />
 
-                    <TextView
+                    <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/manrope_regular"
-                        android:text="@{viewModel.authModel.email}"
-                        android:textColor="@color/view_profile_text_color"
-                        android:textSize="@dimen/_14sp" />
-
-                </LinearLayout>
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerInParent="true"
-                    android:layout_marginEnd="@dimen/_10dp"
-                    android:src="@drawable/ic_green_verified_circular_tick"
-                    tools:ignore="ContentDescription" />
-            </RelativeLayout>
-        </androidx.cardview.widget.CardView>
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerInParent="true"
+                        android:layout_marginEnd="@dimen/_10dp"
+                        android:src="@drawable/ic_green_verified_circular_tick"
+                        android:visibility="@{viewModel.authModel.phoneNumber != null ? View.VISIBLE : View.GONE}"
+                        tools:ignore="ContentDescription" />
 
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardPhoneNumberID"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/cardEmailId"
-            android:layout_marginStart="@dimen/_20dp"
-            android:layout_marginTop="@dimen/_10dp"
-            android:layout_marginEnd="@dimen/_20dp"
-            app:cardBackgroundColor="#303033"
-            app:cardCornerRadius="@dimen/_10dp"
-            app:cardElevation="@dimen/_10dp"
-            app:cardMaxElevation="@dimen/_12dp"
-            app:cardPreventCornerOverlap="true">
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
 
-            <RelativeLayout
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardNameID"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#303033"
-                android:padding="@dimen/_14dp">
+                android:layout_height="wrap_content"
+                android:layout_below="@id/cardPhoneNumberID"
+                android:layout_marginStart="@dimen/_20dp"
+                android:layout_marginTop="@dimen/_10dp"
+                android:layout_marginEnd="@dimen/_20dp"
+                app:cardBackgroundColor="#303033"
+                app:cardCornerRadius="@dimen/_10dp"
+                app:cardElevation="@dimen/_10dp"
+                app:cardMaxElevation="@dimen/_12dp"
+                app:cardPreventCornerOverlap="true">
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_10dp"
-                    android:orientation="vertical"
-                    tools:ignore="RelativeOverlap">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#303033"
+                    android:padding="@dimen/_14dp">
 
-                    <TextView
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/manrope_regular"
-                        android:text="@string/phone"
-                        android:textColor="@color/color_white"
-                        android:textSize="@dimen/_14sp" />
+                        android:layout_marginStart="@dimen/_10dp"
+                        android:orientation="vertical"
+                        tools:ignore="RelativeOverlap">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/manrope_regular"
+                            android:text="@string/name"
+                            android:textColor="@color/color_white"
+                            android:textSize="@dimen/_14sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/manrope_regular"
+                            android:text="@{viewModel.authModel.name == null ? @string/not_added : viewModel.authModel.name}"
+                            android:textColor="@color/view_profile_text_color"
+                            android:textSize="@dimen/_14sp" />
+
+                    </LinearLayout>
 
                     <TextView
+                        android:id="@+id/textviewChangeNameID"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerInParent="true"
+                        android:layout_marginStart="@dimen/_16dp"
+                        android:layout_marginEnd="@dimen/_10dp"
                         android:fontFamily="@font/manrope_regular"
-                        android:text="@{viewModel.authModel.phoneNumber == null ? @string/not_added : viewModel.authModel.phoneNumber}"
-                        android:textColor="@color/view_profile_text_color"
+                        android:text="@{viewModel.authModel.name == null ? @string/add : @string/change}"
+                        android:textColor="#BA011A"
                         android:textSize="@dimen/_14sp" />
 
-                </LinearLayout>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerInParent="true"
-                    android:id="@+id/addPhoneNumberTextviewID"
-                    android:layout_marginStart="@dimen/_16dp"
-                    android:layout_marginEnd="@dimen/_10dp"
-                    android:fontFamily="@font/manrope_regular"
-                    android:text="@{viewModel.authModel.phoneNumber == null ? @string/add : null}"
-                    android:textColor="#BA011A"
-                    android:textSize="@dimen/_14sp"
-                    android:visibility="@{viewModel.authModel.phoneNumber == null ? View.VISIBLE : View.GONE}" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerInParent="true"
-                    android:layout_marginEnd="@dimen/_10dp"
-                    android:src="@drawable/ic_green_verified_circular_tick"
-                    android:visibility="@{viewModel.authModel.phoneNumber != null ? View.VISIBLE : View.GONE}"
-                    tools:ignore="ContentDescription" />
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
 
 
-            </RelativeLayout>
-        </androidx.cardview.widget.CardView>
-
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardNameID"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/cardPhoneNumberID"
-            android:layout_marginStart="@dimen/_20dp"
-            android:layout_marginTop="@dimen/_10dp"
-            android:layout_marginEnd="@dimen/_20dp"
-            app:cardBackgroundColor="#303033"
-            app:cardCornerRadius="@dimen/_10dp"
-            app:cardElevation="@dimen/_10dp"
-            app:cardMaxElevation="@dimen/_12dp"
-            app:cardPreventCornerOverlap="true">
-
-            <RelativeLayout
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardDateOfBirthID"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#303033"
-                android:padding="@dimen/_14dp">
+                android:layout_height="wrap_content"
+                android:layout_below="@id/cardNameID"
+                android:layout_marginStart="@dimen/_20dp"
+                android:layout_marginTop="@dimen/_10dp"
+                android:layout_marginEnd="@dimen/_20dp"
+                app:cardBackgroundColor="#303033"
+                app:cardCornerRadius="@dimen/_10dp"
+                app:cardElevation="@dimen/_10dp"
+                app:cardMaxElevation="@dimen/_12dp"
+                app:cardPreventCornerOverlap="true">
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_10dp"
-                    android:orientation="vertical"
-                    tools:ignore="RelativeOverlap">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#303033"
+                    android:padding="@dimen/_14dp">
 
-                    <TextView
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/manrope_regular"
-                        android:text="@string/name"
-                        android:textColor="@color/color_white"
-                        android:textSize="@dimen/_14sp" />
+                        android:layout_marginStart="@dimen/_10dp"
+                        android:orientation="vertical"
+                        tools:ignore="RelativeOverlap">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/manrope_regular"
+                            android:text="@string/date_of_birth"
+                            android:textColor="@color/color_white"
+                            android:textSize="@dimen/_14sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/tvDateOfBirth"
+                            android:fontFamily="@font/manrope_regular"
+                            android:text="@{viewModel.authModel.dOB.toString() == null ? @string/not_added : viewModel.authModel.dOB.toString()}"
+                            android:textColor="@color/view_profile_text_color"
+                            android:textSize="@dimen/_14sp" />
+
+
+                    </LinearLayout>
 
                     <TextView
+                        android:id="@+id/textviewChangeDobID"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerInParent="true"
+                        android:layout_marginStart="@dimen/_16dp"
+                        android:layout_marginEnd="@dimen/_10dp"
                         android:fontFamily="@font/manrope_regular"
-                        android:text="@{viewModel.authModel.name == null ? @string/not_added : viewModel.authModel.name}"
-                        android:textColor="@color/view_profile_text_color"
+                        android:text="@{viewModel.authModel.dOB.toString() == null ? @string/add : @string/change}"
+                        android:textColor="#BA011A"
                         android:textSize="@dimen/_14sp" />
 
-                </LinearLayout>
 
-                <TextView
-                    android:id="@+id/textviewChangeNameID"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerInParent="true"
-                    android:layout_marginStart="@dimen/_16dp"
-                    android:layout_marginEnd="@dimen/_10dp"
-                    android:fontFamily="@font/manrope_regular"
-                    android:text="@{viewModel.authModel.name == null ? @string/add : @string/change}"
-                    android:textColor="#BA011A"
-                    android:textSize="@dimen/_14sp" />
-
-            </RelativeLayout>
-        </androidx.cardview.widget.CardView>
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
 
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardDateOfBirthID"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/cardNameID"
-            android:layout_marginStart="@dimen/_20dp"
-            android:layout_marginTop="@dimen/_10dp"
-            android:layout_marginEnd="@dimen/_20dp"
-            app:cardBackgroundColor="#303033"
-            app:cardCornerRadius="@dimen/_10dp"
-            app:cardElevation="@dimen/_10dp"
-            app:cardMaxElevation="@dimen/_12dp"
-            app:cardPreventCornerOverlap="true">
-
-            <RelativeLayout
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardGenderID"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#303033"
-                android:padding="@dimen/_14dp">
+                android:layout_height="wrap_content"
+                android:layout_below="@id/cardDateOfBirthID"
+                android:layout_marginStart="@dimen/_20dp"
+                android:layout_marginTop="@dimen/_10dp"
+                android:layout_marginEnd="@dimen/_20dp"
+                app:cardBackgroundColor="#303033"
+                app:cardCornerRadius="@dimen/_10dp"
+                app:cardElevation="@dimen/_10dp"
+                app:cardMaxElevation="@dimen/_12dp"
+                app:cardPreventCornerOverlap="true">
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_10dp"
-                    android:orientation="vertical"
-                    tools:ignore="RelativeOverlap">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#303033"
+                    android:padding="@dimen/_14dp">
 
-                    <TextView
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/manrope_regular"
-                        android:text="@string/date_of_birth"
-                        android:textColor="@color/color_white"
-                        android:textSize="@dimen/_14sp" />
+                        android:layout_marginStart="@dimen/_10dp"
+                        android:orientation="vertical"
+                        tools:ignore="RelativeOverlap">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/manrope_regular"
+                            android:text="@string/gender"
+                            android:textColor="@color/color_white"
+                            android:textSize="@dimen/_14sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/manrope_regular"
+                            android:text="@{viewModel.authModel.gender == null ? @string/not_added : viewModel.authModel.gender}"
+                            android:textColor="@color/view_profile_text_color"
+                            android:textSize="@dimen/_14sp" />
+
+                    </LinearLayout>
 
                     <TextView
+                        android:id="@+id/textviewChangeGenderID"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerInParent="true"
+                        android:layout_marginStart="@dimen/_16dp"
+                        android:layout_marginEnd="@dimen/_10dp"
                         android:fontFamily="@font/manrope_regular"
-                        android:text="@{viewModel.authModel.dOB.toString() == null ? @string/not_added : viewModel.authModel.dOB.toString()}"
-                        android:textColor="@color/view_profile_text_color"
+                        android:text="@{viewModel.authModel.gender == null ? @string/add : @string/change}"
+                        android:textColor="#BA011A"
                         android:textSize="@dimen/_14sp" />
 
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
 
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/textviewChangeDobID"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerInParent="true"
-                    android:layout_marginStart="@dimen/_16dp"
-                    android:layout_marginEnd="@dimen/_10dp"
-                    android:fontFamily="@font/manrope_regular"
-                    android:text="@{viewModel.authModel.dOB.toString() == null ? @string/add : @string/change}"
-                    android:textColor="#BA011A"
-                    android:textSize="@dimen/_14sp" />
-
-
-            </RelativeLayout>
-        </androidx.cardview.widget.CardView>
-
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardGenderID"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/cardDateOfBirthID"
-            android:layout_marginStart="@dimen/_20dp"
-            android:layout_marginTop="@dimen/_10dp"
-            android:layout_marginEnd="@dimen/_20dp"
-            app:cardBackgroundColor="#303033"
-            app:cardCornerRadius="@dimen/_10dp"
-            app:cardElevation="@dimen/_10dp"
-            app:cardMaxElevation="@dimen/_12dp"
-            app:cardPreventCornerOverlap="true">
-
-            <RelativeLayout
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardAddressID"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#303033"
-                android:padding="@dimen/_14dp">
+                android:layout_height="wrap_content"
+                android:layout_below="@id/cardGenderID"
+                android:layout_marginStart="@dimen/_20dp"
+                android:layout_marginTop="@dimen/_10dp"
+                android:layout_marginEnd="@dimen/_20dp"
+                app:cardBackgroundColor="#303033"
+                app:cardCornerRadius="@dimen/_10dp"
+                app:cardElevation="@dimen/_10dp"
+                app:cardMaxElevation="@dimen/_12dp"
+                app:cardPreventCornerOverlap="true">
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_10dp"
-                    android:orientation="vertical"
-                    tools:ignore="RelativeOverlap">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#303033"
+                    android:padding="@dimen/_14dp">
 
-                    <TextView
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/manrope_regular"
-                        android:text="@string/gender"
-                        android:textColor="@color/color_white"
-                        android:textSize="@dimen/_14sp" />
+                        android:layout_marginStart="@dimen/_10dp"
+                        android:orientation="vertical"
+                        tools:ignore="RelativeOverlap">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/manrope_regular"
+                            android:text="@string/address"
+                            android:textColor="@color/color_white"
+                            android:textSize="@dimen/_14sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/manrope_regular"
+                            android:text="@{viewModel.authModel.address.completeAddress == null ? @string/not_added : viewModel.authModel.address.completeAddress}"
+                            android:textColor="@color/view_profile_text_color"
+                            android:textSize="@dimen/_14sp" />
+
+                    </LinearLayout>
 
                     <TextView
+                        android:id="@+id/textviewChangeAddressID"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerInParent="true"
+                        android:layout_marginStart="@dimen/_16dp"
+                        android:layout_marginEnd="@dimen/_10dp"
                         android:fontFamily="@font/manrope_regular"
-                        android:text="@{viewModel.authModel.gender == null ? @string/not_added : viewModel.authModel.gender}"
-                        android:textColor="@color/view_profile_text_color"
+                        android:text="@{viewModel.authModel.address.completeAddress == null ? @string/add : @string/change}"
+                        android:textColor="#BA011A"
                         android:textSize="@dimen/_14sp" />
 
-                </LinearLayout>
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
+        </RelativeLayout>
 
-                <TextView
-                    android:id="@+id/textviewChangeGenderID"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerInParent="true"
-                    android:layout_marginStart="@dimen/_16dp"
-                    android:layout_marginEnd="@dimen/_10dp"
-                    android:fontFamily="@font/manrope_regular"
-                    android:text="@{viewModel.authModel.gender == null ? @string/add : @string/change}"
-                    android:textColor="#BA011A"
-                    android:textSize="@dimen/_14sp" />
-
-            </RelativeLayout>
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardAddressID"
+        <RelativeLayout
+            android:id="@+id/backgroundBlurView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/cardGenderID"
-            android:layout_marginStart="@dimen/_20dp"
-            android:layout_marginTop="@dimen/_10dp"
-            android:layout_marginEnd="@dimen/_20dp"
-            app:cardBackgroundColor="#303033"
-            app:cardCornerRadius="@dimen/_10dp"
-            app:cardElevation="@dimen/_10dp"
-            app:cardMaxElevation="@dimen/_12dp"
-            app:cardPreventCornerOverlap="true">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#303033"
-                android:padding="@dimen/_14dp">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_10dp"
-                    android:orientation="vertical"
-                    tools:ignore="RelativeOverlap">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/manrope_regular"
-                        android:text="@string/address"
-                        android:textColor="@color/color_white"
-                        android:textSize="@dimen/_14sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/manrope_regular"
-                        android:text="@{viewModel.authModel.address.completeAddress == null ? @string/not_added : viewModel.authModel.address.completeAddress}"
-                        android:textColor="@color/view_profile_text_color"
-                        android:textSize="@dimen/_14sp" />
-
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/textviewChangeAddressID"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerInParent="true"
-                    android:layout_marginStart="@dimen/_16dp"
-                    android:layout_marginEnd="@dimen/_10dp"
-                    android:fontFamily="@font/manrope_regular"
-                    android:text="@{viewModel.authModel.address.completeAddress == null ? @string/add : @string/change}"
-                    android:textColor="#BA011A"
-                    android:textSize="@dimen/_14sp" />
-
-            </RelativeLayout>
-        </androidx.cardview.widget.CardView>
-
-
+            android:layout_height="match_parent"
+            android:background="#99D1D1D1"
+            android:visibility="gone" />
     </RelativeLayout>
 
 </layout>

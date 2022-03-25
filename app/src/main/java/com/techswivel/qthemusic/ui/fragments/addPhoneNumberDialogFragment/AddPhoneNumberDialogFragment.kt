@@ -39,7 +39,6 @@ class AddPhoneNumberDialogFragment : BaseDialogFragment(), BaseInterface {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         clickListener()
-
     }
 
     private fun clickListener() {

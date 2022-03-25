@@ -7,58 +7,159 @@
     android:background="@color/color_white"
     app:cardCornerRadius="@dimen/_10dp">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/color_black"
-        android:orientation="vertical"
         android:padding="@dimen/_15dp">
 
         <ImageView
             android:id="@+id/imageviewCancelDialog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
             android:src="@drawable/ic_baseline_clear_24"
             android:textColor="@color/color_black"
-            android:textSize="@dimen/_16sp" />
+            android:layout_alignParentEnd="true" />
 
         <TextView
             android:id="@+id/textMainTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_30dp"
+            android:layout_below="@id/imageviewCancelDialog"
             android:fontFamily="@font/manrope_bold"
             android:text="@string/change_gender"
             android:textColor="@color/color_white"
             android:textSize="@dimen/_18sp" />
 
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/dialog_text_input_layout"
-            style="@style/Widget.AppTheme.TextInputLayoutList"
-            android:layout_width="match_parent"
+        <RadioGroup
+            android:id="@+id/radio_group"
+            android:layout_width="360dp"
             android:layout_height="wrap_content"
-            android:hint="@string/name"
-            android:textColorHint="@color/light_gray_color"
-            app:boxStrokeColor="@color/logout_button_color"
-            app:errorEnabled="true">
+            android:layout_below="@id/textMainTitle"
+            android:layout_marginTop="@dimen/_20dp">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/dialog_edit_text"
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:weightSum="2">
+
+                    <LinearLayout
+                        android:id="@+id/maleCheckBoxId"
+                        android:layout_width="143dp"
+                        android:layout_height="@dimen/_48dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/border_white">
+
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_10dp"
+                            android:buttonTint="@color/radio_button_color"
+                            android:checked="false"
+                            android:text="@string/male"
+                            android:textColor="@color/color_white" />
+
+                        <!--
+                                                style="@style/radionbutton"
+                        -->
+
+                        <!--
+                                                android:onClick="radio_button_click"
+                        -->
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="143dp"
+                        android:layout_height="@dimen/_48dp"
+                        android:layout_marginStart="@dimen/_10dp"
+                        android:layout_marginEnd="@dimen/_2dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/border_white">
+
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_10dp"
+                            android:buttonTint="@color/color_white"
+                            android:text="@string/female"
+                            android:textColor="@color/color_white" />
+
+                        <!--                        android:onClick="radio_button_click"-->
+
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
+            </RelativeLayout>
+
+
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text"
-                android:maxLines="1"
-                android:textColor="@color/color_white"
-                android:textSize="14sp" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_marginTop="@dimen/_10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:baselineAligned="false"
+                    android:weightSum="2">
+
+                    <LinearLayout
+                        android:id="@+id/nonBinaryCheckBoxId"
+                        android:layout_width="143dp"
+                        android:layout_height="@dimen/_48dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/border_white">
+
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_10dp"
+                            android:buttonTint="@color/color_white"
+                            android:text="@string/non_binary"
+                            android:textColor="@color/color_white" />
+
+                        <!--
+                                                android:onClick="radio_button_click"
+                        -->
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="143dp"
+                        android:layout_height="@dimen/_48dp"
+                        android:layout_marginStart="@dimen/_10dp"
+                        android:layout_marginEnd="@dimen/_2dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/border_white">
+
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_10dp"
+                            android:buttonTint="@color/color_white"
+                            android:text="@string/no_answer"
+                            android:textColor="@color/color_white" />
+                    </LinearLayout>
+                </LinearLayout>
+            </RelativeLayout>
+        </RadioGroup>
+
 
         <LinearLayout
-            android:id="@+id/logoutButton"
+            android:id="@+id/updateButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_40dp"
+            android:layout_below="@id/radio_group"
+            android:layout_marginTop="@dimen/_30dp"
+            android:layout_marginBottom="@dimen/_15dp"
             android:background="@drawable/logout_button_drawable">
 
             <TextView
@@ -70,7 +171,7 @@
                 android:textColor="@color/color_white" />
         </LinearLayout>
 
-    </LinearLayout>
+    </RelativeLayout>
 
     <ProgressBar
         android:id="@+id/progress_bar"
@@ -81,4 +182,5 @@
         android:indeterminateTint="@color/logout_button_color"
         android:progressTint="@color/logout_button_color"
         android:visibility="gone" />
+
 </androidx.cardview.widget.CardView>
