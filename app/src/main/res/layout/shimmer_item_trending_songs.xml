@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_8dp"
+        android:background="@android:color/transparent">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cv_shimmer_cover_image"
+            android:layout_width="@dimen/_45dp"
+            android:layout_height="@dimen/_45dp"
+            android:background="@android:color/transparent"
+            app:cardCornerRadius="@dimen/_6dp"
+            app:cardElevation="@dimen/_8dp">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/shimmer_placeholder" />
+
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/tv_shimmer_song_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10dp"
+            android:layout_marginEnd="@dimen/_10dp"
+            android:layout_toStartOf="@id/rl_shimmer_play_crown"
+            android:layout_toEndOf="@id/cv_shimmer_cover_image"
+            android:background="@color/shimmer_placeholder" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_shimmer_song_title"
+            android:layout_marginStart="@dimen/_10dp"
+            android:layout_marginTop="@dimen/_5dp"
+            android:layout_marginEnd="@dimen/_10dp"
+            android:layout_toEndOf="@id/cv_shimmer_cover_image"
+            android:background="@color/shimmer_placeholder" />
+
+        <RelativeLayout
+            android:id="@+id/rl_shimmer_play_crown"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_margin="@dimen/_10dp">
+
+            <ImageView
+                android:layout_width="@dimen/_30dp"
+                android:layout_height="@dimen/_30dp"
+                android:layout_gravity="center"
+                android:background="@color/shimmer_placeholder" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+</layout>

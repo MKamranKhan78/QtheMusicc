@@ -138,27 +138,27 @@ class DummyDataManager {
             )
         }
 
-         fun getDummyAuthDetails(): AuthModel {
-             val address = Address(
-                 "house129street18",
-                 "lahore",
-                 "punjab",
-                 "pakistan",
-                 33000
-             )
-             val notification = Notification(
-                 true,
-                 true
-             )
+        fun getDummyAuthDetails(): AuthModel {
+            val address = Address(
+                "house129street18",
+                "lahore",
+                "punjab",
+                "pakistan",
+                33000
+            )
+            val notification = Notification(
+                true,
+                true
+            )
 
-             val subscription = Subscription(
-                 1,
-                 "Standard Plan",
-                 10,
-                 "Month"
-             )
-             val authModel = AuthModel(
-                 "Usman Khan",
+            val subscription = Subscription(
+                1,
+                "Standard Plan",
+                10,
+                "Month"
+            )
+            val authModel = AuthModel(
+                "Usman Khan",
                 "kamran@gmail.com",
                 "https://ca.slack-edge.com/TH6CHMP7Z-U01RL9JUJG1-0a9af450bd4f-512",
                 "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9",
@@ -188,12 +188,12 @@ class DummyDataManager {
                         false,
                         "No Lyrics Available",
                         4,
-                        "",
+                        "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
                         120,
                         1,
                         SongStatus.FREE,
                         "Lose Yourself",
-                        ""
+                        null
                     ),
                     Song(
                         12,
@@ -211,7 +211,7 @@ class DummyDataManager {
                         2,
                         SongStatus.PREMIUM,
                         "Save Your Tears",
-                        ""
+                        null
                     ),
                     Song(
                         33,
@@ -229,7 +229,7 @@ class DummyDataManager {
                         3,
                         SongStatus.PREMIUM,
                         "On My Way",
-                        ""
+                        null
                     ),
                     Song(
                         5,
@@ -242,16 +242,15 @@ class DummyDataManager {
                         false,
                         "No Lyrics Available",
                         6,
-                        "",
+                        "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3",
                         193,
                         4,
                         SongStatus.FREE,
                         "We Don't Talk Anymore",
-                        ""
+                        "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
                     )
                 )
             )
         }
-
     }
 }

@@ -14,6 +14,7 @@ import com.techswivel.qthemusic.ui.base.BaseViewModel
 import retrofit2.Response
 
 class HomeViewModel : BaseViewModel() {
+    lateinit var recommendedSongsBodyModel: RecommendedSongsBodyModel
     var selectedTab: RecommendedSongsType? = null
     var recommendedSongsDataList: MutableList<Any> = ArrayList()
     var categoriesDataList: MutableList<Any> = ArrayList()
@@ -42,7 +43,7 @@ class HomeViewModel : BaseViewModel() {
             mSongsResponse = value
         }
 
-    fun getRecommendedSongsDataFromServer(recommendedSongsBodyModel: RecommendedSongsBodyModel) {
+    fun getRecommendedSongsDataFromServer() {
         RemoteDataManager.getRecommendedSongsData(recommendedSongsBodyModel).doOnSubscribe {
             mRecommendedSongsResponse.value = ApiResponse.loading()
         }?.subscribe(object : CustomObserver<Response<ResponseMain>>() {

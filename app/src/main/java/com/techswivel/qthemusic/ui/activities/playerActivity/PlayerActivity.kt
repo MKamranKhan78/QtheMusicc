@@ -112,24 +112,6 @@ class PlayerActivity : BaseActivity() {
             (binding.videoPlayer.player as ExoPlayer?)?.playWhenReady = false
         }
 
-        val videoPlayerSoundIcon = findViewById<ImageView>(R.id.iv_video_player_sound)
-        videoPlayerSoundIcon.setOnClickListener {
-            Toast.makeText(
-                this,
-                getString(R.string.str_underdevelopment_feature),
-                Toast.LENGTH_SHORT
-            ).show()
-        }
-
-        val videoPlayerFullScreenIcon = findViewById<ImageView>(R.id.iv_video_player_full_screen)
-        videoPlayerFullScreenIcon.setOnClickListener {
-            Toast.makeText(
-                this,
-                getString(R.string.str_underdevelopment_feature),
-                Toast.LENGTH_SHORT
-            ).show()
-        }
-
         binding.ivPlayPause.setOnClickListener {
             if (viewModel.audioPlayer?.isPlaying == true) {
                 handler.removeCallbacks(updateSongProgress)
@@ -222,6 +204,8 @@ class PlayerActivity : BaseActivity() {
                     .setRenderersFactory(renderersFactory)
                     .setMediaSourceFactory(mediaSourceFactory)
                     .setTrackSelector(viewModel.trackSelector)
+                    .setSeekBackIncrementMs(10000)
+                    .setSeekForwardIncrementMs(10000)
                     .build()
                 (binding.videoPlayer.player as ExoPlayer?)?.trackSelectionParameters =
                     viewModel.trackSelectionParameters

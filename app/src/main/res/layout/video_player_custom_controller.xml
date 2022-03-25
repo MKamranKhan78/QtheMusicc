@@ -28,11 +28,11 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/iv_video_player_sound"
+        android:id="@+id/exo_rew"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
-        android:src="@drawable/ic_icon_close"
+        android:src="@drawable/ic_rewind"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/iv_video_player_pause"
         app:layout_constraintTop_toTopOf="parent" />
@@ -46,7 +46,7 @@
         app:buffered_color="#95989F"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/exo_ffwd"
-        app:layout_constraintStart_toEndOf="@id/iv_video_player_sound"
+        app:layout_constraintStart_toEndOf="@id/exo_rew"
         app:layout_constraintTop_toTopOf="parent"
         app:played_color="@color/color_red"
         app:unplayed_color="@color/color_white" />
@@ -57,16 +57,6 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="5dp"
         android:src="@drawable/ic_forward"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/iv_video_player_full_screen"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/iv_video_player_full_screen"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="5dp"
-        android:src="@drawable/ic_icon_close"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

@@ -264,7 +264,7 @@
             android:layout_height="@dimen/_190dp"
             app:controller_layout_id="@layout/video_player_custom_controller"
             app:hide_on_touch="true"
-            app:resize_mode="fit"
+            app:resize_mode="fill"
             app:show_timeout="5000"
             app:use_controller="true" />
 

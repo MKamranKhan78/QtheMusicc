@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.customData.adapter.RecyclerViewAdapter
 import com.techswivel.qthemusic.customData.enums.*
-import com.techswivel.qthemusic.customData.interfaces.BaseInterface
 import com.techswivel.qthemusic.databinding.FragmentHomeBinding
 import com.techswivel.qthemusic.models.RecommendedSongsBodyBuilder
 import com.techswivel.qthemusic.models.ResponseModel
@@ -25,7 +24,7 @@ import com.techswivel.qthemusic.utils.CommonKeys
 import com.techswivel.qthemusic.utils.DialogUtils
 import kotlinx.coroutines.runBlocking
 
-class HomeFragment : RecyclerViewBaseFragment(), BaseInterface {
+class HomeFragment : RecyclerViewBaseFragment() {
 
     companion object {
         @JvmStatic
@@ -155,6 +154,38 @@ class HomeFragment : RecyclerViewBaseFragment(), BaseInterface {
                         override fun onNoDataFound() {
 
                         }
+
+                        override fun onViewClicked(view: View, data: Any?) {
+                            val songModel = data as Song
+                            when (view.id) {
+                                R.id.rl_trending_song -> {
+                                    if (songModel.songStatus == SongStatus.PREMIUM) {
+                                        Toast.makeText(
+                                            requireContext(),
+                                            getString(R.string.str_underdevelopment_feature),
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    } else {
+                                        val bundle = Bundle().apply {
+                                            putSerializable(CommonKeys.KEY_DATA_MODEL, songModel)
+                                            putString(
+                                                CommonKeys.KEY_SONG_TYPE,
+                                                SongType.TRENDING.value
+                                            )
+                                        }
+                                        ActivityUtils.startNewActivity(
+                                            requireActivity(),
+                                            PlayerActivity::class.java,
+                                            bundle
+                                        )
+                                        requireActivity().overridePendingTransition(
+                                            R.anim.bottom_up,
+                                            R.anim.null_transition
+                                        )
+                                    }
+                                }
+                            }
+                        }
                     }, viewModel.trendingSongsDataList)
 
                 mTrendingSongsAdapter
@@ -162,22 +193,13 @@ class HomeFragment : RecyclerViewBaseFragment(), BaseInterface {
         }
     }
 
-    override fun showProgressBar() {
-        binding.progressBar.visibility = View.VISIBLE
-    }
-
-    override fun hideProgressBar() {
-        binding.progressBar.visibility = View.GONE
-    }
-
     private fun setObserver() {
         viewModel.recommendedSongsResponse.observe(viewLifecycleOwner) { recommendedSongsDataResponse ->
             when (recommendedSongsDataResponse.status) {
                 NetworkStatus.LOADING -> {
-                    showProgressBar()
+                    startRecommendedDataShimmer()
                 }
                 NetworkStatus.SUCCESS -> {
-                    hideProgressBar()
                     viewModel.recommendedSongsDataList.clear()
                     val response = recommendedSongsDataResponse.t as ResponseModel
                     val songsList = response.data.recommendedSongsResponse?.songs
@@ -191,13 +213,13 @@ class HomeFragment : RecyclerViewBaseFragment(), BaseInterface {
                     } else if (!artistsList.isNullOrEmpty() && viewModel.selectedTab == RecommendedSongsType.ARTIST) {
                         viewModel.recommendedSongsDataList.addAll(artistsList)
                     }
-
+                    stopRecommendedDataShimmer()
                     if (::mRecommendedForYouAdapter.isInitialized)
                         mRecommendedForYouAdapter.notifyDataSetChanged()
 
                 }
                 NetworkStatus.ERROR -> {
-                    hideProgressBar()
+                    stopRecommendedDataShimmer()
                     recommendedSongsDataResponse.error?.message?.let { it1 ->
                         DialogUtils.errorAlert(
                             requireContext(),
@@ -207,7 +229,7 @@ class HomeFragment : RecyclerViewBaseFragment(), BaseInterface {
                     }
                 }
                 NetworkStatus.EXPIRE -> {
-                    hideProgressBar()
+                    stopRecommendedDataShimmer()
                     DialogUtils.sessionExpireAlert(requireContext(),
                         object : DialogUtils.CallBack {
                             override fun onPositiveCallBack() {
@@ -227,7 +249,7 @@ class HomeFragment : RecyclerViewBaseFragment(), BaseInterface {
                         })
                 }
                 NetworkStatus.COMPLETED -> {
-                    hideProgressBar()
+                    stopRecommendedDataShimmer()
                 }
             }
         }
@@ -235,10 +257,9 @@ class HomeFragment : RecyclerViewBaseFragment(), BaseInterface {
         viewModel.categoriesResponse.observe(viewLifecycleOwner) { categoriesDataResponse ->
             when (categoriesDataResponse.status) {
                 NetworkStatus.LOADING -> {
-                    showProgressBar()
+                    startCategoriesDataShimmer()
                 }
                 NetworkStatus.SUCCESS -> {
-                    hideProgressBar()
                     viewModel.categoriesDataList.clear()
                     val response = categoriesDataResponse.t as ResponseModel
                     val categoriesList = response.data.category
@@ -246,13 +267,13 @@ class HomeFragment : RecyclerViewBaseFragment(), BaseInterface {
                     if (!categoriesList.isNullOrEmpty()) {
                         viewModel.categoriesDataList.addAll(categoriesList)
                     }
-
+                    stopCategoriesDataShimmer()
                     if (::mWhatsYourMoodAdapter.isInitialized)
                         mWhatsYourMoodAdapter.notifyDataSetChanged()
 
                 }
                 NetworkStatus.ERROR -> {
-                    hideProgressBar()
+                    stopCategoriesDataShimmer()
                     categoriesDataResponse.error?.message?.let { it1 ->
                         DialogUtils.errorAlert(
                             requireContext(),
@@ -262,7 +283,7 @@ class HomeFragment : RecyclerViewBaseFragment(), BaseInterface {
                     }
                 }
                 NetworkStatus.EXPIRE -> {
-                    hideProgressBar()
+                    stopCategoriesDataShimmer()
                     DialogUtils.sessionExpireAlert(requireContext(),
                         object : DialogUtils.CallBack {
                             override fun onPositiveCallBack() {
@@ -282,7 +303,7 @@ class HomeFragment : RecyclerViewBaseFragment(), BaseInterface {
                         })
                 }
                 NetworkStatus.COMPLETED -> {
-                    hideProgressBar()
+                    stopCategoriesDataShimmer()
                 }
             }
         }
@@ -290,10 +311,9 @@ class HomeFragment : RecyclerViewBaseFragment(), BaseInterface {
         viewModel.songsResponse.observe(viewLifecycleOwner) { songsDataResponse ->
             when (songsDataResponse.status) {
                 NetworkStatus.LOADING -> {
-                    showProgressBar()
+                    startTrendingSongsDataShimmer()
                 }
                 NetworkStatus.SUCCESS -> {
-                    hideProgressBar()
                     viewModel.trendingSongsDataList.clear()
                     val response = songsDataResponse.t as ResponseModel
                     val songsList = response.data.songsResponse?.songs
@@ -303,13 +323,13 @@ class HomeFragment : RecyclerViewBaseFragment(), BaseInterface {
                         binding.tvTotalSongs.text =
                             viewModel.trendingSongsDataList.size.toString().plus(" songs")
                     }
-
+                    stopTrendingSongsDataShimmer()
                     if (::mTrendingSongsAdapter.isInitialized)
                         mTrendingSongsAdapter.notifyDataSetChanged()
 
                 }
                 NetworkStatus.ERROR -> {
-                    hideProgressBar()
+                    stopTrendingSongsDataShimmer()
                     songsDataResponse.error?.message?.let { it1 ->
                         DialogUtils.errorAlert(
                             requireContext(),
@@ -319,7 +339,7 @@ class HomeFragment : RecyclerViewBaseFragment(), BaseInterface {
                     }
                 }
                 NetworkStatus.EXPIRE -> {
-                    hideProgressBar()
+                    stopTrendingSongsDataShimmer()
                     DialogUtils.sessionExpireAlert(requireContext(),
                         object : DialogUtils.CallBack {
                             override fun onPositiveCallBack() {
@@ -339,10 +359,50 @@ class HomeFragment : RecyclerViewBaseFragment(), BaseInterface {
                         })
                 }
                 NetworkStatus.COMPLETED -> {
-                    hideProgressBar()
+                    stopTrendingSongsDataShimmer()
                 }
             }
         }
+    }
+
+    private fun startRecommendedDataShimmer() {
+        if (viewModel.recommendedSongsBodyModel.type == RecommendedSongsType.SONGS || viewModel.recommendedSongsBodyModel.type == RecommendedSongsType.ALBUM) {
+            binding.slSongsAlbums.visibility = View.VISIBLE
+            binding.slSongsAlbums.startShimmer()
+        } else if (viewModel.recommendedSongsBodyModel.type == RecommendedSongsType.ARTIST) {
+            binding.slArtists.visibility = View.VISIBLE
+            binding.slArtists.startShimmer()
+        }
+    }
+
+    private fun stopRecommendedDataShimmer() {
+        if (viewModel.recommendedSongsBodyModel.type == RecommendedSongsType.SONGS || viewModel.recommendedSongsBodyModel.type == RecommendedSongsType.ALBUM) {
+            binding.slSongsAlbums.visibility = View.GONE
+            binding.slSongsAlbums.stopShimmer()
+        } else if (viewModel.recommendedSongsBodyModel.type == RecommendedSongsType.ARTIST) {
+            binding.slArtists.visibility = View.GONE
+            binding.slArtists.stopShimmer()
+        }
+    }
+
+    private fun startCategoriesDataShimmer() {
+        binding.slWhatsYourMood.visibility = View.VISIBLE
+        binding.slWhatsYourMood.startShimmer()
+    }
+
+    private fun stopCategoriesDataShimmer() {
+        binding.slWhatsYourMood.visibility = View.GONE
+        binding.slWhatsYourMood.stopShimmer()
+    }
+
+    private fun startTrendingSongsDataShimmer() {
+        binding.slTrendingSongs.visibility = View.VISIBLE
+        binding.slTrendingSongs.startShimmer()
+    }
+
+    private fun stopTrendingSongsDataShimmer() {
+        binding.slTrendingSongs.visibility = View.GONE
+        binding.slTrendingSongs.stopShimmer()
     }
 
     private fun setListeners() {
@@ -383,10 +443,9 @@ class HomeFragment : RecyclerViewBaseFragment(), BaseInterface {
         recommendedSongsBuilder.isListeningHistory = false
         recommendedSongsBuilder.isRecommendedForYou = true
         recommendedSongsBuilder.type = RecommendedSongsType.SONGS
-        val recommendedSongsBodyModel = RecommendedSongsBodyBuilder.build(recommendedSongsBuilder)
-        viewModel.getRecommendedSongsDataFromServer(
-            recommendedSongsBodyModel
-        )
+        viewModel.recommendedSongsBodyModel =
+            RecommendedSongsBodyBuilder.build(recommendedSongsBuilder)
+        viewModel.getRecommendedSongsDataFromServer()
     }
 
     private fun getRecommendedAlbums() {
@@ -394,10 +453,9 @@ class HomeFragment : RecyclerViewBaseFragment(), BaseInterface {
         recommendedSongsBuilder.isListeningHistory = false
         recommendedSongsBuilder.isRecommendedForYou = true
         recommendedSongsBuilder.type = RecommendedSongsType.ALBUM
-        val recommendedSongsBodyModel = RecommendedSongsBodyBuilder.build(recommendedSongsBuilder)
-        viewModel.getRecommendedSongsDataFromServer(
-            recommendedSongsBodyModel
-        )
+        viewModel.recommendedSongsBodyModel =
+            RecommendedSongsBodyBuilder.build(recommendedSongsBuilder)
+        viewModel.getRecommendedSongsDataFromServer()
     }
 
     private fun getRecommendedArtists() {
@@ -405,10 +463,9 @@ class HomeFragment : RecyclerViewBaseFragment(), BaseInterface {
         recommendedSongsBuilder.isListeningHistory = false
         recommendedSongsBuilder.isRecommendedForYou = true
         recommendedSongsBuilder.type = RecommendedSongsType.ARTIST
-        val recommendedSongsBodyModel = RecommendedSongsBodyBuilder.build(recommendedSongsBuilder)
-        viewModel.getRecommendedSongsDataFromServer(
-            recommendedSongsBodyModel
-        )
+        viewModel.recommendedSongsBodyModel =
+            RecommendedSongsBodyBuilder.build(recommendedSongsBuilder)
+        viewModel.getRecommendedSongsDataFromServer()
     }
 
     private fun getSongs() {
