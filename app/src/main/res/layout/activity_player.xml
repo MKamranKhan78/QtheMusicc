@@ -55,44 +55,39 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.button.MaterialButtonToggleGroup
+    <LinearLayout
         android:id="@+id/toggle_button_group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_30dp"
         android:gravity="center"
-        app:checkedButton="@id/btn_audio"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_album_name"
-        app:selectionRequired="true"
-        app:singleSelection="true">
+        app:layout_constraintTop_toBottomOf="@id/tv_album_name">
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_audio"
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/_45dp"
-            android:backgroundTint="@color/selector_red_grey"
+            android:layout_height="@dimen/_30dp"
+            android:background="@drawable/toggle_button_background"
             android:fontFamily="@font/manrope_bold"
             android:text="@string/str_audio"
             android:textAllCaps="false"
             android:textColor="@color/color_white"
-            android:textSize="@dimen/_12sp"
-            app:cornerRadius="@dimen/_8dp" />
+            android:textSize="@dimen/_12sp" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_video"
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/_45dp"
-            android:backgroundTint="@color/selector_red_grey"
+            android:layout_height="@dimen/_30dp"
+            android:background="@drawable/toggle_button_background"
             android:fontFamily="@font/manrope_bold"
             android:text="@string/str_video"
             android:textAllCaps="false"
             android:textColor="@color/color_white"
-            android:textSize="@dimen/_12sp"
-            app:cornerRadius="@dimen/_8dp" />
+            android:textSize="@dimen/_12sp" />
 
-    </com.google.android.material.button.MaterialButtonToggleGroup>
+    </LinearLayout>
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cv_song_cover"

@@ -1,5 +1,8 @@
 package com.techswivel.qthemusic.ui.activities.playerActivity
 
+import android.animation.TimeAnimator
+import android.graphics.drawable.ClipDrawable
+import android.graphics.drawable.LayerDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
@@ -15,6 +18,8 @@ import com.google.android.exoplayer2.source.DefaultMediaSourceFactory
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.constant.Constants
+import com.techswivel.qthemusic.constant.Constants.TOGGLE_ANIMATION_LEVEL_INCREMENT
+import com.techswivel.qthemusic.constant.Constants.TOGGLE_ANIMATION_MAX_LEVEL
 import com.techswivel.qthemusic.databinding.ActivityPlayerBinding
 import com.techswivel.qthemusic.models.Song
 import com.techswivel.qthemusic.ui.base.BaseActivity
@@ -22,8 +27,9 @@ import com.techswivel.qthemusic.utils.CommonKeys
 import com.techswivel.qthemusic.utils.PlayerUtils
 import com.techswivel.qthemusic.utils.Utilities.formatSongDuration
 import com.techswivel.qthemusic.utils.loadImg
+import kotlin.math.min
 
-class PlayerActivity : BaseActivity() {
+class PlayerActivity : BaseActivity(), TimeAnimator.TimeListener {
 
     private lateinit var binding: ActivityPlayerBinding
     private lateinit var viewModel: PlayerActivityViewModel
@@ -66,6 +72,31 @@ class PlayerActivity : BaseActivity() {
         overridePendingTransition(R.anim.null_transition, R.anim.bottom_down)
     }
 
+    override fun onTimeUpdate(animation: TimeAnimator?, totalTime: Long, deltaTime: Long) {
+        viewModel.mClipDrawable.level = viewModel.mCurrentLevel
+        if (viewModel.mCurrentLevel >= TOGGLE_ANIMATION_MAX_LEVEL) {
+            binding.btnAudio.setBackgroundResource(R.drawable.reverse_toggle_button_background)
+            viewModel.mAnimator.cancel()
+            if (binding.btnVideo.isSelected) {
+                val layerDrawable = binding.btnVideo.background as LayerDrawable
+                viewModel.mClipDrawable =
+                    layerDrawable.findDrawableByLayerId(R.id.clip_drawable) as ClipDrawable
+
+                if (!viewModel.mAnimator.isRunning) {
+                    viewModel.mCurrentLevel = 0
+                    viewModel.mAnimator.start()
+                }
+                binding.btnVideo.isSelected = false
+            }
+
+        } else {
+            viewModel.mCurrentLevel = min(
+                TOGGLE_ANIMATION_MAX_LEVEL,
+                viewModel.mCurrentLevel + TOGGLE_ANIMATION_LEVEL_INCREMENT
+            )
+        }
+    }
+
     private fun initViews() {
         val bundle = intent.extras?.getBundle(CommonKeys.KEY_DATA)
         viewModel.songModel = bundle?.getSerializable(CommonKeys.KEY_DATA_MODEL) as Song
@@ -79,6 +110,8 @@ class PlayerActivity : BaseActivity() {
         binding.tvAlbumName.text = viewModel.songModel.albumName
         binding.tvSongName.text = viewModel.songModel.songTitle
         binding.tvArtistName.text = viewModel.songModel.artist
+        viewModel.mAnimator = TimeAnimator()
+        viewModel.mAnimator.setTimeListener(this)
     }
 
     private fun setListeners() {
@@ -95,6 +128,16 @@ class PlayerActivity : BaseActivity() {
         }
 
         binding.btnVideo.setOnClickListener {
+            binding.btnVideo.isSelected = true
+            val layerDrawable = binding.btnAudio.background as LayerDrawable
+            viewModel.mClipDrawable =
+                layerDrawable.findDrawableByLayerId(R.id.clip_drawable) as ClipDrawable
+
+            if (!viewModel.mAnimator.isRunning) {
+                viewModel.mCurrentLevel = 0
+                viewModel.mAnimator.start()
+            }
+
             binding.mlParent.transitionToEnd()
             if (viewModel.audioPlayer?.isPlaying == true) {
                 handler.removeCallbacks(updateSongProgress)
