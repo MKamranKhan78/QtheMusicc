@@ -77,11 +77,6 @@ object RemoteDataManager : BaseDataManager(), RemoteDataMangerImp {
         return ApiService.getGoogleResponse().getGoogleToken(data).subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
     }
-
-    override fun sendOTP(email: String): Observable<Response<ResponseMain>> {
-        TODO("Not yet implemented")
-    }
-
     override fun userLogin(authRequestBuilder: AuthRequestModel): Observable<Response<ResponseMain>> {
         return Observable.create { observer ->
             observer.onNext(getResponseDummyData())
@@ -89,21 +84,21 @@ object RemoteDataManager : BaseDataManager(), RemoteDataMangerImp {
         }
     }
 
-    override fun sendOtpRequest(authRequestModel: AuthRequestModel): Observable<Response<ResponseMain>> {
+    override fun sendOtp(authRequestModel: AuthRequestModel): Observable<Response<ResponseMain>> {
         return Observable.create { observer ->
             observer.onNext(getResponseDummyData())
             observer.onComplete()
         }
     }
 
-    override fun sendVerifyOtpRequest(authRequestModel: AuthRequestModel): Observable<Response<ResponseMain>> {
+    override fun verifyOtpRequest(authRequestModel: AuthRequestModel): Observable<Response<ResponseMain>> {
         return Observable.create { observer ->
             observer.onNext(getResponseDummyData())
             observer.onComplete()
         }
     }
 
-    override fun sentNewPasswordRequest(authRequestModel: AuthRequestModel): Observable<Response<ResponseMain>> {
+    override fun setNewPassword(authRequestModel: AuthRequestModel): Observable<Response<ResponseMain>> {
         return Observable.create{observer->
             observer.onNext(getResponseDummyData())
             observer.onComplete()

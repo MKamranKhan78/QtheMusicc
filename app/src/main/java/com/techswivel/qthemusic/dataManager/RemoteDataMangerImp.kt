@@ -11,8 +11,6 @@ interface RemoteDataMangerImp {
     //Remote calls
     fun getGoogleAccessToken(serverAuthCode: String): Observable<Response<GoogleResponseModel>>
 
-    fun sendOTP(email: String): Observable<Response<ResponseMain>>
-
     fun logoutUser(deviceIdentifier: String): Observable<Response<ResponseMain>>
 
     fun profileUpdate(authModel: AuthModel?): Observable<Response<ResponseMain>>
@@ -20,10 +18,10 @@ interface RemoteDataMangerImp {
     fun getAuthDetails(): AuthModel?
     fun userLogin(authRequestModel: AuthRequestModel): Observable<Response<ResponseMain>>
 
-    fun sendOtpRequest(authRequestModel: AuthRequestModel): Observable<Response<ResponseMain>>
+    fun sendOtp(authRequestModel: AuthRequestModel): Observable<Response<ResponseMain>>
 
-    fun sendVerifyOtpRequest(authRequestModel: AuthRequestModel): Observable<Response<ResponseMain>>
+    fun verifyOtpRequest(authRequestModel: AuthRequestModel): Observable<Response<ResponseMain>>
 
-    fun sentNewPasswordRequest(authRequestModel: AuthRequestModel): Observable<Response<ResponseMain>>
+    fun setNewPassword(authRequestModel: AuthRequestModel): Observable<Response<ResponseMain>>
 
 }

@@ -1,7 +1,7 @@
 package com.techswivel.qthemusic.ui.fragments.forgotPasswordFragment
 
-import com.techswivel.qthemusic.ui.base.BaseViewModel
+import com.techswivel.qthemusic.models.BindingValidationViewModel
 
-class ForgotPasswordViewModel : BaseViewModel() {
-    val TAG = "ForgotPasswordVM"
+class ForgotPasswordViewModel : BindingValidationViewModel() {
+
 }

@@ -22,11 +22,12 @@ class QTheMusicApplication : Application(), LifecycleObserver {
         super.onCreate()
         MultiDex.install(this)
         AppEventsLogger.activateApp(this)
+        System.loadLibrary(Constants.CPP_LIBRARY_NAME)
         when {
             BuildConfig.FLAVOR.equals(Constants.STAGING) -> {
                 mGso =
                     GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)  //google sigin options
-                        .requestServerAuthCode(getString(R.string.google_client_id_staging))
+                        .requestServerAuthCode(getGoogleClientIdStaging())
                         .requestEmail()
                         .build()
             }
@@ -55,18 +56,6 @@ class QTheMusicApplication : Application(), LifecycleObserver {
 
         mContext = this
 
-        /**
-         * FirebaseAuth was not initialized because of that app was getting crash
-         * you need to un comment code after configuring firebase with the application.
-         * */
-//        Firebase.messaging.subscribeToTopic(Constants.FCM_ANDROID_TOPIC)
-//            .addOnCompleteListener { task ->
-//                var msg = getString(R.string.msg_subscribed)
-//                if (!task.isSuccessful) {
-//                    msg = getString(R.string.msg_subscribe_failed)
-//                }
-//                Log.d("TAG", msg)
-//            }
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
@@ -81,7 +70,7 @@ class QTheMusicApplication : Application(), LifecycleObserver {
         isInBackground = true
     }
 
-    //private external fun getGoogleClientIdStaging(): String
+    private external fun getGoogleClientIdStaging(): String
     companion object {
 
         private lateinit var mContext: Context

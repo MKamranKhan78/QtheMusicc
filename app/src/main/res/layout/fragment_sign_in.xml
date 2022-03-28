@@ -7,7 +7,7 @@
         <import type="android.view.View" />
         <variable
             name="obj"
-            type="com.techswivel.qthemusic.models.BindingValidationClass" />
+            type="com.techswivel.qthemusic.ui.fragments.signInFragment.SignInViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -24,7 +24,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/scrim_background_clr" />
+            android:background="@color/scrim_background_clr_sign" />
 
         <TextView
             android:id="@+id/tv_signin_tag"
@@ -70,7 +70,7 @@
                 android:id="@+id/et_login_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:addTextChangedListener="@{obj.emailwatcher}"
+                android:addTextChangedListener="@{obj.getEmailwatcher}"
                 android:background="@null"
                 android:drawableLeft="@drawable/ic_message"
                 android:drawablePadding="@dimen/_16dp"
@@ -95,7 +95,7 @@
                 android:layout_marginStart="@dimen/_40dp"
                 android:fontFamily="@font/manrope_medium"
                 android:paddingBottom="@dimen/_2dp"
-                android:text="@string/invalid_password"
+                android:text="@string/invalid_email"
                 android:textColor="@color/sign_up_btn"
                 android:textSize="@dimen/_12sp"
                 android:visibility="@{obj.isEmailTextValid? View.GONE:View.VISIBLE}"/>
@@ -132,6 +132,7 @@
                     android:fontFamily="@font/manrope_regular"
                     android:hint="@string/password_hint"
                     android:maxLines="1"
+                    android:inputType="textPassword"
                     android:paddingStart="@dimen/_16dp"
                     android:paddingTop="@dimen/_16dp"
                     android:paddingEnd="@dimen/_36dp"
@@ -221,7 +222,7 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
-            android:id="@+id/tv_sign_btn"
+            android:id="@+id/tv_sign_up_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_12dp"

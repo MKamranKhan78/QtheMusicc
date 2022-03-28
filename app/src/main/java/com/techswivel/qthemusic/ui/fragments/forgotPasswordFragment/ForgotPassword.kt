@@ -12,10 +12,10 @@ import com.techswivel.qthemusic.customData.enums.NetworkStatus
 import com.techswivel.qthemusic.customData.enums.OtpType
 import com.techswivel.qthemusic.databinding.FragmentForgotPasswordBinding
 import com.techswivel.qthemusic.models.AuthRequestBuilder
-import com.techswivel.qthemusic.models.BindingValidationClass
 import com.techswivel.qthemusic.models.ErrorResponce
 import com.techswivel.qthemusic.models.ResponseModel
 import com.techswivel.qthemusic.source.remote.networkViewModel.ForgotPasswordNetworkViewModel
+import com.techswivel.qthemusic.ui.activities.authActivity.AuthActivityImp
 import com.techswivel.qthemusic.ui.base.BaseFragment
 import com.techswivel.qthemusic.ui.fragments.otpVerificationFragment.OtpVerification
 import com.techswivel.qthemusic.utils.CommonKeys
@@ -29,7 +29,6 @@ class ForgotPassword : BaseFragment() {
     private lateinit var forgotViewModel: ForgotPasswordViewModel
     private lateinit var forgotPasswordNetworkViewModel: ForgotPasswordNetworkViewModel
     private lateinit var forgotbingding: FragmentForgotPasswordBinding
-    private lateinit var twoWayBindingObj: BindingValidationClass
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -41,8 +40,8 @@ class ForgotPassword : BaseFragment() {
     ): View? {
         // Inflate the layout for this fragment
         forgotbingding = FragmentForgotPasswordBinding.inflate(layoutInflater, container, false)
-        twoWayBindingObj = BindingValidationClass()
-        forgotbingding.myObj = twoWayBindingObj
+
+
 
 
         return forgotbingding.root
@@ -50,10 +49,11 @@ class ForgotPassword : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initViewModels()
         initialization()
         onClickListener()
-        initViewModels()
-        setObserverForViewModels()
+
+        forgotbingding.myObj = forgotViewModel
     }
 
     private fun initialization() {
@@ -74,9 +74,13 @@ class ForgotPassword : BaseFragment() {
 
     private fun onClickListener() {
         forgotbingding.btnSendCodeForgot.setOnClickListener {
-            if (!forgotbingding.etForgotEmailId.text.toString()
-                    .isNullOrEmpty() && twoWayBindingObj.isEmailTextValid.get() == true
+            if (
+                forgotbingding.etForgotEmailId.text.toString().isNullOrEmpty() ||
+                forgotViewModel.isEmailTextValid.get() != true
             ) {
+                forgotbingding.etForgotEmailId.error = getString(R.string.this_required)
+
+            } else if (forgotViewModel.isEmailTextValid.get() == true) {
                 createAndSendOtpRequest()
             }
         }
@@ -87,8 +91,8 @@ class ForgotPassword : BaseFragment() {
         authModelBilder.otpType = OtpType.EMAIL.name
         authModelBilder.email = forgotbingding.etForgotEmailId.toString()
         val otpModel = AuthRequestBuilder.builder(authModelBilder)
-       forgotPasswordNetworkViewModel.sendOtpRequest(otpModel)
-
+        (mActivityListener as AuthActivityImp).forgotPasswordRequest(otpModel,forgotPasswordNetworkViewModel)
+        setObserverForViewModels()
     }
 
     private fun setObserverForViewModels() {
@@ -110,10 +114,8 @@ class ForgotPassword : BaseFragment() {
                     bundle.putSerializable(CommonKeys.APP_FLOW, OtpType.FORGET_PASSWORD)
                     val otpVerification = OtpVerification()
                     otpVerification.arguments = bundle
-                    val transaction = requireActivity().supportFragmentManager.beginTransaction()
-                    transaction.add(R.id.auth_container, otpVerification)
-                        .addToBackStack(TAG)
-                    transaction.commit()
+                    (mActivityListener as AuthActivityImp).replaceCurrentFragment(otpVerification)
+
                 }
                 NetworkStatus.EXPIRE -> {
                     val error = it.error as ErrorResponce

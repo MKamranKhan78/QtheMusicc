@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
+import androidx.activity.result.contract.ActivityResultContract
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
@@ -18,30 +20,28 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
+import com.google.android.material.tabs.TabLayout
 import com.techswivel.qthemusic.R
+import com.techswivel.qthemusic.application.QTheMusicApplication
 import com.techswivel.qthemusic.constant.Constants
 import com.techswivel.qthemusic.customData.enums.*
 import com.techswivel.qthemusic.databinding.FragmentSignInBinding
 import com.techswivel.qthemusic.models.*
 import com.techswivel.qthemusic.source.local.preference.PrefUtils
+import com.techswivel.qthemusic.source.remote.networkViewModel.AuthNetworkViewModel
 import com.techswivel.qthemusic.source.remote.networkViewModel.SignInNetworkViewModel
+import com.techswivel.qthemusic.ui.activities.authActivity.AuthActivityImp
 import com.techswivel.qthemusic.ui.activities.mainActivity.MainActivity
 import com.techswivel.qthemusic.ui.base.BaseFragment
 import com.techswivel.qthemusic.ui.fragments.forgotPasswordFragment.ForgotPassword
 import com.techswivel.qthemusic.utils.*
 import java.util.*
 
-
 class SignInFragment : BaseFragment() {
-    private  val TAG = "SignInFragment"
     private lateinit var signInViewModel: SignInViewModel
+    private lateinit var authNetworkViewModel: AuthNetworkViewModel
     private lateinit var sigInNetworkViewModel: SignInNetworkViewModel
     private lateinit var signInBinding: FragmentSignInBinding
-    private lateinit var googleSignInOptions: GoogleSignInOptions
-    private lateinit var googleSinInClient: GoogleSignInClient
-    private lateinit var callbackManager: CallbackManager
-    private lateinit var loginManager: LoginManager
-    private lateinit var twoWayBindingObj: BindingValidationClass
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,6 +63,7 @@ class SignInFragment : BaseFragment() {
         clickListeners()
         setViewModelObserver()
     }
+
     override fun onResume() {
         super.onResume()
         signInViewModel.showAnimation =
@@ -74,27 +75,12 @@ class SignInFragment : BaseFragment() {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        callbackManager.onActivityResult(
-            requestCode,
-            resultCode,
-            data
-        )
-        if (requestCode == Constants.GOOGLE_SIGN_IN_REQUEST_CODE) {
-            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-            handleGoogleSignInResult(task)
-        }
-    }
     private fun initialization() {
-        twoWayBindingObj = BindingValidationClass()
-        signInBinding.obj = twoWayBindingObj
-        callbackManager = CallbackManager.Factory.create()
-        loginManager = LoginManager.getInstance()
+        signInBinding.obj = signInViewModel
         Glide.with(requireContext()).load(R.drawable.laura_music)
             .transform(BlurImageView(requireContext())).into(signInBinding.ivSigninBg)
-        signInBinding.etPasLayout.passwordVisibilityToggleRequested(false)
-
     }
+
 
     private fun setViewModelObserver() {
         sigInNetworkViewModel.signinUserResponse.observe(
@@ -108,16 +94,10 @@ class SignInFragment : BaseFragment() {
                         signInBinding.pb.visibility = View.VISIBLE
                     }
                     NetworkStatus.SUCCESS -> {
-                        Log.v(TAG, "success")
                         val data = signInResponse.t as ResponseModel
-                        Log.d(TAG, "data${data.data?.authModel}")
                         signInBinding.btnSignIn.visibility = View.VISIBLE
                         signInBinding.pb.visibility = View.INVISIBLE
-                        activity.let {
-                            val intent = Intent(it, MainActivity::class.java)
-                            it?.startActivity(intent)
-                            it?.finish()
-                        }
+                        (mActivityListener as AuthActivityImp).navigateToHomeScreenAfterLogin(null)
                     }
                     NetworkStatus.ERROR -> {
                         val error = signInResponse.error as ErrorResponce
@@ -128,24 +108,51 @@ class SignInFragment : BaseFragment() {
                         )
                     }
                     NetworkStatus.EXPIRE -> {
-                        Log.v(TAG, "EXPIRE")
+                        val error = signInResponse.error as ErrorResponce
+                        DialogUtils.errorAlert(
+                            requireContext(),
+                            getString(R.string.error_occurred),
+                            error.message
+                        )
                     }
                     NetworkStatus.COMPLETED -> {
-                        Log.v("Network_status", "completed")
                     }
                 }
             })
 
-
-        sigInNetworkViewModel.signinUserResponse.observe(viewLifecycleOwner, Observer {
+        authNetworkViewModel.googleSignResponse.observe(viewLifecycleOwner, Observer {
             when (it.status) {
                 NetworkStatus.LOADING -> {
+
                 }
                 NetworkStatus.SUCCESS -> {
                     val data = it.t as GoogleResponseModel
+                    if (data.accessToken != null) {
+                        createUserAndCallApi(
+                            null,
+                            null,
+                            data.accessToken,
+                            LoginType.SOCIAL.name,
+                            null,
+                            null,
+                            SocialSites.GMAIL.name
+                        )
+                    } else {
+                        DialogUtils.errorAlert(
+                            requireContext(), getString(R.string.error_occurred), getString(
+                                R.string.error_access_token
+                            )
+                        )
+                    }
+
                 }
                 NetworkStatus.EXPIRE -> {
-
+                    val error = it.error as ErrorResponce
+                    DialogUtils.errorAlert(
+                        requireContext(),
+                        getString(R.string.error_occurred),
+                        error.message
+                    )
                 }
                 NetworkStatus.ERROR -> {
                     val error = it.error as ErrorResponce
@@ -157,15 +164,27 @@ class SignInFragment : BaseFragment() {
                 }
             }
         })
+
     }
 
     private fun clickListeners() {
+        signInBinding.tvSignUpBtn.setOnClickListener {
+            (mActivityListener as AuthActivityImp).navigateToHomeScreenAfterLogin(null)
+        }
         signInBinding.btnSignIn.setOnClickListener {
             if (
-                !signInBinding.etLoginEmail.text.isNullOrEmpty() &&
-                !signInBinding.etLoginPassword.text.isNullOrEmpty() &&
-                twoWayBindingObj.isEmailTextValid.get() == true &&
-                twoWayBindingObj.isPasswordTextValid.get() == true
+                signInBinding.etLoginEmail.text.isNullOrEmpty() ||
+                signInViewModel.isEmailTextValid.get() != true
+            ) {
+                signInBinding.etLoginEmail.error = getString(R.string.required)
+            } else if (
+                signInBinding.etLoginPassword.text.isNullOrEmpty() ||
+                signInViewModel.isPasswordTextValid.get() != true
+            ) {
+                signInBinding.etLoginPassword.error = getString(R.string.required)
+            } else if (
+                signInViewModel.isEmailTextValid.get() == true &&
+                signInViewModel.isPasswordTextValid.get() == true
             ) {
                 createUserAndCallApi(
                     signInBinding.etLoginEmail.toString(),
@@ -177,26 +196,25 @@ class SignInFragment : BaseFragment() {
                     null
                 )
             }
-        }
 
+        }
         signInBinding.tvForgotPassword.setOnClickListener {
             PrefUtils.setBoolean(requireContext(), CommonKeys.SIGNIN_BTN_ANIMATION, true)
             val bundle = Bundle()
             bundle.putSerializable(CommonKeys.APP_FLOW, OtpType.FORGET_PASSWORD)
             val fortgotPasword = ForgotPassword()
             fortgotPasword.arguments = bundle
-            val transaction = requireActivity().supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.auth_container, fortgotPasword)
-                .addToBackStack(TAG)
-            transaction.commit()
+            (mActivityListener as AuthActivityImp).replaceCurrentFragment(fortgotPasword)
+
         }
 
         signInBinding.signSocialPortion.ivGoogleId.setOnClickListener {
-            signInGoogle()
+            (mActivityListener as AuthActivityImp).signInWithGoogle(authNetworkViewModel)
         }
 
         signInBinding.signSocialPortion.ivFbId.setOnClickListener {
-            signInFacebook()
+            (mActivityListener as AuthActivityImp).signInWithFacebook()
+
         }
 
     }
@@ -220,80 +238,15 @@ class SignInFragment : BaseFragment() {
         authModelBilder.fcmToken = fcmToken
         authModelBilder.deviceIdentifier = deviceIdentifier
         val authModel = AuthRequestBuilder.builder(authModelBilder)
-        sigInNetworkViewModel.userLogin(authModel)
-    }
-
-    private fun signInFacebook() {
-        loginManager.logInWithReadPermissions(
-            this,
-            Arrays.asList(
-                getString(R.string.get_email_fb),
-            )
-        )
-
-        loginManager.registerCallback(callbackManager,
-            object : FacebookCallback<LoginResult?> {
-                override fun onSuccess(result: LoginResult?) {
-                    val accessToken = result?.accessToken?.token
-                    createUserAndCallApi(
-                        null,
-                        null,
-                        accessToken,
-                        LoginType.SOCIAL.name,
-                        null,
-                        "wasi_dev",
-                        SocialSites.FACEBOOK.name
-                    )
-                    Log.d(TAG, "$accessToken")
-                }
-
-                override fun onCancel() {
-                }
-
-                override fun onError(exception: FacebookException) {
-                    Log.d(TAG, "fb exception ${exception.message}")
-                }
-            })
-    }
-
-    private fun signInGoogle() {
-
-        googleSignInOptions =
-            GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.google_client_id_staging))
-                .requestEmail().build()
-        googleSinInClient = GoogleSignIn.getClient(requireContext(), googleSignInOptions)
-        val signInIntent = googleSinInClient.signInIntent
-        startActivityForResult(signInIntent, Constants.GOOGLE_SIGN_IN_REQUEST_CODE)
-    }
-
-
-    private fun handleGoogleSignInResult(completedTask: Task<GoogleSignInAccount>) {
-        try {
-            val account: GoogleSignInAccount = completedTask.getResult(ApiException::class.java)
-            val name = account.displayName
-            val email = account.email
-            val token = account.idToken
-            val authCode = account.serverAuthCode
-            if (token != null) {
-                //  googleSignViewModel.getGoogleToken(token)
-                createUserAndCallApi(
-                    null,
-                    null,
-                    "ksdklfjsdklfjsdklfjsdklfjsdklf",
-                    LoginType.SOCIAL.name,
-                    "kfjsdlfjsdklfjsdklfds",
-                    "wasi_dev", SocialSites.GMAIL.name
-                )
-            }
-        } catch (e: ApiException) {
-            Log.w(TAG, "signInResult:failed code=" + e.statusCode)
-        }
+        (mActivityListener as AuthActivityImp).userLoginRequest(authModel, sigInNetworkViewModel)
     }
 
     private fun initViewModel() {
-        sigInNetworkViewModel = ViewModelProvider(this).get(SignInNetworkViewModel::class.java)
+        authNetworkViewModel=ViewModelProvider(this).get(AuthNetworkViewModel::class.java)
+        sigInNetworkViewModel =
+            ViewModelProvider(requireActivity()).get(SignInNetworkViewModel::class.java)
         signInViewModel = ViewModelProvider(this).get(SignInViewModel::class.java)
+
 
     }
 }

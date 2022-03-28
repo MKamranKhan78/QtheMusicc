@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import com.techswivel.qthemusic.Data.RemoteRepository.ServerRepository.CustomObserver
 import com.techswivel.qthemusic.models.ApiResponse
 import com.techswivel.qthemusic.models.AuthRequestModel
+import com.techswivel.qthemusic.models.ErrorResponce
 import com.techswivel.qthemusic.models.ResponseMain
 import com.techswivel.qthemusic.source.remote.rxjava.CustomError
 import com.techswivel.qthemusic.ui.base.BaseViewModel
@@ -13,7 +14,7 @@ class ForgotPasswordNetworkViewModel:BaseViewModel() {
 
     var forgotPasswordResponse: MutableLiveData<ApiResponse> = MutableLiveData()
     fun sendOtpRequest(authRequestModel: AuthRequestModel){
-        mRemoteDataManager.sendOtpRequest(authRequestModel).doOnSubscribe {
+        mRemoteDataManager.sendOtp(authRequestModel).doOnSubscribe {
             forgotPasswordResponse.value= ApiResponse.loading()
 
         }.subscribe(object :CustomObserver<Response<ResponseMain>>(){
@@ -24,7 +25,15 @@ class ForgotPasswordNetworkViewModel:BaseViewModel() {
             }
 
             override fun onError(e: Throwable, isInternetError: Boolean, error: CustomError?) {
-
+                forgotPasswordResponse.value = ApiResponse.error(
+                    error?.code?.let { code ->
+                        ErrorResponce(
+                            false,
+                            error.message,
+                            code
+                        )
+                    }
+                )
             }
 
             override fun onRequestComplete() {

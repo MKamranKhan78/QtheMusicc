@@ -1,9 +1,14 @@
 package com.techswivel.qthemusic.ui.base
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.widget.TextView
+import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
+import com.google.android.material.internal.TextWatcherAdapter
 import com.techswivel.qthemusic.BuildConfig
 import com.techswivel.qthemusic.constant.Constants
 import com.techswivel.qthemusic.dataManager.RemoteDataManager
@@ -15,6 +20,9 @@ import com.techswivel.qthemusic.source.local.preference.PrefUtils
 import com.techswivel.qthemusic.source.remote.rxjava.DisposableManager
 import com.techswivel.qthemusic.ui.activities.mainActivity.MainActivity
 import com.techswivel.qthemusic.utils.CommonKeys
+import com.techswivel.qthemusic.utils.Log
+import com.techswivel.qthemusic.utils.isValidEmail
+import com.techswivel.qthemusic.utils.isValidPassword
 
 
 abstract class BaseViewModel : ViewModel() {
@@ -150,4 +158,58 @@ abstract class BaseViewModel : ViewModel() {
         )
         return authModel
     }
+
+
+//    val TAG = "Obj"
+//    var text: ObservableField<String> = ObservableField<String>()
+//    var isEmailTextValid: ObservableField<Boolean> = ObservableField(true)
+//    var passwordText: ObservableField<String> = ObservableField<String>()
+//    var isPasswordTextValid: ObservableField<Boolean> = ObservableField<Boolean>(true)
+//    var repeatPasswordText: ObservableField<String> = ObservableField<String>()
+//    var isRepeatPasswordTextValid: ObservableField<Boolean> = ObservableField<Boolean>(true)
+//
+//    var getEmailwatcher: TextWatcher = @SuppressLint("RestrictedApi")
+//    object : TextWatcherAdapter() {
+//        override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+//            super.beforeTextChanged(s, start, count, after)
+//            isEmailTextValid.set(true)
+//        }
+//        override fun afterTextChanged(s: Editable) {
+//            if (s.toString().isValidEmail()) {
+//                text.set(s.toString())
+//                isEmailTextValid.set(true)
+//            } else {
+//                isEmailTextValid.set(false)
+//                Log.d(TAG, "IN Valid")
+//            }
+//        }
+//    }
+//        get() {return field
+//        }
+//
+//    var passwordWatcher: TextWatcher = @SuppressLint("RestrictedApi")
+//    object : TextWatcherAdapter() {
+//        override fun afterTextChanged(s: Editable) {
+//            if (s.toString().isValidPassword()) {
+//                passwordText.set(s.toString())
+//                isPasswordTextValid.set(true)
+//            } else {
+//                isPasswordTextValid.set(false)
+//                Log.d(TAG, "In Valid Password")
+//            }
+//        }
+//    }
+//    var repeatPasswordWatcher: TextWatcher = @SuppressLint("RestrictedApi")
+//    object : TextWatcherAdapter() {
+//        override fun afterTextChanged(s: Editable) {
+//            if (s.toString().isValidPassword()) {
+//                repeatPasswordText.set(s.toString())
+//                isRepeatPasswordTextValid.set(true)
+//            } else {
+//                isRepeatPasswordTextValid.set(false)
+//                Log.d(TAG, "In Valid Password")
+//            }
+//        }
+//    }
+
 }

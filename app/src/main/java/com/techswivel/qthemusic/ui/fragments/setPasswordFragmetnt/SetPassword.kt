@@ -12,10 +12,10 @@ import com.techswivel.qthemusic.customData.enums.NetworkStatus
 import com.techswivel.qthemusic.customData.enums.OtpType
 import com.techswivel.qthemusic.databinding.FragmentSetPasswordBinding
 import com.techswivel.qthemusic.models.AuthRequestBuilder
-import com.techswivel.qthemusic.models.BindingValidationClass
 import com.techswivel.qthemusic.models.ErrorResponce
 import com.techswivel.qthemusic.models.ResponseModel
 import com.techswivel.qthemusic.source.remote.networkViewModel.SetPasswordNetworkViewModel
+import com.techswivel.qthemusic.ui.activities.authActivity.AuthActivityImp
 import com.techswivel.qthemusic.ui.base.BaseFragment
 import com.techswivel.qthemusic.ui.fragments.signInFragment.SignInFragment
 import com.techswivel.qthemusic.utils.CommonKeys
@@ -30,7 +30,6 @@ class SetPassword : BaseFragment() {
     lateinit var setPasswordViewModel: SetPasswordViewModel
     private lateinit var setPasswordNetworkViewModel: SetPasswordNetworkViewModel
     var fragmentFlow: Serializable? = ""
-    private lateinit var twoWayBindingObj: BindingValidationClass
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -54,33 +53,33 @@ class SetPassword : BaseFragment() {
         initViewModel()
         widgetInitialization()
         onClickListener()
-        setPasswordObserver()
+
     }
 
     private fun widgetInitialization() {
 
         setPasswordViewModel.userEmail = arguments?.getString(CommonKeys.USER_EMAIL).toString()
         setPasswordViewModel.userOtp = arguments?.getString(CommonKeys.USER_OTP).toString()
-        twoWayBindingObj = BindingValidationClass()
-        passwordBinding.obj = twoWayBindingObj
-        passwordBinding.etSetPasswordLayout.passwordVisibilityToggleRequested(false)
-        passwordBinding.etSetConfirmPasswordLayout.passwordVisibilityToggleRequested(false)
+        passwordBinding.obj = setPasswordViewModel
     }
 
     private fun onClickListener() {
         passwordBinding.btnDone.setOnClickListener {
             if (
-                passwordBinding.etSetPasswordId.text.isNotEmpty() &&
-                passwordBinding.etSetPasswordConfirmId.text.isNotEmpty() &&
-                twoWayBindingObj.isPasswordTextValid.get() == true &&
-                twoWayBindingObj.isRepeatPasswordTextValid.get() == true
+                passwordBinding.etSetPasswordId.text.isNullOrEmpty() ||
+                setPasswordViewModel.isPasswordTextValid.get() != true
             ) {
-                if (passwordBinding.etSetPasswordId.text.toString() == passwordBinding.etSetPasswordConfirmId.text.toString()) {
-                    createAndSendSetPasswordRequest()
-
-                }
+                passwordBinding.etSetPasswordId.error = getString(R.string.this_required)
+            } else if (
+                passwordBinding.etSetPasswordConfirmId.text.isNullOrEmpty() ||
+                setPasswordViewModel.isRepeatPasswordTextValid.get() != true
+            ) {
+                passwordBinding.etSetPasswordConfirmId.error = getString(R.string.this_required)
+            } else {
+                createAndSendSetPasswordRequest()
             }
         }
+
         passwordBinding.ivBackBtnSetPasId.setOnClickListener {
             requireActivity().onBackPressed()
         }
@@ -92,12 +91,15 @@ class SetPassword : BaseFragment() {
         authModelBilder.otp = setPasswordViewModel.userOtp.toInt()
         authModelBilder.password = passwordBinding.etSetPasswordConfirmId.text.toString()
         val setPasswordModel = AuthRequestBuilder.builder(authModelBilder)
-        setPasswordNetworkViewModel.requestToSetPassword(setPasswordModel)
-
+        (mActivityListener as AuthActivityImp).setPasswordRequest(
+            setPasswordModel,
+            setPasswordNetworkViewModel
+        )
+        setPasswordObserver()
     }
 
     private fun setPasswordObserver() {
-      setPasswordNetworkViewModel.setPasswordResponse.observe(viewLifecycleOwner, Observer {
+        setPasswordNetworkViewModel.setPasswordResponse.observe(viewLifecycleOwner, Observer {
             when (it.status) {
                 NetworkStatus.LOADING -> {
                     passwordBinding.btnDone.visibility = View.INVISIBLE
@@ -108,13 +110,8 @@ class SetPassword : BaseFragment() {
                     passwordBinding.btnDone.visibility = View.VISIBLE
                     passwordBinding.pbSetPassword.visibility = View.INVISIBLE
                     if (fragmentFlow == OtpType.FORGET_PASSWORD) {
-                        val fragmentManager: FragmentManager =
-                            requireActivity().getSupportFragmentManager()
-                        val transaction =
-                            requireActivity().supportFragmentManager.beginTransaction()
-                        transaction.add(R.id.auth_container, SignInFragment())
-                        fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-                        transaction.commit()
+                        (mActivityListener as AuthActivityImp).replaceCurrentFragment(SignInFragment())
+                        (mActivityListener as AuthActivityImp).popUpToAllFragments(SetPassword())
                     }
                 }
                 NetworkStatus.EXPIRE -> {
@@ -139,6 +136,7 @@ class SetPassword : BaseFragment() {
 
     private fun initViewModel() {
         setPasswordViewModel = ViewModelProvider(this).get(SetPasswordViewModel::class.java)
-        setPasswordNetworkViewModel=ViewModelProvider(this).get(SetPasswordNetworkViewModel::class.java)
+        setPasswordNetworkViewModel =
+            ViewModelProvider(this).get(SetPasswordNetworkViewModel::class.java)
     }
 }

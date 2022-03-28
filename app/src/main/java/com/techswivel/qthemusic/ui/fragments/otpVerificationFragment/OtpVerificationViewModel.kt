@@ -10,5 +10,5 @@ class OtpVerificationViewModel :BaseViewModel(){
     var etOtpThree = ""
     var etOtpFour = ""
     var etOtpFive = ""
-    val TAG="OtpVerificationVM"
+   // val TAG="OtpVerificationVM"
 }
