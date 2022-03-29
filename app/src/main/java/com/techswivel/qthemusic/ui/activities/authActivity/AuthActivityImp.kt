@@ -5,16 +5,26 @@ import com.techswivel.qthemusic.customData.interfaces.BaseInterface
 import com.techswivel.qthemusic.models.AuthModel
 import com.techswivel.qthemusic.models.AuthRequestModel
 import com.techswivel.qthemusic.source.remote.networkViewModel.*
+import java.io.Serializable
 
-interface AuthActivityImp :BaseInterface{
+interface AuthActivityImp : BaseInterface {
 
-    fun userLoginRequest(authRequestBuilder: AuthRequestModel,signInNetworkViewModel: SignInNetworkViewModel)
+    fun userLoginRequest(authRequestBuilder: AuthRequestModel)
+
     fun navigateToHomeScreenAfterLogin(authModel: AuthModel?)
-    fun forgotPasswordRequest(authRequestBuilder: AuthRequestModel,forgotPasswordNetworkViewModel: ForgotPasswordNetworkViewModel)
+    fun forgotPasswordRequest(authRequestBuilder: AuthRequestModel, appFlow: Serializable?)
+
     fun replaceCurrentFragment(fragment: Fragment)
-    fun verifyOtpRequest(authRequestBuilder: AuthRequestModel,otpVerificationNetworkViewModel: OtpVerificationNetworkViewModel)
-    fun setPasswordRequest(authRequestBuilder: AuthRequestModel,setPasswordNetworkViewModel: SetPasswordNetworkViewModel)
+    fun verifyOtpRequest(authRequestBuilder: AuthRequestModel)
+
+    fun setPasswordRequest(
+        authRequestBuilder: AuthRequestModel,
+        appFlow: Serializable?,
+        string: String
+    )
+
     fun popUpToAllFragments(fragment: Fragment)
-    fun signInWithGoogle(authNetworkViewModel: AuthNetworkViewModel)
+    fun signInWithGoogle()
     fun signInWithFacebook()
+    fun userSignUp()
 }

@@ -1,5 +1,6 @@
 package com.techswivel.qthemusic.source.remote.networkViewModel
 
+import android.annotation.SuppressLint
 import androidx.lifecycle.MutableLiveData
 import com.techswivel.qthemusic.Data.RemoteRepository.ServerRepository.CustomObserver
 import com.techswivel.qthemusic.R
@@ -18,6 +19,10 @@ class AuthNetworkViewModel : BaseViewModel() {
     var logoutResponse: MutableLiveData<ApiResponse> = MutableLiveData()
     var profileUpdationResponse: MutableLiveData<ApiResponse> = MutableLiveData()
     var googleSignResponse: MutableLiveData<ApiResponse> = MutableLiveData()
+    var signinUserResponse: MutableLiveData<ApiResponse> = MutableLiveData()
+    var forgotPasswordResponse: MutableLiveData<ApiResponse> = MutableLiveData()
+    var otpVerificationResponse:MutableLiveData<ApiResponse> = MutableLiveData()
+    var setPasswordResponse: MutableLiveData<ApiResponse> = MutableLiveData()
 
     fun logoutUser() {
 
@@ -74,7 +79,6 @@ class AuthNetworkViewModel : BaseViewModel() {
             })
     }
 
-
     fun updateProfile(authModel: AuthModel) {
 
         mRemoteDataManager.profileUpdate(authModel).doOnSubscribe {
@@ -129,7 +133,6 @@ class AuthNetworkViewModel : BaseViewModel() {
         })
     }
 
-
     fun getGoogleToken(serverAuthCode: String) {
         Log.d(TAG, "getGoogleToken called")
         mRemoteDataManager.getGoogleAccessToken(serverAuthCode).doOnSubscribe {
@@ -175,4 +178,128 @@ class AuthNetworkViewModel : BaseViewModel() {
 
         })
     }
+
+    @SuppressLint("CheckResult")
+    fun userLogin(authRequestBuilder: AuthRequestModel) {
+
+        mRemoteDataManager.userLogin(authRequestBuilder).doOnSubscribe {
+            signinUserResponse.value = ApiResponse.loading()
+        }.subscribe(object : CustomObserver<Response<ResponseMain>>() {
+            override fun onSuccess(t: Response<ResponseMain>) {
+                if (t.isSuccessful) {
+                    signinUserResponse.value = ApiResponse.success(t.body()?.response)
+                }
+            }
+
+            override fun onError(e: Throwable, isInternetError: Boolean, error: CustomError?) {
+                signinUserResponse.value = ApiResponse.error(
+                    error?.code?.let { code ->
+                        ErrorResponce(
+                            false,
+                            error.message,
+                            code
+                        )
+                    }
+                )
+            }
+
+            override fun onRequestComplete() {
+
+            }
+
+        })
+
+    }
+
+    fun sendOtpRequest(authRequestModel: AuthRequestModel){
+        mRemoteDataManager.sendOtp(authRequestModel).doOnSubscribe {
+            forgotPasswordResponse.value= ApiResponse.loading()
+
+        }.subscribe(object :CustomObserver<Response<ResponseMain>>(){
+            override fun onSuccess(t: Response<ResponseMain>) {
+                if (t.isSuccessful){
+                    forgotPasswordResponse.value= ApiResponse.success(t.body()?.response)
+                }
+            }
+
+            override fun onError(e: Throwable, isInternetError: Boolean, error: CustomError?) {
+                forgotPasswordResponse.value = ApiResponse.error(
+                    error?.code?.let { code ->
+                        ErrorResponce(
+                            false,
+                            error.message,
+                            code
+                        )
+                    }
+                )
+            }
+
+            override fun onRequestComplete() {
+
+            }
+
+        })
+    }
+
+    fun verifyOtpResponse(authRequestModel: AuthRequestModel){
+        mRemoteDataManager.verifyOtpRequest(authRequestModel).doOnSubscribe {
+            otpVerificationResponse.value= ApiResponse.loading()
+
+        }.subscribe(object : CustomObserver<Response<ResponseMain>>(){
+            override fun onSuccess(t: Response<ResponseMain>) {
+                if (t.isSuccessful){
+                    otpVerificationResponse.value= ApiResponse.success(t.body()?.response)
+                }
+            }
+
+            override fun onError(e: Throwable, isInternetError: Boolean, error: CustomError?) {
+                otpVerificationResponse.value = ApiResponse.error(
+                    error?.code?.let { code ->
+                        ErrorResponce(
+                            false,
+                            error.message,
+                            code
+                        )
+                    }
+                )
+            }
+
+            override fun onRequestComplete() {
+
+            }
+
+        })
+    }
+
+    fun requestToSetPassword(authRequestModel: AuthRequestModel) {
+        mRemoteDataManager.setNewPassword(authRequestModel).doOnSubscribe {
+            setPasswordResponse.value= ApiResponse.loading()
+        }.subscribe(object :CustomObserver<Response<ResponseMain>>(){
+            override fun onSuccess(t: Response<ResponseMain>) {
+                if (t.isSuccessful){
+                    setPasswordResponse.value= ApiResponse.success(t.body()?.response)
+                }
+            }
+
+            override fun onError(e: Throwable, isInternetError: Boolean, error: CustomError?) {
+                setPasswordResponse.value = ApiResponse.error(
+                    error?.code?.let { code ->
+                        ErrorResponce(
+                            false,
+                            error.message,
+                            code
+                        )
+                    }
+                )
+            }
+
+            override fun onRequestComplete() {
+
+            }
+
+
+        })
+
+    }
+
 }

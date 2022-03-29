@@ -7,6 +7,9 @@ import android.os.Bundle
 import android.util.AttributeSet
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
 import com.facebook.FacebookException
@@ -20,37 +23,55 @@ import com.google.android.gms.tasks.Task
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.application.QTheMusicApplication
 import com.techswivel.qthemusic.constant.Constants
+import com.techswivel.qthemusic.customData.enums.LoginType
+import com.techswivel.qthemusic.customData.enums.NetworkStatus
+import com.techswivel.qthemusic.customData.enums.OtpType
+import com.techswivel.qthemusic.customData.enums.SocialSites
 import com.techswivel.qthemusic.databinding.ActivityAuthBinding
-import com.techswivel.qthemusic.models.AuthModel
-import com.techswivel.qthemusic.models.AuthRequestModel
+import com.techswivel.qthemusic.models.*
 import com.techswivel.qthemusic.source.local.preference.PrefUtils
 import com.techswivel.qthemusic.source.remote.networkViewModel.*
 import com.techswivel.qthemusic.ui.activities.mainActivity.MainActivity
 import com.techswivel.qthemusic.ui.base.BaseActivity
+import com.techswivel.qthemusic.ui.fragments.otpVerificationFragment.OtpVerification
+import com.techswivel.qthemusic.ui.fragments.setPasswordFragmetnt.SetPassword
 import com.techswivel.qthemusic.ui.fragments.signInFragment.SignInFragment
+import com.techswivel.qthemusic.ui.fragments.signInFragment.SignInFragmentImp
 import com.techswivel.qthemusic.utils.CommonKeys
+import com.techswivel.qthemusic.utils.DialogUtils
 import com.techswivel.qthemusic.utils.Log
+import com.techswivel.qthemusic.utils.Utilities
+import java.io.Serializable
 import java.util.*
 
-private const val TAG="AuthActivity"
+private const val TAG = "AuthActivity"
+
 class AuthActivity : BaseActivity(), AuthActivityImp {
+    var stringss = ""
     private lateinit var authBinding: ActivityAuthBinding
     private lateinit var googleSinInClient: GoogleSignInClient
-    lateinit var mAuthNetworkViewModel: AuthNetworkViewModel
+    lateinit var authNetworkViewModel: AuthNetworkViewModel
     private lateinit var callbackManager: CallbackManager
     private lateinit var loginManager: LoginManager
+    private lateinit var authModelBilder: AuthRequestBuilder
+    var fragmentFlow: Serializable? = ""
+    var userEmail: String? = ""
+    var userOtp: Int? = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         authBinding = ActivityAuthBinding.inflate(layoutInflater)
+        authNetworkViewModel = ViewModelProvider(this).get(AuthNetworkViewModel::class.java)
+        setAutNetworkViewModelObservers()
+        authModelBilder = AuthRequestBuilder()
         replaceFragmentWithoutAddingToBackStack(R.id.auth_container, SignInFragment())
         setContentView(authBinding.root)
-
     }
 
     override fun onCreateView(name: String, context: Context, attrs: AttributeSet): View? {
 
         callbackManager = CallbackManager.Factory.create()
         loginManager = LoginManager.getInstance()
+
         return super.onCreateView(name, context, attrs)
 
     }
@@ -75,10 +96,9 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
     }
 
     override fun userLoginRequest(
-        authRequestBuilder: AuthRequestModel,
-        signInNetworkViewModel: SignInNetworkViewModel
+        authRequestBuilder: AuthRequestModel
     ) {
-        signInNetworkViewModel.userLogin(authRequestBuilder)
+        authNetworkViewModel.userLogin(authRequestBuilder)
     }
 
     override fun navigateToHomeScreenAfterLogin(authModel: AuthModel?) {
@@ -89,9 +109,11 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
 
     override fun forgotPasswordRequest(
         authRequestBuilder: AuthRequestModel,
-        forgotPasswordNetworkViewModel: ForgotPasswordNetworkViewModel
+        appFlow: Serializable?
     ) {
-        forgotPasswordNetworkViewModel.sendOtpRequest(authRequestBuilder)
+        userEmail = authRequestBuilder.email.toString()
+        fragmentFlow = appFlow
+        authNetworkViewModel.sendOtpRequest(authRequestBuilder)
 
     }
 
@@ -109,30 +131,38 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
 
     override fun verifyOtpRequest(
         authRequestBuilder: AuthRequestModel,
-        otpVerificationNetworkViewModel: OtpVerificationNetworkViewModel
-    ) {
-        otpVerificationNetworkViewModel.verifyOtpResponse(authRequestBuilder)
+
+        ) {
+        authNetworkViewModel.verifyOtpResponse(authRequestBuilder)
+        userEmail = authRequestBuilder.email
+        userOtp = authRequestBuilder.otp
     }
 
     override fun setPasswordRequest(
         authRequestBuilder: AuthRequestModel,
-        setPasswordNetworkViewModel: SetPasswordNetworkViewModel
+        appFlow: Serializable?,
+        string: String
     ) {
-        setPasswordNetworkViewModel.requestToSetPassword(authRequestBuilder)
+        stringss = string
+        Utilities.showToast(this,stringss)
+        authNetworkViewModel.requestToSetPassword(authRequestBuilder)
+        fragmentFlow = appFlow
     }
 
     override fun popUpToAllFragments(fragment: Fragment) {
         popUpAllFragmentIncludeThis(fragment::class.java.name)
     }
 
-    override fun signInWithGoogle(authNetworkViewModel: AuthNetworkViewModel) {
-        mAuthNetworkViewModel = authNetworkViewModel
+    override fun signInWithGoogle() {
         signInGoogle()
-
     }
 
     override fun signInWithFacebook() {
         signInFacebook()
+    }
+
+    override fun userSignUp() {
+
     }
 
     private fun handleGoogleSignInResult(completedTask: Task<GoogleSignInAccount>) {
@@ -140,10 +170,9 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
             val account: GoogleSignInAccount = completedTask.getResult(ApiException::class.java)
             val authCode = account.serverAuthCode
             if (authCode != null) {
-                Log.d(TAG, "auth Code is $authCode")
-                mAuthNetworkViewModel.getGoogleToken(authCode)
+                authNetworkViewModel.getGoogleToken(authCode)
             } else {
-                Log.d(TAG, "not found")
+                Log.d(TAG, "ServerAuthCode Not Found")
             }
 
         } catch (e: ApiException) {
@@ -155,7 +184,7 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
 
         googleSinInClient = GoogleSignIn.getClient(this, QTheMusicApplication.getGso())
         val signInIntent = googleSinInClient.signInIntent
-        startActivityForResult(signInIntent,Constants.GOOGLE_SIGN_IN_REQUEST_CODE)
+        startActivityForResult(signInIntent, Constants.GOOGLE_SIGN_IN_REQUEST_CODE)
 
     }
 
@@ -164,15 +193,16 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
             this,
             Arrays.asList(
                 getString(R.string.get_email_fb),
+                "public_profile"
             )
         )
         loginManager.registerCallback(callbackManager,
             object : FacebookCallback<LoginResult?> {
                 override fun onSuccess(result: LoginResult?) {
                     val accessToken = result?.accessToken?.token
-                    val intent = Intent(this@AuthActivity, MainActivity::class.java)
-                    startActivity(intent)
-                    finish()
+                    authModelBilder.accessToken = accessToken
+                    val authModel = AuthRequestBuilder.builder(authModelBilder)
+                    userLoginRequest(authModel)
                 }
 
                 override fun onCancel() {
@@ -182,6 +212,204 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
                     Log.d(TAG, "fb exception ${exception.message}")
                 }
             })
+    }
+
+
+    private fun setAutNetworkViewModelObservers() {
+        authNetworkViewModel.signinUserResponse.observe(this, Observer {
+            when (it.status) {
+                NetworkStatus.LOADING -> {
+                    authBinding.authProgressBar.visibility = View.VISIBLE
+                }
+                NetworkStatus.SUCCESS -> {
+                    authBinding.authProgressBar.visibility = View.INVISIBLE
+                    val data = it.t as ResponseModel
+                    val intent = Intent(this@AuthActivity, MainActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                }
+                NetworkStatus.ERROR -> {
+                    authBinding.authProgressBar.visibility = View.INVISIBLE
+                    val error = it.error as ErrorResponce
+                    DialogUtils.errorAlert(
+                        this,
+                        getString(R.string.error_occurred),
+                        error.message
+                    )
+                }
+                NetworkStatus.EXPIRE -> {
+                    authBinding.authProgressBar.visibility = View.INVISIBLE
+                    val error = it.error as ErrorResponce
+                    DialogUtils.errorAlert(
+                        this,
+                        getString(R.string.error_occurred),
+                        error.message
+                    )
+                }
+                NetworkStatus.COMPLETED -> {
+                }
+            }
+        })
+        authNetworkViewModel.googleSignResponse.observe(this, Observer {
+            when (it.status) {
+                NetworkStatus.LOADING -> {
+                    authBinding.authProgressBar.visibility = View.VISIBLE
+                }
+                NetworkStatus.SUCCESS -> {
+                    authBinding.authProgressBar.visibility = View.INVISIBLE
+
+                    val data = it.t as GoogleResponseModel
+                    if (data.accessToken != null) {
+
+                        authModelBilder.accessToken = data.accessToken
+                        authModelBilder.loginType = LoginType.SOCIAL.name
+                        authModelBilder.socialSite = SocialSites.GMAIL.name
+                        val authModel = AuthRequestBuilder.builder(authModelBilder)
+                        userLoginRequest(authModel)
+                    } else {
+                        DialogUtils.errorAlert(
+                            this, getString(R.string.error_occurred), getString(
+                                R.string.error_access_token
+                            )
+                        )
+                    }
+                }
+                NetworkStatus.EXPIRE -> {
+                    authBinding.authProgressBar.visibility = View.INVISIBLE
+                    val error = it.error as ErrorResponce
+                    DialogUtils.errorAlert(
+                        this,
+                        getString(R.string.error_occurred),
+                        error.message
+                    )
+                }
+                NetworkStatus.ERROR -> {
+                    authBinding.authProgressBar.visibility = View.INVISIBLE
+                    val error = it.error as ErrorResponce
+                    DialogUtils.errorAlert(
+                        this,
+                        getString(R.string.error_occurred),
+                        error.message
+                    )
+                }
+            }
+        })
+        authNetworkViewModel.forgotPasswordResponse.observe(this, Observer {
+            when (it.status) {
+                NetworkStatus.LOADING -> {
+                    authBinding.authProgressBar.visibility = View.VISIBLE
+                }
+                NetworkStatus.SUCCESS -> {
+                    authBinding.authProgressBar.visibility = View.INVISIBLE
+                    val data = it.t as ResponseModel
+                    val bundle = Bundle()
+                    bundle.putString(CommonKeys.USER_EMAIL, userEmail)
+                    bundle.putSerializable(CommonKeys.APP_FLOW, OtpType.FORGET_PASSWORD)
+                    val otpVerification = OtpVerification()
+                    otpVerification.arguments = bundle
+                    replaceCurrentFragment(otpVerification)
+
+                }
+                NetworkStatus.EXPIRE -> {
+                    authBinding.authProgressBar.visibility = View.INVISIBLE
+                    val error = it.error as ErrorResponce
+                    DialogUtils.errorAlert(
+                        this,
+                        getString(R.string.error_occurred),
+                        error.message
+                    )
+                }
+                NetworkStatus.ERROR -> {
+                    authBinding.authProgressBar.visibility = View.INVISIBLE
+                    val error = it.error as ErrorResponce
+                    DialogUtils.errorAlert(
+                        this,
+                        getString(R.string.error_occurred),
+                        error.message
+                    )
+                }
+            }
+        })
+
+        authNetworkViewModel.otpVerificationResponse.observe(
+            this,
+            Observer {
+                when (it.status) {
+                    NetworkStatus.LOADING -> {
+                        authBinding.authProgressBar.visibility = View.VISIBLE
+                    }
+                    NetworkStatus.SUCCESS -> {
+                        authBinding.authProgressBar.visibility = View.INVISIBLE
+                        val data = it.t as ResponseModel
+                        val bundle = Bundle()
+                        bundle.putSerializable(CommonKeys.APP_FLOW, fragmentFlow)
+                        bundle.putString(CommonKeys.USER_OTP, userOtp.toString())
+                        bundle.putString(CommonKeys.USER_EMAIL, userEmail)
+                        val setPassword = SetPassword()
+                        setPassword.arguments = bundle
+                        PrefUtils.setBoolean(this, CommonKeys.START_TIMER, false)
+                        replaceCurrentFragment(setPassword)
+
+                    }
+                    NetworkStatus.EXPIRE -> {
+                        authBinding.authProgressBar.visibility = View.INVISIBLE
+                        val error = it.error as ErrorResponce
+                        DialogUtils.errorAlert(
+                            this,
+                            getString(R.string.error_occurred),
+                            error.message
+                        )
+                    }
+                    NetworkStatus.ERROR -> {
+                        authBinding.authProgressBar.visibility = View.INVISIBLE
+                        val error = it.error as ErrorResponce
+                        DialogUtils.errorAlert(
+                            this,
+                            getString(R.string.error_occurred),
+                            error.message
+                        )
+                    }
+                }
+            })
+
+        authNetworkViewModel.setPasswordResponse.observe(this, Observer {
+            when (it.status) {
+                NetworkStatus.LOADING -> {
+                    authBinding.authProgressBar.visibility = View.VISIBLE
+                }
+                NetworkStatus.SUCCESS -> {
+                    authBinding.authProgressBar.visibility = View.INVISIBLE
+                    PrefUtils.removeValue(this, CommonKeys.SIGNIN_BTN_ANIMATION)
+                    val data = it.t as ResponseModel
+                    if (fragmentFlow == OtpType.FORGET_PASSWORD) {
+                        Log.d(TAG, "success")
+
+                        replaceCurrentFragment(SignInFragment())
+
+                    } else {
+                        Utilities.showToast(this, "flow not match")
+                    }
+                }
+                NetworkStatus.EXPIRE -> {
+                    authBinding.authProgressBar.visibility = View.INVISIBLE
+                    val error = it.error as ErrorResponce
+                    DialogUtils.errorAlert(
+                        this,
+                        getString(R.string.error_occurred),
+                        error.message
+                    )
+                }
+                NetworkStatus.ERROR -> {
+                    authBinding.authProgressBar.visibility = View.INVISIBLE
+                    val error = it.error as ErrorResponce
+                    DialogUtils.errorAlert(
+                        this,
+                        getString(R.string.error_occurred),
+                        error.message
+                    )
+                }
+            }
+        })
     }
 
 }

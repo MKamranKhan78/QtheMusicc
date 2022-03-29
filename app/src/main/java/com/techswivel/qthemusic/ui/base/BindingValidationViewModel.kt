@@ -1,4 +1,4 @@
-package com.techswivel.qthemusic.models
+package com.techswivel.qthemusic.ui.base
 
 import android.annotation.SuppressLint
 import android.text.Editable

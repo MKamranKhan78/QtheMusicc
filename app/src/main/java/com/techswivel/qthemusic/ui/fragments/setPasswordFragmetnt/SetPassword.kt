@@ -4,35 +4,22 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.techswivel.qthemusic.R
-import com.techswivel.qthemusic.customData.enums.NetworkStatus
-import com.techswivel.qthemusic.customData.enums.OtpType
 import com.techswivel.qthemusic.databinding.FragmentSetPasswordBinding
 import com.techswivel.qthemusic.models.AuthRequestBuilder
-import com.techswivel.qthemusic.models.ErrorResponce
-import com.techswivel.qthemusic.models.ResponseModel
-import com.techswivel.qthemusic.source.remote.networkViewModel.SetPasswordNetworkViewModel
 import com.techswivel.qthemusic.ui.activities.authActivity.AuthActivityImp
 import com.techswivel.qthemusic.ui.base.BaseFragment
-import com.techswivel.qthemusic.ui.fragments.signInFragment.SignInFragment
 import com.techswivel.qthemusic.utils.CommonKeys
-import com.techswivel.qthemusic.utils.DialogUtils
-import com.techswivel.qthemusic.utils.Log
 import java.io.Serializable
 
 
 class SetPassword : BaseFragment() {
     lateinit var passwordBinding: FragmentSetPasswordBinding
     lateinit var setPasswordViewModel: SetPasswordViewModel
-    private lateinit var setPasswordNetworkViewModel: SetPasswordNetworkViewModel
     var fragmentFlow: Serializable? = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
     }
 
     override fun onCreateView(
@@ -75,7 +62,18 @@ class SetPassword : BaseFragment() {
             ) {
                 passwordBinding.etSetPasswordConfirmId.error = getString(R.string.this_required)
             } else {
-                createAndSendSetPasswordRequest()
+
+                if (passwordBinding.etSetPasswordId.text.toString() !=
+                    passwordBinding.etSetPasswordConfirmId.text.toString()
+                ) {
+                    passwordBinding.etSetPasswordConfirmId.error =
+                        getString(R.string.password_never_match_error)
+                    passwordBinding.etSetPasswordId.error =
+                        getString(R.string.password_never_match_error)
+                } else {
+                    createAndSendSetPasswordRequest()
+                }
+
             }
         }
 
@@ -92,50 +90,12 @@ class SetPassword : BaseFragment() {
         val setPasswordModel = AuthRequestBuilder.builder(authModelBilder)
         (mActivityListener as AuthActivityImp).setPasswordRequest(
             setPasswordModel,
-            setPasswordNetworkViewModel
+            fragmentFlow,
+            SetPassword::class.java.name
         )
-        setPasswordObserver()
-    }
-
-    private fun setPasswordObserver() {
-        setPasswordNetworkViewModel.setPasswordResponse.observe(viewLifecycleOwner, Observer {
-            when (it.status) {
-                NetworkStatus.LOADING -> {
-                    passwordBinding.btnDone.visibility = View.INVISIBLE
-                    passwordBinding.pbSetPassword.visibility = View.VISIBLE
-                }
-                NetworkStatus.SUCCESS -> {
-                    val data = it.t as ResponseModel
-                    passwordBinding.btnDone.visibility = View.VISIBLE
-                    passwordBinding.pbSetPassword.visibility = View.INVISIBLE
-                    if (fragmentFlow == OtpType.FORGET_PASSWORD) {
-                        (mActivityListener as AuthActivityImp).replaceCurrentFragment(SignInFragment())
-                        (mActivityListener as AuthActivityImp).popUpToAllFragments(SetPassword())
-                    }
-                }
-                NetworkStatus.EXPIRE -> {
-                    val error = it.error as ErrorResponce
-                    DialogUtils.errorAlert(
-                        requireContext(),
-                        getString(R.string.error_occurred),
-                        error.message
-                    )
-                }
-                NetworkStatus.ERROR -> {
-                    val error = it.error as ErrorResponce
-                    DialogUtils.errorAlert(
-                        requireContext(),
-                        getString(R.string.error_occurred),
-                        error.message
-                    )
-                }
-            }
-        })
     }
 
     private fun initViewModel() {
         setPasswordViewModel = ViewModelProvider(this).get(SetPasswordViewModel::class.java)
-        setPasswordNetworkViewModel =
-            ViewModelProvider(this).get(SetPasswordNetworkViewModel::class.java)
     }
 }

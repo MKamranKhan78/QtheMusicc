@@ -36,7 +36,8 @@ object Constants {
     const val VIDEO_CAMERA_PICKER_REQUEST_CODE = 22345
     const val GOOGLE_SIGN_IN_REQUEST_CODE=1001
 
-    const val OTP_RESEND_TIME:Long=30000
-    const val OTP_SECOND:Long=1000
+    const val OTP_RESEND_TIME_IN_MILLI_SECONDS:Long=30000
+
+    const val OTP_COUNT_DOWN_INTERVAL_IN_MILLI_SECONDS:Long=1000
 
 }
