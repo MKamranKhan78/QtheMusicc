@@ -55,39 +55,45 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
+    <com.addisonelliott.segmentedbutton.SegmentedButtonGroup
         android:id="@+id/toggle_button_group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_30dp"
-        android:gravity="center"
+        android:background="@color/color_grey"
+        app:divider="@android:color/transparent"
+        app:dividerWidth="1dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_album_name">
+        app:layout_constraintTop_toBottomOf="@id/tv_album_name"
+        app:position="0"
+        app:radius="@dimen/_8dp"
+        app:ripple="false"
+        app:selectedBackground="@color/color_red">
 
-        <androidx.appcompat.widget.AppCompatButton
+        <com.addisonelliott.segmentedbutton.SegmentedButton
             android:id="@+id/btn_audio"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/_30dp"
-            android:background="@drawable/toggle_button_background"
             android:fontFamily="@font/manrope_bold"
-            android:text="@string/str_audio"
+            android:padding="@dimen/_20dp"
             android:textAllCaps="false"
-            android:textColor="@color/color_white"
-            android:textSize="@dimen/_12sp" />
+            android:textSize="@dimen/_12sp"
+            app:text="@string/str_audio"
+            app:textColor="@color/color_white" />
 
-        <androidx.appcompat.widget.AppCompatButton
+        <com.addisonelliott.segmentedbutton.SegmentedButton
             android:id="@+id/btn_video"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/_30dp"
-            android:background="@drawable/toggle_button_background"
             android:fontFamily="@font/manrope_bold"
-            android:text="@string/str_video"
+            android:padding="@dimen/_20dp"
             android:textAllCaps="false"
-            android:textColor="@color/color_white"
-            android:textSize="@dimen/_12sp" />
+            android:textSize="@dimen/_12sp"
+            app:text="@string/str_video"
+            app:textColor="@color/color_white" />
 
-    </LinearLayout>
+    </com.addisonelliott.segmentedbutton.SegmentedButtonGroup>
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cv_song_cover"
@@ -157,7 +163,7 @@
         android:progressBackgroundTint="@color/color_white"
         android:progressBackgroundTintMode="src_over"
         android:progressTint="@color/color_red"
-        android:thumb="@drawable/custom_thumb"
+        android:thumb="@drawable/ic_seekbar_thumb"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_artist_name" />
 

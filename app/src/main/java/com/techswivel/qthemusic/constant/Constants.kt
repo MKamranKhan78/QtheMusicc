@@ -35,6 +35,4 @@ object Constants {
 
     const val VIDEO_CAMERA_PICKER_REQUEST_CODE = 22345
     const val SEEK_BAR_DELAY = 100
-    const val TOGGLE_ANIMATION_LEVEL_INCREMENT = 1000
-    const val TOGGLE_ANIMATION_MAX_LEVEL = 10000
 }

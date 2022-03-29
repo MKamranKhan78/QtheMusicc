@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
         android:name=".application.QTheMusicApplication"
@@ -22,9 +23,6 @@
         tools:targetApi="m">
         <activity
             android:name=".ui.activities.playerActivity.PlayerActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.activities.profileUpdatingActivity.ProfileUpdatingActivity"
             android:exported="false" />
         <activity
             android:name=".ui.activities.profileSettingScreen.ProfileSettingActivity"
@@ -48,6 +46,8 @@
         <activity
             android:name=".ui.wrapper.FrameActivity"
             android:screenOrientation="portrait" />
+
+        <service android:name=".services.PlayerBackgroundService" />
 
         <service
             android:name=".source.remote.firebase.FirebaseNotificationService"

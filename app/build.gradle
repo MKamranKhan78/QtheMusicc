@@ -185,4 +185,7 @@ dependencies {
 
     // Shimmer Effect
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
+
+    // Segmented Buttons
+    implementation 'com.github.addisonelliott:SegmentedButton:3.1.9'
 }
