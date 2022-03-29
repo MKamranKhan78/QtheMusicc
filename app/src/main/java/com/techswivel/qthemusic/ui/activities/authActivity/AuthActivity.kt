@@ -1,37 +1,25 @@
 package com.techswivel.qthemusic.ui.activities.authActivity
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.AttributeSet
-import android.util.Base64
 import android.view.View
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
 import com.facebook.FacebookException
-import com.facebook.FacebookSdk
-import com.facebook.appevents.AppEventsLogger
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.application.QTheMusicApplication
 import com.techswivel.qthemusic.constant.Constants
-import com.techswivel.qthemusic.customData.enums.LoginType
-import com.techswivel.qthemusic.customData.enums.SocialSites
 import com.techswivel.qthemusic.databinding.ActivityAuthBinding
 import com.techswivel.qthemusic.models.AuthModel
 import com.techswivel.qthemusic.models.AuthRequestModel
@@ -39,19 +27,13 @@ import com.techswivel.qthemusic.source.local.preference.PrefUtils
 import com.techswivel.qthemusic.source.remote.networkViewModel.*
 import com.techswivel.qthemusic.ui.activities.mainActivity.MainActivity
 import com.techswivel.qthemusic.ui.base.BaseActivity
-import com.techswivel.qthemusic.ui.fragments.forgotPasswordFragment.ForgotPasswordImp
 import com.techswivel.qthemusic.ui.fragments.signInFragment.SignInFragment
-import com.techswivel.qthemusic.ui.fragments.signInFragment.SignInFragmentImp
 import com.techswivel.qthemusic.utils.CommonKeys
 import com.techswivel.qthemusic.utils.Log
-import com.techswivel.qthemusic.utils.Utilities
-import java.security.MessageDigest
-import java.security.NoSuchAlgorithmException
 import java.util.*
 
-
+private const val TAG="AuthActivity"
 class AuthActivity : BaseActivity(), AuthActivityImp {
-    val TAG = "AuthActivity"
     private lateinit var authBinding: ActivityAuthBinding
     private lateinit var googleSinInClient: GoogleSignInClient
     lateinit var mAuthNetworkViewModel: AuthNetworkViewModel
@@ -60,8 +42,7 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         authBinding = ActivityAuthBinding.inflate(layoutInflater)
-        replaceFragment(R.id.auth_container, SignInFragment())
-
+        replaceFragmentWithoutAddingToBackStack(R.id.auth_container, SignInFragment())
         setContentView(authBinding.root)
 
     }

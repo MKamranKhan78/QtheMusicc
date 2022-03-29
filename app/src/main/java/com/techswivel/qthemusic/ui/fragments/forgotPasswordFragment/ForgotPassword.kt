@@ -24,7 +24,6 @@ import java.io.Serializable
 
 
 class ForgotPassword : BaseFragment() {
-    val TAG = "ForgotPassword"
     var fragmentFlow: Serializable? = ""
     private lateinit var forgotViewModel: ForgotPasswordViewModel
     private lateinit var forgotPasswordNetworkViewModel: ForgotPasswordNetworkViewModel

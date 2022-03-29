@@ -80,8 +80,7 @@ class SignInFragment : BaseFragment() {
         Glide.with(requireContext()).load(R.drawable.laura_music)
             .transform(BlurImageView(requireContext())).into(signInBinding.ivSigninBg)
     }
-
-
+    
     private fun setViewModelObserver() {
         sigInNetworkViewModel.signinUserResponse.observe(
             viewLifecycleOwner,
@@ -144,7 +143,6 @@ class SignInFragment : BaseFragment() {
                             )
                         )
                     }
-
                 }
                 NetworkStatus.EXPIRE -> {
                     val error = it.error as ErrorResponce
@@ -164,7 +162,6 @@ class SignInFragment : BaseFragment() {
                 }
             }
         })
-
     }
 
     private fun clickListeners() {
@@ -196,7 +193,6 @@ class SignInFragment : BaseFragment() {
                     null
                 )
             }
-
         }
         signInBinding.tvForgotPassword.setOnClickListener {
             PrefUtils.setBoolean(requireContext(), CommonKeys.SIGNIN_BTN_ANIMATION, true)
@@ -216,7 +212,6 @@ class SignInFragment : BaseFragment() {
             (mActivityListener as AuthActivityImp).signInWithFacebook()
 
         }
-
     }
 
     private fun createUserAndCallApi(
@@ -242,7 +237,7 @@ class SignInFragment : BaseFragment() {
     }
 
     private fun initViewModel() {
-        authNetworkViewModel=ViewModelProvider(this).get(AuthNetworkViewModel::class.java)
+        authNetworkViewModel = ViewModelProvider(this).get(AuthNetworkViewModel::class.java)
         sigInNetworkViewModel =
             ViewModelProvider(requireActivity()).get(SignInNetworkViewModel::class.java)
         signInViewModel = ViewModelProvider(this).get(SignInViewModel::class.java)

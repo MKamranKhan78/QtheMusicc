@@ -30,10 +30,7 @@ import com.techswivel.qthemusic.utils.DialogUtils
 import com.techswivel.qthemusic.utils.Log
 import com.techswivel.qthemusic.utils.Utilities
 import java.io.Serializable
-
 class OtpVerification : BaseFragment() {
-    val TAG = "OtpVerification"
-
     private lateinit var viewBinding: FragmentOtpVerificationBinding
     private lateinit var verifyOtpViewModel: OtpVerificationViewModel
     private lateinit var otpVerificationNetworkViewModel: OtpVerificationNetworkViewModel
@@ -72,8 +69,6 @@ class OtpVerification : BaseFragment() {
     private fun initialization() {
         fragmentFlow = arguments?.getSerializable(CommonKeys.APP_FLOW)
         verifyOtpViewModel.email = arguments?.getString(CommonKeys.USER_EMAIL).toString()
-        Log.d(TAG, "fragment flow $fragmentFlow")
-        Log.d(TAG, "email is ${verifyOtpViewModel.email}")
         viewBinding.tvEmailWhereSndOtp.text = verifyOtpViewModel.email
     }
 

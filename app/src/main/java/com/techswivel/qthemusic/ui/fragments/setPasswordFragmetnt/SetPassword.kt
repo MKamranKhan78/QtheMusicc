@@ -25,7 +25,6 @@ import java.io.Serializable
 
 
 class SetPassword : BaseFragment() {
-    val TAG = "SetPassword"
     lateinit var passwordBinding: FragmentSetPasswordBinding
     lateinit var setPasswordViewModel: SetPasswordViewModel
     private lateinit var setPasswordNetworkViewModel: SetPasswordNetworkViewModel
@@ -49,7 +48,7 @@ class SetPassword : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         fragmentFlow = arguments?.getSerializable(CommonKeys.APP_FLOW)
-        Log.d(TAG, "flow is $fragmentFlow")
+
         initViewModel()
         widgetInitialization()
         onClickListener()
