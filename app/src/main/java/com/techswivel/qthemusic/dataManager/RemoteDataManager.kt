@@ -4,6 +4,7 @@ import com.techswivel.qthemusic.BuildConfig
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.application.QTheMusicApplication
 import com.techswivel.qthemusic.constant.Constants
+import com.techswivel.qthemusic.customData.enums.OtpType
 import com.techswivel.qthemusic.dataManager.DummyDataManager.Companion.getDummyAuthDetails
 import com.techswivel.qthemusic.dataManager.DummyDataManager.Companion.getResponseDummyData
 import com.techswivel.qthemusic.models.AuthModel
@@ -91,6 +92,18 @@ object RemoteDataManager : BaseDataManager(), RemoteDataMangerImp {
     }
 
     override fun logoutUser(deviceIdentifier: String): Observable<Response<ResponseMain>> {
+        return Observable.create { observer ->
+            // observer.onError(Throwable("This is dummy thorwable if you want to test failed case."))
+            observer.onNext(getResponseDummyData())
+            observer.onComplete()
+        }
+    }
+
+    override fun sendOtp(
+        otpType: OtpType?,
+        email: String?,
+        phoneNumber: String?
+    ): Observable<Response<ResponseMain>> {
         return Observable.create { observer ->
             // observer.onError(Throwable("This is dummy thorwable if you want to test failed case."))
             observer.onNext(getResponseDummyData())

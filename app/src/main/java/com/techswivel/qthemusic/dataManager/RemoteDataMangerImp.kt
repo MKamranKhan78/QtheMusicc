@@ -1,5 +1,6 @@
 package com.techswivel.qthemusic.dataManager
 
+import com.techswivel.qthemusic.customData.enums.OtpType
 import com.techswivel.qthemusic.models.AuthModel
 import com.techswivel.qthemusic.models.GoogleResponseModel
 import com.techswivel.qthemusic.models.ResponseMain
@@ -13,6 +14,12 @@ interface RemoteDataMangerImp {
     fun sendOTP(email: String): Observable<Response<ResponseMain>>
 
     fun logoutUser(deviceIdentifier: String): Observable<Response<ResponseMain>>
+
+    fun sendOtp(
+        otpType: OtpType?,
+        email: String?,
+        phoneNumber: String?
+    ): Observable<Response<ResponseMain>>
 
     fun profileUpdate(authModel: AuthModel?): Observable<Response<ResponseMain>>
 

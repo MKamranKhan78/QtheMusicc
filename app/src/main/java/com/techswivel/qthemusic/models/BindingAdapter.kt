@@ -7,6 +7,8 @@ import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.techswivel.qthemusic.R
+import java.text.DateFormat
+import java.util.*
 
 object BindingAdapter {
 
@@ -22,6 +24,27 @@ object BindingAdapter {
     fun setPlan(textView: TextView, subscription: Subscription?) {
         textView.text = "$" + subscription?.planPrice.toString() + "/" + subscription?.planDuration
     }
+
+    @JvmStatic
+    @BindingAdapter("setDate")
+    fun setDate(textView: TextView?, dateInMillis: Long?) {
+        if (dateInMillis != null) {
+            val dateObj = dateInMillis.let { dateInMillis ->
+                Date(dateInMillis)
+            }
+            textView?.text = DateFormat.getDateInstance(DateFormat.LONG).format(dateObj)
+        } else {
+            textView?.text = textView?.context?.getString(R.string.not_added)
+        }
+
+    }
+
+    @JvmStatic
+    @BindingAdapter("setDateOfBirth")
+    fun setDateOfBirth(textView: TextView, text: String?) {
+        textView.text = text
+    }
+
 
     /*@JvmStatic
     @BindingAdapter(value = ["isChecked", "isArtistChecked"])

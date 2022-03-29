@@ -5,7 +5,7 @@ class AuthModelBuilder {
     var email: String? = null
     var avatar: String? = null
     var jwt: String? = null
-    var dOB: Int? = null
+    var dOB: Long? = null
     var phoneNumber: String? = null
     var gender: String? = null
     var isInterestsSet: Boolean? = null
@@ -17,7 +17,7 @@ class AuthModelBuilder {
     fun email(email: String?) = apply { this.email = email }
     fun avatar(avatar: String?) = apply { this.avatar = avatar }
     fun jwt(jwt: String?) = apply { this.jwt = jwt }
-    fun dOB(dOB: Int?) = apply { this.dOB = dOB }
+    fun dOB(dOB: Long?) = apply { this.dOB = dOB }
     fun phoneNumber(phoneNumber: String?) = apply { this.phoneNumber = phoneNumber }
     fun gender(gender: String?) = apply { this.gender = gender }
     fun isInterestsSet(isInterestsSet: Boolean?) = apply { this.isInterestsSet = isInterestsSet }

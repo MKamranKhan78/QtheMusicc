@@ -56,7 +56,7 @@ abstract class BaseViewModel : ViewModel() {
             authModel?.notification?.isArtistUpdateEnabled ?: true
         )
         PrefUtils.setString(activity, CommonKeys.KEY_USER_PHONE, authModel?.phoneNumber)
-        authModel?.dOB?.let { doB -> PrefUtils.setInt(activity, CommonKeys.KEY_USER_DOB, doB) }
+        authModel?.dOB?.let { doB -> PrefUtils.setLong(activity, CommonKeys.KEY_USER_DOB, doB) }
         authModel?.subscription?.planId?.let { planId ->
             PrefUtils.setInt(
                 activity, CommonKeys.KEY_USER_PLAN_ID,
@@ -114,7 +114,7 @@ abstract class BaseViewModel : ViewModel() {
         var enableNotification: Boolean? = null
         var enableArtistUpdate: Boolean? = null
 
-        var userdob: Int? = null
+        var userdob: Long? = null
         var userZipcode: Int? = null
 
         var userPlanId: Int? = null
@@ -133,7 +133,7 @@ abstract class BaseViewModel : ViewModel() {
         userPhone = PrefUtils.getString(context, CommonKeys.KEY_USER_PHONE)
         enableNotification = PrefUtils.getBoolean(context, CommonKeys.KEY_USER_ENABLE_NOTIFICATION)
         enableArtistUpdate = PrefUtils.getBoolean(context, CommonKeys.KEY_ARTIST_UPDATE)
-        userdob = PrefUtils.getInt(context, CommonKeys.KEY_USER_DOB)
+        userdob = PrefUtils.getLong(context, CommonKeys.KEY_USER_DOB)
         userZipcode = PrefUtils.getInt(context, CommonKeys.KEY_USER_ZIP_CODE)
         userPlanId = PrefUtils.getInt(context, CommonKeys.KEY_USER_PLAN_ID)
         userPlanPrize = PrefUtils.getInt(context, CommonKeys.KEY_USER_PLAN_PRIZE)

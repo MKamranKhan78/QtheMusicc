@@ -35,7 +35,7 @@
 
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/et_email_forgot_layout"
+            android:id="@+id/et_name_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_40dp"
@@ -59,7 +59,7 @@
             -->
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_forgot_email_id"
+                android:id="@+id/et_name_id"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="@dimen/_4dp"
@@ -85,7 +85,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <LinearLayout
-            android:id="@+id/logoutButton"
+            android:id="@+id/updateButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_20dp"

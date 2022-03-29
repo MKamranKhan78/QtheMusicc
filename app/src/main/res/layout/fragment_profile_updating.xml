@@ -46,11 +46,12 @@
                     setImageViewImage="@{viewModel.authModel.avatar}"
                     android:layout_width="@dimen/_110dp"
                     android:layout_height="@dimen/_110dp"
+                    android:scaleType="centerCrop"
                     android:layout_gravity="center|center_horizontal"
                     app:shapeAppearanceOverlay="@style/circleImageView" />
 
                 <com.google.android.material.imageview.ShapeableImageView
-                    android:id="@+id/addPhotoImageviewId"
+                    android:id="@+id/changePhotoImageviewId"
                     android:layout_width="@dimen/_22dp"
                     android:layout_height="@dimen/_22dp"
                     android:layout_gravity="bottom|right"
@@ -155,6 +156,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:id="@+id/phoneNumberTvID"
                             android:fontFamily="@font/manrope_regular"
                             android:text="@{viewModel.authModel.phoneNumber == null ? @string/not_added : viewModel.authModel.phoneNumber}"
                             android:textColor="@color/view_profile_text_color"
@@ -289,11 +291,11 @@
                             android:textSize="@dimen/_14sp" />
 
                         <TextView
+                            android:id="@+id/tvDateOfBirth"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:id="@+id/tvDateOfBirth"
+                            setDate="@{viewModel.authModel.DOB}"
                             android:fontFamily="@font/manrope_regular"
-                            android:text="@{viewModel.authModel.dOB.toString() == null ? @string/not_added : viewModel.authModel.dOB.toString()}"
                             android:textColor="@color/view_profile_text_color"
                             android:textSize="@dimen/_14sp" />
 
@@ -447,6 +449,17 @@
             android:layout_height="match_parent"
             android:background="#99D1D1D1"
             android:visibility="gone" />
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:indeterminate="true"
+            android:indeterminateTint="@color/logout_button_color"
+            android:progressTint="@color/logout_button_color"
+            android:visibility="gone" />
+
     </RelativeLayout>
 
 </layout>

@@ -5,5 +5,6 @@ import com.techswivel.qthemusic.ui.base.BaseViewModel
 
 class ProfileUpdatingViewModel : BaseViewModel() {
     var authModel: AuthModel? = null
+    var dateInMillis: Long? = null
 
 }

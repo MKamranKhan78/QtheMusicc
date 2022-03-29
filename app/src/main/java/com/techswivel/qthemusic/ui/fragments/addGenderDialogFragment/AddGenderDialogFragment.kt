@@ -1,16 +1,10 @@
 package com.techswivel.qthemusic.ui.fragments.addGenderDialogFragment
 
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
-import android.widget.RadioButton
-import android.widget.Toast
 import androidx.fragment.app.DialogFragment
-import com.techswivel.qthemusic.application.QTheMusicApplication
 import com.techswivel.qthemusic.customData.interfaces.BaseInterface
 import com.techswivel.qthemusic.databinding.FragmentAddGenderDialogBinding
 import com.techswivel.qthemusic.ui.base.BaseDialogFragment
@@ -43,36 +37,23 @@ class AddGenderDialogFragment : BaseDialogFragment(), BaseInterface {
         super.onViewCreated(view, savedInstanceState)
         clickListener()
 
-        mBinding.radioGroup.setOnCheckedChangeListener { group, checkedId ->
-            val radio: RadioButton = view.findViewById(checkedId)
-            Toast.makeText(
-                QTheMusicApplication.getContext(), " On checked change : ${radio.text}",
-                Toast.LENGTH_SHORT
-            ).show()
+        //checkWhichCheckBoxIsChecked()
+/*        setOnCheckedChangeListener()*/
+    }
+
+    private fun checkWhichCheckBoxIsChecked() {
+        /*if (mBinding.radioOne.isChecked == true){
+            mBinding.radioTwo.isChecked = false
+            mBinding.radioThree.isChecked = false
         }
-
-
-        // Get radio group selected status and text using button click event
-        mBinding.updateButton.setOnClickListener {
-            // Get the checked radio button id from radio group
-            var id: Int = mBinding.radioGroup.checkedRadioButtonId
-            if (id != -1) { // If any radio button checked from radio group
-                // Get the instance of radio button using id
-                val radio: RadioButton = view.findViewById(id)
-                Toast.makeText(
-                    QTheMusicApplication.getContext(), "On button click : ${radio.text}",
-                    Toast.LENGTH_SHORT
-                ).show()
-            } else {
-                // If no radio button checked in this radio group
-                Toast.makeText(
-                    QTheMusicApplication.getContext(), "On button click : nothing selected",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        }
-
-
+         if (mBinding.radioTwo.isChecked == true){
+             mBinding.radioOne.isChecked = false
+             mBinding.radioThree.isChecked = false
+         }
+         if (mBinding.radioThree.isChecked == true){
+             mBinding.radioTwo.isChecked = false
+             mBinding.radioOne.isChecked = false
+         }*/
     }
 
     override fun showProgressBar() {
@@ -81,27 +62,99 @@ class AddGenderDialogFragment : BaseDialogFragment(), BaseInterface {
     override fun hideProgressBar() {
     }
 
-    protected fun setDialogStyle() {
-        if (dialog != null && dialog?.window != null) {
-            dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            dialog?.window?.requestFeature(Window.FEATURE_NO_TITLE)
-        }
-    }
 
     private fun clickListener() {
         mBinding.imageviewCancelDialog.setOnClickListener {
             dismiss()
         }
+        mBinding.updateButton.setOnClickListener {
+            // setOnCheckedChangeListener()
+        }
+
+        mBinding.rbRad1.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(view: View?) {
+                mBinding.rbRad2.isChecked = false
+                mBinding.rbRad4.isChecked = false
+                mBinding.rbRad3.isChecked = false
+            }
+        })
+
+        mBinding.rbRad3.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(view: View?) {
+                mBinding.rbRad2.isChecked = false
+                mBinding.rbRad4.isChecked = false
+                mBinding.rbRad1.isChecked = false
+            }
+        })
+
+        mBinding.rbRad2.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(view: View?) {
+                mBinding.rbRad3.isChecked = false
+                mBinding.rbRad4.isChecked = false
+                mBinding.rbRad1.isChecked = false
+            }
+        })
+
+        mBinding.rbRad4.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(view: View?) {
+                mBinding.rbRad3.isChecked = false
+                mBinding.rbRad2.isChecked = false
+                mBinding.rbRad1.isChecked = false
+            }
+        })
+
+/*
+        if (mBinding.maleRadioButton.isChecked){
+            Toast.makeText(QTheMusicApplication.getContext(),"male",Toast.LENGTH_SHORT).show()
+            mBinding.rg2.clearCheck()
+        }
+        else if (mBinding.nonBinaryRadioButton.isChecked){
+            Toast.makeText(QTheMusicApplication.getContext(),"non_binary",Toast.LENGTH_SHORT).show()
+            mBinding.rg1.clearCheck()
+        }
+*/
+
+        /*when (R.id.radioButton_1){
+            if (checked) {
+                rg_2.clearCheck();
+                rg_3.clearCheck();
+            }
+                break;
+
+        }*/
+
+/*        when (R.id.maleRadioButton) {
+            if (mBinding.)
+            in 10..100 -> println("A positive number between 10 and 100 (inclusive)")
+        }*/
+/*        when(R.id.maleRadioButton)
+            if (checked) {
+                rg_2.clearCheck();
+                rg_3.clearCheck();
+            }
+            break*/
     }
 
-    fun radioButtonClick(view: View) {
-        // Get the clicked radio button instance
-        val radio: RadioButton = view.findViewById(mBinding.radioGroup.checkedRadioButtonId)
-        Toast.makeText(
-            QTheMusicApplication.getContext(), "On click : ${radio.text}",
-            Toast.LENGTH_SHORT
-        ).show()
-    }
+
+    /*private fun setOnCheckedChangeListener() {
+        mBinding.radioGroup.setOnCheckedChangeListener { group, checkedId ->
+            var text = ""
+
+            if (R.id.radioBtnMale == checkedId){
+                text = "MALE"
+            }
+            else if (R.id.radioBtnFemale == checkedId){
+                text = "FEMALE"
+            }
+            else if (R.id.radioBtnNonBinary == checkedId){
+                text = "NON-BINARY"
+            }
+            else if (R.id.radioBtnNoAnswer == checkedId){
+                text = "NO-ANSWER"
+            }
+            Toast.makeText(QTheMusicApplication.getContext(), text, Toast.LENGTH_SHORT).show()
+        }
+    }*/
 
 
 }

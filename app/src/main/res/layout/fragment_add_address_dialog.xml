@@ -54,7 +54,7 @@
             app:hintTextColor="@color/color_white">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_forgot_email_id"
+                android:id="@+id/et_address_id"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="@dimen/_4dp"
@@ -103,6 +103,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:id="@+id/ed_city_id"
                     android:layout_marginTop="@dimen/_4dp"
                     android:drawablePadding="@dimen/_16dp"
                     android:fontFamily="@font/manrope_regular"
@@ -143,6 +144,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginTop="@dimen/_4dp"
                     android:drawablePadding="@dimen/_16dp"
+                    android:id="@+id/et_state_id"
                     android:fontFamily="@font/manrope_regular"
                     android:maxLines="1"
                     android:paddingStart="@dimen/_16dp"
@@ -185,6 +187,7 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
+                    android:id="@+id/et_country_id"
                     android:layout_height="match_parent"
                     android:layout_marginTop="@dimen/_4dp"
                     android:drawablePadding="@dimen/_16dp"
@@ -224,6 +227,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginTop="@dimen/_4dp"
+                    android:id="@+id/et_zipcode_id"
                     android:drawablePadding="@dimen/_16dp"
                     android:fontFamily="@font/manrope_regular"
                     android:inputType="number"
@@ -241,7 +245,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/logoutButton"
+            android:id="@+id/updateButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_25dp"

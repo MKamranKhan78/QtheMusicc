@@ -8,10 +8,11 @@ import androidx.fragment.app.Fragment
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.databinding.ActivityProfileSettingBinding
 import com.techswivel.qthemusic.ui.base.BaseActivity
+import com.techswivel.qthemusic.ui.fragments.profileUpdatingFragment.ProfileUpdatingFragment
 import com.techswivel.qthemusic.ui.fragments.underDevelopmentMessageFragment.profile_setting_fragment.ProfileSettingFragment
 
 
-class ProfileSettingActivity : BaseActivity() {
+class ProfileSettingActivity : BaseActivity(), ProfileSettingActivityImpl {
 
     private lateinit var mBinding: ActivityProfileSettingBinding
     private var mFragment: Fragment? = null
@@ -62,4 +63,23 @@ class ProfileSettingActivity : BaseActivity() {
             }
         }
     }
+
+//    override fun openProfileSettingFragment() {
+//        openFragment(ProfileUpdatingFragment.newInstance())
+//    }
+
+    override fun openProfileSettingFragment(phoneNumber: String?) {
+        var bundle = Bundle()
+        bundle.putString("_phoneNumberKey", phoneNumber)
+        openFragment(ProfileUpdatingFragment.newInstance(bundle))
+    }
+
+    override fun showProgressBar() {
+
+    }
+
+    override fun hideProgressBar() {
+
+    }
+
 }

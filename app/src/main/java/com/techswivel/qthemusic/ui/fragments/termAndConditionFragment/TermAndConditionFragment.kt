@@ -18,8 +18,6 @@ import com.techswivel.qthemusic.utils.CommonKeys
 class TermAndConditionFragment : BaseFragment() {
 
     companion object {
-        //    fun newInstance() = TermAndConditionFragment()
-        fun newInstance() = TermAndConditionFragment()
         fun newInstance(mBundle: Bundle?) = TermAndConditionFragment().apply {
             arguments = mBundle
         }
@@ -40,29 +38,20 @@ class TermAndConditionFragment : BaseFragment() {
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        changeStatusBarColor()
-        setToolBar()
         initViewModel()
+        changeStatusBarColor()
         getBundleData()
-        showExpectedText()
+        setToolBar()
     }
 
-    private fun showExpectedText() {
-        if (viewModel.isTermAndCondition == true) {
-            viewModel.toolbarTitle = "Term and Condition"
-            viewModel.description =
-                QTheMusicApplication.getContext().getString(R.string.term_and_codition_text)
-        } else {
-            viewModel.toolbarTitle = "Privacy Policy"
-            viewModel.description =
-                QTheMusicApplication.getContext().getString(R.string.term_and_codition_text)
-        }
+    private fun bindViewModelWithLayout() {
+        mBinding.viewModel = viewModel
+        mBinding.executePendingBindings()
     }
 
     private fun initViewModel() {
         viewModel =
             ViewModelProvider(this).get(TermAndConditionViewModel::class.java)
-
     }
 
     private fun getBundleData() {
@@ -70,7 +59,7 @@ class TermAndConditionFragment : BaseFragment() {
             viewModel.isTermAndCondition =
                 bundle.getBoolean(CommonKeys.KEY_TERM_AND_CONDITION_PRIVACY)
         }
-
+        bindViewModelWithLayout()
     }
 
 
@@ -85,7 +74,15 @@ class TermAndConditionFragment : BaseFragment() {
         setUpActionBar(
             mBinding.fragmentToolbar.toolbar, "", true
         )
-        mBinding.fragmentToolbar.toolbarTitle.text = "Term And Condition"
+        if (viewModel.isTermAndCondition == true) {
+            mBinding.fragmentToolbar.toolbarTitle.text =
+                QTheMusicApplication.getContext().getText(R.string.terms_and_conditions)
+
+        } else {
+            mBinding.fragmentToolbar.toolbarTitle.text =
+                QTheMusicApplication.getContext().getText(R.string.privacy_policy)
+
+        }
     }
 
 }

@@ -31,133 +31,81 @@
             android:textColor="@color/color_white"
             android:textSize="@dimen/_18sp" />
 
-        <RadioGroup
-            android:id="@+id/radio_group"
-            android:layout_width="360dp"
+        <LinearLayout
+            android:id="@+id/firstLayout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/textMainTitle"
-            android:layout_marginTop="@dimen/_20dp">
+            android:layout_marginTop="@dimen/_30dp"
+            android:orientation="horizontal"
+            android:weightSum="2">
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:weightSum="2">
-
-                    <LinearLayout
-                        android:id="@+id/maleCheckBoxId"
-                        android:layout_width="143dp"
-                        android:layout_height="@dimen/_48dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/border_white">
-
-                        <RadioButton
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/_10dp"
-                            android:buttonTint="@color/radio_button_color"
-                            android:checked="false"
-                            android:text="@string/male"
-                            android:textColor="@color/color_white" />
-
-                        <!--
-                                                style="@style/radionbutton"
-                        -->
-
-                        <!--
-                                                android:onClick="radio_button_click"
-                        -->
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="143dp"
-                        android:layout_height="@dimen/_48dp"
-                        android:layout_marginStart="@dimen/_10dp"
-                        android:layout_marginEnd="@dimen/_2dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/border_white">
-
-                        <RadioButton
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/_10dp"
-                            android:buttonTint="@color/color_white"
-                            android:text="@string/female"
-                            android:textColor="@color/color_white" />
-
-                        <!--                        android:onClick="radio_button_click"-->
-
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-
-            </RelativeLayout>
-
-
-            <RelativeLayout
-                android:layout_width="match_parent"
+            <RadioButton
+                android:id="@+id/rb_rad1"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_10dp">
+                android:layout_marginEnd="@dimen/_5dp"
+                android:layout_weight="1"
+                android:background="@drawable/border_white"
+                android:buttonTint="@color/radio_button_color"
+                android:checked="true"
+                android:text="@string/male"
+                android:textColor="@color/color_white" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:baselineAligned="false"
-                    android:weightSum="2">
 
-                    <LinearLayout
-                        android:id="@+id/nonBinaryCheckBoxId"
-                        android:layout_width="143dp"
-                        android:layout_height="@dimen/_48dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/border_white">
+            <RadioButton
+                android:id="@+id/rb_rad2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_5dp"
+                android:layout_weight="1"
+                android:background="@drawable/border_white"
+                android:buttonTint="@color/radio_button_color"
+                android:checked="false"
+                android:text="@string/female"
+                android:textColor="@color/color_white" />
 
-                        <RadioButton
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/_10dp"
-                            android:buttonTint="@color/color_white"
-                            android:text="@string/non_binary"
-                            android:textColor="@color/color_white" />
+        </LinearLayout>
 
-                        <!--
-                                                android:onClick="radio_button_click"
-                        -->
+        <LinearLayout
+            android:id="@+id/secondLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/firstLayout"
+            android:layout_marginTop="@dimen/_10dp"
+            android:orientation="horizontal"
+            android:weightSum="2">
 
-                    </LinearLayout>
+            <RadioButton
+                android:id="@+id/rb_rad3"
+                android:layout_width="85dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/_5dp"
+                android:layout_weight="1"
+                android:background="@drawable/border_white"
+                android:buttonTint="@color/radio_button_color"
+                android:checked="false"
+                android:text="@string/non_binary"
+                android:textColor="@color/color_white" />
 
-                    <LinearLayout
-                        android:layout_width="143dp"
-                        android:layout_height="@dimen/_48dp"
-                        android:layout_marginStart="@dimen/_10dp"
-                        android:layout_marginEnd="@dimen/_2dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/border_white">
-
-                        <RadioButton
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/_10dp"
-                            android:buttonTint="@color/color_white"
-                            android:text="@string/no_answer"
-                            android:textColor="@color/color_white" />
-                    </LinearLayout>
-                </LinearLayout>
-            </RelativeLayout>
-        </RadioGroup>
-
+            <RadioButton
+                android:id="@+id/rb_rad4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_5dp"
+                android:layout_weight="1"
+                android:background="@drawable/border_white"
+                android:buttonTint="@color/radio_button_color"
+                android:checked="false"
+                android:text="@string/no_answer"
+                android:textColor="@color/color_white" />
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/updateButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/radio_group"
+            android:layout_below="@id/secondLayout"
             android:layout_marginTop="@dimen/_30dp"
             android:layout_marginBottom="@dimen/_15dp"
             android:background="@drawable/logout_button_drawable">
