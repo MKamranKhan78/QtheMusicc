@@ -96,7 +96,6 @@ class SignInFragment : BaseFragment() {
             val fortgotPasword = ForgotPassword()
             fortgotPasword.arguments = bundle
             (mActivityListener as AuthActivityImp).replaceCurrentFragment(fortgotPasword)
-
         }
 
         signInBinding.signSocialPortion.ivGoogleId.setOnClickListener {
