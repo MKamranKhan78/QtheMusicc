@@ -71,6 +71,14 @@ abstract class BaseActivity : AppCompatActivity() {
             .commit()
     }
 
+    protected open fun replaceFragmentWithoutAddingToBackStack(
+        containerViewId: Int,
+        fragment: Fragment
+    ) {
+        fragmentManager.beginTransaction().replace(containerViewId, fragment)
+            .commit()
+    }
+
     protected open fun popUpAllFragmentIncludeThis(pClassName: String?) {
         fragmentManager.popBackStack(pClassName, FragmentManager.POP_BACK_STACK_INCLUSIVE)
     }

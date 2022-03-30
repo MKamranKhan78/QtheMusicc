@@ -9,7 +9,7 @@ android {
     ndkVersion '23.1.7779620'
     def appVersion = '1.0.0'
     def appCenterBuildID = "${System.env.APPCENTER_BUILD_ID}" != "null" ? "${System.env.APPCENTER_BUILD_ID}" : "1"
-    
+
     defaultConfig {
         applicationId "com.techswivel.qthemusic"
         minSdkVersion 19
@@ -68,7 +68,7 @@ android {
         development {
             dimension "version"
             applicationIdSuffix ".development"
-            versionName appVersion+"-development"
+            versionName appVersion + "-development"
             manifestPlaceholders = [
                     appIcon: "@mipmap/app_icon_development",
             ]
@@ -76,7 +76,7 @@ android {
         staging {
             dimension "version"
             applicationIdSuffix ".staging"
-            versionName appVersion+"-staging"
+            versionName appVersion + "-staging"
             manifestPlaceholders = [
                     appIcon: "@mipmap/app_icon_staging",
             ]
@@ -84,14 +84,14 @@ android {
         acceptance {
             dimension "version"
             applicationIdSuffix ".acceptance"
-            versionName appVersion+"-acceptance"
+            versionName appVersion + "-acceptance"
             manifestPlaceholders = [
                     appIcon: "@mipmap/app_icon_acceptance",
             ]
         }
     }
 
-    buildFeatures{
+    buildFeatures {
         dataBinding = true
         viewBinding = true
     }
@@ -152,6 +152,8 @@ dependencies {
     //facebook sdk
     implementation 'com.facebook.android:facebook-android-sdk:12.0.0'
 
+    //google signIn sdk
+    implementation 'com.google.android.gms:play-services-auth:20.1.0'
 
     //Rxjava
     implementation 'io.reactivex.rxjava2:rxjava:2.2.21'

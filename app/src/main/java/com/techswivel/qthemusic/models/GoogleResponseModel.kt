@@ -3,9 +3,9 @@ package com.techswivel.qthemusic.models
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-class GoogleResponseModel {
+ class GoogleResponseModel {
     @SerializedName("access_token")
-    @Expose
+
     var accessToken: String? = null
 
     @SerializedName("token_type")

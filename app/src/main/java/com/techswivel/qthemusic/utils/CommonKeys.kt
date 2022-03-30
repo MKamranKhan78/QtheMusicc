@@ -12,6 +12,11 @@ class CommonKeys {
         const val KEY_IS_LOGGED_IN = "_key_is_logged_in"
         const val TYPE_VIDEO = 1
         const val TYPE_PHOTO = 2
+        const val APP_FLOW="app_flow"
+        const val START_TIMER="Start_Timer"
+        const val USER_EMAIL="user_email"
+        const val USER_OTP="user_otp"
+        const val SIGNIN_BTN_ANIMATION="sigin_btn_animation"
         const val KEY_USER_NAME = "_key_user_name"
         const val KEY_USER_EMAIL = "_key_user_email"
         const val KEY_USER_AVATAR = "_key_user_avatar"

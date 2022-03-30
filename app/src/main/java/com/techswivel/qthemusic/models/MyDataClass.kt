@@ -7,8 +7,9 @@ class MyDataClass(
     @Expose
     @SerializedName("auth")
     val authModel: AuthModel?,
+
 ) {
     constructor() : this(
-        null
+        null,
     )
 }

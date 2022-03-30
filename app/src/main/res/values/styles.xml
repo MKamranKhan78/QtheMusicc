@@ -6,7 +6,10 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
+        <item name="android:statusBarColor" tools:ignore="NewApi">@color/app_bar_clr
+        </item>
     </style>
+
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
@@ -15,5 +18,16 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
     </style>
+
+
+    <style name="ThemeOverlay.AppTheme.TextInputEditText.Outlined" parent="">
+        <item name="colorControlActivated">@color/sign_up_btn</item>
+    </style>
+
+    <style name="InputEditTextHindAppearance" parent="TextAppearance.Design.Hint">
+        <item name="android:textSize">12sp</item>
+        <item name="fontFamily">@font/manrope_regular</item>
+    </style>
+
 
 </resources>
