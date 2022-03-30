@@ -16,13 +16,12 @@ import com.techswivel.qthemusic.models.RecommendedSongsBodyBuilder
 import com.techswivel.qthemusic.models.ResponseModel
 import com.techswivel.qthemusic.models.Song
 import com.techswivel.qthemusic.models.SongsBodyBuilder
-import com.techswivel.qthemusic.source.local.preference.DataStoreUtils
+import com.techswivel.qthemusic.source.remote.networkViewModel.SongAndArtistsViewModel
 import com.techswivel.qthemusic.ui.activities.playerActivity.PlayerActivity
 import com.techswivel.qthemusic.ui.base.RecyclerViewBaseFragment
 import com.techswivel.qthemusic.utils.ActivityUtils
 import com.techswivel.qthemusic.utils.CommonKeys
 import com.techswivel.qthemusic.utils.DialogUtils
-import kotlinx.coroutines.runBlocking
 
 class HomeFragment : RecyclerViewBaseFragment() {
 
@@ -33,6 +32,7 @@ class HomeFragment : RecyclerViewBaseFragment() {
 
     private lateinit var binding: FragmentHomeBinding
     private lateinit var viewModel: HomeViewModel
+    private lateinit var networkViewModel: SongAndArtistsViewModel
     private lateinit var mRecommendedForYouAdapter: RecyclerViewAdapter
     private lateinit var mWhatsYourMoodAdapter: RecyclerViewAdapter
     private lateinit var mTrendingSongsAdapter: RecyclerViewAdapter
@@ -48,6 +48,7 @@ class HomeFragment : RecyclerViewBaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
+        networkViewModel = ViewModelProvider(this)[SongAndArtistsViewModel::class.java]
         viewModel.selectedTab = RecommendedSongsType.SONGS
         setUpHorizentalRecyclerView(
             binding.recyclerViewRecommendedMedia,
@@ -66,7 +67,7 @@ class HomeFragment : RecyclerViewBaseFragment() {
         setObserver()
         setListeners()
         getRecommendedSongs()
-        viewModel.getCategoriesDataFromServer(CategoryType.RECOMMENDED)
+        networkViewModel.getCategoriesDataFromServer(CategoryType.RECOMMENDED)
         getSongs()
     }
 
@@ -105,7 +106,11 @@ class HomeFragment : RecyclerViewBaseFragment() {
                                         ).show()
                                     } else {
                                         val bundle = Bundle().apply {
-                                            putSerializable(CommonKeys.KEY_DATA_MODEL, songModel)
+                                            putParcelable(CommonKeys.KEY_DATA_MODEL, songModel)
+                                            putParcelableArrayList(
+                                                CommonKeys.KEY_SONGS_LIST,
+                                                viewModel.recommendedSongsDataList as ArrayList<out Song>
+                                            )
                                             putString(
                                                 CommonKeys.KEY_SONG_TYPE,
                                                 SongType.RECOMMENDED.value
@@ -167,7 +172,11 @@ class HomeFragment : RecyclerViewBaseFragment() {
                                         ).show()
                                     } else {
                                         val bundle = Bundle().apply {
-                                            putSerializable(CommonKeys.KEY_DATA_MODEL, songModel)
+                                            putParcelable(CommonKeys.KEY_DATA_MODEL, songModel)
+                                            putParcelableArrayList(
+                                                CommonKeys.KEY_SONGS_LIST,
+                                                viewModel.trendingSongsDataList as ArrayList<out Song>
+                                            )
                                             putString(
                                                 CommonKeys.KEY_SONG_TYPE,
                                                 SongType.TRENDING.value
@@ -194,7 +203,7 @@ class HomeFragment : RecyclerViewBaseFragment() {
     }
 
     private fun setObserver() {
-        viewModel.recommendedSongsResponse.observe(viewLifecycleOwner) { recommendedSongsDataResponse ->
+        networkViewModel.recommendedSongsResponse.observe(viewLifecycleOwner) { recommendedSongsDataResponse ->
             when (recommendedSongsDataResponse.status) {
                 NetworkStatus.LOADING -> {
                     startRecommendedDataShimmer()
@@ -213,13 +222,11 @@ class HomeFragment : RecyclerViewBaseFragment() {
                     } else if (!artistsList.isNullOrEmpty() && viewModel.selectedTab == RecommendedSongsType.ARTIST) {
                         viewModel.recommendedSongsDataList.addAll(artistsList)
                     }
-                    stopRecommendedDataShimmer()
                     if (::mRecommendedForYouAdapter.isInitialized)
                         mRecommendedForYouAdapter.notifyDataSetChanged()
 
                 }
                 NetworkStatus.ERROR -> {
-                    stopRecommendedDataShimmer()
                     recommendedSongsDataResponse.error?.message?.let { it1 ->
                         DialogUtils.errorAlert(
                             requireContext(),
@@ -229,19 +236,10 @@ class HomeFragment : RecyclerViewBaseFragment() {
                     }
                 }
                 NetworkStatus.EXPIRE -> {
-                    stopRecommendedDataShimmer()
                     DialogUtils.sessionExpireAlert(requireContext(),
                         object : DialogUtils.CallBack {
                             override fun onPositiveCallBack() {
-                                runBlocking {
-                                    DataStoreUtils.clearAllPreference()
-                                }
-//                                viewModel.deleteAllLocalData()
-//                                ActivityUtils.startNewActivity(
-//                                    requireActivity(),
-//                                    RegistrationActivity::class.java,
-//                                    Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-//                                )
+                                viewModel.clearAppSession(requireActivity())
                             }
 
                             override fun onNegativeCallBack() {
@@ -254,7 +252,7 @@ class HomeFragment : RecyclerViewBaseFragment() {
             }
         }
 
-        viewModel.categoriesResponse.observe(viewLifecycleOwner) { categoriesDataResponse ->
+        networkViewModel.categoriesResponse.observe(viewLifecycleOwner) { categoriesDataResponse ->
             when (categoriesDataResponse.status) {
                 NetworkStatus.LOADING -> {
                     startCategoriesDataShimmer()
@@ -267,13 +265,11 @@ class HomeFragment : RecyclerViewBaseFragment() {
                     if (!categoriesList.isNullOrEmpty()) {
                         viewModel.categoriesDataList.addAll(categoriesList)
                     }
-                    stopCategoriesDataShimmer()
                     if (::mWhatsYourMoodAdapter.isInitialized)
                         mWhatsYourMoodAdapter.notifyDataSetChanged()
 
                 }
                 NetworkStatus.ERROR -> {
-                    stopCategoriesDataShimmer()
                     categoriesDataResponse.error?.message?.let { it1 ->
                         DialogUtils.errorAlert(
                             requireContext(),
@@ -283,19 +279,10 @@ class HomeFragment : RecyclerViewBaseFragment() {
                     }
                 }
                 NetworkStatus.EXPIRE -> {
-                    stopCategoriesDataShimmer()
                     DialogUtils.sessionExpireAlert(requireContext(),
                         object : DialogUtils.CallBack {
                             override fun onPositiveCallBack() {
-                                runBlocking {
-                                    DataStoreUtils.clearAllPreference()
-                                }
-//                                viewModel.deleteAllLocalData()
-//                                ActivityUtils.startNewActivity(
-//                                    requireActivity(),
-//                                    RegistrationActivity::class.java,
-//                                    Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-//                                )
+                                viewModel.clearAppSession(requireActivity())
                             }
 
                             override fun onNegativeCallBack() {
@@ -308,7 +295,7 @@ class HomeFragment : RecyclerViewBaseFragment() {
             }
         }
 
-        viewModel.songsResponse.observe(viewLifecycleOwner) { songsDataResponse ->
+        networkViewModel.songsResponse.observe(viewLifecycleOwner) { songsDataResponse ->
             when (songsDataResponse.status) {
                 NetworkStatus.LOADING -> {
                     startTrendingSongsDataShimmer()
@@ -323,13 +310,11 @@ class HomeFragment : RecyclerViewBaseFragment() {
                         binding.tvTotalSongs.text =
                             viewModel.trendingSongsDataList.size.toString().plus(" songs")
                     }
-                    stopTrendingSongsDataShimmer()
                     if (::mTrendingSongsAdapter.isInitialized)
                         mTrendingSongsAdapter.notifyDataSetChanged()
 
                 }
                 NetworkStatus.ERROR -> {
-                    stopTrendingSongsDataShimmer()
                     songsDataResponse.error?.message?.let { it1 ->
                         DialogUtils.errorAlert(
                             requireContext(),
@@ -339,19 +324,10 @@ class HomeFragment : RecyclerViewBaseFragment() {
                     }
                 }
                 NetworkStatus.EXPIRE -> {
-                    stopTrendingSongsDataShimmer()
                     DialogUtils.sessionExpireAlert(requireContext(),
                         object : DialogUtils.CallBack {
                             override fun onPositiveCallBack() {
-                                runBlocking {
-                                    DataStoreUtils.clearAllPreference()
-                                }
-//                                viewModel.deleteAllLocalData()
-//                                ActivityUtils.startNewActivity(
-//                                    requireActivity(),
-//                                    RegistrationActivity::class.java,
-//                                    Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-//                                )
+                                viewModel.clearAppSession(requireActivity())
                             }
 
                             override fun onNegativeCallBack() {
@@ -445,7 +421,7 @@ class HomeFragment : RecyclerViewBaseFragment() {
         recommendedSongsBuilder.type = RecommendedSongsType.SONGS
         viewModel.recommendedSongsBodyModel =
             RecommendedSongsBodyBuilder.build(recommendedSongsBuilder)
-        viewModel.getRecommendedSongsDataFromServer()
+        networkViewModel.getRecommendedSongsDataFromServer(viewModel.recommendedSongsBodyModel)
     }
 
     private fun getRecommendedAlbums() {
@@ -455,7 +431,7 @@ class HomeFragment : RecyclerViewBaseFragment() {
         recommendedSongsBuilder.type = RecommendedSongsType.ALBUM
         viewModel.recommendedSongsBodyModel =
             RecommendedSongsBodyBuilder.build(recommendedSongsBuilder)
-        viewModel.getRecommendedSongsDataFromServer()
+        networkViewModel.getRecommendedSongsDataFromServer(viewModel.recommendedSongsBodyModel)
     }
 
     private fun getRecommendedArtists() {
@@ -465,14 +441,14 @@ class HomeFragment : RecyclerViewBaseFragment() {
         recommendedSongsBuilder.type = RecommendedSongsType.ARTIST
         viewModel.recommendedSongsBodyModel =
             RecommendedSongsBodyBuilder.build(recommendedSongsBuilder)
-        viewModel.getRecommendedSongsDataFromServer()
+        networkViewModel.getRecommendedSongsDataFromServer(viewModel.recommendedSongsBodyModel)
     }
 
     private fun getSongs() {
         val songsBuilder = SongsBodyBuilder()
         songsBuilder.type = SongType.TRENDING
         val songsBodyModel = SongsBodyBuilder.build(songsBuilder)
-        viewModel.getSongsDataFromServer(
+        networkViewModel.getSongsDataFromServer(
             songsBodyModel
         )
     }

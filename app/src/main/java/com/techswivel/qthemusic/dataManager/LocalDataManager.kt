@@ -8,6 +8,10 @@ object LocalDataManager : BaseDataManager(), LocalDataManagerImp {
 
     /** -------------- Database Instance method ---------------------- */
 
+    override fun deleteAllLocalData() {
+        getRoomInstance().clearAllTables()
+    }
+
     private fun getRoomInstance(): AppRoomDatabase {
         return AppRoomDatabase.getDatabaseInstance(QTheMusicApplication.getContext())
     }

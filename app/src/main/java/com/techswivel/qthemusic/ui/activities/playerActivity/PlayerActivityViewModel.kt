@@ -9,7 +9,8 @@ import com.techswivel.qthemusic.models.Song
 import com.techswivel.qthemusic.ui.base.BaseViewModel
 
 class PlayerActivityViewModel : BaseViewModel() {
-    lateinit var songModel: Song
+    lateinit var songsList: MutableList<Song>
+    lateinit var currentSongModel: Song
     lateinit var dataSourceFactory: DataSource.Factory
     lateinit var trackSelectionParameters: DefaultTrackSelector.Parameters
     lateinit var mediaItem: MediaItem

@@ -1,10 +1,12 @@
 package com.techswivel.qthemusic.models
 
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import com.techswivel.qthemusic.customData.enums.SongStatus
-import java.io.Serializable
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class Song(
     @SerializedName("albumId")
     var albumId: Int?,
@@ -38,4 +40,4 @@ data class Song(
     var songTitle: String?,
     @SerializedName("songVideoUrl")
     var songVideoUrl: String?
-) : Serializable
+) : Parcelable

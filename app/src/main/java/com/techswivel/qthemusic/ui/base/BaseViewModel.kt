@@ -1,24 +1,32 @@
 package com.techswivel.qthemusic.ui.base
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.view.View
 import android.widget.TextView
 import androidx.lifecycle.ViewModel
 import com.techswivel.qthemusic.BuildConfig
 import com.techswivel.qthemusic.constant.Constants
+import com.techswivel.qthemusic.dataManager.LocalDataManager
 import com.techswivel.qthemusic.dataManager.RemoteDataManager
 import com.techswivel.qthemusic.models.Address
 import com.techswivel.qthemusic.models.AuthModel
 import com.techswivel.qthemusic.models.Notification
 import com.techswivel.qthemusic.models.Subscription
+import com.techswivel.qthemusic.source.local.preference.DataStoreUtils
 import com.techswivel.qthemusic.source.local.preference.PrefUtils
 import com.techswivel.qthemusic.source.remote.rxjava.DisposableManager
 import com.techswivel.qthemusic.ui.activities.mainActivity.MainActivity
+import com.techswivel.qthemusic.ui.activities.splashActivity.SplashActivity
+import com.techswivel.qthemusic.utils.ActivityUtils
 import com.techswivel.qthemusic.utils.CommonKeys
+import kotlinx.coroutines.runBlocking
 
 
 abstract class BaseViewModel : ViewModel() {
     val mRemoteDataManager = RemoteDataManager
+    val mLocalDataManager = LocalDataManager
 
     fun setServerName(textView: TextView) {
         if (!BuildConfig.FLAVOR.equals(Constants.PRODUCTION)) {
@@ -149,5 +157,17 @@ abstract class BaseViewModel : ViewModel() {
             null, userdob, userPhone, userGender, false, address, subsription, notification
         )
         return authModel
+    }
+
+    fun clearAppSession(activity: Activity) {
+        runBlocking {
+            DataStoreUtils.clearAllPreference()
+            mLocalDataManager.deleteAllLocalData()
+        }
+        ActivityUtils.startNewActivity(
+            activity,
+            SplashActivity::class.java,
+            Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        )
     }
 }
