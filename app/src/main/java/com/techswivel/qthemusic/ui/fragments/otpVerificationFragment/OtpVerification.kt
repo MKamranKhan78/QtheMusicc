@@ -57,7 +57,6 @@ class OtpVerification : BaseFragment() {
     private fun initialization() {
         fragmentFlow = arguments?.getSerializable(CommonKeys.APP_FLOW)
         verifyOtpViewModel.email = arguments?.getString(CommonKeys.USER_EMAIL).toString()
-        Utilities.showToast(requireContext(),verifyOtpViewModel.email)
         viewBinding.tvEmailWhereSndOtp.text = verifyOtpViewModel.email
     }
 

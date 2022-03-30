@@ -90,9 +90,7 @@ class SetPassword : BaseFragment() {
         val setPasswordModel = AuthRequestBuilder.builder(authModelBilder)
         (mActivityListener as AuthActivityImp).setPasswordRequest(
             setPasswordModel,
-            fragmentFlow,
-            SetPassword::class.java.name
-        )
+            fragmentFlow )
     }
 
     private fun initViewModel() {

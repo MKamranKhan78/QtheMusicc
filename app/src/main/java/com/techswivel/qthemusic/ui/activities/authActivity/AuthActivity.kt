@@ -33,6 +33,7 @@ import com.techswivel.qthemusic.source.local.preference.PrefUtils
 import com.techswivel.qthemusic.source.remote.networkViewModel.*
 import com.techswivel.qthemusic.ui.activities.mainActivity.MainActivity
 import com.techswivel.qthemusic.ui.base.BaseActivity
+import com.techswivel.qthemusic.ui.fragments.forgotPasswordFragment.ForgotPassword
 import com.techswivel.qthemusic.ui.fragments.otpVerificationFragment.OtpVerification
 import com.techswivel.qthemusic.ui.fragments.setPasswordFragmetnt.SetPassword
 import com.techswivel.qthemusic.ui.fragments.signInFragment.SignInFragment
@@ -47,7 +48,6 @@ import java.util.*
 private const val TAG = "AuthActivity"
 
 class AuthActivity : BaseActivity(), AuthActivityImp {
-    var stringss = ""
     private lateinit var authBinding: ActivityAuthBinding
     private lateinit var googleSinInClient: GoogleSignInClient
     lateinit var authNetworkViewModel: AuthNetworkViewModel
@@ -140,11 +140,8 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
 
     override fun setPasswordRequest(
         authRequestBuilder: AuthRequestModel,
-        appFlow: Serializable?,
-        string: String
+        appFlow: Serializable?
     ) {
-        stringss = string
-        Utilities.showToast(this,stringss)
         authNetworkViewModel.requestToSetPassword(authRequestBuilder)
         fragmentFlow = appFlow
     }
@@ -193,7 +190,7 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
             this,
             Arrays.asList(
                 getString(R.string.get_email_fb),
-                "public_profile"
+                getString(R.string.fb_public_profile_args)
             )
         )
         loginManager.registerCallback(callbackManager,
@@ -216,6 +213,7 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
 
 
     private fun setAutNetworkViewModelObservers() {
+
         authNetworkViewModel.signinUserResponse.observe(this, Observer {
             when (it.status) {
                 NetworkStatus.LOADING -> {
@@ -382,12 +380,12 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
                     PrefUtils.removeValue(this, CommonKeys.SIGNIN_BTN_ANIMATION)
                     val data = it.t as ResponseModel
                     if (fragmentFlow == OtpType.FORGET_PASSWORD) {
-                        Log.d(TAG, "success")
 
                         replaceCurrentFragment(SignInFragment())
+                        popUpAllFragmentIncludeThis(ForgotPassword::class.java.name)
 
                     } else {
-                        Utilities.showToast(this, "flow not match")
+                       Log.d(TAG,"SignUp Flow")
                     }
                 }
                 NetworkStatus.EXPIRE -> {

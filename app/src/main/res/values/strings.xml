@@ -111,6 +111,7 @@
     <string name="this_required">This field is required</string>
     <string name="error_access_token">Access Token Not Found</string>
     <string name="password_never_match_error">Password never match</string>
+    <string name="fb_public_profile_args">public_profile</string>
 
 
 </resources>

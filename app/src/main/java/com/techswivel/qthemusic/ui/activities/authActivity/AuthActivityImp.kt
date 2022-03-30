@@ -19,8 +19,7 @@ interface AuthActivityImp : BaseInterface {
 
     fun setPasswordRequest(
         authRequestBuilder: AuthRequestModel,
-        appFlow: Serializable?,
-        string: String
+        appFlow: Serializable?
     )
 
     fun popUpToAllFragments(fragment: Fragment)
