@@ -5,10 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import com.techswivel.qthemusic.Data.RemoteRepository.ServerRepository.CustomObserver
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.application.QTheMusicApplication
-import com.techswivel.qthemusic.models.ApiResponse
-import com.techswivel.qthemusic.models.AuthModel
-import com.techswivel.qthemusic.models.ErrorResponse
-import com.techswivel.qthemusic.models.ResponseMain
 import com.techswivel.qthemusic.models.*
 import com.techswivel.qthemusic.source.remote.rxjava.CustomError
 import com.techswivel.qthemusic.source.remote.rxjava.ErrorUtils
@@ -43,7 +39,7 @@ class AuthNetworkViewModel : BaseViewModel() {
                         }
                         t.code() == 403 -> {
                             val error: ResponseMain? = ErrorUtils.parseError(t)
-                            val errorData = ErrorResponce(
+                            val errorData = ErrorResponse(
                                 error?.response?.status ?: false,
                                 error?.response?.message ?: QTheMusicApplication.getContext()
                                     .getString(R.string.something_wrong),
@@ -54,7 +50,7 @@ class AuthNetworkViewModel : BaseViewModel() {
                         else -> {
                             val error: ResponseMain? = ErrorUtils.parseError(t)
                             logoutResponse.value = ApiResponse.error(
-                                ErrorResponce(
+                                ErrorResponse(
                                     error?.response?.status ?: false,
                                     error?.response?.message ?: QTheMusicApplication.getContext()
                                         .getString(R.string.something_wrong),
@@ -68,7 +64,7 @@ class AuthNetworkViewModel : BaseViewModel() {
                 override fun onError(e: Throwable, isInternetError: Boolean, error: CustomError?) {
                     logoutResponse.value = ApiResponse.error(
                         error?.code?.let { code ->
-                            ErrorResponce(
+                            ErrorResponse(
                                 false,
                                 error.message,
                                 code
@@ -152,7 +148,7 @@ class AuthNetworkViewModel : BaseViewModel() {
                         val obj = JSONObject(t.errorBody()!!.string())
                         Log.d(TAG, "data is ${obj}")
                         googleSignResponse.value = ApiResponse.error(
-                            ErrorResponce(
+                            ErrorResponse(
                                 false,
                                 obj.toString(),
                                 t.code()
@@ -167,7 +163,7 @@ class AuthNetworkViewModel : BaseViewModel() {
             override fun onError(e: Throwable, isInternetError: Boolean, error: CustomError?) {
                 googleSignResponse.value = ApiResponse.error(
                     error?.message?.let {
-                        ErrorResponce(
+                        ErrorResponse(
                             false,
                             it,
                             error.code
@@ -198,7 +194,7 @@ class AuthNetworkViewModel : BaseViewModel() {
             override fun onError(e: Throwable, isInternetError: Boolean, error: CustomError?) {
                 signinUserResponse.value = ApiResponse.error(
                     error?.code?.let { code ->
-                        ErrorResponce(
+                        ErrorResponse(
                             false,
                             error.message,
                             code
@@ -229,7 +225,7 @@ class AuthNetworkViewModel : BaseViewModel() {
             override fun onError(e: Throwable, isInternetError: Boolean, error: CustomError?) {
                 forgotPasswordResponse.value = ApiResponse.error(
                     error?.code?.let { code ->
-                        ErrorResponce(
+                        ErrorResponse(
                             false,
                             error.message,
                             code
@@ -259,7 +255,7 @@ class AuthNetworkViewModel : BaseViewModel() {
             override fun onError(e: Throwable, isInternetError: Boolean, error: CustomError?) {
                 otpVerificationResponse.value = ApiResponse.error(
                     error?.code?.let { code ->
-                        ErrorResponce(
+                        ErrorResponse(
                             false,
                             error.message,
                             code
@@ -288,7 +284,7 @@ class AuthNetworkViewModel : BaseViewModel() {
             override fun onError(e: Throwable, isInternetError: Boolean, error: CustomError?) {
                 setPasswordResponse.value = ApiResponse.error(
                     error?.code?.let { code ->
-                        ErrorResponce(
+                        ErrorResponse(
                             false,
                             error.message,
                             code

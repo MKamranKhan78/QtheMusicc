@@ -20,53 +20,6 @@ class DummyDataManager {
                 )
             )
         }
-        fun newPasswordOtpDummyData(): Response<ResponseMain> {
-            return Response.success(
-                ResponseMain(
-                    ResponseModel(
-                        true,
-                        "",
-                        null
-                    )
-                )
-            )
-        }
-
-        fun getVerifyOtpDummyData(): Response<ResponseMain> {
-            return Response.success(
-                ResponseMain(
-                    ResponseModel(
-                        true,
-                        "",
-                        null
-                    )
-                )
-            )
-        }
-        fun getUserOtpDummyData(): Response<ResponseMain> {
-            return Response.success(
-                ResponseMain(
-                    ResponseModel(
-                        true,
-                        "",
-                       null
-                    )
-                )
-            )
-        }
-
-        fun getUserLoginDummyData(): Response<ResponseMain> {
-            return Response.success(
-                ResponseMain(
-                    ResponseModel(
-                        true,
-                        "",
-                        getDataList()
-                    )
-                )
-            )
-        }
-
 
         private fun getDataList(): MyDataClass {
             val address=Address("Mughalpura, Lahore","Lahore","Punjab","Pakistan",5552)
