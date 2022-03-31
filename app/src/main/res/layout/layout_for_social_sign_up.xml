@@ -60,7 +60,6 @@
             android:background="@drawable/shape_social_icons_bg"
             android:padding="@dimen/_12dp"
             android:src="@drawable/ic_google"
-            app:layout_constraintBottom_toBottomOf="@+id/imageView2"
             app:layout_constraintEnd_toStartOf="@+id/iv_apple_id"
             app:layout_constraintTop_toTopOf="@+id/iv_apple_id" />
 
@@ -81,7 +80,6 @@
             android:layout_marginStart="@dimen/_4dp"
             android:background="@drawable/shape_social_icons_bg"
             android:padding="@dimen/_12dp"
-            app:layout_constraintBottom_toBottomOf="@+id/imageView2"
             app:layout_constraintStart_toEndOf="@+id/iv_apple_id"
             app:layout_constraintTop_toTopOf="@+id/iv_apple_id"
             app:srcCompat="@drawable/ic_facebook" />
