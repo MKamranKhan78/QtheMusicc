@@ -1,26 +1,27 @@
 <resources>
     <string name="app_name">Q the Music</string>
 
-    <string name="google_client_id_acceptance">abcd</string>
-    <string name="google_client_secret_acceptance">abcd</string>
-    <string name="google_client_redirect_uri_acceptance">abcd</string>
+    <string name="google_client_id_acceptance">345540049924-j2pgaphe6hhoios3oag2g7ktpdo1crrb.apps.googleusercontent.com</string>
+    <string name="google_client_secret_acceptance">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</string>
+    <string name="google_client_redirect_uri_acceptance">https://qthemusic-acceptance.firebaseapp.com/__/auth/handler</string>
 
-    <string name="google_client_id_development">abcd</string>
-    <string name="google_client_secret_development">abcd</string>
-    <string name="google_client_redirect_uri_development">abcd</string>
+    <string name="google_client_id_development">74605093159-funodu4lv47i9u57h2meqahlcan5elo3.apps.googleusercontent.com</string>
+    <string name="google_client_secret_development">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</string>
+    <string name="google_client_redirect_uri_development">https://qthemusic-staging.firebaseapp.com/__/auth/handler</string>
 
-    <string name="google_client_id_production">abcd</string>
-    <string name="google_client_secret_production">abcd</string>
+    <string name="google_client_id_production">716441253502-tetnmv0sg1nnvkkr715bagro7equ0ubh.apps.googleusercontent.com</string>
+    <string name="google_client_secret_production">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</string>
     <string name="google_client_redirect_uri_production">abcd</string>
 
-    <string name="google_client_id_staging">abcd</string> <!-- 586601826954-bf3rmcj9dbhii39tpu9negagt85ebfjg.apps.googleusercontent.com -->
-    <string name="google_client_secret_staging">abcd</string> <!-- q25W9B3-pqWebWZ1ZY6Za6op -->
-    <string name="google_client_redirect_uri_staging">abcd</string> <!-- https://udeoglobe-staging.firebaseapp.com/__/auth/handler -->
-
+    <string name="google_client_id_staging">74605093159-funodu4lv47i9u57h2meqahlcan5elo3.apps.googleusercontent.com</string> <!-- 586601826954-bf3rmcj9dbhii39tpu9negagt85ebfjg.apps.googleusercontent.com -->
+    <string name="google_client_secret_staging">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</string> <!-- q25W9B3-pqWebWZ1ZY6Za6op -->
+    <string name="google_client_redirect_uri_staging">https://qthemusic-staging.firebaseapp.com/__/auth/handler</string> <!-- https://udeoglobe-staging.firebaseapp.com/__/auth/handler -->
+    <string name="facebook_app_id">348614333948475</string>
+    <string name="fb_login_protocol_scheme">fb1234</string>
+    <string name="facebook_client_token">527db1c05e0c2c1ce9b40deabd02d582</string>
     <string name="no_internet">No Internet Connection</string>
     <string name="call_not_supported">Call Not Supported</string>
     <string name="pick_image_intent_text">Pick Image</string>
-    <string name="facebook_app_id">123456</string>
     <string name="server_setting">Server Settings</string>
     <string name="minimun_version">Minimun Version</string>
     <string name="ok">OK</string>
@@ -52,6 +53,8 @@
     <string name="str_search">Search</string>
     <string name="str_categories">Categories</string>
     <string name="str_profile">Profile</string>
+    <!-- TODO: Remove or change this placeholder text -->
+
     <string name="str_recommended_for_you">Recommended for you</string>
     <string name="str_songs">Songs</string>
     <string name="str_albums">Albums</string>
@@ -86,6 +89,42 @@
     <string name="favorite_songs">Favorite Songs</string>
     <string name="playlists">Playlists</string>
     <string name="settings">settings</string>
+    <string name="something_wrong">Something went wrong.</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="sign_in">Sign In</string>
+    <string name="sign_in_to_continue">Sign In to continue</string>
+    <string name="dont_have_account">Don\'t have an account?</string>
+    <string name="sign_up">Sing Up</string>
+    <string name="or">OR</string>
+    <string name="required">required</string>
+    <string name="error_invalid_email">enter valid email</string>
+    <string name="forgot_password_tag">Forgot Password</string>
+    <string name="email_hint">Email</string>
+    <string name="password_hint">Password</string>
+    <string name="send_code">Send Code</string>
+    <string name="confirm_code">Confirm Code</string>
+    <string name="otp_verifaton">OTP Verification</string>
+    <string name="code_has_send">Code has been sent on</string>
+    <string name="email_sami">samiiiolle@gmail.com</string>
+    <string name="resend_tag">Resends in</string>
+    <string name="resend_time">00:</string>
+    <string name="set_password">Set Password</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="done">Done</string>
+    <string name="invalid_email">Enter valid email</string>
+    <string name="invalid_password">Enter valid password</string>
+    <string name="error_occurred">Error Occurred</string>
+    <string name="get_email_fb">email</string>
+    <string name="enter_valid_otp">Enter Valid Otp</string>
+    <string name="resend">Resend</string>
+    <string name="this_required">This field is required</string>
+    <string name="error_access_token">Access Token Not Found</string>
+    <string name="password_never_match_error">Password never match</string>
+    <string name="fb_public_profile_args">public_profile</string>
+
+
     <string name="channel_name">channel_name</string>
     <string name="channel_desc">channel_desc</string>
 </resources>

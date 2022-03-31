@@ -2,7 +2,9 @@ package com.techswivel.qthemusic.utils
 
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.text.InputFilter
+import android.widget.Toast
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -45,6 +47,10 @@ object Utilities {
             30 -> "11"
             else -> ""
         }
+    }
+
+    fun showToast(context: Context, msg: String) {
+        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
     }
 
     fun formatSongDuration(timeMs: Long): String {

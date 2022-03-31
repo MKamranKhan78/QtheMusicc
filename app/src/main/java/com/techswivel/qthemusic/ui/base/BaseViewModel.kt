@@ -1,11 +1,16 @@
 package com.techswivel.qthemusic.ui.base
 
 import android.app.Activity
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.widget.TextView
+import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
+import com.google.android.material.internal.TextWatcherAdapter
 import com.techswivel.qthemusic.BuildConfig
 import com.techswivel.qthemusic.constant.Constants
 import com.techswivel.qthemusic.dataManager.LocalDataManager
@@ -22,6 +27,9 @@ import com.techswivel.qthemusic.ui.activities.splashActivity.SplashActivity
 import com.techswivel.qthemusic.utils.ActivityUtils
 import com.techswivel.qthemusic.utils.CommonKeys
 import kotlinx.coroutines.runBlocking
+import com.techswivel.qthemusic.utils.Log
+import com.techswivel.qthemusic.utils.isValidEmail
+import com.techswivel.qthemusic.utils.isValidPassword
 
 
 abstract class BaseViewModel : ViewModel() {

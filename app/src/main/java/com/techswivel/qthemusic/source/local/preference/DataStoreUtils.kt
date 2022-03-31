@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import java.io.IOException
 
-object DataStoreUtils : IDataStorePreferenceAPI {
+object  DataStoreUtils : IDataStorePreferenceAPI {
     private val Context.dataStore by preferencesDataStore(
         name = PREF_NAME
     )

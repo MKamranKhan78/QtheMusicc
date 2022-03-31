@@ -22,20 +22,20 @@ import java.util.regex.Matcher
 import java.util.regex.Pattern
 
 
-fun EditText.isValidPassword(): Boolean {
+fun String.isValidPassword(): Boolean {
     val regex = ("^(?=.*[0-9])"
             + "(?=.*[a-z])(?=.*[A-Z])"
             + "(?=.*[@_*#$%^&+=])"
             + "(?=\\S+$).{8,36}$")
     val p = Pattern.compile(regex)
-    val m: Matcher = p.matcher(this.editableText.toString())
+    val m: Matcher = p.matcher(this)
     return m.matches()
 }
 
-fun EditText.isValidEmail(): Boolean {
+fun String.isValidEmail(): Boolean {
     val emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+"
     val p = Pattern.compile(emailPattern)
-    val m: Matcher = p.matcher(this.editableText.toString())
+    val m: Matcher = p.matcher(this)
     return m.matches()
 }
 
