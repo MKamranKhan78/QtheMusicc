@@ -59,6 +59,7 @@
                             android:layout_width="@dimen/_110dp"
                             android:layout_height="@dimen/_110dp"
                             setImageViewImage="@{authModel.avatar}"
+                            android:scaleType="fitXY"
                             android:layout_gravity="center_horizontal"
                             android:src="@drawable/ic_round_account_circle_24"
                             app:shapeAppearanceOverlay="@style/circleImageView"

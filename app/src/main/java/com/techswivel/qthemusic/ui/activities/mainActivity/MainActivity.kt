@@ -1,10 +1,7 @@
 package com.techswivel.qthemusic.ui.activities.mainActivity
 
 import android.app.Activity
-import android.os.Build
 import android.os.Bundle
-import androidx.annotation.RequiresApi
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.techswivel.dfaktfahrerapp.ui.fragments.underDevelopmentMessageFragment.UnderDevelopmentMessageFragment
@@ -20,7 +17,6 @@ class MainActivity : BaseActivity() {
     private lateinit var viewModel: MainActivityViewModel
     private var mFragment: Fragment? = null
 
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = ActivityMainBinding.inflate(layoutInflater)
@@ -28,7 +24,6 @@ class MainActivity : BaseActivity() {
         openUnderDevelopmentFragment()
         initView()
         setBottomNavigationSelector()
-        changeStatusBarColor()
         getDummyDataAndSaveInPrefrences()
 
     }
@@ -36,7 +31,7 @@ class MainActivity : BaseActivity() {
     private fun getDummyDataAndSaveInPrefrences() {
         val auth = viewModel.getDummyData()
         PrefUtils.clearAllPrefData(this)
-        viewModel.setDataInSharedPrefrence(auth, this)
+        viewModel.setDataInSharedPrefrence(auth)
     }
 
     override fun onBackPressed() {
@@ -70,12 +65,6 @@ class MainActivity : BaseActivity() {
             }
             return@setOnItemSelectedListener true
         }
-    }
-
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-    private fun changeStatusBarColor() {
-        val window = this.window
-        window.statusBarColor = ContextCompat.getColor(this, R.color.color_black)
     }
 
     private fun initView() {

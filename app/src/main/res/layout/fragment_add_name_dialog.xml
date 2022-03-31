@@ -54,10 +54,6 @@
             app:hintEnabled="true"
             app:hintTextColor="@color/color_white">
 
-            <!--
-                        android:theme="@style/ThemeOverlay.AppTheme.TextInputEditText.Outlined"
-            -->
-
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_name_id"
                 android:layout_width="match_parent"
@@ -74,13 +70,6 @@
                 android:textColorHighlight="@color/color_white"
                 android:textColorHint="@color/light_gray_color"
                 android:textSize="@dimen/_14sp" />
-            <!--
-                        android:text="@{my_obj.text}"
-            -->
-
-            <!--
-                        android:addTextChangedListener="@{my_obj.emailwatcher}"
-            -->
 
         </com.google.android.material.textfield.TextInputLayout>
 

@@ -76,14 +76,6 @@
                     android:layout_weight="1.4"
                     app:ccp_textSize="14sp" />
 
-                <!--
-                                <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center_vertical"
-                                    android:src="@drawable/ic_icon_ionic_ios_arrow_down" />
-                -->
-
                 <View
                     android:layout_width="@dimen/_2dp"
                     android:layout_height="@dimen/_20dp"

@@ -5,6 +5,7 @@ import android.view.View
 import android.widget.TextView
 import androidx.lifecycle.ViewModel
 import com.techswivel.qthemusic.BuildConfig
+import com.techswivel.qthemusic.application.QTheMusicApplication
 import com.techswivel.qthemusic.constant.Constants
 import com.techswivel.qthemusic.dataManager.RemoteDataManager
 import com.techswivel.qthemusic.models.Address
@@ -13,7 +14,6 @@ import com.techswivel.qthemusic.models.Notification
 import com.techswivel.qthemusic.models.Subscription
 import com.techswivel.qthemusic.source.local.preference.PrefUtils
 import com.techswivel.qthemusic.source.remote.rxjava.DisposableManager
-import com.techswivel.qthemusic.ui.activities.mainActivity.MainActivity
 import com.techswivel.qthemusic.utils.CommonKeys
 
 
@@ -37,60 +37,94 @@ abstract class BaseViewModel : ViewModel() {
         return mRemoteDataManager.getAuthDetails()
     }
 
-    fun setDataInSharedPrefrence(authModel: AuthModel?, activity: MainActivity) {
+    fun setDataInSharedPrefrence(authModel: AuthModel?) {
 
-        PrefUtils.setString(activity, CommonKeys.KEY_USER_NAME, authModel?.name)
-        PrefUtils.setString(activity, CommonKeys.KEY_USER_EMAIL, authModel?.email)
         PrefUtils.setString(
-            activity,
+            QTheMusicApplication.getContext(),
+            CommonKeys.KEY_USER_NAME,
+            authModel?.name
+        )
+        PrefUtils.setString(
+            QTheMusicApplication.getContext(),
+            CommonKeys.KEY_USER_EMAIL,
+            authModel?.email
+        )
+        PrefUtils.setString(
+            QTheMusicApplication.getContext(),
             CommonKeys.KEY_USER_AVATAR,
             authModel?.avatar
         )
         PrefUtils.setBoolean(
-            activity, CommonKeys.KEY_USER_ENABLE_NOTIFICATION,
+            QTheMusicApplication.getContext(), CommonKeys.KEY_USER_ENABLE_NOTIFICATION,
             authModel?.notification?.isNotificationEnabled ?: true
         )
         PrefUtils.setBoolean(
-            activity,
+            QTheMusicApplication.getContext(),
             CommonKeys.KEY_ARTIST_UPDATE,
             authModel?.notification?.isArtistUpdateEnabled ?: true
         )
-        PrefUtils.setString(activity, CommonKeys.KEY_USER_PHONE, authModel?.phoneNumber)
-        authModel?.dOB?.let { doB -> PrefUtils.setLong(activity, CommonKeys.KEY_USER_DOB, doB) }
+        PrefUtils.setString(
+            QTheMusicApplication.getContext(),
+            CommonKeys.KEY_USER_PHONE,
+            authModel?.phoneNumber
+        )
+        authModel?.dOB?.let { doB ->
+            PrefUtils.setLong(
+                QTheMusicApplication.getContext(),
+                CommonKeys.KEY_USER_DOB,
+                doB
+            )
+        }
         authModel?.subscription?.planId?.let { planId ->
             PrefUtils.setInt(
-                activity, CommonKeys.KEY_USER_PLAN_ID,
+                QTheMusicApplication.getContext(), CommonKeys.KEY_USER_PLAN_ID,
                 planId
             )
         }
         authModel?.subscription?.planPrice?.let { planPrice ->
             PrefUtils.setInt(
-                activity, CommonKeys.KEY_USER_PLAN_PRIZE,
+                QTheMusicApplication.getContext(), CommonKeys.KEY_USER_PLAN_PRIZE,
                 planPrice
             )
         }
         authModel?.address?.zipCode?.let { zipCode ->
             PrefUtils.setInt(
-                activity, CommonKeys.KEY_USER_ZIP_CODE,
+                QTheMusicApplication.getContext(), CommonKeys.KEY_USER_ZIP_CODE,
                 zipCode
             )
         }
-        PrefUtils.setString(activity, CommonKeys.KEY_USER_GENDER, authModel?.gender)
-        PrefUtils.setString(activity, CommonKeys.KEY_USER_CITY, authModel?.address?.city)
-        PrefUtils.setString(activity, CommonKeys.KEY_USER_STATE, authModel?.address?.state)
-        PrefUtils.setString(activity, CommonKeys.KEY_USER_COUNTRY, authModel?.address?.country)
         PrefUtils.setString(
-            activity,
+            QTheMusicApplication.getContext(),
+            CommonKeys.KEY_USER_GENDER,
+            authModel?.gender
+        )
+        PrefUtils.setString(
+            QTheMusicApplication.getContext(),
+            CommonKeys.KEY_USER_CITY,
+            authModel?.address?.city
+        )
+        PrefUtils.setString(
+            QTheMusicApplication.getContext(),
+            CommonKeys.KEY_USER_STATE,
+            authModel?.address?.state
+        )
+        PrefUtils.setString(
+            QTheMusicApplication.getContext(),
+            CommonKeys.KEY_USER_COUNTRY,
+            authModel?.address?.country
+        )
+        PrefUtils.setString(
+            QTheMusicApplication.getContext(),
             CommonKeys.KEY_USER_PLAN_TITLE,
             authModel?.subscription?.planTitle
         )
         PrefUtils.setString(
-            activity,
+            QTheMusicApplication.getContext(),
             CommonKeys.KEY_USER_PLAN_DURATION,
             authModel?.subscription?.planDuration
         )
         PrefUtils.setString(
-            activity,
+            QTheMusicApplication.getContext(),
             CommonKeys.KEY_USER_ADRESS,
             authModel?.address?.completeAddress
         )

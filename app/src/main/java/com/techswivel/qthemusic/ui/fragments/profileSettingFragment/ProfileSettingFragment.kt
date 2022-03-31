@@ -150,9 +150,6 @@ class ProfileSettingFragment : BaseFragment() {
 
 
         mBinding.userProfileViewID.setOnClickListener {
-            // send call back to activity
-            //(mActivityListener as ProfileSettingActivityImp ).openProfileSettingFragment()
-
             ActivityUtils.launchFragment(
                 requireContext(),
                 ProfileUpdatingFragment::class.java.name

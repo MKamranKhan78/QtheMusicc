@@ -15,7 +15,9 @@ import com.techswivel.qthemusic.models.AuthModel
 import com.techswivel.qthemusic.models.AuthModelBuilder
 import com.techswivel.qthemusic.source.local.preference.DataStoreUtils
 import com.techswivel.qthemusic.source.remote.networkViewModel.AuthNetworkViewModel
+import com.techswivel.qthemusic.ui.activities.profileSettingScreen.ProfileSettingActivityImpl
 import com.techswivel.qthemusic.ui.base.BaseDialogFragment
+import com.techswivel.qthemusic.utils.CommonKeys
 import com.techswivel.qthemusic.utils.DialogUtils
 import com.techswivel.qthemusic.utils.Log
 import kotlinx.coroutines.runBlocking
@@ -23,9 +25,14 @@ import kotlinx.coroutines.runBlocking
 class AddNameDialogFragment : BaseDialogFragment(), BaseInterface {
 
     companion object {
-        fun newInstance() = AddNameDialogFragment()
+        fun newInstance(profileSettingActivityImpl: ProfileSettingActivityImpl, bundle: Bundle?) =
+            AddNameDialogFragment().apply {
+                setCallBack(profileSettingActivityImpl)
+                arguments = bundle
+            }
     }
 
+    private lateinit var mProfileSettingActivityImpl: ProfileSettingActivityImpl
     private lateinit var mBinding: FragmentAddNameDialogBinding
     private lateinit var authNetworkViewModel: AuthNetworkViewModel
     private lateinit var viewModel: AddNameViewModel
@@ -49,9 +56,15 @@ class AddNameDialogFragment : BaseDialogFragment(), BaseInterface {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViewModels()
+        getBundleData()
         clickListener()
         setObserver()
 
+    }
+
+    private fun getBundleData() {
+        viewModel.authModel = arguments?.getSerializable(CommonKeys.KEY_DATA) as AuthModel?
+        mBinding.etNameId.setText(viewModel.authModel?.name)
     }
 
     private fun setObserver() {
@@ -62,6 +75,8 @@ class AddNameDialogFragment : BaseDialogFragment(), BaseInterface {
                 }
                 NetworkStatus.SUCCESS -> {
                     mBinding.progressBar.visibility = View.GONE
+//                    mProfileSettingActivityImpl.openProfileSettingFragmentWithName(viewModel.name)
+                    mProfileSettingActivityImpl.openProfileSettingFragmentWithName(viewModel.authModel)
                     dismiss()
                     Toast.makeText(
                         QTheMusicApplication.getContext(),
@@ -125,16 +140,34 @@ class AddNameDialogFragment : BaseDialogFragment(), BaseInterface {
         }
 
         mBinding.updateButton.setOnClickListener {
-            // first validate it.
-            viewModel.name = mBinding.etNameId.text.toString()
-            val authModelBilder = AuthModelBuilder()
-            authModelBilder.name = viewModel.name
-            val authModel = AuthModelBuilder.build(authModelBilder)
-            updateProfile(authModel)
+
+            viewModel.isAllFieldsChecked = checkAllFields()
+
+            if (viewModel.isAllFieldsChecked) {
+                viewModel.name = mBinding.etNameId.text.toString()
+                viewModel.authModel?.name = mBinding.etNameId.text.toString()
+                val authModelBilder = AuthModelBuilder()
+                authModelBilder.name = viewModel.name
+                val authModel = AuthModelBuilder.build(authModelBilder)
+                updateProfile(authModel)
+            }
+
         }
     }
 
     private fun updateProfile(authModel: AuthModel) {
         authNetworkViewModel.updateProfile(authModel)
+    }
+
+    private fun setCallBack(profileSettingActivityImpl: ProfileSettingActivityImpl) {
+        mProfileSettingActivityImpl = profileSettingActivityImpl
+    }
+
+    private fun checkAllFields(): Boolean {
+        if (mBinding.etNameId.length() == 0) {
+            mBinding.etNameId.setError("Name is required")
+            return false
+        }
+        return true
     }
 }

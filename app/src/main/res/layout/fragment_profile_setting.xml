@@ -166,6 +166,7 @@
                     setImageViewImage="@{viewModel.authModel.avatar}"
                     android:layout_width="@dimen/_36dp"
                     android:layout_height="@dimen/_36dp"
+                    android:scaleType="fitXY"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginStart="@dimen/_4dp"
                     app:shapeAppearanceOverlay="@style/circleImageView"
@@ -184,7 +185,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/manrope_regular"
-                        android:text="@{viewModel.authModel.name}"
+                        android:text="@{viewModel.authModel.name == null ? @string/not_added : viewModel.authModel.name }"
                         android:textColor="@color/color_white"
                         android:textSize="@dimen/_14sp" />
 

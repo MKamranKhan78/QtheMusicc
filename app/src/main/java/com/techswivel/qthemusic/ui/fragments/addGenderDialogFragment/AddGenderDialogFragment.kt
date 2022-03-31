@@ -4,19 +4,47 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.ViewModelProvider
+import com.techswivel.qthemusic.application.QTheMusicApplication
+import com.techswivel.qthemusic.customData.enums.GenderType
+import com.techswivel.qthemusic.customData.enums.NetworkStatus
 import com.techswivel.qthemusic.customData.interfaces.BaseInterface
 import com.techswivel.qthemusic.databinding.FragmentAddGenderDialogBinding
+import com.techswivel.qthemusic.models.AuthModel
+import com.techswivel.qthemusic.models.AuthModelBuilder
+import com.techswivel.qthemusic.source.local.preference.DataStoreUtils
+import com.techswivel.qthemusic.source.remote.networkViewModel.AuthNetworkViewModel
+import com.techswivel.qthemusic.ui.activities.profileSettingScreen.ProfileSettingActivityImpl
 import com.techswivel.qthemusic.ui.base.BaseDialogFragment
+import com.techswivel.qthemusic.utils.CommonKeys
+import com.techswivel.qthemusic.utils.DialogUtils
+import com.techswivel.qthemusic.utils.Log
+import kotlinx.coroutines.runBlocking
 
 
 class AddGenderDialogFragment : BaseDialogFragment(), BaseInterface {
 
+    /*companion object {
+        fun newInstance(profileSettingActivityImpl: ProfileSettingActivityImpl) =
+            AddGenderDialogFragment().apply {
+                setCallBack(profileSettingActivityImpl)
+            }
+    }*/
     companion object {
-        fun newInstance() = AddGenderDialogFragment()
+        fun newInstance(profileSettingActivityImpl: ProfileSettingActivityImpl, bundle: Bundle?) =
+            AddGenderDialogFragment().apply {
+                setCallBack(profileSettingActivityImpl)
+                arguments = bundle
+            }
     }
 
+    private lateinit var mProfileSettingActivityImpl: ProfileSettingActivityImpl
     private lateinit var mBinding: FragmentAddGenderDialogBinding
+    private lateinit var viewModel: AddGenderViewModel
+    private lateinit var netWorkViewModel: AuthNetworkViewModel
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,26 +63,99 @@ class AddGenderDialogFragment : BaseDialogFragment(), BaseInterface {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initViewModel()
+        getBundleData()
         clickListener()
-
-        //checkWhichCheckBoxIsChecked()
-/*        setOnCheckedChangeListener()*/
+        setObserver()
     }
 
-    private fun checkWhichCheckBoxIsChecked() {
-        /*if (mBinding.radioOne.isChecked == true){
-            mBinding.radioTwo.isChecked = false
-            mBinding.radioThree.isChecked = false
+    private fun getBundleData() {
+        viewModel.authModel = arguments?.getSerializable(CommonKeys.KEY_DATA) as AuthModel?
+        if (viewModel.authModel?.gender == GenderType.MALE.toString()) {
+            mBinding.maleRB.isChecked = true
+            mBinding.femaleRB.isChecked = false
+            mBinding.nonBinaryRB.isChecked = false
+            mBinding.noAnswerRB.isChecked = false
+        } else if (viewModel.authModel?.gender == GenderType.FEMALE.toString()) {
+            mBinding.maleRB.isChecked = false
+            mBinding.femaleRB.isChecked = true
+            mBinding.nonBinaryRB.isChecked = false
+            mBinding.noAnswerRB.isChecked = false
+        } else if (viewModel.authModel?.gender == GenderType.NON_BINARY.toString()) {
+            mBinding.maleRB.isChecked = false
+            mBinding.femaleRB.isChecked = false
+            mBinding.nonBinaryRB.isChecked = true
+            mBinding.noAnswerRB.isChecked = false
+        } else if (viewModel.authModel?.gender == GenderType.NOT_ANSWERED.toString()) {
+            mBinding.maleRB.isChecked = false
+            mBinding.femaleRB.isChecked = false
+            mBinding.nonBinaryRB.isChecked = false
+            mBinding.noAnswerRB.isChecked = true
+        } else {
+            Log.v("isChecked", "nothing is checked")
         }
-         if (mBinding.radioTwo.isChecked == true){
-             mBinding.radioOne.isChecked = false
-             mBinding.radioThree.isChecked = false
-         }
-         if (mBinding.radioThree.isChecked == true){
-             mBinding.radioTwo.isChecked = false
-             mBinding.radioOne.isChecked = false
-         }*/
     }
+
+    private fun setObserver() {
+        netWorkViewModel.profileUpdationResponse.observe(requireActivity()) { updateProfileResponse ->
+            when (updateProfileResponse.status) {
+                NetworkStatus.LOADING -> {
+                    mBinding.progressBar.visibility = View.VISIBLE
+                }
+                NetworkStatus.SUCCESS -> {
+                    mBinding.progressBar.visibility = View.GONE
+                    mProfileSettingActivityImpl.openProfileSettingFragmentWithGender(viewModel.authModel)
+//                    mProfileSettingActivityImpl.openProfileSettingFragmentWithGender(viewModel.gender.toString())
+                    dismiss()
+                    Toast.makeText(
+                        QTheMusicApplication.getContext(),
+                        "gender successfully updated.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                NetworkStatus.ERROR -> {
+                    mBinding.progressBar.visibility = View.GONE
+                    updateProfileResponse.error?.message?.let { error_message ->
+                        DialogUtils.errorAlert(
+                            QTheMusicApplication.getContext(),
+                            updateProfileResponse.error.code.toString(),
+                            updateProfileResponse.error.message
+                        )
+                    }
+                }
+                NetworkStatus.EXPIRE -> {
+                    mBinding.progressBar.visibility = View.GONE
+                    DialogUtils.sessionExpireAlert(
+                        QTheMusicApplication.getContext(),
+                        object : DialogUtils.CallBack {
+                            override fun onPositiveCallBack() {
+                                runBlocking {
+                                    DataStoreUtils.clearAllPreference()
+                                }
+                            }
+
+                            override fun onNegativeCallBack() {
+                            }
+                        })
+                }
+                NetworkStatus.COMPLETED -> {
+                    mBinding.progressBar.visibility = View.GONE
+                    dismiss()
+                    Log.v("Network_status", "completed")
+                }
+            }
+        }
+
+    }
+
+    private fun initViewModel() {
+        viewModel =
+            ViewModelProvider(this).get(AddGenderViewModel::class.java)
+
+        netWorkViewModel =
+            ViewModelProvider(this).get(AuthNetworkViewModel::class.java)
+    }
+
 
     override fun showProgressBar() {
     }
@@ -67,94 +168,66 @@ class AddGenderDialogFragment : BaseDialogFragment(), BaseInterface {
         mBinding.imageviewCancelDialog.setOnClickListener {
             dismiss()
         }
+
         mBinding.updateButton.setOnClickListener {
-            // setOnCheckedChangeListener()
+            viewModel.authModel?.gender = viewModel.gender.toString()
+            val authModelBilder = AuthModelBuilder()
+            authModelBilder.gender = viewModel.gender.toString()
+            val authModel = AuthModelBuilder.build(authModelBilder)
+            updateProfile(authModel)
+
+
+/*            viewModel.name = mBinding.etNameId.text.toString()
+            viewModel.authModel?.name =mBinding.etNameId.text.toString()
+            val authModelBilder = AuthModelBuilder()
+            authModelBilder.name = viewModel.name
+            val authModel = AuthModelBuilder.build(authModelBilder)
+            updateProfile(authModel)*/
         }
 
-        mBinding.rbRad1.setOnClickListener(object : View.OnClickListener {
+        mBinding.maleRB.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View?) {
-                mBinding.rbRad2.isChecked = false
-                mBinding.rbRad4.isChecked = false
-                mBinding.rbRad3.isChecked = false
+                viewModel.gender = GenderType.MALE
+                mBinding.femaleRB.isChecked = false
+                mBinding.noAnswerRB.isChecked = false
+                mBinding.nonBinaryRB.isChecked = false
             }
         })
 
-        mBinding.rbRad3.setOnClickListener(object : View.OnClickListener {
+        mBinding.nonBinaryRB.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View?) {
-                mBinding.rbRad2.isChecked = false
-                mBinding.rbRad4.isChecked = false
-                mBinding.rbRad1.isChecked = false
+                viewModel.gender = GenderType.NON_BINARY
+                mBinding.femaleRB.isChecked = false
+                mBinding.noAnswerRB.isChecked = false
+                mBinding.maleRB.isChecked = false
             }
         })
 
-        mBinding.rbRad2.setOnClickListener(object : View.OnClickListener {
+        mBinding.femaleRB.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View?) {
-                mBinding.rbRad3.isChecked = false
-                mBinding.rbRad4.isChecked = false
-                mBinding.rbRad1.isChecked = false
+                viewModel.gender = GenderType.FEMALE
+                mBinding.nonBinaryRB.isChecked = false
+                mBinding.noAnswerRB.isChecked = false
+                mBinding.maleRB.isChecked = false
             }
         })
 
-        mBinding.rbRad4.setOnClickListener(object : View.OnClickListener {
+        mBinding.noAnswerRB.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View?) {
-                mBinding.rbRad3.isChecked = false
-                mBinding.rbRad2.isChecked = false
-                mBinding.rbRad1.isChecked = false
+                viewModel.gender = GenderType.NOT_ANSWERED
+                mBinding.nonBinaryRB.isChecked = false
+                mBinding.femaleRB.isChecked = false
+                mBinding.maleRB.isChecked = false
             }
         })
-
-/*
-        if (mBinding.maleRadioButton.isChecked){
-            Toast.makeText(QTheMusicApplication.getContext(),"male",Toast.LENGTH_SHORT).show()
-            mBinding.rg2.clearCheck()
-        }
-        else if (mBinding.nonBinaryRadioButton.isChecked){
-            Toast.makeText(QTheMusicApplication.getContext(),"non_binary",Toast.LENGTH_SHORT).show()
-            mBinding.rg1.clearCheck()
-        }
-*/
-
-        /*when (R.id.radioButton_1){
-            if (checked) {
-                rg_2.clearCheck();
-                rg_3.clearCheck();
-            }
-                break;
-
-        }*/
-
-/*        when (R.id.maleRadioButton) {
-            if (mBinding.)
-            in 10..100 -> println("A positive number between 10 and 100 (inclusive)")
-        }*/
-/*        when(R.id.maleRadioButton)
-            if (checked) {
-                rg_2.clearCheck();
-                rg_3.clearCheck();
-            }
-            break*/
     }
 
+    private fun setCallBack(profileSettingActivityImpl: ProfileSettingActivityImpl) {
+        mProfileSettingActivityImpl = profileSettingActivityImpl
+    }
 
-    /*private fun setOnCheckedChangeListener() {
-        mBinding.radioGroup.setOnCheckedChangeListener { group, checkedId ->
-            var text = ""
-
-            if (R.id.radioBtnMale == checkedId){
-                text = "MALE"
-            }
-            else if (R.id.radioBtnFemale == checkedId){
-                text = "FEMALE"
-            }
-            else if (R.id.radioBtnNonBinary == checkedId){
-                text = "NON-BINARY"
-            }
-            else if (R.id.radioBtnNoAnswer == checkedId){
-                text = "NO-ANSWER"
-            }
-            Toast.makeText(QTheMusicApplication.getContext(), text, Toast.LENGTH_SHORT).show()
-        }
-    }*/
-
+    private fun updateProfile(authModel: AuthModel) {
+        netWorkViewModel.updateProfile(authModel)
+    }
 
 }

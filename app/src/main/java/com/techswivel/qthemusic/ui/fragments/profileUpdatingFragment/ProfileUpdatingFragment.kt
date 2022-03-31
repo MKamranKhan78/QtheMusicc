@@ -3,8 +3,11 @@ package com.techswivel.qthemusic.ui.fragments.profileUpdatingFragment
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.DatePickerDialog
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
@@ -12,8 +15,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.annotation.RequiresApi
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.application.QTheMusicApplication
@@ -22,20 +23,29 @@ import com.techswivel.qthemusic.databinding.FragmentProfileUpdatingBinding
 import com.techswivel.qthemusic.models.AuthModel
 import com.techswivel.qthemusic.models.AuthModelBuilder
 import com.techswivel.qthemusic.source.local.preference.DataStoreUtils
+import com.techswivel.qthemusic.source.local.preference.PrefUtils
 import com.techswivel.qthemusic.source.remote.networkViewModel.AuthNetworkViewModel
+import com.techswivel.qthemusic.source.remote.networkViewModel.AuthorizationViewModel
+import com.techswivel.qthemusic.ui.activities.profileSettingScreen.ProfileSettingActivityImpl
 import com.techswivel.qthemusic.ui.base.BaseFragment
+import com.techswivel.qthemusic.ui.dialogFragments.chooserDialogFragment.ChooserDialogFragment
 import com.techswivel.qthemusic.ui.fragments.addAddressDialogFragment.AddAddressDialogFragment
 import com.techswivel.qthemusic.ui.fragments.addGenderDialogFragment.AddGenderDialogFragment
 import com.techswivel.qthemusic.ui.fragments.addNameDialogFragment.AddNameDialogFragment
 import com.techswivel.qthemusic.ui.fragments.addPhoneNumberDialogFragment.AddPhoneNumberDialogFragment
+import com.techswivel.qthemusic.utils.CommonKeys
+import com.techswivel.qthemusic.utils.CommonKeys.Companion.KEY_USER_DOB
+import com.techswivel.qthemusic.utils.CommonKeys.Companion.KEY_USER_PHONE
 import com.techswivel.qthemusic.utils.DialogUtils
+import com.techswivel.qthemusic.utils.PermissionUtils
 import kotlinx.coroutines.runBlocking
+import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.text.DateFormat
 import java.util.*
 
 
-class ProfileUpdatingFragment : BaseFragment() {
+class ProfileUpdatingFragment : BaseFragment(), ProfileSettingActivityImpl {
 
     companion object {
         fun newInstance() = ProfileUpdatingFragment()
@@ -47,6 +57,9 @@ class ProfileUpdatingFragment : BaseFragment() {
     private lateinit var mBinding: FragmentProfileUpdatingBinding
     private lateinit var viewModel: ProfileUpdatingViewModel
     private lateinit var netWorkViewModel: AuthNetworkViewModel
+    private lateinit var authorizationViewModel: AuthorizationViewModel
+    private lateinit var dialogFragment: ChooserDialogFragment
+
 
     private val GALLERY = 1
     private val CAMERA = 2
@@ -65,25 +78,15 @@ class ProfileUpdatingFragment : BaseFragment() {
         return mBinding.root
     }
 
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setToolBar()
         initViewModel()
-        changeStatusBarColor()
         viewModel.authModel = viewModel.getPrefrencesData(QTheMusicApplication.getContext())
         bindViewModelWithView()
-        getBundleData()
         clickListeners()
         setObserver()
 
-    }
-
-    private fun getBundleData() {
-        arguments?.let {
-            val phoneNumber = it.getString("_phoneNumberKey")
-            mBinding.phoneNumberTvID.text = phoneNumber
-        }
     }
 
 
@@ -98,33 +101,33 @@ class ProfileUpdatingFragment : BaseFragment() {
                         QTheMusicApplication.getContext().contentResolver,
                         contentURI
                     )
-                    //val path = saveImage(bitmap)
-                    Toast.makeText(
-                        QTheMusicApplication.getContext(),
-                        contentURI.toString(),
-                        Toast.LENGTH_SHORT
-                    ).show()
                     mBinding.profilePic.setImageBitmap(bitmap)
+                    viewModel.uri = contentURI
 
                 } catch (e: IOException) {
                     e.printStackTrace()
                     Toast.makeText(QTheMusicApplication.getContext(), "Failed!", Toast.LENGTH_SHORT)
                         .show()
                 }
-
             }
 
         } else if (requestCode == CAMERA) {
-            val thumbnail = data?.data//?.extras?.get("data") as Bitmap
             val bitmap = data?.extras?.get("data") as Bitmap
             mBinding.profilePic.setImageBitmap(bitmap)
-            // saveImage(thumbnail)
-            Toast.makeText(
-                QTheMusicApplication.getContext(),
-                thumbnail.toString(),
-                Toast.LENGTH_SHORT
-            ).show()
+            val uri = getImageUri(QTheMusicApplication.getContext(), bitmap)
+            viewModel.uri = uri
         }
+        val authModelBilder = AuthModelBuilder()
+        authModelBilder.avatar = viewModel.uri.toString()
+        val authModel = AuthModelBuilder.build(authModelBilder)
+        PrefUtils.setString(
+            QTheMusicApplication.getContext(),
+            CommonKeys.KEY_USER_AVATAR,
+            viewModel.uri.toString()
+        )
+        updateProfile(authModel)
+
+
     }
 
     private fun setObserver() {
@@ -136,9 +139,10 @@ class ProfileUpdatingFragment : BaseFragment() {
                 }
                 NetworkStatus.SUCCESS -> {
                     mBinding.progressBar.visibility = View.GONE
+
                     Toast.makeText(
                         QTheMusicApplication.getContext(),
-                        "date of birth successfully updated.",
+                        "Profile Update successfully.",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -176,72 +180,33 @@ class ProfileUpdatingFragment : BaseFragment() {
     }
 
     private fun clickListeners() {
+        val bundle = Bundle()
+        bundle.putSerializable(CommonKeys.KEY_DATA, viewModel.authModel)
         mBinding.textviewChangeNameID.setOnClickListener {
             val fragmentTransaction =
                 requireActivity().supportFragmentManager.beginTransaction()
-            val dialogFragment = AddNameDialogFragment.newInstance()
+            val dialogFragment = AddNameDialogFragment.newInstance(this, bundle)
             dialogFragment.show(fragmentTransaction, TAG)
-
         }
 
         mBinding.addPhoneNumberTextviewID.setOnClickListener {
             val fragmentTransaction =
                 requireActivity().supportFragmentManager.beginTransaction()
-            val dialogFragment = AddPhoneNumberDialogFragment.newInstance()
+            val dialogFragment = AddPhoneNumberDialogFragment.newInstance(this)
             dialogFragment.show(fragmentTransaction, TAG)
-
         }
 
         mBinding.changePhotoImageviewId.setOnClickListener {
-            showPictureDialog()
+            picImageFromGallery()
         }
 
         mBinding.textviewChangeGenderID.setOnClickListener {
+            val bundle = Bundle()
+            bundle.putSerializable(CommonKeys.KEY_DATA, viewModel.authModel)
             val fragmentTransaction =
                 requireActivity().supportFragmentManager.beginTransaction()
-            val dialogFragment = AddGenderDialogFragment.newInstance()
-            // these are three method for how to use it ?
-            //number 1
-            /*val map: Bitmap? = Utilities.takeScreenShot(requireActivity())
-            val fast: Bitmap? = map?.let { it1 -> Utilities.fastblur(it1, 10) }
-            val draw: Drawable = BitmapDrawable(resources, fast)
-            requireActivity().getWindow().setBackgroundDrawable(draw)
-            */
-
-
-            //number 2
-            /*btnblur.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    AlertDialog.Builder builder=new AlertDialog.Builder(BlurImageView.this,R.style.Theme_D1NoTitleDim);
-                    builder.setTitle("Content");
-                    builder.setMessage("CLICK OK to Exit");
-                    builder.setPositiveButton("ON", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            back_dim_layout.setVisibility(View.GONE);
-                            dialog.cancel();
-                        }
-                    });
-                    alert=builder.create();
-                    Bitmap map=takeScreenShot(BlurImageView.this);
-
-                    Bitmap fast=fastblur(map, 10);
-                    final Drawable draw=new BitmapDrawable(getResources(),fast);
-                    alert.getWindow().setBackgroundDrawable(draw);
-                    alert.show();
-                }
-            });*/
-
-            //number 3
-/*            val lp: WindowManager.LayoutParams = requireActivity().getWindow().getAttributes()
-            lp.dimAmount = 0.5f
-            requireActivity().getWindow().setAttributes(lp)
-            requireActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND)*/
+            val dialogFragment = AddGenderDialogFragment.newInstance(this, bundle)
             dialogFragment.show(fragmentTransaction, TAG)
-
-
         }
 
         mBinding.textviewChangeDobID.setOnClickListener {
@@ -257,6 +222,8 @@ class ProfileUpdatingFragment : BaseFragment() {
                     mBinding.tvDateOfBirth.setText(
                         DateFormat.getDateInstance(DateFormat.LONG).format(dateObj)
                     )
+                    mBinding.textviewChangeDobID.text =
+                        QTheMusicApplication.getContext().getString(R.string.change)
                 },
                 year,
                 month,
@@ -267,9 +234,11 @@ class ProfileUpdatingFragment : BaseFragment() {
         }
 
         mBinding.textviewChangeAddressID.setOnClickListener {
+            val bundle = Bundle()
+            bundle.putSerializable(CommonKeys.KEY_DATA, viewModel.authModel)
             val fragmentTransaction =
                 requireActivity().supportFragmentManager.beginTransaction()
-            val dialogFragment = AddAddressDialogFragment.newInstance()
+            val dialogFragment = AddAddressDialogFragment.newInstance(this, bundle)
             dialogFragment.show(fragmentTransaction, TAG)
         }
     }
@@ -284,13 +253,6 @@ class ProfileUpdatingFragment : BaseFragment() {
             .setTextColor(QTheMusicApplication.getContext().getColor(R.color.color_black))
         // for disabling the past date
         datePicker.getDatePicker().setMinDate(System.currentTimeMillis() - 1000)
-    }
-
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-    private fun changeStatusBarColor() {
-        val window = requireActivity().window
-        window.statusBarColor =
-            ContextCompat.getColor(QTheMusicApplication.getContext(), R.color.color_black)
     }
 
 
@@ -310,6 +272,12 @@ class ProfileUpdatingFragment : BaseFragment() {
         val authModelBilder = AuthModelBuilder()
         authModelBilder.dOB = viewModel.dateInMillis
         val authModel = AuthModelBuilder.build(authModelBilder)
+        viewModel.dateInMillis?.let { dateInMillis ->
+            PrefUtils.setLong(
+                QTheMusicApplication.getContext(), KEY_USER_DOB,
+                dateInMillis
+            )
+        }
         updateProfile(authModel)
     }
 
@@ -324,6 +292,56 @@ class ProfileUpdatingFragment : BaseFragment() {
 
         netWorkViewModel =
             ViewModelProvider(this).get(AuthNetworkViewModel::class.java)
+
+        authorizationViewModel =
+            ViewModelProvider(this).get(AuthorizationViewModel::class.java)
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (::dialogFragment.isInitialized) {
+            dialogFragment.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        }
+        if ((grantResults.isNotEmpty() &&
+                    grantResults[0] == PackageManager.PERMISSION_GRANTED)
+        ) {
+            when (requestCode) {
+                PermissionUtils.PERMISSION_STORAGE -> {
+                    showPictureDialog()
+                }
+            }
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (!requireActivity().shouldShowRequestPermissionRationale(permissions[0])) {
+                DialogUtils.goToSystemLocationSetting(
+                    requireActivity(),
+                    getString(R.string.camera_permission_msg)
+                )
+            } else {
+                Toast.makeText(
+                    activity,
+                    resources.getString(R.string.permission_denied),
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        } else {
+            Toast.makeText(
+                activity,
+                resources.getString(R.string.permission_denied),
+                Toast.LENGTH_LONG
+            ).show()
+        }
+    }
+
+    private fun picImageFromGallery() {
+        if (PermissionUtils.isStoragePermissionGranted(requireContext())) {
+            showPictureDialog()
+        } else {
+            PermissionUtils.requestStoragePermission(requireActivity())
+        }
     }
 
     private fun showPictureDialog() {
@@ -355,65 +373,60 @@ class ProfileUpdatingFragment : BaseFragment() {
         startActivityForResult(intent, CAMERA)
     }
 
+    override fun openProfileSettingFragmentWithPnone(phoneNumber: String?) {
+        mBinding.phoneNumberTvID.text = phoneNumber
+        PrefUtils.setString(QTheMusicApplication.getContext(), KEY_USER_PHONE, phoneNumber)
+        mBinding.numberAdditionTick.visibility = View.VISIBLE
+        mBinding.addPhoneNumberTextviewID.visibility = View.GONE
+    }
 
-    /*fun saveImage(myBitmap: Bitmap):String {
+    override fun openProfileSettingFragmentWithName(authModel: AuthModel?) {
+
+        // here is the auth model
+        PrefUtils.clearAllPrefData(QTheMusicApplication.getContext())
+        viewModel.setDataInSharedPrefrence(authModel)
+        viewModel.authModel = viewModel.getPrefrencesData(QTheMusicApplication.getContext())
+        mBinding.tvNameId.text = viewModel.authModel?.name
+        mBinding.textviewChangeNameID.text =
+            QTheMusicApplication.getContext().getString(R.string.change)
+    }
+
+    override fun openProfileSettingFragmentWithAddress(authModel: AuthModel?) {
+        PrefUtils.clearAllPrefData(QTheMusicApplication.getContext())
+        viewModel.setDataInSharedPrefrence(authModel)
+        viewModel.authModel = viewModel.getPrefrencesData(QTheMusicApplication.getContext())
+        mBinding.adressTextview.text = authModel?.address?.completeAddress
+        mBinding.textviewChangeAddressID.text =
+            QTheMusicApplication.getContext().getString(R.string.change)
+    }
+
+    override fun openProfileSettingFragmentWithGender(authModel: AuthModel?) {
+        PrefUtils.clearAllPrefData(QTheMusicApplication.getContext())
+        viewModel.setDataInSharedPrefrence(authModel)
+        viewModel.authModel = viewModel.getPrefrencesData(QTheMusicApplication.getContext())
+        mBinding.genderTextviewId.text = authModel?.gender
+        mBinding.textviewChangeGenderID.text =
+            QTheMusicApplication.getContext().getString(R.string.change)
+    }
+
+    override fun showProgressBar() {
+        mBinding.progressBar.visibility = View.VISIBLE
+    }
+
+    override fun hideProgressBar() {
+        mBinding.progressBar.visibility = View.GONE
+    }
+
+    fun getImageUri(inContext: Context, inImage: Bitmap): Uri? {
         val bytes = ByteArrayOutputStream()
-        myBitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes)
-        val wallpaperDirectory = File(
-            (Environment.getExternalStorageDirectory()).toString() + CommonKeys.IMAGE_DIRECTORY)
-        // have the object build the directory structure, if needed.
-        Log.d("fee",wallpaperDirectory.toString())
-        if (!wallpaperDirectory.exists())
-        {
-
-            wallpaperDirectory.mkdirs()
-        }
-
-        try
-        {
-            Log.d("heel",wallpaperDirectory.toString())
-            val f = File(wallpaperDirectory, ((Calendar.getInstance()
-                .getTimeInMillis()).toString() + ".jpg"))
-            f.createNewFile()
-            val fo = FileOutputStream(f)
-            fo.write(bytes.toByteArray())
-            MediaScannerConnection.scanFile(QTheMusicApplication.getContext(),
-                arrayOf(f.getPath()),
-                arrayOf("image/jpeg"), null)
-            fo.close()
-            Log.d("TAG", "File Saved::--->" + f.getAbsolutePath())
-
-            return f.getAbsolutePath()
-        }
-        catch (e1: IOException) {
-            e1.printStackTrace()
-        }
-
-        return ""
-    }*/
-
-
-/*    internal class Blurry() : AsyncTask<Void?, Int?, Bitmap?>() {
-        override fun onPostExecute(result: Bitmap?) {
-            if (result != null) {
-                val draw: Drawable = BitmapDrawable(getResources(), result)
-                val window: Window = dialog.getWindow()
-                // this position alert again in the TOP -- need to avoid that!
-                window.setBackgroundDrawable(draw)
-                window.setLayout(
-                    WindowManager.LayoutParams.MATCH_PARENT,
-                    WindowManager.LayoutParams.MATCH_PARENT
-                )
-                window.setGravity(Gravity.CENTER)
-                dialog.show()
-            }
-        }
-
-        override fun doInBackground(vararg p0: Void?): Bitmap? {
-            val map: Bitmap = AppUtils.takeScreenShot(this@MainActivity)
-            return BlurView().fastBlur(map, 10)
-        }
-    }*/
-
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+        val path = MediaStore.Images.Media.insertImage(
+            inContext.getContentResolver(),
+            inImage,
+            "Title",
+            null
+        )
+        return Uri.parse(path)
+    }
 
 }

@@ -1,30 +1,24 @@
 package com.techswivel.qthemusic.ui.activities.profileSettingScreen
 
-import android.os.Build
 import android.os.Bundle
-import androidx.annotation.RequiresApi
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.databinding.ActivityProfileSettingBinding
 import com.techswivel.qthemusic.ui.base.BaseActivity
-import com.techswivel.qthemusic.ui.fragments.profileUpdatingFragment.ProfileUpdatingFragment
 import com.techswivel.qthemusic.ui.fragments.underDevelopmentMessageFragment.profile_setting_fragment.ProfileSettingFragment
 
 
-class ProfileSettingActivity : BaseActivity(), ProfileSettingActivityImpl {
+class ProfileSettingActivity : BaseActivity() {
 
     private lateinit var mBinding: ActivityProfileSettingBinding
     private var mFragment: Fragment? = null
 
 
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = ActivityProfileSettingBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
         openSettingFragment()
-        changeStatusBarColor()
         setToolBar()
 
     }
@@ -49,11 +43,6 @@ class ProfileSettingActivity : BaseActivity(), ProfileSettingActivityImpl {
         return super.onSupportNavigateUp()
     }
 
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-    private fun changeStatusBarColor() {
-        val window = this.window
-        window.statusBarColor = ContextCompat.getColor(this, R.color.color_black)
-    }
 
     private fun openFragment(fragment: Fragment) {
         ::mFragment.set(fragment)
@@ -68,6 +57,7 @@ class ProfileSettingActivity : BaseActivity(), ProfileSettingActivityImpl {
 //        openFragment(ProfileUpdatingFragment.newInstance())
 //    }
 
+/*
     override fun openProfileSettingFragment(phoneNumber: String?) {
         var bundle = Bundle()
         bundle.putString("_phoneNumberKey", phoneNumber)
@@ -81,5 +71,6 @@ class ProfileSettingActivity : BaseActivity(), ProfileSettingActivityImpl {
     override fun hideProgressBar() {
 
     }
+*/
 
 }

@@ -18,6 +18,7 @@ class CommonKeys {
         const val KEY_USER_ENABLE_NOTIFICATION = "_key_user_enable_notification"
         const val KEY_ARTIST_UPDATE = "_key_user_artist_update"
         const val KEY_SUBSRIPTION = "_key_subsription"
+        const val DEFAULT_FILE_PICK_LIMIT = 1
         const val KEY_USER_PHONE = "_key_user_phone"
         const val KEY_USER_DOB = "_key_user_dob"
         const val KEY_USER_GENDER = "_key_user_gender"

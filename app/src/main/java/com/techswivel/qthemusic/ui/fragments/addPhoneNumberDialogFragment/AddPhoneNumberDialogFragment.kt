@@ -17,6 +17,7 @@ import com.techswivel.qthemusic.databinding.FragmentAddPhoneNumberDialogBinding
 import com.techswivel.qthemusic.source.local.preference.DataStoreUtils
 import com.techswivel.qthemusic.source.local.preference.PrefUtils
 import com.techswivel.qthemusic.source.remote.networkViewModel.AuthNetworkViewModel
+import com.techswivel.qthemusic.source.remote.networkViewModel.AuthorizationViewModel
 import com.techswivel.qthemusic.ui.activities.profileSettingScreen.ProfileSettingActivityImpl
 import com.techswivel.qthemusic.ui.base.BaseDialogFragment
 import com.techswivel.qthemusic.utils.CommonKeys
@@ -30,12 +31,17 @@ class AddPhoneNumberDialogFragment : BaseDialogFragment(), BaseInterface {
     // this fragment have only api work and search design.
 
     companion object {
-        fun newInstance() = AddPhoneNumberDialogFragment()
+        fun newInstance(profileSettingActivityImpl: ProfileSettingActivityImpl) =
+            AddPhoneNumberDialogFragment().apply {
+                setCallBack(profileSettingActivityImpl)
+            }
     }
 
+    private lateinit var mProfileSettingActivityImpl: ProfileSettingActivityImpl
     private lateinit var mBinding: FragmentAddPhoneNumberDialogBinding
     private lateinit var viewModel: AddPhoneNumberViewModel
     private lateinit var mAuthNetworkViewModel: AuthNetworkViewModel
+    private lateinit var mAuthorizationViewModel: AuthorizationViewModel
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,16 +68,14 @@ class AddPhoneNumberDialogFragment : BaseDialogFragment(), BaseInterface {
     }
 
     private fun setObserver() {
-        mAuthNetworkViewModel.sendOtpResponse.observe(requireActivity()) { sendOtpResponse ->
+        mAuthorizationViewModel.sendOtpResponse.observe(requireActivity()) { sendOtpResponse ->
             when (sendOtpResponse.status) {
                 NetworkStatus.LOADING -> {
                     mBinding.progressBar.visibility = View.VISIBLE
                 }
                 NetworkStatus.SUCCESS -> {
                     mBinding.progressBar.visibility = View.GONE
-                    (mActivityListener as ProfileSettingActivityImpl).openProfileSettingFragment(
-                        viewModel.number
-                    )
+                    mProfileSettingActivityImpl.openProfileSettingFragmentWithPnone(viewModel.number)
                     dismiss()
                     Toast.makeText(
                         QTheMusicApplication.getContext(),
@@ -120,6 +124,9 @@ class AddPhoneNumberDialogFragment : BaseDialogFragment(), BaseInterface {
 
         mAuthNetworkViewModel =
             ViewModelProvider(this).get(AuthNetworkViewModel::class.java)
+
+        mAuthorizationViewModel =
+            ViewModelProvider(this).get(AuthorizationViewModel::class.java)
     }
 
     private fun clickListener() {
@@ -130,16 +137,16 @@ class AddPhoneNumberDialogFragment : BaseDialogFragment(), BaseInterface {
         mBinding.updateButton.setOnClickListener {
 
             if (checkValidity(mBinding.countryCodePickerId, mBinding.edtPhone)) {
-                Toast.makeText(
+                /*Toast.makeText(
                     QTheMusicApplication.getContext(),
                     "call back success",
                     Toast.LENGTH_SHORT
-                ).show()
+                ).show()*/
                 viewModel.email = PrefUtils.getString(
                     QTheMusicApplication.getContext(),
                     CommonKeys.KEY_USER_EMAIL
                 )
-                mAuthNetworkViewModel.sendOtp(
+                mAuthorizationViewModel.sendOtp(
                     OtpType.PHONE_NUMBER,
                     viewModel.email,
                     viewModel.number
@@ -169,6 +176,10 @@ class AddPhoneNumberDialogFragment : BaseDialogFragment(), BaseInterface {
             false
         }
 
+    }
+
+    private fun setCallBack(profileSettingActivityImpl: ProfileSettingActivityImpl) {
+        mProfileSettingActivityImpl = profileSettingActivityImpl
     }
 
     override fun showProgressBar() {

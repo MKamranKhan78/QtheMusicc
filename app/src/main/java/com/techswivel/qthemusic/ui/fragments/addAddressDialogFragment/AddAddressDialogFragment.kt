@@ -15,7 +15,9 @@ import com.techswivel.qthemusic.models.AuthModel
 import com.techswivel.qthemusic.models.AuthModelBuilder
 import com.techswivel.qthemusic.source.local.preference.DataStoreUtils
 import com.techswivel.qthemusic.source.remote.networkViewModel.AuthNetworkViewModel
+import com.techswivel.qthemusic.ui.activities.profileSettingScreen.ProfileSettingActivityImpl
 import com.techswivel.qthemusic.ui.base.BaseDialogFragment
+import com.techswivel.qthemusic.utils.CommonKeys
 import com.techswivel.qthemusic.utils.DialogUtils
 import com.techswivel.qthemusic.utils.Log
 import kotlinx.coroutines.runBlocking
@@ -24,9 +26,14 @@ import kotlinx.coroutines.runBlocking
 class AddAddressDialogFragment : BaseDialogFragment(), BaseInterface {
 
     companion object {
-        fun newInstance() = AddAddressDialogFragment()
+        fun newInstance(profileSettingActivityImpl: ProfileSettingActivityImpl, bundle: Bundle?) =
+            AddAddressDialogFragment().apply {
+                setCallBack(profileSettingActivityImpl)
+                arguments = bundle
+            }
     }
 
+    private lateinit var mProfileSettingActivityImpl: ProfileSettingActivityImpl
     private lateinit var authNetworkViewModel: AuthNetworkViewModel
     private lateinit var mBinding: FragmentAddAddressDialogBinding
     private lateinit var viewModel: AddAddressDialogViewModel
@@ -49,10 +56,19 @@ class AddAddressDialogFragment : BaseDialogFragment(), BaseInterface {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViewModel()
+        getBundleData()
         clickListener()
         setObserver()
     }
 
+    private fun getBundleData() {
+        viewModel.authModel = arguments?.getSerializable(CommonKeys.KEY_DATA) as AuthModel?
+        mBinding.edCityId.setText(viewModel.authModel?.address?.city)
+        mBinding.etAddressId.setText(viewModel.authModel?.address?.completeAddress)
+        mBinding.etCountryId.setText(viewModel.authModel?.address?.country)
+        mBinding.etStateId.setText(viewModel.authModel?.address?.state)
+        mBinding.etZipcodeId.setText(viewModel.authModel?.address?.zipCode.toString())
+    }
 
     override fun showProgressBar() {
     }
@@ -67,21 +83,60 @@ class AddAddressDialogFragment : BaseDialogFragment(), BaseInterface {
         }
 
         mBinding.updateButton.setOnClickListener {
-            // first validate it.
-            viewModel.address = mBinding.etAddressId.text.toString()
-            viewModel.city = mBinding.edCityId.text.toString()
-            viewModel.state = mBinding.etStateId.text.toString()
-//            viewModel.zipCode =mBinding.etZipcodeId.text.toInt()
-            viewModel.country = mBinding.etCountryId.text.toString()
-            val authModelBilder = AuthModelBuilder()
-            authModelBilder.address?.completeAddress = viewModel.address
-            authModelBilder.address?.city = viewModel.city
-            authModelBilder.address?.state = viewModel.state
-//            authModelBilder.address?.zipCode = viewModel.zipCode
-            authModelBilder.address?.country = viewModel.country
-            val authModel = AuthModelBuilder.build(authModelBilder)
-            updateProfile(authModel)
+
+            viewModel.isAllFieldsChecked = checkAllFields()
+
+            if (viewModel.isAllFieldsChecked) {
+                viewModel.address = mBinding.etAddressId.text.toString()
+                viewModel.city = mBinding.edCityId.text.toString()
+                viewModel.state = mBinding.etStateId.text.toString()
+                viewModel.zipCode = mBinding.etZipcodeId.text.toString().toInt()
+                viewModel.country = mBinding.etCountryId.text.toString()
+                viewModel.authModel?.address?.completeAddress = viewModel.address
+                viewModel.authModel?.address?.city = viewModel.city
+                viewModel.authModel?.address?.state = viewModel.state
+                viewModel.authModel?.address?.country = viewModel.country
+                viewModel.authModel?.address?.zipCode = viewModel.zipCode
+
+                val authModelBilder = AuthModelBuilder()
+                authModelBilder.address?.completeAddress = viewModel.address
+                authModelBilder.address?.city = viewModel.city
+                authModelBilder.address?.state = viewModel.state
+                authModelBilder.address?.zipCode = viewModel.zipCode
+                authModelBilder.address?.country = viewModel.country
+                val authModel = AuthModelBuilder.build(authModelBilder)
+                updateProfile(authModel)
+
+            }
         }
+    }
+
+    private fun checkAllFields(): Boolean {
+        if (mBinding.etAddressId.length() == 0) {
+            mBinding.etAddressId.setError("Address is required")
+            return false
+        }
+        if (mBinding.edCityId.length() == 0) {
+            mBinding.edCityId.setError("City is required")
+            return false
+        }
+
+        if (mBinding.etStateId.length() == 0) {
+            mBinding.etStateId.setError("State is required")
+            return false
+        }
+
+        if (mBinding.etCountryId.length() == 0) {
+            mBinding.etCountryId.setError("Country is required")
+            return false
+        }
+
+        if (mBinding.etZipcodeId.length() == 0) {
+            mBinding.etZipcodeId.setError("Zipcode is required")
+            return false
+        }
+
+        return true
     }
 
     private fun initViewModel() {
@@ -99,6 +154,8 @@ class AddAddressDialogFragment : BaseDialogFragment(), BaseInterface {
                 }
                 NetworkStatus.SUCCESS -> {
                     mBinding.progressBar.visibility = View.GONE
+                    mProfileSettingActivityImpl.openProfileSettingFragmentWithAddress(viewModel.authModel)
+
                     dismiss()
                     Toast.makeText(
                         QTheMusicApplication.getContext(),
@@ -146,5 +203,8 @@ class AddAddressDialogFragment : BaseDialogFragment(), BaseInterface {
         authNetworkViewModel.updateProfile(authModel)
     }
 
+    private fun setCallBack(profileSettingActivityImpl: ProfileSettingActivityImpl) {
+        mProfileSettingActivityImpl = profileSettingActivityImpl
+    }
 
 }

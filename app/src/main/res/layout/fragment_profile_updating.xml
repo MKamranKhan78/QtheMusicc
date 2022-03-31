@@ -67,7 +67,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/imageviewProfileUpdatingScreen"
                 android:layout_marginStart="@dimen/_20dp"
-                android:layout_marginTop="@dimen/_30dp"
+                android:layout_marginTop="@dimen/_60dp"
                 android:layout_marginEnd="@dimen/_20dp"
                 app:cardBackgroundColor="#303033"
                 app:cardCornerRadius="@dimen/_10dp"
@@ -184,6 +184,7 @@
                         android:layout_alignParentEnd="true"
                         android:layout_centerInParent="true"
                         android:layout_marginEnd="@dimen/_10dp"
+                        android:id="@+id/numberAdditionTick"
                         android:src="@drawable/ic_green_verified_circular_tick"
                         android:visibility="@{viewModel.authModel.phoneNumber != null ? View.VISIBLE : View.GONE}"
                         tools:ignore="ContentDescription" />
@@ -231,6 +232,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:id="@+id/tvNameId"
                             android:fontFamily="@font/manrope_regular"
                             android:text="@{viewModel.authModel.name == null ? @string/not_added : viewModel.authModel.name}"
                             android:textColor="@color/view_profile_text_color"
@@ -292,9 +294,9 @@
 
                         <TextView
                             android:id="@+id/tvDateOfBirth"
+                            setDate="@{viewModel.authModel.DOB}"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            setDate="@{viewModel.authModel.DOB}"
                             android:fontFamily="@font/manrope_regular"
                             android:textColor="@color/view_profile_text_color"
                             android:textSize="@dimen/_14sp" />
@@ -311,7 +313,7 @@
                         android:layout_marginStart="@dimen/_16dp"
                         android:layout_marginEnd="@dimen/_10dp"
                         android:fontFamily="@font/manrope_regular"
-                        android:text="@{viewModel.authModel.dOB.toString() == null ? @string/add : @string/change}"
+                        android:text="@{viewModel.authModel.dOB == null ? @string/add : @string/change}"
                         android:textColor="#BA011A"
                         android:textSize="@dimen/_14sp" />
 
@@ -358,6 +360,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:id="@+id/genderTextviewId"
                             android:fontFamily="@font/manrope_regular"
                             android:text="@{viewModel.authModel.gender == null ? @string/not_added : viewModel.authModel.gender}"
                             android:textColor="@color/view_profile_text_color"
@@ -402,8 +405,9 @@
                     android:padding="@dimen/_14dp">
 
                     <LinearLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_toStartOf="@id/textviewChangeAddressID"
                         android:layout_marginStart="@dimen/_10dp"
                         android:orientation="vertical"
                         tools:ignore="RelativeOverlap">
@@ -417,7 +421,11 @@
                             android:textSize="@dimen/_14sp" />
 
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:id="@+id/adressTextview"
+                            android:layout_width="match_parent"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:minLines="1"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/manrope_regular"
                             android:text="@{viewModel.authModel.address.completeAddress == null ? @string/not_added : viewModel.authModel.address.completeAddress}"
