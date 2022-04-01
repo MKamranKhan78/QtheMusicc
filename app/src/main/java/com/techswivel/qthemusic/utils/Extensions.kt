@@ -9,6 +9,7 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
+import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import coil.load
 import com.techswivel.qthemusic.R
@@ -21,20 +22,20 @@ import java.util.regex.Matcher
 import java.util.regex.Pattern
 
 
-fun EditText.isValidPassword(): Boolean {
+fun String.isValidPassword(): Boolean {
     val regex = ("^(?=.*[0-9])"
             + "(?=.*[a-z])(?=.*[A-Z])"
             + "(?=.*[@_*#$%^&+=])"
             + "(?=\\S+$).{8,36}$")
     val p = Pattern.compile(regex)
-    val m: Matcher = p.matcher(this.editableText.toString())
+    val m: Matcher = p.matcher(this)
     return m.matches()
 }
 
-fun EditText.isValidEmail(): Boolean {
+fun String.isValidEmail(): Boolean {
     val emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+"
     val p = Pattern.compile(emailPattern)
-    val m: Matcher = p.matcher(this.editableText.toString())
+    val m: Matcher = p.matcher(this)
     return m.matches()
 }
 
@@ -123,4 +124,13 @@ fun EditText.closeKeyboard(activity: Activity) {
         view = View(activity)
     }
     imm.hideSoftInputFromWindow(view.windowToken, 0)
+}
+
+fun View.setVisibilityInMotionLayout(visibility: Int) {
+    val motionLayout = parent as MotionLayout
+    motionLayout.constraintSetIds.forEach {
+        val constraintSet = motionLayout.getConstraintSet(it) ?: return@forEach
+        constraintSet.setVisibility(this.id, visibility)
+        constraintSet.applyTo(motionLayout)
+    }
 }

@@ -5,7 +5,7 @@ import com.techswivel.qthemusic.customData.enums.NetworkStatus
 class ApiResponse private constructor(
     val status: NetworkStatus,
     var t: Any?,
-    val error: ErrorResponce?
+    val error: ErrorResponse?
 ) {
 
     companion object {
@@ -17,7 +17,7 @@ class ApiResponse private constructor(
             return ApiResponse(NetworkStatus.SUCCESS, t, null)
         }
 
-        fun error(error: ErrorResponce?): ApiResponse {
+        fun error(error: ErrorResponse?): ApiResponse {
             return ApiResponse(NetworkStatus.ERROR, null, error)
         }
 
@@ -25,7 +25,7 @@ class ApiResponse private constructor(
             return ApiResponse(NetworkStatus.COMPLETED, null, null)
         }
 
-        fun expire(error: ErrorResponce?): ApiResponse {
+        fun expire(error: ErrorResponse?): ApiResponse {
             return ApiResponse(NetworkStatus.EXPIRE, null, error)
         }
     }

@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/main_background"
+    tools:context=".ui.fragments.homeFragment.HomeFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_recommended_for_you"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_20dp"
+            android:layout_marginTop="@dimen/_20dp"
+            android:fontFamily="@font/manrope_bold"
+            android:text="@string/str_recommended_for_you"
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/_18sp" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_songs"
+            style="@style/TabButtonTextStyle"
+            android:layout_width="@dimen/_100dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_recommended_for_you"
+            android:layout_marginStart="@dimen/_14dp"
+            android:layout_marginTop="@dimen/_10dp"
+            android:background="@drawable/selected_tab_background"
+            android:text="@string/str_songs" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_albums"
+            style="@style/TabButtonTextStyle"
+            android:layout_width="@dimen/_100dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_recommended_for_you"
+            android:layout_marginStart="-5dp"
+            android:layout_marginTop="@dimen/_10dp"
+            android:layout_toEndOf="@id/btn_songs"
+            android:background="@drawable/unselected_tab_background"
+            android:text="@string/str_albums" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_artists"
+            style="@style/TabButtonTextStyle"
+            android:layout_width="@dimen/_100dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_recommended_for_you"
+            android:layout_marginStart="-5dp"
+            android:layout_marginTop="@dimen/_10dp"
+            android:layout_toEndOf="@id/btn_albums"
+            android:background="@drawable/unselected_tab_background"
+            android:text="@string/str_artists" />
+
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/sl_songs_albums"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/btn_songs"
+            android:padding="@dimen/_14dp"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <include layout="@layout/shimmer_item_songs_albums" />
+
+                <include layout="@layout/shimmer_item_songs_albums" />
+
+                <include layout="@layout/shimmer_item_songs_albums" />
+
+                <include layout="@layout/shimmer_item_songs_albums" />
+
+            </LinearLayout>
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/sl_artists"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/btn_songs"
+            android:padding="@dimen/_14dp"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <include layout="@layout/shimmer_item_artist" />
+
+                <include layout="@layout/shimmer_item_artist" />
+
+                <include layout="@layout/shimmer_item_artist" />
+
+                <include layout="@layout/shimmer_item_artist" />
+
+            </LinearLayout>
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_recommended_media"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/btn_songs"
+            android:orientation="horizontal"
+            android:padding="@dimen/_14dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_songs" />
+
+        <TextView
+            android:id="@+id/tv_whats_your_mood"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/recycler_view_recommended_media"
+            android:layout_marginStart="@dimen/_20dp"
+            android:layout_marginTop="@dimen/_20dp"
+            android:fontFamily="@font/manrope_bold"
+            android:text="@string/str_what_s_your_mood"
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/_18sp" />
+
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/sl_whats_your_mood"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/tv_whats_your_mood"
+            android:padding="@dimen/_14dp"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <include layout="@layout/shimmer_item_whats_your_mood" />
+
+                <include layout="@layout/shimmer_item_whats_your_mood" />
+
+                <include layout="@layout/shimmer_item_whats_your_mood" />
+
+                <include layout="@layout/shimmer_item_whats_your_mood" />
+
+            </LinearLayout>
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_whats_your_mood"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_whats_your_mood"
+            android:orientation="horizontal"
+            android:padding="@dimen/_14dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_whats_your_mood" />
+
+        <TextView
+            android:id="@+id/tv_trending_songs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/recycler_view_whats_your_mood"
+            android:layout_marginStart="@dimen/_20dp"
+            android:layout_marginTop="@dimen/_10dp"
+            android:fontFamily="@font/manrope_bold"
+            android:text="@string/str_trending_songs"
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/_18sp" />
+
+        <TextView
+            android:id="@+id/tv_total_songs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/recycler_view_whats_your_mood"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="@dimen/_10dp"
+            android:layout_marginEnd="@dimen/_20dp"
+            android:fontFamily="@font/manrope_regular"
+            android:textColor="@color/color_light_grey"
+            android:textSize="@dimen/_14sp"
+            tools:text="30 songs" />
+
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/sl_trending_songs"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/tv_total_songs"
+            android:padding="@dimen/_14dp"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <include layout="@layout/shimmer_item_trending_songs" />
+
+                <include layout="@layout/shimmer_item_trending_songs" />
+
+                <include layout="@layout/shimmer_item_trending_songs" />
+
+                <include layout="@layout/shimmer_item_trending_songs" />
+
+                <include layout="@layout/shimmer_item_trending_songs" />
+
+                <include layout="@layout/shimmer_item_trending_songs" />
+
+            </LinearLayout>
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_trending_songs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_total_songs"
+            android:padding="@dimen/_14dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_trending_songs" />
+
+    </RelativeLayout>
+
+</androidx.core.widget.NestedScrollView>

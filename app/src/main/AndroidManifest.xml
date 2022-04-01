@@ -9,6 +9,11 @@
 <!--    <uses-permission android:name="android.permission.CAMERA" />-->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission
+        android:name="com.google.android.gms.permission.AD_ID"
+        tools:node="remove" />
+
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
         android:name=".application.QTheMusicApplication"
@@ -20,6 +25,13 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
+
+        <activity
+            android:name=".ui.activities.playerActivity.PlayerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activities.authActivity.AuthActivity"
+            android:exported="false" />
         <activity
             android:name=".ui.activities.profileSettingScreen.ProfileSettingActivity"
             android:exported="false" />
@@ -29,7 +41,6 @@
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -42,6 +53,8 @@
         <activity
             android:name=".ui.wrapper.FrameActivity"
             android:screenOrientation="portrait" />
+
+        <service android:name=".services.PlayerBackgroundService" />
 
         <service
             android:name=".source.remote.firebase.FirebaseNotificationService"
@@ -70,6 +83,9 @@
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
+        <meta-data
+            android:name="com.facebook.sdk.ClientToken"
+            android:value="@string/facebook_client_token" />
 
         <activity
             android:name="com.facebook.FacebookActivity"
@@ -87,4 +103,7 @@
         </provider>
     </application>
 
+    <queries>
+        <package android:name="com.facebook.katana" />
+    </queries>
 </manifest>

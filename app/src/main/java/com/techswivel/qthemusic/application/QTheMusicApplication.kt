@@ -6,6 +6,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 import androidx.multidex.MultiDex
+import com.facebook.FacebookSdk
+import com.facebook.appevents.AppEventsLogger
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -19,15 +21,13 @@ class QTheMusicApplication : Application(), LifecycleObserver {
     override fun onCreate() {
         super.onCreate()
         MultiDex.install(this)
-        //    mAuth = FirebaseAuth.getInstance()
-        //  firestoreDB = FirebaseFirestore.getInstance()
-        // FacebookSdk.sdkInitialize(this)
-        //   AppEventsLogger.activateApp(this)
+        AppEventsLogger.activateApp(this)
+        System.loadLibrary(Constants.CPP_LIBRARY_NAME)
         when {
             BuildConfig.FLAVOR.equals(Constants.STAGING) -> {
                 mGso =
                     GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)  //google sigin options
-                        .requestServerAuthCode(getString(R.string.google_client_id_staging))
+                        .requestServerAuthCode(getGoogleClientIdStaging())
                         .requestEmail()
                         .build()
             }
@@ -56,18 +56,6 @@ class QTheMusicApplication : Application(), LifecycleObserver {
 
         mContext = this
 
-        /**
-         * FirebaseAuth was not initialized because of that app was getting crash
-         * you need to un comment code after configuring firebase with the application.
-         * */
-//        Firebase.messaging.subscribeToTopic(Constants.FCM_ANDROID_TOPIC)
-//            .addOnCompleteListener { task ->
-//                var msg = getString(R.string.msg_subscribed)
-//                if (!task.isSuccessful) {
-//                    msg = getString(R.string.msg_subscribe_failed)
-//                }
-//                Log.d("TAG", msg)
-//            }
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
@@ -81,6 +69,8 @@ class QTheMusicApplication : Application(), LifecycleObserver {
         // app moved to background
         isInBackground = true
     }
+
+    private external fun getGoogleClientIdStaging(): String
 
     companion object {
 

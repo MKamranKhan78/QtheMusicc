@@ -5,9 +5,12 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.graphics.Bitmap
 import android.graphics.Rect
+import android.content.Context
 import android.text.InputFilter
 import android.view.View
 import com.techswivel.qthemusic.utils.Log.e
+import android.widget.Toast
+import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -275,5 +278,29 @@ object Utilities {
         e("pix", w.toString() + " " + h + " " + pix.size)
         bitmap.setPixels(pix, 0, w, 0, 0, w, h)
         return bitmap
+    }
+
+    fun showToast(context: Context, msg: String) {
+        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
+    }
+
+    fun formatSongDuration(timeMs: Long): String {
+        val mFormatBuilder: StringBuilder = StringBuilder()
+        val mFormatter: Formatter = Formatter(mFormatBuilder, Locale.getDefault())
+        val totalSeconds = timeMs / 1000
+        val seconds = totalSeconds % 60
+        val minutes = totalSeconds / 60 % 60
+        val hours = totalSeconds / 3600
+        mFormatBuilder.setLength(0)
+        return if (hours > 0) {
+            mFormatter.format("%d:%02d:%02d", hours, minutes, seconds).toString()
+        } else {
+            mFormatter.format("%02d:%02d", minutes, seconds).toString()
+        }
+    }
+
+    fun roundOffDecimal(number: Float?): Float {
+        val df = DecimalFormat("#.##")
+        return df.format(number).toFloat()
     }
 }
