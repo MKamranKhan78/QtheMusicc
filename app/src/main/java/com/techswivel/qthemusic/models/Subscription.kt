@@ -9,7 +9,7 @@ data class Subscription(
     @SerializedName("planTitle")
     var planTitle: String?,
     @SerializedName("planPrice")
-    var planPrice: Int?,
+    var planPrice: Float?,
     @SerializedName("planDuration")
     var planDuration: String?
 ) : Serializable

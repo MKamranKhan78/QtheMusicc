@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 import com.techswivel.qthemusic.customData.adapter.VerticalSpaceItemDecoration
+import com.techswivel.qthemusic.customData.enums.AdapterType
 
 abstract class RecyclerViewBaseFragment : BaseFragment() {
 
@@ -15,16 +16,20 @@ abstract class RecyclerViewBaseFragment : BaseFragment() {
         private var TAG: String = RecyclerViewBaseFragment::class.java.name
     }
 
-    protected open fun setUpRecyclerView(pRecyclerView: RecyclerView) {
+    protected open fun setUpRecyclerView(pRecyclerView: RecyclerView, adapterType: AdapterType?) {
         val linearLayoutManager = LinearLayoutManager(requireContext())
         linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
         pRecyclerView.layoutManager = linearLayoutManager
         pRecyclerView.itemAnimator = DefaultItemAnimator()
-        val mAdapter: RecyclerView.Adapter<*> = onPrepareAdapter()
+        val mAdapter: RecyclerView.Adapter<*> = onPrepareAdapter(adapterType)
         pRecyclerView.adapter = mAdapter
     }
 
-    protected open fun setUpRecyclerView(pRecyclerView: RecyclerView, verticalSpacing: Int) {
+    protected open fun setUpRecyclerView(
+        pRecyclerView: RecyclerView,
+        verticalSpacing: Int,
+        adapterType: AdapterType?
+    ) {
         val linearLayoutManager = LinearLayoutManager(requireContext())
         linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
         pRecyclerView.layoutManager = linearLayoutManager
@@ -32,13 +37,14 @@ abstract class RecyclerViewBaseFragment : BaseFragment() {
         mItemDecorator.VerticalSpaceItemDecoration(verticalSpacing)
         pRecyclerView.addItemDecoration(mItemDecorator)
         pRecyclerView.itemAnimator = DefaultItemAnimator()
-        val mAdapter: RecyclerView.Adapter<*> = onPrepareAdapter()
+        val mAdapter: RecyclerView.Adapter<*> = onPrepareAdapter(adapterType)
         pRecyclerView.adapter = mAdapter
     }
 
     protected open fun setUpHorizentalRecyclerView(
         pRecyclerView: RecyclerView,
-        horizentalSpacing: Int
+        horizentalSpacing: Int,
+        adapterType: AdapterType?
     ) {
         val linearLayoutManager = LinearLayoutManager(requireContext())
         linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
@@ -47,7 +53,7 @@ abstract class RecyclerViewBaseFragment : BaseFragment() {
         mItemDecorator.HorizentalSpaceItemDecoration(horizentalSpacing)
         pRecyclerView.addItemDecoration(mItemDecorator)
         pRecyclerView.itemAnimator = DefaultItemAnimator()
-        val mAdapter: RecyclerView.Adapter<*> = onPrepareAdapter()
+        val mAdapter: RecyclerView.Adapter<*> = onPrepareAdapter(adapterType)
         pRecyclerView.adapter = mAdapter
     }
 
@@ -55,7 +61,8 @@ abstract class RecyclerViewBaseFragment : BaseFragment() {
         pRecyclerView: RecyclerView,
         numColums: Int,
         verticalSpacing: Int,
-        horizentalSpacing: Int
+        horizentalSpacing: Int,
+        adapterType: AdapterType?
     ) {
 
         pRecyclerView.layoutManager = GridLayoutManager(requireContext(), numColums)
@@ -82,12 +89,12 @@ abstract class RecyclerViewBaseFragment : BaseFragment() {
             })
         }
         if (pRecyclerView.adapter == null) {
-            pRecyclerView.adapter = onPrepareAdapter()
+            pRecyclerView.adapter = onPrepareAdapter(adapterType)
         } else {
             pRecyclerView.adapter = null
-            pRecyclerView.adapter = onPrepareAdapter()
+            pRecyclerView.adapter = onPrepareAdapter(adapterType)
         }
     }
 
-    protected abstract fun onPrepareAdapter(): RecyclerView.Adapter<*>
+    protected abstract fun onPrepareAdapter(adapterType: AdapterType?): RecyclerView.Adapter<*>
 }

@@ -40,4 +40,5 @@ object Constants {
 
     const val OTP_COUNT_DOWN_INTERVAL_IN_MILLI_SECONDS:Long=1000
 
+    const val SEEK_BAR_DELAY = 100
 }

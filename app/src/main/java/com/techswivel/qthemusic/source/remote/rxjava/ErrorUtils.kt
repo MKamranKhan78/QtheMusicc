@@ -19,11 +19,12 @@ class ErrorUtils {
                     ResponseModel(
                         false,
                         "",
-                        MyDataClass()
+                        MyDataClass(),
+                        null
                     )
                 )
             } catch (e: Exception) {
-                return ResponseMain(ResponseModel(false, e.localizedMessage, MyDataClass()))
+                return ResponseMain(ResponseModel(false, e.localizedMessage, MyDataClass(), null))
             }
             return error
         }

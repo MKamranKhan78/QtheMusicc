@@ -9,6 +9,7 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
+import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import coil.load
 import com.techswivel.qthemusic.R
@@ -123,4 +124,13 @@ fun EditText.closeKeyboard(activity: Activity) {
         view = View(activity)
     }
     imm.hideSoftInputFromWindow(view.windowToken, 0)
+}
+
+fun View.setVisibilityInMotionLayout(visibility: Int) {
+    val motionLayout = parent as MotionLayout
+    motionLayout.constraintSetIds.forEach {
+        val constraintSet = motionLayout.getConstraintSet(it) ?: return@forEach
+        constraintSet.setVisibility(this.id, visibility)
+        constraintSet.applyTo(motionLayout)
+    }
 }

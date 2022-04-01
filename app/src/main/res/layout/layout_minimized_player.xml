@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom"
+    android:orientation="vertical">
+
+    <SeekBar
+        android:id="@+id/sb_audio_player"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="-15dp"
+        android:layout_marginEnd="-15dp"
+        android:layout_marginBottom="-6dp"
+        android:progressBackgroundTint="@android:color/transparent"
+        android:progressTint="@color/color_red"
+        android:thumb="@null" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_60dp"
+        android:background="#303033"
+        android:orientation="horizontal">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="@dimen/_45dp"
+            android:layout_height="@dimen/_45dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="@dimen/_20dp"
+            android:background="@android:color/transparent"
+            app:cardCornerRadius="@dimen/_6dp"
+            app:cardElevation="@dimen/_8dp">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                tools:src="@drawable/no_image_palce_holder" />
+
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="@dimen/_10dp"
+            android:layout_marginEnd="@dimen/_10dp"
+            android:ellipsize="end"
+            android:fontFamily="@font/manrope_regular"
+            android:maxLines="1"
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/_16sp"
+            tools:text="Master Blaster (Jammin’)" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="@dimen/_20dp"
+            android:src="@drawable/ic_pause" />
+
+    </LinearLayout>
+
+</LinearLayout>

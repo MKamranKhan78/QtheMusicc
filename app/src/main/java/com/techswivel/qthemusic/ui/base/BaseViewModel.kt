@@ -1,32 +1,32 @@
 package com.techswivel.qthemusic.ui.base
 
-import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
-import android.text.Editable
-import android.text.TextWatcher
+import android.content.Intent
 import android.view.View
 import android.widget.TextView
-import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
-import com.google.android.material.internal.TextWatcherAdapter
 import com.techswivel.qthemusic.BuildConfig
 import com.techswivel.qthemusic.constant.Constants
+import com.techswivel.qthemusic.dataManager.LocalDataManager
 import com.techswivel.qthemusic.dataManager.RemoteDataManager
 import com.techswivel.qthemusic.models.Address
 import com.techswivel.qthemusic.models.AuthModel
 import com.techswivel.qthemusic.models.Notification
 import com.techswivel.qthemusic.models.Subscription
+import com.techswivel.qthemusic.source.local.preference.DataStoreUtils
 import com.techswivel.qthemusic.source.local.preference.PrefUtils
 import com.techswivel.qthemusic.source.remote.rxjava.DisposableManager
 import com.techswivel.qthemusic.ui.activities.mainActivity.MainActivity
+import com.techswivel.qthemusic.ui.activities.splashActivity.SplashActivity
+import com.techswivel.qthemusic.utils.ActivityUtils
 import com.techswivel.qthemusic.utils.CommonKeys
-import com.techswivel.qthemusic.utils.Log
-import com.techswivel.qthemusic.utils.isValidEmail
-import com.techswivel.qthemusic.utils.isValidPassword
+import kotlinx.coroutines.runBlocking
 
 
 abstract class BaseViewModel : ViewModel() {
     val mRemoteDataManager = RemoteDataManager
+    val mLocalDataManager = LocalDataManager
 
     fun setServerName(textView: TextView) {
         if (!BuildConfig.FLAVOR.equals(Constants.PRODUCTION)) {
@@ -72,7 +72,7 @@ abstract class BaseViewModel : ViewModel() {
             )
         }
         authModel?.subscription?.planPrice?.let { planPrice ->
-            PrefUtils.setInt(
+            PrefUtils.setFloat(
                 activity, CommonKeys.KEY_USER_PLAN_PRIZE,
                 planPrice
             )
@@ -126,7 +126,7 @@ abstract class BaseViewModel : ViewModel() {
         var userZipcode: Int? = null
 
         var userPlanId: Int? = null
-        var userPlanPrize: Int? = null
+        var userPlanPrize: Float? = null
 
         userName = PrefUtils.getString(context, CommonKeys.KEY_USER_NAME)
         userEmail = PrefUtils.getString(context, CommonKeys.KEY_USER_EMAIL)
@@ -144,7 +144,7 @@ abstract class BaseViewModel : ViewModel() {
         userdob = PrefUtils.getInt(context, CommonKeys.KEY_USER_DOB)
         userZipcode = PrefUtils.getInt(context, CommonKeys.KEY_USER_ZIP_CODE)
         userPlanId = PrefUtils.getInt(context, CommonKeys.KEY_USER_PLAN_ID)
-        userPlanPrize = PrefUtils.getInt(context, CommonKeys.KEY_USER_PLAN_PRIZE)
+        userPlanPrize = PrefUtils.getFloat(context, CommonKeys.KEY_USER_PLAN_PRIZE)
 
 
         val subsription = Subscription(userPlanId, userPlanTitle, userPlanPrize, userDuration)
@@ -157,5 +157,17 @@ abstract class BaseViewModel : ViewModel() {
             null, userdob, userPhone, userGender, false, address, subsription, notification
         )
         return authModel
+    }
+
+    fun clearAppSession(activity: Activity) {
+        runBlocking {
+            DataStoreUtils.clearAllPreference()
+            mLocalDataManager.deleteAllLocalData()
+        }
+        ActivityUtils.startNewActivity(
+            activity,
+            SplashActivity::class.java,
+            Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        )
     }
 }
