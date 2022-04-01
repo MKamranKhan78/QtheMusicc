@@ -25,13 +25,6 @@ import kotlinx.coroutines.runBlocking
 
 
 class AddGenderDialogFragment : BaseDialogFragment(), BaseInterface {
-
-    /*companion object {
-        fun newInstance(profileSettingActivityImpl: ProfileSettingActivityImpl) =
-            AddGenderDialogFragment().apply {
-                setCallBack(profileSettingActivityImpl)
-            }
-    }*/
     companion object {
         fun newInstance(profileSettingActivityImpl: ProfileSettingActivityImpl, bundle: Bundle?) =
             AddGenderDialogFragment().apply {
@@ -105,7 +98,6 @@ class AddGenderDialogFragment : BaseDialogFragment(), BaseInterface {
                 NetworkStatus.SUCCESS -> {
                     mBinding.progressBar.visibility = View.GONE
                     mProfileSettingActivityImpl.openProfileSettingFragmentWithGender(viewModel.authModel)
-//                    mProfileSettingActivityImpl.openProfileSettingFragmentWithGender(viewModel.gender.toString())
                     dismiss()
                     Toast.makeText(
                         QTheMusicApplication.getContext(),
@@ -176,13 +168,6 @@ class AddGenderDialogFragment : BaseDialogFragment(), BaseInterface {
             val authModel = AuthModelBuilder.build(authModelBilder)
             updateProfile(authModel)
 
-
-/*            viewModel.name = mBinding.etNameId.text.toString()
-            viewModel.authModel?.name =mBinding.etNameId.text.toString()
-            val authModelBilder = AuthModelBuilder()
-            authModelBilder.name = viewModel.name
-            val authModel = AuthModelBuilder.build(authModelBilder)
-            updateProfile(authModel)*/
         }
 
         mBinding.maleRB.setOnClickListener(object : View.OnClickListener {

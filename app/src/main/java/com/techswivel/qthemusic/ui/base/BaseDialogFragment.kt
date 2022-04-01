@@ -42,4 +42,6 @@ abstract class BaseDialogFragment : DialogFragment() {
             dialog?.window?.requestFeature(Window.FEATURE_NO_TITLE)
         }
     }
+
+
 }

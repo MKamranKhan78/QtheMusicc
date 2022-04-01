@@ -75,7 +75,6 @@ class AddNameDialogFragment : BaseDialogFragment(), BaseInterface {
                 }
                 NetworkStatus.SUCCESS -> {
                     mBinding.progressBar.visibility = View.GONE
-//                    mProfileSettingActivityImpl.openProfileSettingFragmentWithName(viewModel.name)
                     mProfileSettingActivityImpl.openProfileSettingFragmentWithName(viewModel.authModel)
                     dismiss()
                     Toast.makeText(

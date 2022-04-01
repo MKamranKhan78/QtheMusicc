@@ -27,8 +27,8 @@ object BindingAdapter {
 
     @JvmStatic
     @BindingAdapter("setDate")
-    fun setDate(textView: TextView?, dateInMillis: Long?) {
-        if (dateInMillis != null) {
+    fun setDate(textView: TextView?, dateInMillis: Long) {
+        if (dateInMillis.toInt() != 0) {
             val dateObj = dateInMillis.let { dateInMillis ->
                 Date(dateInMillis)
             }
@@ -45,18 +45,6 @@ object BindingAdapter {
         textView.text = text
     }
 
-
-    /*@JvmStatic
-    @BindingAdapter(value = ["isChecked", "isArtistChecked"])
-    fun isChecked(view: SwitchCompat, enabled: Boolean, artistChecked: Boolean) {
-        if (enabled == false) {
-            view.isEnabled = false
-            view.isChecked = false
-        } else {
-            view.isEnabled = true
-            view.isChecked = artistChecked
-        }
-    }*/
 
     @JvmStatic
     @BindingAdapter("setImageViewImage")

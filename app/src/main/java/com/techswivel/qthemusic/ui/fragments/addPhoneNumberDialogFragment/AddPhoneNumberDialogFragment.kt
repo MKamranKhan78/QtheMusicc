@@ -27,9 +27,6 @@ import kotlinx.coroutines.runBlocking
 
 
 class AddPhoneNumberDialogFragment : BaseDialogFragment(), BaseInterface {
-
-    // this fragment have only api work and search design.
-
     companion object {
         fun newInstance(profileSettingActivityImpl: ProfileSettingActivityImpl) =
             AddPhoneNumberDialogFragment().apply {
@@ -79,7 +76,7 @@ class AddPhoneNumberDialogFragment : BaseDialogFragment(), BaseInterface {
                     dismiss()
                     Toast.makeText(
                         QTheMusicApplication.getContext(),
-                        "otp sent successfully",
+                        "Otp sent successfully",
                         Toast.LENGTH_SHORT
                     ).show()
 
@@ -136,41 +133,31 @@ class AddPhoneNumberDialogFragment : BaseDialogFragment(), BaseInterface {
 
         mBinding.updateButton.setOnClickListener {
 
-            if (checkValidity(mBinding.countryCodePickerId, mBinding.edtPhone)) {
-                /*Toast.makeText(
-                    QTheMusicApplication.getContext(),
-                    "call back success",
-                    Toast.LENGTH_SHORT
-                ).show()*/
-                viewModel.email = PrefUtils.getString(
-                    QTheMusicApplication.getContext(),
-                    CommonKeys.KEY_USER_EMAIL
-                )
-                mAuthorizationViewModel.sendOtp(
-                    OtpType.PHONE_NUMBER,
-                    viewModel.email,
-                    viewModel.number
-                )
+            if (mBinding.edtPhone.text.toString() != "") {
+                if (checkValidity(mBinding.countryCodePickerId, mBinding.edtPhone)) {
+                    viewModel.email = PrefUtils.getString(
+                        QTheMusicApplication.getContext(),
+                        CommonKeys.KEY_USER_EMAIL
+                    )
+                    mAuthorizationViewModel.sendOtp(
+                        OtpType.PHONE_NUMBER,
+                        viewModel.email,
+                        viewModel.number
+                    )
+                } else {
+                    mBinding.edtPhone.error = "Please enter a valid phone number"
+                }
             } else {
-                Toast.makeText(
-                    QTheMusicApplication.getContext(),
-                    "Please enter a valid phone number",
-                    Toast.LENGTH_SHORT
-                ).show()
+                mBinding.edtPhone.error = "Please enter phone number"
             }
-
         }
     }
 
     private fun checkValidity(ccp: CountryCodePicker, edtPhoneNumber: EditText): Boolean {
-
-        /* Checking validity for Indian Phone number */
-        /* You can create it the same way for your country or multiple countries */
         val numberString = edtPhoneNumber.text.toString()
 
         return if (ccp.isValid) {
             viewModel.number = ccp.fullNumber
-            //Toast.makeText(QTheMusicApplication.getContext(), "number " + ccp.fullNumber + " is valid.", Toast.LENGTH_SHORT).show()
             true
         } else {
             false

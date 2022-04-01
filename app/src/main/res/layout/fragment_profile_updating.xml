@@ -313,7 +313,7 @@
                         android:layout_marginStart="@dimen/_16dp"
                         android:layout_marginEnd="@dimen/_10dp"
                         android:fontFamily="@font/manrope_regular"
-                        android:text="@{viewModel.authModel.dOB == null ? @string/add : @string/change}"
+                        android:text="@{viewModel.authModel.dOB == 0 ? @string/add : @string/change}"
                         android:textColor="#BA011A"
                         android:textSize="@dimen/_14sp" />
 

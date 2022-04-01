@@ -192,4 +192,7 @@ dependencies {
     implementation 'com.github.jkwiecien:EasyImage:3.0.4'
 
 
+    //blur dialog fragment
+    implementation 'com.eightbitlab:blurview:1.6.3'
+    implementation 'com.eightbitlab:supportrenderscriptblur:1.0.2'
 }

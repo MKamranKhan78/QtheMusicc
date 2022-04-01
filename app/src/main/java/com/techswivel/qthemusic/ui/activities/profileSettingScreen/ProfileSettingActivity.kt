@@ -53,24 +53,4 @@ class ProfileSettingActivity : BaseActivity() {
         }
     }
 
-//    override fun openProfileSettingFragment() {
-//        openFragment(ProfileUpdatingFragment.newInstance())
-//    }
-
-/*
-    override fun openProfileSettingFragment(phoneNumber: String?) {
-        var bundle = Bundle()
-        bundle.putString("_phoneNumberKey", phoneNumber)
-        openFragment(ProfileUpdatingFragment.newInstance(bundle))
-    }
-
-    override fun showProgressBar() {
-
-    }
-
-    override fun hideProgressBar() {
-
-    }
-*/
-
 }

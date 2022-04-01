@@ -1,6 +1,7 @@
 package com.techswivel.qthemusic.ui.fragments.profileUpdatingFragment
 
 import android.annotation.SuppressLint
+import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.content.Context
@@ -109,23 +110,40 @@ class ProfileUpdatingFragment : BaseFragment(), ProfileSettingActivityImpl {
                     Toast.makeText(QTheMusicApplication.getContext(), "Failed!", Toast.LENGTH_SHORT)
                         .show()
                 }
+
+                val authModelBilder = AuthModelBuilder()
+                authModelBilder.avatar = viewModel.uri.toString()
+                val authModel = AuthModelBuilder.build(authModelBilder)
+                PrefUtils.setString(
+                    QTheMusicApplication.getContext(),
+                    CommonKeys.KEY_USER_AVATAR,
+                    viewModel.uri.toString()
+                )
+                updateProfile(authModel)
+
             }
 
         } else if (requestCode == CAMERA) {
-            val bitmap = data?.extras?.get("data") as Bitmap
-            mBinding.profilePic.setImageBitmap(bitmap)
-            val uri = getImageUri(QTheMusicApplication.getContext(), bitmap)
-            viewModel.uri = uri
+
+            if (resultCode != RESULT_OK) {
+                return
+            } else {
+                val bitmap = data?.extras?.get("data") as Bitmap
+                mBinding.profilePic.setImageBitmap(bitmap)
+                val uri = getImageUri(QTheMusicApplication.getContext(), bitmap)
+                viewModel.uri = uri
+                val authModelBilder = AuthModelBuilder()
+                authModelBilder.avatar = viewModel.uri.toString()
+                val authModel = AuthModelBuilder.build(authModelBilder)
+                PrefUtils.setString(
+                    QTheMusicApplication.getContext(),
+                    CommonKeys.KEY_USER_AVATAR,
+                    viewModel.uri.toString()
+                )
+                updateProfile(authModel)
+            }
+
         }
-        val authModelBilder = AuthModelBuilder()
-        authModelBilder.avatar = viewModel.uri.toString()
-        val authModel = AuthModelBuilder.build(authModelBilder)
-        PrefUtils.setString(
-            QTheMusicApplication.getContext(),
-            CommonKeys.KEY_USER_AVATAR,
-            viewModel.uri.toString()
-        )
-        updateProfile(authModel)
 
 
     }
@@ -342,6 +360,12 @@ class ProfileUpdatingFragment : BaseFragment(), ProfileSettingActivityImpl {
         } else {
             PermissionUtils.requestStoragePermission(requireActivity())
         }
+        if (PermissionUtils.isStoragePermissionGranted(requireContext())) {
+            showPictureDialog()
+        } else {
+            PermissionUtils.requestStoragePermission(requireActivity())
+        }
+
     }
 
     private fun showPictureDialog() {
