@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.text.InputFilter
 import android.widget.Toast
+import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -66,5 +67,10 @@ object Utilities {
         } else {
             mFormatter.format("%02d:%02d", minutes, seconds).toString()
         }
+    }
+
+    fun roundOffDecimal(number: Float?): Float {
+        val df = DecimalFormat("#.##")
+        return df.format(number).toFloat()
     }
 }

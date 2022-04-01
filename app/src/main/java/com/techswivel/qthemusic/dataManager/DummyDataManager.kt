@@ -22,9 +22,9 @@ class DummyDataManager {
         }
 
         private fun getDataList(): MyDataClass {
-            val address=Address("Mughalpura, Lahore","Lahore","Punjab","Pakistan",5552)
-            val subscription=Subscription(0,"My Name Is Wasi",1000000,"1:25")
-            val notification=Notification(false,false)
+            val address = Address("Mughalpura, Lahore", "Lahore", "Punjab", "Pakistan", 5552)
+            val subscription = Subscription(0, "My Name Is Wasi", 1000000.00f, "1:25")
+            val notification = Notification(false, false)
             val authModel=AuthModel(
                 "Waseen Asghar",
                 "waseem.asghar@techswivel.com",
@@ -170,7 +170,7 @@ class DummyDataManager {
             val subscription = Subscription(
                 1,
                 "Standard Plan",
-                10,
+                10.56f,
                 "Month"
             )
             val authModel = AuthModel(
@@ -263,6 +263,150 @@ class DummyDataManager {
                         4,
                         SongStatus.FREE,
                         "We Don't Talk Anymore",
+                        "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+                    ),
+                    Song(
+                        5,
+                        "ABC Records",
+                        "Charlie Puth and Selena Gomez",
+                        7,
+                        9,
+                        "https://m.media-amazon.com/images/M/MV5BOWQyYmJiOWUtNzkzYS00YWJlLWI5YjgtYTg4MjI0MmM1N2ZkXkEyXkFqcGdeQXVyNjE0ODc0MDc@._V1_.jpg",
+                        true,
+                        false,
+                        "No Lyrics Available",
+                        6,
+                        "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3",
+                        157,
+                        5,
+                        SongStatus.FREE,
+                        "Let Me Down Slowly",
+                        "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+                    ),
+                    Song(
+                        5,
+                        "ABC Records",
+                        "Charlie Puth and Selena Gomez",
+                        7,
+                        9,
+                        "https://m.media-amazon.com/images/M/MV5BOWQyYmJiOWUtNzkzYS00YWJlLWI5YjgtYTg4MjI0MmM1N2ZkXkEyXkFqcGdeQXVyNjE0ODc0MDc@._V1_.jpg",
+                        true,
+                        false,
+                        "No Lyrics Available",
+                        6,
+                        "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3",
+                        155,
+                        6,
+                        SongStatus.FREE,
+                        "On The Floor",
+                        "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+                    ),
+                    Song(
+                        5,
+                        "ABC Records",
+                        "Charlie Puth and Selena Gomez",
+                        7,
+                        9,
+                        "https://m.media-amazon.com/images/M/MV5BOWQyYmJiOWUtNzkzYS00YWJlLWI5YjgtYTg4MjI0MmM1N2ZkXkEyXkFqcGdeQXVyNjE0ODc0MDc@._V1_.jpg",
+                        true,
+                        false,
+                        "No Lyrics Available",
+                        6,
+                        "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3",
+                        143,
+                        7,
+                        SongStatus.FREE,
+                        "Love Nwantiti",
+                        "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+                    ),
+                    Song(
+                        5,
+                        "ABC Records",
+                        "Charlie Puth and Selena Gomez",
+                        7,
+                        9,
+                        "https://m.media-amazon.com/images/M/MV5BOWQyYmJiOWUtNzkzYS00YWJlLWI5YjgtYTg4MjI0MmM1N2ZkXkEyXkFqcGdeQXVyNjE0ODc0MDc@._V1_.jpg",
+                        true,
+                        false,
+                        "No Lyrics Available",
+                        6,
+                        "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3",
+                        153,
+                        8,
+                        SongStatus.FREE,
+                        "See You Again",
+                        "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+                    ),
+                    Song(
+                        5,
+                        "ABC Records",
+                        "Charlie Puth and Selena Gomez",
+                        7,
+                        9,
+                        "https://m.media-amazon.com/images/M/MV5BOWQyYmJiOWUtNzkzYS00YWJlLWI5YjgtYTg4MjI0MmM1N2ZkXkEyXkFqcGdeQXVyNjE0ODc0MDc@._V1_.jpg",
+                        true,
+                        false,
+                        "No Lyrics Available",
+                        6,
+                        "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3",
+                        213,
+                        9,
+                        SongStatus.FREE,
+                        "Despacito",
+                        "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+                    ),
+                    Song(
+                        5,
+                        "ABC Records",
+                        "Charlie Puth and Selena Gomez",
+                        7,
+                        9,
+                        "https://m.media-amazon.com/images/M/MV5BOWQyYmJiOWUtNzkzYS00YWJlLWI5YjgtYTg4MjI0MmM1N2ZkXkEyXkFqcGdeQXVyNjE0ODc0MDc@._V1_.jpg",
+                        true,
+                        false,
+                        "No Lyrics Available",
+                        6,
+                        "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3",
+                        321,
+                        10,
+                        SongStatus.FREE,
+                        "Shape Of You",
+                        "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+                    ),
+                    Song(
+                        5,
+                        "ABC Records",
+                        "Charlie Puth and Selena Gomez",
+                        7,
+                        9,
+                        "https://m.media-amazon.com/images/M/MV5BOWQyYmJiOWUtNzkzYS00YWJlLWI5YjgtYTg4MjI0MmM1N2ZkXkEyXkFqcGdeQXVyNjE0ODc0MDc@._V1_.jpg",
+                        true,
+                        false,
+                        "No Lyrics Available",
+                        6,
+                        "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3",
+                        123,
+                        11,
+                        SongStatus.FREE,
+                        "Solo",
+                        "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+                    ),
+                    Song(
+                        5,
+                        "ABC Records",
+                        "Charlie Puth and Selena Gomez",
+                        7,
+                        9,
+                        "https://m.media-amazon.com/images/M/MV5BOWQyYmJiOWUtNzkzYS00YWJlLWI5YjgtYTg4MjI0MmM1N2ZkXkEyXkFqcGdeQXVyNjE0ODc0MDc@._V1_.jpg",
+                        true,
+                        false,
+                        "No Lyrics Available",
+                        6,
+                        "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3",
+                        234,
+                        12,
+                        SongStatus.FREE,
+                        "Cheap Thrills",
                         "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
                     )
                 )

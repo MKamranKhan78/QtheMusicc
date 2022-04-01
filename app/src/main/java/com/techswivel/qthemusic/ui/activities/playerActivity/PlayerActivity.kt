@@ -12,22 +12,24 @@ import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.audio.AudioAttributes
 import com.google.android.exoplayer2.source.DefaultMediaSourceFactory
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
+import com.techswivel.dfaktfahrerapp.ui.fragments.underDevelopmentMessageFragment.UnderDevelopmentMessageFragment
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.constant.Constants
 import com.techswivel.qthemusic.customData.enums.SongStatus
 import com.techswivel.qthemusic.databinding.ActivityPlayerBinding
 import com.techswivel.qthemusic.models.Song
 import com.techswivel.qthemusic.ui.base.BaseActivity
-import com.techswivel.qthemusic.utils.CommonKeys
-import com.techswivel.qthemusic.utils.PlayerUtils
+import com.techswivel.qthemusic.utils.*
 import com.techswivel.qthemusic.utils.Utilities.formatSongDuration
-import com.techswivel.qthemusic.utils.loadImg
-import com.techswivel.qthemusic.utils.setVisibilityInMotionLayout
 
 class PlayerActivity : BaseActivity() {
 
     private lateinit var binding: ActivityPlayerBinding
     private lateinit var viewModel: PlayerActivityViewModel
+    private lateinit var videoPlayerPlayIcon: ImageView
+    private lateinit var videoPlayerPauseIcon: ImageView
+    private lateinit var videoPlayerBigPlayIcon: ImageView
+    private lateinit var videoPlayerBigPauseIcon: ImageView
     private val playbackStateListener: Player.Listener = playbackStateListener()
     private val handler: Handler = Handler(Looper.getMainLooper())
     private val updateSongProgress = object : Runnable {
@@ -93,6 +95,7 @@ class PlayerActivity : BaseActivity() {
         binding.btnAudio.setOnClickListener {
             binding.mlParent.transitionToStart()
             if ((binding.videoPlayer.player as ExoPlayer?)?.isPlaying == true) {
+                showVideoPlayerPlayIcons()
                 (binding.videoPlayer.player as ExoPlayer?)?.playWhenReady = false
             }
         }
@@ -106,13 +109,27 @@ class PlayerActivity : BaseActivity() {
             }
         }
 
-        val videoPlayerPlayIcon = findViewById<ImageView>(R.id.iv_video_player_play)
+        videoPlayerPlayIcon = findViewById(R.id.iv_video_player_play)
         videoPlayerPlayIcon.setOnClickListener {
+            showVideoPlayerPauseIcons()
             (binding.videoPlayer.player as ExoPlayer?)?.playWhenReady = true
         }
 
-        val videoPlayerPauseIcon = findViewById<ImageView>(R.id.iv_video_player_pause)
+        videoPlayerPauseIcon = findViewById(R.id.iv_video_player_pause)
         videoPlayerPauseIcon.setOnClickListener {
+            showVideoPlayerPlayIcons()
+            (binding.videoPlayer.player as ExoPlayer?)?.playWhenReady = false
+        }
+
+        videoPlayerBigPlayIcon = findViewById(R.id.iv_video_player_big_play)
+        videoPlayerBigPlayIcon.setOnClickListener {
+            showVideoPlayerPauseIcons()
+            (binding.videoPlayer.player as ExoPlayer?)?.playWhenReady = true
+        }
+
+        videoPlayerBigPauseIcon = findViewById(R.id.iv_video_player_big_pause)
+        videoPlayerBigPauseIcon.setOnClickListener {
+            showVideoPlayerPlayIcons()
             (binding.videoPlayer.player as ExoPlayer?)?.playWhenReady = false
         }
 
@@ -159,6 +176,37 @@ class PlayerActivity : BaseActivity() {
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
             override fun onStopTrackingTouch(seekBar: SeekBar) {}
         })
+
+        binding.ivEmptyHeart.setOnClickListener {
+            if (binding.ivEmptyHeart.tag == getString(R.string.str_empty)) {
+                binding.ivEmptyHeart.setImageResource(R.drawable.ic_red_heart)
+                binding.ivEmptyHeart.tag = getString(R.string.str_filled)
+            } else {
+                binding.ivEmptyHeart.setImageResource(R.drawable.ic_empty_heart)
+                binding.ivEmptyHeart.tag = getString(R.string.str_empty)
+            }
+        }
+
+        binding.ivMoreOptions.setOnClickListener {
+            ActivityUtils.launchFragment(
+                this,
+                UnderDevelopmentMessageFragment::class.java.name
+            )
+        }
+    }
+
+    private fun showVideoPlayerPlayIcons() {
+        videoPlayerPauseIcon.visibility = View.GONE
+        videoPlayerPlayIcon.visibility = View.VISIBLE
+        videoPlayerBigPauseIcon.visibility = View.GONE
+        videoPlayerBigPlayIcon.visibility = View.VISIBLE
+    }
+
+    private fun showVideoPlayerPauseIcons() {
+        videoPlayerPauseIcon.visibility = View.VISIBLE
+        videoPlayerPlayIcon.visibility = View.GONE
+        videoPlayerBigPauseIcon.visibility = View.VISIBLE
+        videoPlayerBigPlayIcon.visibility = View.GONE
     }
 
     private fun initializePlayers() {
@@ -223,8 +271,10 @@ class PlayerActivity : BaseActivity() {
 
     private fun stopPlayer() {
         if ((binding.videoPlayer.player as ExoPlayer?)?.isPlaying == true) {
+            showVideoPlayerPlayIcons()
             (binding.videoPlayer.player as ExoPlayer?)?.playWhenReady = false
         } else if (viewModel.audioPlayer?.isPlaying == true) {
+            binding.ivPlayPause.setImageResource(R.drawable.ic_red_play)
             handler.removeCallbacks(updateSongProgress)
             viewModel.audioPlayer?.playWhenReady = false
         }

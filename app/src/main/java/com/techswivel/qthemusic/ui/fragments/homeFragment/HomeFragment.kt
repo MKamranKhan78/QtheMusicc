@@ -8,6 +8,7 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
+import com.techswivel.dfaktfahrerapp.ui.fragments.underDevelopmentMessageFragment.UnderDevelopmentMessageFragment
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.customData.adapter.RecyclerViewAdapter
 import com.techswivel.qthemusic.customData.enums.*
@@ -143,6 +144,17 @@ class HomeFragment : RecyclerViewBaseFragment() {
 
                         override fun onNoDataFound() {
 
+                        }
+
+                        override fun onViewClicked(view: View, data: Any?) {
+                            when (view.id) {
+                                R.id.cv_main_image -> {
+                                    ActivityUtils.launchFragment(
+                                        requireContext(),
+                                        UnderDevelopmentMessageFragment::class.java.name
+                                    )
+                                }
+                            }
                         }
                     }, viewModel.categoriesDataList)
 

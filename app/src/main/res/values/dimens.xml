@@ -65,6 +65,8 @@
     <dimen name="_120dp">120dp</dimen>
     <dimen name="_145dp">145dp</dimen>
     <dimen name="_150dp">150dp</dimen>
+    <dimen name="_155dp">155dp</dimen>
+    <dimen name="_160dp">160dp</dimen>
     <dimen name="_170dp">170dp</dimen>
     <dimen name="_180dp">180dp</dimen>
     <dimen name="_190dp">190dp</dimen>

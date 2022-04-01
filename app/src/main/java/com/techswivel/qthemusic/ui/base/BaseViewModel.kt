@@ -1,16 +1,11 @@
 package com.techswivel.qthemusic.ui.base
 
 import android.app.Activity
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.View
 import android.widget.TextView
-import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
-import com.google.android.material.internal.TextWatcherAdapter
 import com.techswivel.qthemusic.BuildConfig
 import com.techswivel.qthemusic.constant.Constants
 import com.techswivel.qthemusic.dataManager.LocalDataManager
@@ -27,9 +22,6 @@ import com.techswivel.qthemusic.ui.activities.splashActivity.SplashActivity
 import com.techswivel.qthemusic.utils.ActivityUtils
 import com.techswivel.qthemusic.utils.CommonKeys
 import kotlinx.coroutines.runBlocking
-import com.techswivel.qthemusic.utils.Log
-import com.techswivel.qthemusic.utils.isValidEmail
-import com.techswivel.qthemusic.utils.isValidPassword
 
 
 abstract class BaseViewModel : ViewModel() {
@@ -80,7 +72,7 @@ abstract class BaseViewModel : ViewModel() {
             )
         }
         authModel?.subscription?.planPrice?.let { planPrice ->
-            PrefUtils.setInt(
+            PrefUtils.setFloat(
                 activity, CommonKeys.KEY_USER_PLAN_PRIZE,
                 planPrice
             )
@@ -134,7 +126,7 @@ abstract class BaseViewModel : ViewModel() {
         var userZipcode: Int? = null
 
         var userPlanId: Int? = null
-        var userPlanPrize: Int? = null
+        var userPlanPrize: Float? = null
 
         userName = PrefUtils.getString(context, CommonKeys.KEY_USER_NAME)
         userEmail = PrefUtils.getString(context, CommonKeys.KEY_USER_EMAIL)
@@ -152,7 +144,7 @@ abstract class BaseViewModel : ViewModel() {
         userdob = PrefUtils.getInt(context, CommonKeys.KEY_USER_DOB)
         userZipcode = PrefUtils.getInt(context, CommonKeys.KEY_USER_ZIP_CODE)
         userPlanId = PrefUtils.getInt(context, CommonKeys.KEY_USER_PLAN_ID)
-        userPlanPrize = PrefUtils.getInt(context, CommonKeys.KEY_USER_PLAN_PRIZE)
+        userPlanPrize = PrefUtils.getFloat(context, CommonKeys.KEY_USER_PLAN_PRIZE)
 
 
         val subsription = Subscription(userPlanId, userPlanTitle, userPlanPrize, userDuration)

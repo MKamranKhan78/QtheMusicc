@@ -16,39 +16,46 @@
             type="com.techswivel.qthemusic.models.Category" />
     </data>
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cv_main_image"
-        android:layout_width="@dimen/_170dp"
-        android:layout_height="@dimen/_100dp"
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_margin="@dimen/_8dp"
-        android:background="@android:color/transparent"
-        app:cardCornerRadius="@dimen/_10dp"
-        app:cardElevation="@dimen/_8dp">
+        android:background="@android:color/transparent">
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="fitXY"
-            app:setImageViewImage="@{obj.categoryImageUrl}"
-            tools:src="@drawable/no_image_palce_holder" />
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cv_main_image"
+            android:layout_width="@dimen/_150dp"
+            android:layout_height="@dimen/_100dp"
+            android:background="@android:color/transparent"
+            android:onClick="@{(view) -> click.onViewClick(view, obj)}"
+            app:cardCornerRadius="@dimen/_10dp"
+            app:cardElevation="@dimen/_8dp">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/color_red_overlay">
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                app:setImageViewImage="@{obj.categoryImageUrl}"
+                tools:src="@drawable/no_image_palce_holder" />
 
-            <TextView
-                android:id="@+id/tv_whats_your_mood"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:fontFamily="@font/manrope_regular"
-                android:text="@{obj.categoryTitle}"
-                android:textColor="@color/color_white"
-                android:textSize="@dimen/_14sp" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/color_red_overlay">
 
-        </RelativeLayout>
+                <TextView
+                    android:id="@+id/tv_whats_your_mood"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:fontFamily="@font/manrope_regular"
+                    android:text="@{obj.categoryTitle}"
+                    android:textColor="@color/color_white"
+                    android:textSize="@dimen/_14sp" />
 
-    </androidx.cardview.widget.CardView>
+            </RelativeLayout>
 
+        </androidx.cardview.widget.CardView>
+
+    </RelativeLayout>
 </layout>

@@ -9,6 +9,7 @@ import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.techswivel.qthemusic.R
+import com.techswivel.qthemusic.utils.Utilities.roundOffDecimal
 
 object BindingAdapter {
 
@@ -22,7 +23,8 @@ object BindingAdapter {
     @JvmStatic
     @BindingAdapter("setPlan")
     fun setPlan(textView: TextView, subscription: Subscription?) {
-        textView.text = "$" + subscription?.planPrice.toString() + "/" + subscription?.planDuration
+        textView.text =
+            "$" + roundOffDecimal(subscription?.planPrice).toString() + " / " + subscription?.planDuration
     }
 
     /*@JvmStatic
