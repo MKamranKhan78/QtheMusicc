@@ -121,6 +121,7 @@
                 android:textSize="@dimen/_14sp" />
         </com.google.android.material.textfield.TextInputLayout>
         <ImageView
+            android:id="@+id/calander"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             app:layout_constraintEnd_toEndOf="@id/et_user_dob_layout"
@@ -161,6 +162,7 @@
                 android:fontFamily="@font/manrope_regular"
                 android:maxLines="1"
                 android:paddingTop="@dimen/_20dp"
+                android:editable="false"
                 android:paddingBottom="@dimen/_16dp"
                 android:textColor="@color/color_white"
                 android:textColorHighlight="@color/color_white"
@@ -381,6 +383,7 @@
                 android:fontFamily="@font/manrope_regular"
                 android:maxLines="1"
                 android:paddingTop="@dimen/_20dp"
+                android:inputType="number"
                 android:paddingBottom="@dimen/_16dp"
                 android:textColor="@color/color_white"
                 android:textColorHighlight="@color/color_white"
@@ -407,8 +410,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/et_zip_code_layout" />
-
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

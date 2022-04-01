@@ -45,7 +45,7 @@ import com.techswivel.qthemusic.utils.Utilities
 import java.io.Serializable
 import java.util.*
 
-private const val TAG = "AuthActivity"
+
 
 class AuthActivity : BaseActivity(), AuthActivityImp {
     private lateinit var authBinding: ActivityAuthBinding
@@ -409,5 +409,7 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
             }
         })
     }
-
+companion object{
+    private val TAG="AuthActivity"
+}
 }
