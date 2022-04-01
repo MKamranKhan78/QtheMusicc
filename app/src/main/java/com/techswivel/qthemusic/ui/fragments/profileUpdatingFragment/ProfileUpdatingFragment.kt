@@ -26,7 +26,6 @@ import com.techswivel.qthemusic.models.AuthModelBuilder
 import com.techswivel.qthemusic.source.local.preference.DataStoreUtils
 import com.techswivel.qthemusic.source.local.preference.PrefUtils
 import com.techswivel.qthemusic.source.remote.networkViewModel.AuthNetworkViewModel
-import com.techswivel.qthemusic.source.remote.networkViewModel.AuthorizationViewModel
 import com.techswivel.qthemusic.ui.activities.profileSettingScreen.ProfileSettingActivityImpl
 import com.techswivel.qthemusic.ui.base.BaseFragment
 import com.techswivel.qthemusic.ui.dialogFragments.chooserDialogFragment.ChooserDialogFragment
@@ -58,7 +57,6 @@ class ProfileUpdatingFragment : BaseFragment(), ProfileSettingActivityImpl {
     private lateinit var mBinding: FragmentProfileUpdatingBinding
     private lateinit var viewModel: ProfileUpdatingViewModel
     private lateinit var netWorkViewModel: AuthNetworkViewModel
-    private lateinit var authorizationViewModel: AuthorizationViewModel
     private lateinit var dialogFragment: ChooserDialogFragment
 
 
@@ -310,9 +308,6 @@ class ProfileUpdatingFragment : BaseFragment(), ProfileSettingActivityImpl {
 
         netWorkViewModel =
             ViewModelProvider(this).get(AuthNetworkViewModel::class.java)
-
-        authorizationViewModel =
-            ViewModelProvider(this).get(AuthorizationViewModel::class.java)
     }
 
     override fun onRequestPermissionsResult(

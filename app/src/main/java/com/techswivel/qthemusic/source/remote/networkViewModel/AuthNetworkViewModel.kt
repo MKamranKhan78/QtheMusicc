@@ -39,7 +39,7 @@ class AuthNetworkViewModel : BaseViewModel() {
                     }
                     t.code() == 403 -> {
                         val error: ResponseMain? = ErrorUtils.parseError(t)
-                        val errorData = ErrorResponce(
+                        val errorData = ErrorResponse(
                             error?.response?.status ?: false,
                             error?.response?.message ?: QTheMusicApplication.getContext()
                                 .getString(R.string.something_wrong),
@@ -50,7 +50,7 @@ class AuthNetworkViewModel : BaseViewModel() {
                     else -> {
                         val error: ResponseMain? = ErrorUtils.parseError(t)
                         logoutResponse.value = ApiResponse.error(
-                            ErrorResponce(
+                            ErrorResponse(
                                 error?.response?.status ?: false,
                                 error?.response?.message ?: QTheMusicApplication.getContext()
                                     .getString(R.string.something_wrong),

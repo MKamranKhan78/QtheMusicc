@@ -20,10 +20,6 @@
     </style>
 
 
-    <style name="ThemeOverlay.AppTheme.TextInputEditText.Outlined" parent="">
-        <item name="colorControlActivated">@color/sign_up_btn</item>
-    </style>
-
     <style name="InputEditTextHindAppearance" parent="TextAppearance.Design.Hint">
         <item name="android:textSize">12sp</item>
         <item name="fontFamily">@font/manrope_regular</item>

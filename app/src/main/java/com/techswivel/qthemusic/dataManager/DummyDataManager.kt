@@ -170,7 +170,7 @@ class DummyDataManager {
              val subscription = Subscription(
                  1,
                  "Standard Plan",
-                 10,
+                 10.00f,
                  "Month"
              )
              val authModel = AuthModel(

@@ -18,7 +18,6 @@ import com.techswivel.qthemusic.models.Subscription
 import com.techswivel.qthemusic.source.local.preference.DataStoreUtils
 import com.techswivel.qthemusic.source.local.preference.PrefUtils
 import com.techswivel.qthemusic.source.remote.rxjava.DisposableManager
-import com.techswivel.qthemusic.ui.activities.mainActivity.MainActivity
 import com.techswivel.qthemusic.ui.activities.splashActivity.SplashActivity
 import com.techswivel.qthemusic.utils.ActivityUtils
 import com.techswivel.qthemusic.utils.CommonKeys
@@ -91,7 +90,7 @@ abstract class BaseViewModel : ViewModel() {
             )
         }
         authModel?.subscription?.planPrice?.let { planPrice ->
-            PrefUtils.setInt(
+            PrefUtils.setFloat(
                 QTheMusicApplication.getContext(), CommonKeys.KEY_USER_PLAN_PRIZE,
                 planPrice
             )

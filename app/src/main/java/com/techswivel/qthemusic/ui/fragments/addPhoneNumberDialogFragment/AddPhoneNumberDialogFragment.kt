@@ -14,10 +14,10 @@ import com.techswivel.qthemusic.customData.enums.NetworkStatus
 import com.techswivel.qthemusic.customData.enums.OtpType
 import com.techswivel.qthemusic.customData.interfaces.BaseInterface
 import com.techswivel.qthemusic.databinding.FragmentAddPhoneNumberDialogBinding
+import com.techswivel.qthemusic.models.AuthRequestBuilder
 import com.techswivel.qthemusic.source.local.preference.DataStoreUtils
 import com.techswivel.qthemusic.source.local.preference.PrefUtils
 import com.techswivel.qthemusic.source.remote.networkViewModel.AuthNetworkViewModel
-import com.techswivel.qthemusic.source.remote.networkViewModel.AuthorizationViewModel
 import com.techswivel.qthemusic.ui.activities.profileSettingScreen.ProfileSettingActivityImpl
 import com.techswivel.qthemusic.ui.base.BaseDialogFragment
 import com.techswivel.qthemusic.utils.CommonKeys
@@ -38,7 +38,6 @@ class AddPhoneNumberDialogFragment : BaseDialogFragment(), BaseInterface {
     private lateinit var mBinding: FragmentAddPhoneNumberDialogBinding
     private lateinit var viewModel: AddPhoneNumberViewModel
     private lateinit var mAuthNetworkViewModel: AuthNetworkViewModel
-    private lateinit var mAuthorizationViewModel: AuthorizationViewModel
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,7 +64,7 @@ class AddPhoneNumberDialogFragment : BaseDialogFragment(), BaseInterface {
     }
 
     private fun setObserver() {
-        mAuthorizationViewModel.sendOtpResponse.observe(requireActivity()) { sendOtpResponse ->
+        mAuthNetworkViewModel.forgotPasswordResponse.observe(requireActivity()) { sendOtpResponse ->
             when (sendOtpResponse.status) {
                 NetworkStatus.LOADING -> {
                     mBinding.progressBar.visibility = View.VISIBLE
@@ -121,9 +120,6 @@ class AddPhoneNumberDialogFragment : BaseDialogFragment(), BaseInterface {
 
         mAuthNetworkViewModel =
             ViewModelProvider(this).get(AuthNetworkViewModel::class.java)
-
-        mAuthorizationViewModel =
-            ViewModelProvider(this).get(AuthorizationViewModel::class.java)
     }
 
     private fun clickListener() {
@@ -132,18 +128,17 @@ class AddPhoneNumberDialogFragment : BaseDialogFragment(), BaseInterface {
         }
 
         mBinding.updateButton.setOnClickListener {
-
+            val authRequestData = AuthRequestBuilder()
             if (mBinding.edtPhone.text.toString() != "") {
                 if (checkValidity(mBinding.countryCodePickerId, mBinding.edtPhone)) {
                     viewModel.email = PrefUtils.getString(
                         QTheMusicApplication.getContext(),
                         CommonKeys.KEY_USER_EMAIL
                     )
-                    mAuthorizationViewModel.sendOtp(
-                        OtpType.PHONE_NUMBER,
-                        viewModel.email,
-                        viewModel.number
-                    )
+                    authRequestData.otpType = OtpType.PHONE_NUMBER.name
+                    authRequestData.email = viewModel.email
+                    authRequestData.phoneNumber = viewModel.number
+                    mAuthNetworkViewModel.sendOtpRequest(AuthRequestBuilder.builder(authRequestData))
                 } else {
                     mBinding.edtPhone.error = "Please enter a valid phone number"
                 }
