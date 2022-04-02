@@ -27,7 +27,7 @@
     <color name="color_light_grey">#99999F</color>
     <color name="color_red">#BA011A</color>
     <color name="color_red_overlay">#99BA011A</color>
-    <color name="color_gray_end_gradiant">#474646</color>
+    <color name="color_gray_end_gradiant">#545454</color>
     <color name="view_profile_text_color">#99999F</color>
     <color name="color_black_landing_background">#000000</color>
     <color name="color_center_black_landing_background">#313131</color>

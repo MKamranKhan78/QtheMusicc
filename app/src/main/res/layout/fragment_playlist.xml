@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_black"
+    tools:context=".ui.fragments.playlist_fragment.PlaylistFragment">
+
+    <include
+        android:id="@+id/activityToolbar"
+        layout="@layout/app_bar_white_center_title_with_menu_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_below="@id/activityToolbar"
+        android:id="@+id/recyclerviewPlaylist"
+        android:layout_height="match_parent">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:id="@+id/progress_bar"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_centerInParent="true"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvNoDataFound"
+        android:visibility="gone"
+        android:textColor="@color/color_light_grey"
+        android:layout_centerInParent="true"
+        android:text="@string/no_data_found"/>
+</RelativeLayout>

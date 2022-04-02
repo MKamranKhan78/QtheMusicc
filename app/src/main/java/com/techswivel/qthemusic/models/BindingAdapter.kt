@@ -21,23 +21,19 @@ object BindingAdapter {
 
     @SuppressLint("SetTextI18n")
     @JvmStatic
+    @BindingAdapter("setNomberOfSong")
+    fun setNomberOfSong(textView: TextView, no_of_songs: Int?) {
+        textView.text = "$no_of_songs songs"
+    }
+
+    @SuppressLint("SetTextI18n")
+    @JvmStatic
     @BindingAdapter("setPlan")
     fun setPlan(textView: TextView, subscription: Subscription?) {
         textView.text =
             "$" + roundOffDecimal(subscription?.planPrice).toString() + " / " + subscription?.planDuration
     }
 
-    /*@JvmStatic
-    @BindingAdapter(value = ["isChecked", "isArtistChecked"])
-    fun isChecked(view: SwitchCompat, enabled: Boolean, artistChecked: Boolean) {
-        if (enabled == false) {
-            view.isEnabled = false
-            view.isChecked = false
-        } else {
-            view.isEnabled = true
-            view.isChecked = artistChecked
-        }
-    }*/
 
     @JvmStatic
     @BindingAdapter("setImageViewImage")

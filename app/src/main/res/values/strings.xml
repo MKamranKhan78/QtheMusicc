@@ -122,4 +122,7 @@
     <string name="channel_desc">channel_desc</string>
     <string name="str_empty">Empty</string>
     <string name="str_filled">Filled</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="no_data_found">No Data Found</string>
 </resources>

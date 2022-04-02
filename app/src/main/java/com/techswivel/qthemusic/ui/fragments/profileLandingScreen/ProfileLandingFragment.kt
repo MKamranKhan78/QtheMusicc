@@ -11,6 +11,7 @@ import com.techswivel.qthemusic.databinding.FragmentProfileLandingBinding
 import com.techswivel.qthemusic.ui.activities.profileSettingScreen.ProfileSettingActivity
 import com.techswivel.qthemusic.ui.activities.serverSettingActivity.ServerSettingActivity
 import com.techswivel.qthemusic.ui.base.BaseFragment
+import com.techswivel.qthemusic.ui.fragments.playlist_fragment.PlaylistFragment
 import com.techswivel.qthemusic.utils.ActivityUtils
 
 class ProfileLandingFragment : BaseFragment() {
@@ -62,7 +63,7 @@ class ProfileLandingFragment : BaseFragment() {
         mBinding.playListTextView.setOnClickListener {
             ActivityUtils.launchFragment(
                 requireContext(),
-                UnderDevelopmentMessageFragment::class.java.name
+                PlaylistFragment::class.java.name
             )
         }
         mBinding.favoriteSongTextview.setOnClickListener {

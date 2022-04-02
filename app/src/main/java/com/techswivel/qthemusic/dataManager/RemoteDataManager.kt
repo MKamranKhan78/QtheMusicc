@@ -35,6 +35,14 @@ object RemoteDataManager : BaseDataManager(), RemoteDataManagerImp {
         }
     }
 
+    override fun getPlayListFromServer(): Observable<Response<ResponseMain>> {
+        return Observable.create { observer ->
+            // observer.onError(Throwable("This is dummy thorwable if you want to test failed case."))
+            observer.onNext(getResponseDummyData())
+            observer.onComplete()
+        }
+    }
+
     override fun getSongsData(songsBodyModel: SongsBodyModel): Observable<Response<ResponseMain>> {
         return Observable.create { observer ->
             // observer.onError(Throwable("This is dummy thorwable if you want to test failed case."))

@@ -39,14 +39,22 @@
             android:name=".ui.activities.splashActivity.SplashActivity"
             android:exported="true"
             android:screenOrientation="portrait">
+            <!--uncomment this intent filter-->
+            <!--<intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>-->
+        </activity>
+        <activity
+            android:name=".ui.activities.mainActivity.MainActivity"
+            android:screenOrientation="portrait"
+            android:exported="true">
+            <!--remove this intent filter and exported true from here-->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".ui.activities.mainActivity.MainActivity"
-            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activities.serverSettingActivity.ServerSettingActivity"
             android:screenOrientation="portrait" />
