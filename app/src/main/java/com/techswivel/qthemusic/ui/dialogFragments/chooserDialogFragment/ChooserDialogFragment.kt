@@ -69,6 +69,9 @@ class ChooserDialogFragment : BaseDialogFragment() {
             viewModel.viewType = args.getInt(CommonKeys.KEY_DATA)
         }
         binding = FragmentDialogChooserBinding.inflate(inflater, container, false)
+
+
+        Log.d(TAG,"onCreateView Called")
         return binding.root
     }
 
@@ -82,6 +85,7 @@ class ChooserDialogFragment : BaseDialogFragment() {
          */
         viewModel.getContentGallery =
             registerForActivityResult(ActivityResultContracts.GetMultipleContents()) { uriList: List<Uri>? ->
+                Log.d(TAG,"onacitivity results called")
                 if (!uriList.isNullOrEmpty()) {
                     viewModel.mImageUri.clear()
                     viewModel.mImageUri.addAll(uriList)

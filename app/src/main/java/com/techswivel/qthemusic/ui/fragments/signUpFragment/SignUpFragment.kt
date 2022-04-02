@@ -1,5 +1,6 @@
 package com.techswivel.qthemusic.ui.fragments.signUpFragment
 
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.app.Dialog
 import android.graphics.Color
@@ -57,15 +58,17 @@ class SignUpFragment : BaseFragment() {
     }
 
 
+    @SuppressLint("SetTextI18n")
     @RequiresApi(Build.VERSION_CODES.M)
     private fun clickListeners() {
-        signUpBinding.calander.setOnClickListener {
+        signUpBinding.dobView.setOnClickListener {
             val datePicker = DatePickerDialog(
                 requireContext(), R.style.MyDatePickerStyle,
                 { view, year, month, dayOfMonth ->
                     // change date into millis
 
                     Log.d(TAG, "date is $year $month $dayOfMonth")
+                    signUpBinding.etUserDob.setText("$year $month $dayOfMonth")
                 },
                 year,
                 month,
@@ -77,7 +80,7 @@ class SignUpFragment : BaseFragment() {
             WhyWeAreAskingDialogFragment().show(parentFragmentManager, TAG)
 
         }
-        signUpBinding.etUserGender.setOnClickListener {
+        signUpBinding.genderView.setOnClickListener {
             GenderDialogFragment().show(parentFragmentManager, TAG)
         }
         signUpBinding.profileImgSection.setOnClickListener {

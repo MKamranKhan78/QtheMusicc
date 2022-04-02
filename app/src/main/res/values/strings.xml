@@ -68,7 +68,6 @@
     <string name="current_plan">current plan</string>
     <string name="listen_with_premium">Listen With Premium</string>
     <string name="free_account">Free Account</string>
-    <string name="your_interests">Your Interests</string>
     <string name="buying_history">Buying History</string>
     <string name="downloaded">Downloaded</string>
     <string name="listening_history">Listening History</string>
@@ -128,6 +127,10 @@
     <string name="female">Female</string>
     <string name="non_binary">Non-binary</string>
     <string name="no_answer">No answer</string>
+    <string name="select_gender">Select Gender</string>
+    <string name="update">Update</string>
+    <string name="your_interests">Your Interests</string>
+    <string name="your_interest_msg">Select 2 to 5 topics according to your interests.</string>
 
 
 </resources>

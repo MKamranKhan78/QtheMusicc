@@ -11,7 +11,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-
         <FrameLayout
             android:id="@+id/profile_img_section"
             android:layout_width="@dimen/_110dp"
@@ -119,6 +118,7 @@
                 android:textColorHighlight="@color/color_white"
                 android:textColorHint="@color/color_white"
                 android:textSize="@dimen/_14sp" />
+
         </com.google.android.material.textfield.TextInputLayout>
         <ImageView
             android:id="@+id/calander"
@@ -131,7 +131,15 @@
             android:layout_marginEnd="@dimen/_16dp"
             android:padding="@dimen/_4dp"
             />
-
+        <View
+            android:id="@+id/dob_view"
+            android:layout_width="@dimen/_0dp"
+            android:layout_height="@dimen/_0dp"
+            app:layout_constraintStart_toStartOf="@+id/et_user_dob_layout"
+            app:layout_constraintEnd_toEndOf="@+id/et_user_dob_layout"
+            app:layout_constraintTop_toTopOf="@id/et_user_dob_layout"
+            app:layout_constraintBottom_toBottomOf="@id/et_user_dob_layout"
+            />
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/et_user_gender_layout"
             android:layout_width="match_parent"
@@ -162,13 +170,24 @@
                 android:fontFamily="@font/manrope_regular"
                 android:maxLines="1"
                 android:paddingTop="@dimen/_20dp"
+                android:drawablePadding="@dimen/_16dp"
                 android:editable="false"
+                android:drawableEnd="@drawable/ic_icon_ionic_ios_arrow_down"
                 android:paddingBottom="@dimen/_16dp"
                 android:textColor="@color/color_white"
                 android:textColorHighlight="@color/color_white"
                 android:textColorHint="@color/color_white"
                 android:textSize="@dimen/_14sp" />
         </com.google.android.material.textfield.TextInputLayout>
+        <View
+            android:id="@+id/gender_view"
+            android:layout_width="@dimen/_0dp"
+            android:layout_height="@dimen/_0dp"
+            app:layout_constraintStart_toStartOf="@+id/et_user_gender_layout"
+            app:layout_constraintEnd_toEndOf="@+id/et_user_gender_layout"
+            app:layout_constraintTop_toTopOf="@id/et_user_gender_layout"
+            app:layout_constraintBottom_toBottomOf="@id/et_user_gender_layout"
+            />
 
         <TextView
             android:id="@+id/tv_your_address_tag"
@@ -411,5 +430,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/et_zip_code_layout" />
 
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </ScrollView>

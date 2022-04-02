@@ -20,6 +20,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("int", "APPCENTER_BUILD_ID", appCenterBuildID)
 
+
         kapt {
             arguments {
                 arg("room.schemaLocation", "$projectDir/")

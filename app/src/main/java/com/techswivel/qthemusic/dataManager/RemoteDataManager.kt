@@ -105,6 +105,14 @@ object RemoteDataManager : BaseDataManager(), RemoteDataMangerImp {
         }
     }
 
+    override fun signUp(authRequestModel: AuthRequestModel): Observable<Response<ResponseMain>> {
+        return Observable.create{observer->
+            observer.onNext(getResponseDummyData())
+            observer.onComplete()
+        }
+
+    }
+
     override fun logoutUser(deviceIdentifier: String): Observable<Response<ResponseMain>> {
         return Observable.create { observer ->
             // observer.onError(Throwable("This is dummy thorwable if you want to test failed case."))

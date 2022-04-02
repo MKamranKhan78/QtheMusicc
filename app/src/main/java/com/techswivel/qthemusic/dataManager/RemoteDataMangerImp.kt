@@ -24,4 +24,6 @@ interface RemoteDataMangerImp {
 
     fun setNewPassword(authRequestModel: AuthRequestModel): Observable<Response<ResponseMain>>
 
+    fun signUp(authRequestModel: AuthRequestModel): Observable<Response<ResponseMain>>
+
 }
