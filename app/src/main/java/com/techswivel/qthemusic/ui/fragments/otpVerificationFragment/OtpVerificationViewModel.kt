@@ -1,5 +1,7 @@
 package com.techswivel.qthemusic.ui.fragments.otpVerificationFragment
 
+import android.os.CountDownTimer
+import com.techswivel.qthemusic.customData.enums.OtpType
 import com.techswivel.qthemusic.ui.base.BaseViewModel
 
 class OtpVerificationViewModel :BaseViewModel(){
@@ -10,5 +12,6 @@ class OtpVerificationViewModel :BaseViewModel(){
     var etOtpThree = ""
     var etOtpFour = ""
     var etOtpFive = ""
-   // val TAG="OtpVerificationVM"
+    lateinit var fragmentFlow: OtpType
+    lateinit var countDownTimer: CountDownTimer
 }

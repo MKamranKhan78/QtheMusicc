@@ -68,12 +68,12 @@ class SignInFragment : BaseFragment() {
                 signInBinding.etLoginEmail.text.isNullOrEmpty() ||
                 signInViewModel.isEmailTextValid.get() != true
             ) {
-                signInBinding.etLoginEmail.error = getString(R.string.this_required)
+                signInBinding.etLoginEmail.error = getString(R.string.email_is_required)
             } else if (
                 signInBinding.etLoginPassword.text.isNullOrEmpty() ||
                 signInViewModel.isPasswordTextValid.get() != true
             ) {
-                signInBinding.etLoginPassword.error = getString(R.string.this_required)
+                signInBinding.etLoginPassword.error =getString(R.string.password_is_required)
             } else if (
                 signInViewModel.isEmailTextValid.get() == true &&
                 signInViewModel.isPasswordTextValid.get() == true
@@ -84,7 +84,7 @@ class SignInFragment : BaseFragment() {
                     null,
                     LoginType.SIMPLE.name,
                     "kljsdjklsdfkljsdf",
-                    "wasi_dev",
+                    context?.toDeviceIdentifier(),
                     null
                 )
             }
@@ -92,7 +92,7 @@ class SignInFragment : BaseFragment() {
         signInBinding.tvForgotPassword.setOnClickListener {
             PrefUtils.setBoolean(requireContext(), CommonKeys.SIGNIN_BTN_ANIMATION, true)
             val bundle = Bundle()
-            bundle.putSerializable(CommonKeys.APP_FLOW, OtpType.FORGET_PASSWORD)
+            bundle.putSerializable(CommonKeys.OTP_TYPE, OtpType.FORGET_PASSWORD)
             val fortgotPasword = ForgotPassword()
             fortgotPasword.arguments = bundle
             (mActivityListener as AuthActivityImp).replaceCurrentFragment(fortgotPasword)

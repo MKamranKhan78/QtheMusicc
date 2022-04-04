@@ -13,12 +13,13 @@ import com.techswivel.qthemusic.models.AuthRequestBuilder
 import com.techswivel.qthemusic.ui.activities.authActivity.AuthActivityImp
 import com.techswivel.qthemusic.ui.base.BaseFragment
 import com.techswivel.qthemusic.utils.CommonKeys
-import java.io.Serializable
+import com.techswivel.qthemusic.utils.Log
 
 
 class ForgotPassword : BaseFragment() {
-    var fragmentFlow: Serializable? = ""
+    private lateinit var fragmentFlow: OtpType
     private lateinit var forgotViewModel: ForgotPasswordViewModel
+
     private lateinit var forgotbingding: FragmentForgotPasswordBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,7 +46,8 @@ class ForgotPassword : BaseFragment() {
     }
 
     private fun initialization() {
-        fragmentFlow = arguments?.getSerializable(CommonKeys.APP_FLOW)
+        fragmentFlow = arguments?.getSerializable(CommonKeys.OTP_TYPE) as OtpType
+        Log.d(TAG, "fragment flow is $fragmentFlow")
         if (fragmentFlow == OtpType.FORGET_PASSWORD) {
             forgotbingding.tvPolicyTag.visibility = View.INVISIBLE
             forgotbingding.socialPortion.visibility = View.INVISIBLE
@@ -66,7 +68,7 @@ class ForgotPassword : BaseFragment() {
                 forgotbingding.etForgotEmailId.text.toString().isNullOrEmpty() ||
                 forgotViewModel.isEmailTextValid.get() != true
             ) {
-                forgotbingding.etForgotEmailId.error = getString(R.string.this_required)
+                forgotbingding.etForgotEmailId.error = getString(R.string.email_is_required)
 
             } else if (forgotViewModel.isEmailTextValid.get() == true) {
                 createAndSendOtpRequest()
@@ -76,10 +78,10 @@ class ForgotPassword : BaseFragment() {
 
     private fun createAndSendOtpRequest() {
         val authModelBilder = AuthRequestBuilder()
-        authModelBilder.otpType = OtpType.EMAIL.name
+        authModelBilder.otpType = fragmentFlow.name
         authModelBilder.email = forgotbingding.etForgotEmailId.text.toString()
         val otpModel = AuthRequestBuilder.builder(authModelBilder)
-        (mActivityListener as AuthActivityImp).forgotPasswordRequest(otpModel,fragmentFlow)
+        (mActivityListener as AuthActivityImp).forgotPasswordRequest(otpModel)
         setObserverForViewModels()
     }
 
@@ -91,4 +93,7 @@ class ForgotPassword : BaseFragment() {
             ViewModelProvider(requireActivity()).get(ForgotPasswordViewModel::class.java)
     }
 
+    companion object {
+        private val TAG = "ForgotPassword"
+    }
 }

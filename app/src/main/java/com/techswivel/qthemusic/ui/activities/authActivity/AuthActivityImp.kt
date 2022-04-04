@@ -12,15 +12,13 @@ interface AuthActivityImp : BaseInterface {
     fun userLoginRequest(authRequestBuilder: AuthRequestModel)
 
     fun navigateToHomeScreenAfterLogin(authModel: AuthModel?)
-    fun forgotPasswordRequest(authRequestBuilder: AuthRequestModel, appFlow: Serializable?)
+    fun forgotPasswordRequest(authRequestBuilder: AuthRequestModel)
 
     fun replaceCurrentFragment(fragment: Fragment)
     fun verifyOtpRequest(authRequestBuilder: AuthRequestModel)
 
     fun setPasswordRequest(
-        authRequestBuilder: AuthRequestModel,
-        appFlow: Serializable?
-    )
+        authRequestBuilder: AuthRequestModel)
 
     fun popUpToAllFragments(fragment: Fragment)
     fun signInWithGoogle()

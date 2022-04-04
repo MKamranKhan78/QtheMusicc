@@ -8,8 +8,10 @@ class MyDataClass(
     @SerializedName("auth")
     val authModel: AuthModel?,
 
+
 ) {
     constructor() : this(
         null,
+
     )
 }

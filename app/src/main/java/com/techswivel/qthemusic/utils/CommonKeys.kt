@@ -12,7 +12,7 @@ class CommonKeys {
         const val KEY_IS_LOGGED_IN = "_key_is_logged_in"
         const val TYPE_VIDEO = 1
         const val TYPE_PHOTO = 2
-        const val APP_FLOW="app_flow"
+        const val OTP_TYPE="app_flow"
         const val START_TIMER="Start_Timer"
         const val USER_EMAIL="user_email"
         const val USER_OTP="user_otp"
@@ -35,7 +35,7 @@ class CommonKeys {
         const val KEY_USER_ADRESS = "_key_user_address"
         const val KEY_USER_PLAN_PRIZE = "_key_user_plan_prize"
         const val KEY_USER_PLAN_DURATION = "_key_user_plan_duration"
-
+        const val KEY_IS_INTEREST_SET="key_is_interest_set"
 
     }
 }

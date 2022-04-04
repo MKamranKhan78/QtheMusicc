@@ -6,9 +6,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.AttributeSet
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
@@ -37,7 +37,6 @@ import com.techswivel.qthemusic.ui.fragments.forgotPasswordFragment.ForgotPasswo
 import com.techswivel.qthemusic.ui.fragments.otpVerificationFragment.OtpVerification
 import com.techswivel.qthemusic.ui.fragments.setPasswordFragmetnt.SetPassword
 import com.techswivel.qthemusic.ui.fragments.signInFragment.SignInFragment
-import com.techswivel.qthemusic.ui.fragments.signInFragment.SignInFragmentImp
 import com.techswivel.qthemusic.utils.CommonKeys
 import com.techswivel.qthemusic.utils.DialogUtils
 import com.techswivel.qthemusic.utils.Log
@@ -46,21 +45,20 @@ import java.io.Serializable
 import java.util.*
 
 
-
 class AuthActivity : BaseActivity(), AuthActivityImp {
     private lateinit var authBinding: ActivityAuthBinding
     private lateinit var googleSinInClient: GoogleSignInClient
     lateinit var authNetworkViewModel: AuthNetworkViewModel
+    private lateinit var mAuthActivityViewModel: AuthActivityViewModel
     private lateinit var callbackManager: CallbackManager
     private lateinit var loginManager: LoginManager
     private lateinit var authModelBilder: AuthRequestBuilder
-    var fragmentFlow: Serializable? = ""
-    var userEmail: String? = ""
-    var userOtp: Int? = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         authBinding = ActivityAuthBinding.inflate(layoutInflater)
         authNetworkViewModel = ViewModelProvider(this).get(AuthNetworkViewModel::class.java)
+        mAuthActivityViewModel = ViewModelProvider(this).get(AuthActivityViewModel::class.java)
         setAutNetworkViewModelObservers()
         authModelBilder = AuthRequestBuilder()
         replaceFragmentWithoutAddingToBackStack(R.id.auth_container, SignInFragment())
@@ -108,11 +106,10 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
     }
 
     override fun forgotPasswordRequest(
-        authRequestBuilder: AuthRequestModel,
-        appFlow: Serializable?
+        authRequestBuilder: AuthRequestModel
     ) {
-        userEmail = authRequestBuilder.email.toString()
-        fragmentFlow = appFlow
+        mAuthActivityViewModel.userEmail = authRequestBuilder.email.toString()
+        mAuthActivityViewModel.fragmentFlow = authRequestBuilder.otpType
         authNetworkViewModel.sendOtpRequest(authRequestBuilder)
 
     }
@@ -134,16 +131,15 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
 
         ) {
         authNetworkViewModel.verifyOtpResponse(authRequestBuilder)
-        userEmail = authRequestBuilder.email
-        userOtp = authRequestBuilder.otp
+        mAuthActivityViewModel.userEmail = authRequestBuilder.email
+        mAuthActivityViewModel.userOtp = authRequestBuilder.otp
     }
 
     override fun setPasswordRequest(
-        authRequestBuilder: AuthRequestModel,
-        appFlow: Serializable?
+        authRequestBuilder: AuthRequestModel
     ) {
         authNetworkViewModel.requestToSetPassword(authRequestBuilder)
-        fragmentFlow = appFlow
+        mAuthActivityViewModel.fragmentFlow = authRequestBuilder.otpType
     }
 
     override fun popUpToAllFragments(fragment: Fragment) {
@@ -221,7 +217,21 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
                 }
                 NetworkStatus.SUCCESS -> {
                     authBinding.authProgressBar.visibility = View.INVISIBLE
-                    val data = it.t as ResponseModel
+                    val mResponseModel = it.t as ResponseModel
+                    val userData = mResponseModel.data?.authModel
+                    val userName = userData?.name
+                    val userProfile = userData?.avatar
+                    val userEmail = userData?.email
+                    val isInterestSet = userData?.isInterestsSet
+                    val userJwt = userData?.jwt
+                    PrefUtils.setString(this, CommonKeys.KEY_FIRST_NAME, userName)
+                    PrefUtils.setString(this, CommonKeys.KEY_USER_EMAIL, userEmail)
+                    PrefUtils.setString(this, CommonKeys.KEY_JWT, userJwt)
+                    PrefUtils.setString(this, CommonKeys.KEY_USER_AVATAR, userProfile)
+                    if (isInterestSet != null) {
+                        PrefUtils.setBoolean(this, CommonKeys.KEY_IS_INTEREST_SET, isInterestSet)
+                    }
+                    PrefUtils.setBoolean(this,CommonKeys.KEY_IS_LOGGED_IN,true)
                     val intent = Intent(this@AuthActivity, MainActivity::class.java)
                     startActivity(intent)
                     finish()
@@ -301,8 +311,8 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
                     authBinding.authProgressBar.visibility = View.INVISIBLE
                     val data = it.t as ResponseModel
                     val bundle = Bundle()
-                    bundle.putString(CommonKeys.USER_EMAIL, userEmail)
-                    bundle.putSerializable(CommonKeys.APP_FLOW, OtpType.FORGET_PASSWORD)
+                    bundle.putString(CommonKeys.USER_EMAIL, mAuthActivityViewModel.userEmail)
+                    bundle.putSerializable(CommonKeys.OTP_TYPE, OtpType.FORGET_PASSWORD)
                     val otpVerification = OtpVerification()
                     otpVerification.arguments = bundle
                     replaceCurrentFragment(otpVerification)
@@ -340,9 +350,15 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
                         authBinding.authProgressBar.visibility = View.INVISIBLE
                         val data = it.t as ResponseModel
                         val bundle = Bundle()
-                        bundle.putSerializable(CommonKeys.APP_FLOW, fragmentFlow)
-                        bundle.putString(CommonKeys.USER_OTP, userOtp.toString())
-                        bundle.putString(CommonKeys.USER_EMAIL, userEmail)
+                        bundle.putSerializable(
+                            CommonKeys.OTP_TYPE,
+                            mAuthActivityViewModel.fragmentFlow
+                        )
+                        bundle.putString(
+                            CommonKeys.USER_OTP,
+                            mAuthActivityViewModel.userOtp.toString()
+                        )
+                        bundle.putString(CommonKeys.USER_EMAIL, mAuthActivityViewModel.userEmail)
                         val setPassword = SetPassword()
                         setPassword.arguments = bundle
                         PrefUtils.setBoolean(this, CommonKeys.START_TIMER, false)
@@ -379,13 +395,12 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
                     authBinding.authProgressBar.visibility = View.INVISIBLE
                     PrefUtils.removeValue(this, CommonKeys.SIGNIN_BTN_ANIMATION)
                     val data = it.t as ResponseModel
-                    if (fragmentFlow == OtpType.FORGET_PASSWORD) {
-
+                    if (mAuthActivityViewModel.fragmentFlow == OtpType.FORGET_PASSWORD.name) {
                         replaceCurrentFragment(SignInFragment())
                         popUpAllFragmentIncludeThis(ForgotPassword::class.java.name)
 
                     } else {
-                       Log.d(TAG,"SignUp Flow")
+                        Utilities.showToast(this, "signup flow")
                     }
                 }
                 NetworkStatus.EXPIRE -> {
@@ -409,7 +424,8 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
             }
         })
     }
-companion object{
-    private val TAG="AuthActivity"
-}
+
+    companion object {
+        private val TAG = "AuthActivity"
+    }
 }

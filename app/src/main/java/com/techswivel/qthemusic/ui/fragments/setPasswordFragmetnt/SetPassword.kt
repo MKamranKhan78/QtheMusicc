@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import com.techswivel.qthemusic.R
+import com.techswivel.qthemusic.customData.enums.OtpType
 import com.techswivel.qthemusic.databinding.FragmentSetPasswordBinding
 import com.techswivel.qthemusic.models.AuthRequestBuilder
 import com.techswivel.qthemusic.ui.activities.authActivity.AuthActivityImp
@@ -17,7 +18,6 @@ import java.io.Serializable
 class SetPassword : BaseFragment() {
     lateinit var passwordBinding: FragmentSetPasswordBinding
     lateinit var setPasswordViewModel: SetPasswordViewModel
-    var fragmentFlow: Serializable? = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -34,8 +34,6 @@ class SetPassword : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        fragmentFlow = arguments?.getSerializable(CommonKeys.APP_FLOW)
-
         initViewModel()
         widgetInitialization()
         onClickListener()
@@ -55,12 +53,13 @@ class SetPassword : BaseFragment() {
                 passwordBinding.etSetPasswordId.text.isNullOrEmpty() ||
                 setPasswordViewModel.isPasswordTextValid.get() != true
             ) {
-                passwordBinding.etSetPasswordId.error = getString(R.string.this_required)
+                passwordBinding.etSetPasswordId.error = getString(R.string.password_is_required)
             } else if (
                 passwordBinding.etSetPasswordConfirmId.text.isNullOrEmpty() ||
                 setPasswordViewModel.isRepeatPasswordTextValid.get() != true
             ) {
-                passwordBinding.etSetPasswordConfirmId.error = getString(R.string.this_required)
+                passwordBinding.etSetPasswordConfirmId.error =
+                    getString(R.string.password_is_required)
             } else {
 
                 if (passwordBinding.etSetPasswordId.text.toString() !=
@@ -89,8 +88,8 @@ class SetPassword : BaseFragment() {
         authModelBilder.password = passwordBinding.etSetPasswordConfirmId.text.toString()
         val setPasswordModel = AuthRequestBuilder.builder(authModelBilder)
         (mActivityListener as AuthActivityImp).setPasswordRequest(
-            setPasswordModel,
-            fragmentFlow )
+            setPasswordModel
+        )
     }
 
     private fun initViewModel() {

@@ -28,8 +28,6 @@ class MainActivity : BaseActivity() {
         initView()
         setBottomNavigationSelector()
         changeStatusBarColor()
-        getDummyDataAndSaveInPrefrences()
-
     }
 
     private fun getDummyDataAndSaveInPrefrences() {
@@ -63,7 +61,6 @@ class MainActivity : BaseActivity() {
                 }
                 R.id.bottom_nav_profile -> {
                     openLandingProfileFragment()
-
                 }
             }
             return@setOnItemSelectedListener true

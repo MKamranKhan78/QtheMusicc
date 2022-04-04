@@ -105,7 +105,7 @@
     <string name="invalid_password">Enter valid password</string>
     <string name="error_occurred">Error Occurred</string>
     <string name="get_email_fb">email</string>
-    <string name="enter_valid_otp">Enter Valid Otp</string>
+    <string name="enter_valid_otp">OTP must have 5 digits</string>
     <string name="resend">Resend</string>
     <string name="this_required">This field is required</string>
     <string name="error_access_token">Access Token Not Found</string>
@@ -131,6 +131,8 @@
     <string name="update">Update</string>
     <string name="your_interests">Your Interests</string>
     <string name="your_interest_msg">Select 2 to 5 topics according to your interests.</string>
+    <string name="email_is_required">Email is  Required</string>
+    <string name="password_is_required">Password is  Required</string>
 
 
 </resources>

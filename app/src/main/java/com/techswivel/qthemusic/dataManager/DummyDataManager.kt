@@ -121,7 +121,5 @@ class DummyDataManager {
             )
             return authModel
         }
-
-
     }
 }
