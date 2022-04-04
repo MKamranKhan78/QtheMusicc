@@ -1,6 +1,7 @@
 package com.techswivel.qthemusic.ui.dialogFragments.chooserDialogFragment
 
 import android.app.Activity.RESULT_OK
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -83,20 +84,26 @@ class ChooserDialogFragment : BaseDialogFragment() {
          * and multiple contents by using [ActivityResultContracts.GetMultipleContents].
          * For reference [https://stackoverflow.com/questions/64431993/how-to-get-specific-number-of-images-with-activity-results-api]
          */
+        Log.d(TAG,"onViewCreated Called")
         viewModel.getContentGallery =
             registerForActivityResult(ActivityResultContracts.GetMultipleContents()) { uriList: List<Uri>? ->
-                Log.d(TAG,"onacitivity results called")
+                Log.d(TAG,"getContentGallery results called")
+
                 if (!uriList.isNullOrEmpty()) {
                     viewModel.mImageUri.clear()
                     viewModel.mImageUri.addAll(uriList)
                     callBack?.onActivityResult(viewModel.mImageUri)
                     dismiss()
+                }else{
+                    Log.d(TAG,"list is empaty")
                 }
             }
 
         viewModel.getContentCameraVideo =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                Log.d(TAG,"getContentCameraVideo results called")
                 if (result.data != null && result.resultCode == RESULT_OK) {
+
                     val uri = result?.data?.data
                     if (uri != null) {
                         viewModel.mImageUri.clear()
@@ -109,7 +116,9 @@ class ChooserDialogFragment : BaseDialogFragment() {
 
         viewModel.getContentCameraImage =
             registerForActivityResult(ActivityResultContracts.TakePicture()) { isSuccess ->
+                Log.d(TAG,"getContentCameraImage results called")
                 if (isSuccess) {
+
                     viewModel.imageLatestTmpUri?.let { uri ->
                         viewModel.mImageUri.clear()
                         viewModel.mImageUri.add(uri)
@@ -135,6 +144,7 @@ class ChooserDialogFragment : BaseDialogFragment() {
                         viewModel.openCameraIntent()
                     }
                     IMAGE_PICKER_REQUEST_CODE -> {
+                        Log.d(TAG,"onacitivity results called")
                         viewModel.openGalleryIntent()
                     }
                     VIDEO_GALLERY_PICKER_REQUEST_CODE -> {
@@ -200,6 +210,7 @@ class ChooserDialogFragment : BaseDialogFragment() {
         }
 
         binding.galleryLayout.setOnClickListener {
+            Log.d(TAG,"galleryLayout clicked")
             viewModel.mRequestCode = IMAGE_PICKER_REQUEST_CODE
             if (PermissionUtils.isStoragePermissionGranted(requireContext())) {
                 viewModel.openGalleryIntent()
@@ -208,7 +219,6 @@ class ChooserDialogFragment : BaseDialogFragment() {
             }
         }
     }
-
     private fun typeVideo() {
         binding.textSelect.text = getString(R.string.str_select_video)
         binding.cameraLayout.setOnClickListener {

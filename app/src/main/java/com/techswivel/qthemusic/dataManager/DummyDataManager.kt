@@ -151,6 +151,7 @@ class DummyDataManager {
                     "https://cdn5.vectorstock.com/i/1000x1000/77/09/colorful-detailed-pop-music-can-vector-19847709.jpg",
                     "POP"
                 ),
+                
             )
         }
 

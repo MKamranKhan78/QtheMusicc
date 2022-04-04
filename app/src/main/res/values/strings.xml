@@ -59,7 +59,6 @@
     <string name="str_artists">Artists</string>
     <string name="str_what_s_your_mood">What\'s your mood?</string>
     <string name="str_trending_songs">Trending Songs</string>
-    <string name="something_wrong">Something went wrong!</string>
     <string name="str_video">Video</string>
     <string name="str_audio">Audio</string>
     <string name="str_underdevelopment_feature">Underdevelopment feature</string>
@@ -143,7 +142,6 @@
     <string name="no_answer">No answer</string>
     <string name="select_gender">Select Gender</string>
     <string name="update">Update</string>
-    <string name="your_interests">Your Interests</string>
     <string name="your_interest_msg">Select 2 to 5 topics according to your interests.</string>
     <string name="email_is_required">Email is  Required</string>
     <string name="password_is_required">Password is  Required</string>

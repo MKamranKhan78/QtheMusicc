@@ -1,9 +1,7 @@
 package com.techswivel.qthemusic.dataManager
 
-import com.techswivel.qthemusic.models.AuthModel
-import com.techswivel.qthemusic.models.AuthRequestModel
-import com.techswivel.qthemusic.models.GoogleResponseModel
-import com.techswivel.qthemusic.models.ResponseMain
+import com.techswivel.qthemusic.customData.enums.CategoryType
+import com.techswivel.qthemusic.models.*
 import io.reactivex.Observable
 import retrofit2.Response
 
@@ -20,5 +18,6 @@ interface RemoteDataManagerImp {
     fun verifyOtpRequest(authRequestModel: AuthRequestModel): Observable<Response<ResponseMain>>
     fun setNewPassword(authRequestModel: AuthRequestModel): Observable<Response<ResponseMain>>
     fun signUp(authRequestModel: AuthRequestModel): Observable<Response<ResponseMain>>
+
 
 }

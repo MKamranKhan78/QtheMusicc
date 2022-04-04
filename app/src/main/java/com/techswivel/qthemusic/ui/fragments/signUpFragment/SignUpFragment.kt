@@ -2,13 +2,9 @@ package com.techswivel.qthemusic.ui.fragments.signUpFragment
 
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
-import android.app.Dialog
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,17 +12,17 @@ import androidx.annotation.RequiresApi
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.application.QTheMusicApplication
 import com.techswivel.qthemusic.databinding.FragmentSignUpBinding
-import com.techswivel.qthemusic.models.AuthModelBuilder
+import com.techswivel.qthemusic.models.AuthModel
+import com.techswivel.qthemusic.ui.activities.profileSettingScreen.ProfileSettingActivityImpl
 import com.techswivel.qthemusic.ui.base.BaseFragment
 import com.techswivel.qthemusic.ui.dialogFragments.chooserDialogFragment.ChooserDialogFragment
-import com.techswivel.qthemusic.ui.dialogFragments.genderDialogFragment.GenderDialogFragment
+import com.techswivel.qthemusic.ui.dialogFragments.genderDialogFragment.GenderSelectionDialogFragment
 import com.techswivel.qthemusic.ui.dialogFragments.whyWeAreAskingDialogFragment.WhyWeAreAskingDialogFragment
 import com.techswivel.qthemusic.utils.CommonKeys
 import com.techswivel.qthemusic.utils.Log
 import com.techswivel.qthemusic.utils.Utilities
-import java.util.*
 
-class SignUpFragment : BaseFragment() {
+class SignUpFragment : BaseFragment(),SignUpFragmentImp{
     companion object {
         private const val TAG = "SignUpFragment"
     }
@@ -81,14 +77,18 @@ class SignUpFragment : BaseFragment() {
 
         }
         signUpBinding.genderView.setOnClickListener {
-            GenderDialogFragment().show(parentFragmentManager, TAG)
+            GenderSelectionDialogFragment.newInstance(this,).show(parentFragmentManager,TAG)
         }
+
         signUpBinding.profileImgSection.setOnClickListener {
           ChooserDialogFragment.newInstance(CommonKeys.TYPE_PHOTO,object :ChooserDialogFragment.CallBack{
               override fun onActivityResult(mImageUri: List<Uri>?) {
                   Log.d(TAG,"Uri is ${mImageUri}")
               }
           }).show(parentFragmentManager, TAG)
+        }
+        signUpBinding.tvLetGoProfileBtn.setOnClickListener {
+
         }
     }
 
@@ -102,7 +102,17 @@ class SignUpFragment : BaseFragment() {
             .setTextColor(QTheMusicApplication.getContext().getColor(R.color.color_black))
         // for disabling the past date
         datePicker.getDatePicker().setMinDate(System.currentTimeMillis() - 1000)
+    }
 
+    override fun getGender(gender: String?) {
+        signUpBinding.etUserGender.setText(gender)
+    }
+
+    override fun showProgressBar() {
+
+    }
+
+    override fun hideProgressBar() {
 
     }
 
