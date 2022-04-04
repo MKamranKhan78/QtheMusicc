@@ -5,8 +5,11 @@ import android.os.Build
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.techswivel.qthemusic.R
+import com.techswivel.qthemusic.utils.Utilities.roundOffDecimal
 
 object BindingAdapter {
 
@@ -20,7 +23,8 @@ object BindingAdapter {
     @JvmStatic
     @BindingAdapter("setPlan")
     fun setPlan(textView: TextView, subscription: Subscription?) {
-        textView.text = "$" + subscription?.planPrice.toString() + "/" + subscription?.planDuration
+        textView.text =
+            "$" + roundOffDecimal(subscription?.planPrice).toString() + " / " + subscription?.planDuration
     }
 
     /*@JvmStatic
@@ -37,14 +41,26 @@ object BindingAdapter {
 
     @JvmStatic
     @BindingAdapter("setImageViewImage")
-    fun setImageViewImage(pImageView: ImageView?, image: String) {
+    fun setImageViewImage(pImageView: ImageView, image: String) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            pImageView?.context?.let { context ->
-                Glide.with(context).load(image)
-                    .placeholder(R.drawable.ic_round_account_circle_24)
-                    .error(R.drawable.ic_round_account_circle_24)
-                    .into(pImageView)
-            }
+            val circularProgressDrawable = CircularProgressDrawable(pImageView.context)
+            circularProgressDrawable.strokeWidth = 5f
+            circularProgressDrawable.centerRadius = 30f
+            circularProgressDrawable.start()
+            val requestOptions = RequestOptions()
+            requestOptions.placeholder(circularProgressDrawable)
+            requestOptions.error(R.drawable.no_image_palce_holder)
+            Glide.with(pImageView.context).setDefaultRequestOptions(requestOptions).load(image)
+                .into(pImageView)
         }
+    }
+
+    @JvmStatic
+    @BindingAdapter("setSongTime")
+    fun setSongTime(pTextView: TextView, duration: Int) {
+        val minutes = (duration % 3600) / 60
+        val seconds = duration % 60
+
+        pTextView.text = String.format("%02d:%02d", minutes, seconds);
     }
 }

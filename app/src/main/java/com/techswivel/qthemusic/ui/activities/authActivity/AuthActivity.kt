@@ -30,7 +30,7 @@ import com.techswivel.qthemusic.customData.enums.SocialSites
 import com.techswivel.qthemusic.databinding.ActivityAuthBinding
 import com.techswivel.qthemusic.models.*
 import com.techswivel.qthemusic.source.local.preference.PrefUtils
-import com.techswivel.qthemusic.source.remote.networkViewModel.*
+import com.techswivel.qthemusic.source.remote.networkViewModel.AuthNetworkViewModel
 import com.techswivel.qthemusic.ui.activities.mainActivity.MainActivity
 import com.techswivel.qthemusic.ui.base.BaseActivity
 import com.techswivel.qthemusic.ui.fragments.forgotPasswordFragment.ForgotPassword
@@ -40,7 +40,6 @@ import com.techswivel.qthemusic.ui.fragments.signInFragment.SignInFragment
 import com.techswivel.qthemusic.utils.CommonKeys
 import com.techswivel.qthemusic.utils.DialogUtils
 import com.techswivel.qthemusic.utils.Log
-import com.techswivel.qthemusic.utils.Utilities
 import java.io.Serializable
 import java.util.*
 
@@ -238,7 +237,7 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
                 }
                 NetworkStatus.ERROR -> {
                     authBinding.authProgressBar.visibility = View.INVISIBLE
-                    val error = it.error as ErrorResponce
+                    val error = it.error as ErrorResponse
                     DialogUtils.errorAlert(
                         this,
                         getString(R.string.error_occurred),
@@ -247,7 +246,7 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
                 }
                 NetworkStatus.EXPIRE -> {
                     authBinding.authProgressBar.visibility = View.INVISIBLE
-                    val error = it.error as ErrorResponce
+                    val error = it.error as ErrorResponse
                     DialogUtils.errorAlert(
                         this,
                         getString(R.string.error_occurred),
@@ -284,7 +283,7 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
                 }
                 NetworkStatus.EXPIRE -> {
                     authBinding.authProgressBar.visibility = View.INVISIBLE
-                    val error = it.error as ErrorResponce
+                    val error = it.error as ErrorResponse
                     DialogUtils.errorAlert(
                         this,
                         getString(R.string.error_occurred),
@@ -293,7 +292,7 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
                 }
                 NetworkStatus.ERROR -> {
                     authBinding.authProgressBar.visibility = View.INVISIBLE
-                    val error = it.error as ErrorResponce
+                    val error = it.error as ErrorResponse
                     DialogUtils.errorAlert(
                         this,
                         getString(R.string.error_occurred),
@@ -320,7 +319,7 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
                 }
                 NetworkStatus.EXPIRE -> {
                     authBinding.authProgressBar.visibility = View.INVISIBLE
-                    val error = it.error as ErrorResponce
+                    val error = it.error as ErrorResponse
                     DialogUtils.errorAlert(
                         this,
                         getString(R.string.error_occurred),
@@ -329,7 +328,7 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
                 }
                 NetworkStatus.ERROR -> {
                     authBinding.authProgressBar.visibility = View.INVISIBLE
-                    val error = it.error as ErrorResponce
+                    val error = it.error as ErrorResponse
                     DialogUtils.errorAlert(
                         this,
                         getString(R.string.error_occurred),
@@ -367,7 +366,7 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
                     }
                     NetworkStatus.EXPIRE -> {
                         authBinding.authProgressBar.visibility = View.INVISIBLE
-                        val error = it.error as ErrorResponce
+                        val error = it.error as ErrorResponse
                         DialogUtils.errorAlert(
                             this,
                             getString(R.string.error_occurred),
@@ -376,7 +375,7 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
                     }
                     NetworkStatus.ERROR -> {
                         authBinding.authProgressBar.visibility = View.INVISIBLE
-                        val error = it.error as ErrorResponce
+                        val error = it.error as ErrorResponse
                         DialogUtils.errorAlert(
                             this,
                             getString(R.string.error_occurred),
@@ -405,7 +404,7 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
                 }
                 NetworkStatus.EXPIRE -> {
                     authBinding.authProgressBar.visibility = View.INVISIBLE
-                    val error = it.error as ErrorResponce
+                    val error = it.error as ErrorResponse
                     DialogUtils.errorAlert(
                         this,
                         getString(R.string.error_occurred),
@@ -414,7 +413,7 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
                 }
                 NetworkStatus.ERROR -> {
                     authBinding.authProgressBar.visibility = View.INVISIBLE
-                    val error = it.error as ErrorResponce
+                    val error = it.error as ErrorResponse
                     DialogUtils.errorAlert(
                         this,
                         getString(R.string.error_occurred),

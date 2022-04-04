@@ -1,14 +1,12 @@
 package com.techswivel.qthemusic.dataManager
+
 import com.techswivel.qthemusic.BuildConfig
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.application.QTheMusicApplication
 import com.techswivel.qthemusic.constant.Constants
+import com.techswivel.qthemusic.customData.enums.CategoryType
 import com.techswivel.qthemusic.dataManager.DummyDataManager.Companion.getDummyAuthDetails
 import com.techswivel.qthemusic.dataManager.DummyDataManager.Companion.getResponseDummyData
-import com.techswivel.qthemusic.dataManager.DummyDataManager.Companion.getUserLoginDummyData
-import com.techswivel.qthemusic.dataManager.DummyDataManager.Companion.getUserOtpDummyData
-import com.techswivel.qthemusic.dataManager.DummyDataManager.Companion.getVerifyOtpDummyData
-import com.techswivel.qthemusic.dataManager.DummyDataManager.Companion.newPasswordOtpDummyData
 import com.techswivel.qthemusic.models.*
 import com.techswivel.qthemusic.source.remote.retrofit.ApiService
 import io.reactivex.Observable
@@ -17,11 +15,34 @@ import io.reactivex.schedulers.Schedulers
 import retrofit2.Response
 
 
-object RemoteDataManager : BaseDataManager(), RemoteDataMangerImp {
+object RemoteDataManager : BaseDataManager(), RemoteDataManagerImp {
 
     private lateinit var data: GoogleAuthModel
 
-    // Remote calls
+    override fun getRecommendedSongsData(recommendedSongsBodyModel: RecommendedSongsBodyModel): Observable<Response<ResponseMain>> {
+        return Observable.create { observer ->
+            // observer.onError(Throwable("This is dummy thorwable if you want to test failed case."))
+            observer.onNext(getResponseDummyData())
+            observer.onComplete()
+        }
+    }
+
+    override fun getCategoriesData(categoryType: CategoryType): Observable<Response<ResponseMain>> {
+        return Observable.create { observer ->
+            // observer.onError(Throwable("This is dummy thorwable if you want to test failed case."))
+            observer.onNext(getResponseDummyData())
+            observer.onComplete()
+        }
+    }
+
+    override fun getSongsData(songsBodyModel: SongsBodyModel): Observable<Response<ResponseMain>> {
+        return Observable.create { observer ->
+            // observer.onError(Throwable("This is dummy thorwable if you want to test failed case."))
+            observer.onNext(getResponseDummyData())
+            observer.onComplete()
+        }
+    }
+
     override fun getGoogleAccessToken(serverAuthCode: String): Observable<Response<GoogleResponseModel>> {
 
         when {
@@ -77,6 +98,7 @@ object RemoteDataManager : BaseDataManager(), RemoteDataMangerImp {
         return ApiService.getGoogleResponse().getGoogleToken(data).subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
     }
+
     override fun userLogin(authRequestBuilder: AuthRequestModel): Observable<Response<ResponseMain>> {
         return Observable.create { observer ->
             observer.onNext(getResponseDummyData())
@@ -99,7 +121,7 @@ object RemoteDataManager : BaseDataManager(), RemoteDataMangerImp {
     }
 
     override fun setNewPassword(authRequestModel: AuthRequestModel): Observable<Response<ResponseMain>> {
-        return Observable.create{observer->
+        return Observable.create { observer ->
             observer.onNext(getResponseDummyData())
             observer.onComplete()
         }
