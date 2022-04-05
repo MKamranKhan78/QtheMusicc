@@ -23,14 +23,12 @@ import com.google.android.gms.tasks.Task
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.application.QTheMusicApplication
 import com.techswivel.qthemusic.constant.Constants
-import com.techswivel.qthemusic.customData.enums.LoginType
-import com.techswivel.qthemusic.customData.enums.NetworkStatus
-import com.techswivel.qthemusic.customData.enums.OtpType
-import com.techswivel.qthemusic.customData.enums.SocialSites
+import com.techswivel.qthemusic.customData.enums.*
 import com.techswivel.qthemusic.databinding.ActivityAuthBinding
 import com.techswivel.qthemusic.models.*
 import com.techswivel.qthemusic.source.local.preference.PrefUtils
 import com.techswivel.qthemusic.source.remote.networkViewModel.AuthNetworkViewModel
+import com.techswivel.qthemusic.source.remote.networkViewModel.SongAndArtistsViewModel
 import com.techswivel.qthemusic.ui.activities.mainActivity.MainActivity
 import com.techswivel.qthemusic.ui.base.BaseActivity
 import com.techswivel.qthemusic.ui.fragments.forgotPasswordFragment.ForgotPassword
@@ -50,6 +48,7 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
     private lateinit var googleSinInClient: GoogleSignInClient
     lateinit var authNetworkViewModel: AuthNetworkViewModel
     private lateinit var mAuthActivityViewModel: AuthActivityViewModel
+    private lateinit var mSongAndArtistViewModel: SongAndArtistsViewModel
     private lateinit var callbackManager: CallbackManager
     private lateinit var loginManager: LoginManager
     private lateinit var authModelBilder: AuthRequestBuilder
@@ -59,6 +58,7 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
         authBinding = ActivityAuthBinding.inflate(layoutInflater)
         authNetworkViewModel = ViewModelProvider(this).get(AuthNetworkViewModel::class.java)
         mAuthActivityViewModel = ViewModelProvider(this).get(AuthActivityViewModel::class.java)
+        mSongAndArtistViewModel = ViewModelProvider(this).get(SongAndArtistsViewModel::class.java)
         setAutNetworkViewModelObservers()
         authModelBilder = AuthRequestBuilder()
         replaceFragmentWithoutAddingToBackStack(R.id.auth_container, SignInFragment())
@@ -115,11 +115,11 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
     }
 
     override fun showProgressBar() {
-
+        authBinding.authProgressBar.visibility = View.VISIBLE
     }
 
     override fun hideProgressBar() {
-
+        authBinding.authProgressBar.visibility = View.INVISIBLE
     }
 
     override fun replaceCurrentFragment(fragment: Fragment) {
@@ -154,8 +154,13 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
         signInFacebook()
     }
 
-    override fun userSignUp() {
+    override fun userSignUp(authRequestBuilder: AuthRequestModel) {
 
+    }
+
+    override fun getCategories(categoryType: CategoryType) {
+        Log.d(TAG,"getCategories called")
+        mSongAndArtistViewModel.getCategoriesDataFromServer(categoryType)
     }
 
     private fun handleGoogleSignInResult(completedTask: Task<GoogleSignInAccount>) {
@@ -209,16 +214,50 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
 
 
     private fun setAutNetworkViewModelObservers() {
+        mSongAndArtistViewModel.categoriesResponse.observe(this, Observer {
+            when (it.status) {
+                NetworkStatus.LOADING -> {
+                    showProgressBar()
+                    Log.d(TAG,"Loading")
+                }
+                NetworkStatus.SUCCESS -> {
+                    hideProgressBar()
+                    val mResponseModel = it.t as ResponseModel
+                    val userData = mResponseModel.data.category
+                    Log.d(TAG, "categories list is $userData")
+                }
+                NetworkStatus.ERROR -> {
+                    hideProgressBar()
+                    val error = it.error as ErrorResponse
+                    DialogUtils.errorAlert(
+                        this,
+                        getString(R.string.error_occurred),
+                        error.message
+                    )
+                }
+                NetworkStatus.EXPIRE -> {
+                    hideProgressBar()
+                    val error = it.error as ErrorResponse
+                    DialogUtils.errorAlert(
+                        this,
+                        getString(R.string.error_occurred),
+                        error.message
+                    )
+                }
+                NetworkStatus.COMPLETED -> {
+                }
+            }
+        })
 
         authNetworkViewModel.signinUserResponse.observe(this, Observer {
             when (it.status) {
                 NetworkStatus.LOADING -> {
-                    authBinding.authProgressBar.visibility = View.VISIBLE
+                    showProgressBar()
                 }
                 NetworkStatus.SUCCESS -> {
-                    authBinding.authProgressBar.visibility = View.INVISIBLE
+                    hideProgressBar()
                     val mResponseModel = it.t as ResponseModel
-                    val userData = mResponseModel.data?.authModel
+                    val userData = mResponseModel.data.authModel
                     val userName = userData?.name
                     val userProfile = userData?.avatar
                     val userEmail = userData?.email
@@ -231,13 +270,13 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
                     if (isInterestSet != null) {
                         PrefUtils.setBoolean(this, CommonKeys.KEY_IS_INTEREST_SET, isInterestSet)
                     }
-                    PrefUtils.setBoolean(this,CommonKeys.KEY_IS_LOGGED_IN,true)
+                    PrefUtils.setBoolean(this, CommonKeys.KEY_IS_LOGGED_IN, true)
                     val intent = Intent(this@AuthActivity, MainActivity::class.java)
                     startActivity(intent)
                     finish()
                 }
                 NetworkStatus.ERROR -> {
-                    authBinding.authProgressBar.visibility = View.INVISIBLE
+                    hideProgressBar()
                     val error = it.error as ErrorResponse
                     DialogUtils.errorAlert(
                         this,
@@ -246,7 +285,7 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
                     )
                 }
                 NetworkStatus.EXPIRE -> {
-                    authBinding.authProgressBar.visibility = View.INVISIBLE
+                    hideProgressBar()
                     val error = it.error as ErrorResponse
                     DialogUtils.errorAlert(
                         this,
@@ -261,11 +300,10 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
         authNetworkViewModel.googleSignResponse.observe(this, Observer {
             when (it.status) {
                 NetworkStatus.LOADING -> {
-                    authBinding.authProgressBar.visibility = View.VISIBLE
+                    showProgressBar()
                 }
                 NetworkStatus.SUCCESS -> {
-                    authBinding.authProgressBar.visibility = View.INVISIBLE
-
+                    hideProgressBar()
                     val data = it.t as GoogleResponseModel
                     if (data.accessToken != null) {
 
@@ -283,7 +321,7 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
                     }
                 }
                 NetworkStatus.EXPIRE -> {
-                    authBinding.authProgressBar.visibility = View.INVISIBLE
+                    hideProgressBar()
                     val error = it.error as ErrorResponse
                     DialogUtils.errorAlert(
                         this,
@@ -292,7 +330,7 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
                     )
                 }
                 NetworkStatus.ERROR -> {
-                    authBinding.authProgressBar.visibility = View.INVISIBLE
+                    hideProgressBar()
                     val error = it.error as ErrorResponse
                     DialogUtils.errorAlert(
                         this,
@@ -305,10 +343,10 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
         authNetworkViewModel.forgotPasswordResponse.observe(this, Observer {
             when (it.status) {
                 NetworkStatus.LOADING -> {
-                    authBinding.authProgressBar.visibility = View.VISIBLE
+                    showProgressBar()
                 }
                 NetworkStatus.SUCCESS -> {
-                    authBinding.authProgressBar.visibility = View.INVISIBLE
+                    hideProgressBar()
                     val data = it.t as ResponseModel
                     val bundle = Bundle()
                     bundle.putString(CommonKeys.USER_EMAIL, mAuthActivityViewModel.userEmail)
@@ -319,7 +357,7 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
 
                 }
                 NetworkStatus.EXPIRE -> {
-                    authBinding.authProgressBar.visibility = View.INVISIBLE
+                    hideProgressBar()
                     val error = it.error as ErrorResponse
                     DialogUtils.errorAlert(
                         this,
@@ -328,7 +366,7 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
                     )
                 }
                 NetworkStatus.ERROR -> {
-                    authBinding.authProgressBar.visibility = View.INVISIBLE
+                    hideProgressBar()
                     val error = it.error as ErrorResponse
                     DialogUtils.errorAlert(
                         this,
@@ -344,10 +382,10 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
             Observer {
                 when (it.status) {
                     NetworkStatus.LOADING -> {
-                        authBinding.authProgressBar.visibility = View.VISIBLE
+                        showProgressBar()
                     }
                     NetworkStatus.SUCCESS -> {
-                        authBinding.authProgressBar.visibility = View.INVISIBLE
+                        hideProgressBar()
                         val data = it.t as ResponseModel
                         val bundle = Bundle()
                         bundle.putSerializable(
@@ -366,7 +404,7 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
 
                     }
                     NetworkStatus.EXPIRE -> {
-                        authBinding.authProgressBar.visibility = View.INVISIBLE
+                        hideProgressBar()
                         val error = it.error as ErrorResponse
                         DialogUtils.errorAlert(
                             this,
@@ -375,7 +413,7 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
                         )
                     }
                     NetworkStatus.ERROR -> {
-                        authBinding.authProgressBar.visibility = View.INVISIBLE
+                        hideProgressBar()
                         val error = it.error as ErrorResponse
                         DialogUtils.errorAlert(
                             this,
@@ -389,11 +427,11 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
         authNetworkViewModel.setPasswordResponse.observe(this, Observer {
             when (it.status) {
                 NetworkStatus.LOADING -> {
-                    authBinding.authProgressBar.visibility = View.VISIBLE
+                    showProgressBar()
                 }
                 NetworkStatus.SUCCESS -> {
-                    authBinding.authProgressBar.visibility = View.INVISIBLE
-                    PrefUtils.removeValue(this, CommonKeys.SIGNIN_BTN_ANIMATION)
+                    hideProgressBar()
+                    PrefUtils.removeValue (this, CommonKeys.SIGNIN_BTN_ANIMATION)
                     val data = it.t as ResponseModel
                     if (mAuthActivityViewModel.fragmentFlow == OtpType.FORGET_PASSWORD.name) {
                         replaceCurrentFragment(SignInFragment())
@@ -404,7 +442,7 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
                     }
                 }
                 NetworkStatus.EXPIRE -> {
-                    authBinding.authProgressBar.visibility = View.INVISIBLE
+                    hideProgressBar()
                     val error = it.error as ErrorResponse
                     DialogUtils.errorAlert(
                         this,
@@ -413,7 +451,7 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
                     )
                 }
                 NetworkStatus.ERROR -> {
-                    authBinding.authProgressBar.visibility = View.INVISIBLE
+                    hideProgressBar()
                     val error = it.error as ErrorResponse
                     DialogUtils.errorAlert(
                         this,

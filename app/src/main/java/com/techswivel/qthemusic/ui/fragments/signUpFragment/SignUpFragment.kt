@@ -13,16 +13,18 @@ import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.application.QTheMusicApplication
 import com.techswivel.qthemusic.databinding.FragmentSignUpBinding
 import com.techswivel.qthemusic.models.AuthModel
+import com.techswivel.qthemusic.ui.activities.authActivity.AuthActivityImp
 import com.techswivel.qthemusic.ui.activities.profileSettingScreen.ProfileSettingActivityImpl
 import com.techswivel.qthemusic.ui.base.BaseFragment
 import com.techswivel.qthemusic.ui.dialogFragments.chooserDialogFragment.ChooserDialogFragment
 import com.techswivel.qthemusic.ui.dialogFragments.genderDialogFragment.GenderSelectionDialogFragment
 import com.techswivel.qthemusic.ui.dialogFragments.whyWeAreAskingDialogFragment.WhyWeAreAskingDialogFragment
+import com.techswivel.qthemusic.ui.fragments.yourInterestFragment.YourInterestFragment
 import com.techswivel.qthemusic.utils.CommonKeys
 import com.techswivel.qthemusic.utils.Log
 import com.techswivel.qthemusic.utils.Utilities
 
-class SignUpFragment : BaseFragment(),SignUpFragmentImp{
+class SignUpFragment : BaseFragment(), SignUpFragmentImp, ChooserDialogFragment.CallBack {
     companion object {
         private const val TAG = "SignUpFragment"
     }
@@ -63,8 +65,9 @@ class SignUpFragment : BaseFragment(),SignUpFragmentImp{
                 { view, year, month, dayOfMonth ->
                     // change date into millis
 
-                    Log.d(TAG, "date is $year $month $dayOfMonth")
-                    signUpBinding.etUserDob.setText("$year $month $dayOfMonth")
+                    Log.d(TAG, "date is $year ${month.plus(1)} $dayOfMonth")
+
+                    signUpBinding.etUserDob.setText("$dayOfMonth ${getMonths(month.plus(1))} $year")
                 },
                 year,
                 month,
@@ -77,18 +80,16 @@ class SignUpFragment : BaseFragment(),SignUpFragmentImp{
 
         }
         signUpBinding.genderView.setOnClickListener {
-            GenderSelectionDialogFragment.newInstance(this,).show(parentFragmentManager,TAG)
+            GenderSelectionDialogFragment.newInstance(this).show(parentFragmentManager, TAG)
         }
 
         signUpBinding.profileImgSection.setOnClickListener {
-          ChooserDialogFragment.newInstance(CommonKeys.TYPE_PHOTO,object :ChooserDialogFragment.CallBack{
-              override fun onActivityResult(mImageUri: List<Uri>?) {
-                  Log.d(TAG,"Uri is ${mImageUri}")
-              }
-          }).show(parentFragmentManager, TAG)
+            val fragmentTransaction = requireActivity().supportFragmentManager.beginTransaction()
+            val dialogFragment = ChooserDialogFragment.newInstance(CommonKeys.TYPE_PHOTO, this)
+            dialogFragment.show(fragmentTransaction, "TAG")
         }
         signUpBinding.tvLetGoProfileBtn.setOnClickListener {
-
+            (mActivityListener as AuthActivityImp).replaceCurrentFragment(YourInterestFragment())
         }
     }
 
@@ -116,4 +117,35 @@ class SignUpFragment : BaseFragment(),SignUpFragmentImp{
 
     }
 
+    override fun onActivityResult(mImageUri: List<Uri>?) {
+        Log.d(TAG, "uri is $mImageUri")
+    }
+
+    fun getMonths(int: Int): String {
+        val myData=int
+
+        Log.d(TAG,"myData is $myData")
+        val data = listOf<String>(
+            "January",
+            "February",
+            "March",
+            "April",
+            "May",
+            "June",
+            "July",
+            "August",
+            "September",
+            "October",
+            "November",
+            "December"
+        )
+        if (int==12){
+
+            return data[int.minus(1)]
+        }else{
+            Log.d(TAG,"else data is $int")
+            return data[int.minus(1)]
+        }
+
+    }
 }

@@ -1,6 +1,7 @@
 package com.techswivel.qthemusic.ui.activities.authActivity
 
 import androidx.fragment.app.Fragment
+import com.techswivel.qthemusic.customData.enums.CategoryType
 import com.techswivel.qthemusic.customData.interfaces.BaseInterface
 import com.techswivel.qthemusic.models.AuthModel
 import com.techswivel.qthemusic.models.AuthRequestModel
@@ -23,5 +24,6 @@ interface AuthActivityImp : BaseInterface {
     fun popUpToAllFragments(fragment: Fragment)
     fun signInWithGoogle()
     fun signInWithFacebook()
-    fun userSignUp()
+    fun userSignUp(authRequestBuilder: AuthRequestModel)
+    fun getCategories(categoryType: CategoryType)
 }

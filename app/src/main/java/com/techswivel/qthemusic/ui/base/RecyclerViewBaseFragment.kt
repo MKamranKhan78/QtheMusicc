@@ -62,7 +62,7 @@ abstract class RecyclerViewBaseFragment : BaseFragment() {
         numColums: Int,
         verticalSpacing: Int,
         horizentalSpacing: Int,
-        adapterType: AdapterType?
+        adapterType: AdapterType?,
     ) {
 
         pRecyclerView.layoutManager = GridLayoutManager(requireContext(), numColums)
@@ -97,4 +97,5 @@ abstract class RecyclerViewBaseFragment : BaseFragment() {
     }
 
     protected abstract fun onPrepareAdapter(adapterType: AdapterType?): RecyclerView.Adapter<*>
+
 }
