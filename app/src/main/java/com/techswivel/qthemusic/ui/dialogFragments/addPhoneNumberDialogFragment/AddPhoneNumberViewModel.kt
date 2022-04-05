@@ -1,4 +1,4 @@
-package com.techswivel.qthemusic.ui.fragments.addPhoneNumberDialogFragment
+package com.techswivel.qthemusic.ui.dialogFragments.addPhoneNumberDialogFragment
 
 import com.techswivel.qthemusic.models.AuthModel
 import com.techswivel.qthemusic.ui.base.BaseViewModel

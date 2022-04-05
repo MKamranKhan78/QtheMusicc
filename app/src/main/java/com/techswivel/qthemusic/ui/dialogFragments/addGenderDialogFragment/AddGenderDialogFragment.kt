@@ -1,4 +1,4 @@
-package com.techswivel.qthemusic.ui.fragments.addGenderDialogFragment
+package com.techswivel.qthemusic.ui.dialogFragments.addGenderDialogFragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
+import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.application.QTheMusicApplication
 import com.techswivel.qthemusic.customData.enums.GenderType
 import com.techswivel.qthemusic.customData.enums.NetworkStatus
@@ -101,7 +102,7 @@ class AddGenderDialogFragment : BaseDialogFragment(), BaseInterface {
                     dismiss()
                     Toast.makeText(
                         QTheMusicApplication.getContext(),
-                        "gender successfully updated.",
+                        getString(R.string.gender_successfully_updated),
                         Toast.LENGTH_SHORT
                     ).show()
                 }

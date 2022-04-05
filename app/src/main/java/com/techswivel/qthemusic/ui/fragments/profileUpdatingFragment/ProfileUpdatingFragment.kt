@@ -28,11 +28,11 @@ import com.techswivel.qthemusic.source.local.preference.PrefUtils
 import com.techswivel.qthemusic.source.remote.networkViewModel.AuthNetworkViewModel
 import com.techswivel.qthemusic.ui.activities.profileSettingScreen.ProfileSettingActivityImpl
 import com.techswivel.qthemusic.ui.base.BaseFragment
+import com.techswivel.qthemusic.ui.dialogFragments.addAddressDialogFragment.AddAddressDialogFragment
+import com.techswivel.qthemusic.ui.dialogFragments.addGenderDialogFragment.AddGenderDialogFragment
+import com.techswivel.qthemusic.ui.dialogFragments.addNameDialogFragment.AddNameDialogFragment
+import com.techswivel.qthemusic.ui.dialogFragments.addPhoneNumberDialogFragment.AddPhoneNumberDialogFragment
 import com.techswivel.qthemusic.ui.dialogFragments.chooserDialogFragment.ChooserDialogFragment
-import com.techswivel.qthemusic.ui.fragments.addAddressDialogFragment.AddAddressDialogFragment
-import com.techswivel.qthemusic.ui.fragments.addGenderDialogFragment.AddGenderDialogFragment
-import com.techswivel.qthemusic.ui.fragments.addNameDialogFragment.AddNameDialogFragment
-import com.techswivel.qthemusic.ui.fragments.addPhoneNumberDialogFragment.AddPhoneNumberDialogFragment
 import com.techswivel.qthemusic.utils.CommonKeys
 import com.techswivel.qthemusic.utils.CommonKeys.Companion.KEY_USER_DOB
 import com.techswivel.qthemusic.utils.CommonKeys.Companion.KEY_USER_PHONE

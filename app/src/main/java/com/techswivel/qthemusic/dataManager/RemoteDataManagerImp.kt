@@ -1,6 +1,7 @@
 package com.techswivel.qthemusic.dataManager
 
 import com.techswivel.qthemusic.customData.enums.CategoryType
+import com.techswivel.qthemusic.customData.enums.OtpType
 import com.techswivel.qthemusic.models.*
 import io.reactivex.Observable
 import retrofit2.Response
@@ -17,4 +18,11 @@ interface RemoteDataManagerImp {
     fun sendOtp(authRequestModel: AuthRequestModel): Observable<Response<ResponseMain>>
     fun verifyOtpRequest(authRequestModel: AuthRequestModel): Observable<Response<ResponseMain>>
     fun setNewPassword(authRequestModel: AuthRequestModel): Observable<Response<ResponseMain>>
+    fun sendOTP(email: String): Observable<Response<ResponseMain>>
+    fun sendOtp(
+        otpType: OtpType?,
+        email: String?,
+        phoneNumber: String?
+    ): Observable<Response<ResponseMain>>
+
 }

@@ -1,4 +1,4 @@
-package com.techswivel.qthemusic.ui.fragments.addPhoneNumberDialogFragment
+package com.techswivel.qthemusic.ui.dialogFragments.addPhoneNumberDialogFragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import com.rilixtech.widget.countrycodepicker.CountryCodePicker
+import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.application.QTheMusicApplication
 import com.techswivel.qthemusic.customData.enums.NetworkStatus
 import com.techswivel.qthemusic.customData.enums.OtpType
@@ -75,7 +76,7 @@ class AddPhoneNumberDialogFragment : BaseDialogFragment(), BaseInterface {
                     dismiss()
                     Toast.makeText(
                         QTheMusicApplication.getContext(),
-                        "Otp sent successfully",
+                        getString(R.string.otp_send_successfully),
                         Toast.LENGTH_SHORT
                     ).show()
 
@@ -140,10 +141,10 @@ class AddPhoneNumberDialogFragment : BaseDialogFragment(), BaseInterface {
                     authRequestData.phoneNumber = viewModel.number
                     mAuthNetworkViewModel.sendOtpRequest(AuthRequestBuilder.builder(authRequestData))
                 } else {
-                    mBinding.edtPhone.error = "Please enter a valid phone number"
+                    mBinding.edtPhone.error = getString(R.string.enter_valid_no)
                 }
             } else {
-                mBinding.edtPhone.error = "Please enter phone number"
+                mBinding.edtPhone.error = getString(R.string.enter_no)
             }
         }
     }

@@ -1,4 +1,4 @@
-package com.techswivel.qthemusic.ui.fragments.addNameDialogFragment
+package com.techswivel.qthemusic.ui.dialogFragments.addNameDialogFragment
 
 import com.techswivel.qthemusic.models.AuthModel
 import com.techswivel.qthemusic.ui.base.BaseViewModel

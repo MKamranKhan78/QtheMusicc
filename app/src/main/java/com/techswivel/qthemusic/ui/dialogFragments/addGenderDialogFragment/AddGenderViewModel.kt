@@ -1,4 +1,4 @@
-package com.techswivel.qthemusic.ui.fragments.addGenderDialogFragment
+package com.techswivel.qthemusic.ui.dialogFragments.addGenderDialogFragment
 
 import com.techswivel.qthemusic.customData.enums.GenderType
 import com.techswivel.qthemusic.models.AuthModel

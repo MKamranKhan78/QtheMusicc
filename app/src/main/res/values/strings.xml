@@ -148,4 +148,15 @@
     <string name="channel_desc">channel_desc</string>
     <string name="str_empty">Empty</string>
     <string name="str_filled">Filled</string>
+    <string name="address_required">Address is required</string>
+    <string name="city_required">City is required</string>
+    <string name="state_required">State is required</string>
+    <string name="country_required">Country is required</string>
+    <string name="zipcode_required">Zipcode is required</string>
+    <string name="address_successfully_updated">Address successfully updated</string>
+    <string name="gender_successfully_updated">Gender successfully updated</string>
+    <string name="name_successfully_updated">Name successfully updated</string>
+    <string name="otp_send_successfully">Otp send successfully</string>
+    <string name="enter_valid_no">Please enter a valid phone number</string>
+    <string name="enter_no">Please enter phone number</string>
 </resources>

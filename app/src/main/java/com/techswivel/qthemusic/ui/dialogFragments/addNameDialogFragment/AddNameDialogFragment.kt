@@ -1,4 +1,4 @@
-package com.techswivel.qthemusic.ui.fragments.addNameDialogFragment
+package com.techswivel.qthemusic.ui.dialogFragments.addNameDialogFragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
+import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.application.QTheMusicApplication
 import com.techswivel.qthemusic.customData.enums.NetworkStatus
 import com.techswivel.qthemusic.customData.interfaces.BaseInterface
@@ -79,7 +80,7 @@ class AddNameDialogFragment : BaseDialogFragment(), BaseInterface {
                     dismiss()
                     Toast.makeText(
                         QTheMusicApplication.getContext(),
-                        "name successfully updated.",
+                        getString(R.string.name_successfully_updated),
                         Toast.LENGTH_SHORT
                     ).show()
                 }

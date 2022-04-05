@@ -1,4 +1,4 @@
-package com.techswivel.qthemusic.ui.fragments.addAddressDialogFragment
+package com.techswivel.qthemusic.ui.dialogFragments.addAddressDialogFragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
+import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.application.QTheMusicApplication
 import com.techswivel.qthemusic.customData.enums.NetworkStatus
 import com.techswivel.qthemusic.customData.interfaces.BaseInterface
@@ -113,26 +114,26 @@ class AddAddressDialogFragment : BaseDialogFragment(), BaseInterface {
 
     private fun checkAllFields(): Boolean {
         if (mBinding.etAddressId.length() == 0) {
-            mBinding.etAddressId.setError("Address is required")
+            mBinding.etAddressId.setError(getString(R.string.address_required))
             return false
         }
         if (mBinding.edCityId.length() == 0) {
-            mBinding.edCityId.setError("City is required")
+            mBinding.edCityId.setError(getString(R.string.city_required))
             return false
         }
 
         if (mBinding.etStateId.length() == 0) {
-            mBinding.etStateId.setError("State is required")
+            mBinding.etStateId.setError(getString(R.string.state_required))
             return false
         }
 
         if (mBinding.etCountryId.length() == 0) {
-            mBinding.etCountryId.setError("Country is required")
+            mBinding.etCountryId.setError(getString(R.string.country_required))
             return false
         }
 
         if (mBinding.etZipcodeId.length() == 0) {
-            mBinding.etZipcodeId.setError("Zipcode is required")
+            mBinding.etZipcodeId.setError(getString(R.string.zipcode_required))
             return false
         }
 
@@ -159,7 +160,7 @@ class AddAddressDialogFragment : BaseDialogFragment(), BaseInterface {
                     dismiss()
                     Toast.makeText(
                         QTheMusicApplication.getContext(),
-                        "adress successfully updated.",
+                        getString(R.string.address_successfully_updated),
                         Toast.LENGTH_SHORT
                     ).show()
                 }
