@@ -20,7 +20,6 @@ abstract class BaseActivity : AppCompatActivity() {
 
     private val fragmentManager = supportFragmentManager
     private lateinit var connectionLiveData: NetworkChangeReceiver
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         connectionLiveData = NetworkChangeReceiver(this)

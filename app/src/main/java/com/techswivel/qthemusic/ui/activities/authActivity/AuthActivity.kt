@@ -35,6 +35,8 @@ import com.techswivel.qthemusic.ui.fragments.forgotPasswordFragment.ForgotPasswo
 import com.techswivel.qthemusic.ui.fragments.otpVerificationFragment.OtpVerification
 import com.techswivel.qthemusic.ui.fragments.setPasswordFragmetnt.SetPassword
 import com.techswivel.qthemusic.ui.fragments.signInFragment.SignInFragment
+import com.techswivel.qthemusic.ui.fragments.yourInterestFragment.YourInterestFragment
+import com.techswivel.qthemusic.ui.fragments.yourInterestFragment.YourInterestImp
 import com.techswivel.qthemusic.utils.CommonKeys
 import com.techswivel.qthemusic.utils.DialogUtils
 import com.techswivel.qthemusic.utils.Log
@@ -52,7 +54,7 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
     private lateinit var callbackManager: CallbackManager
     private lateinit var loginManager: LoginManager
     private lateinit var authModelBilder: AuthRequestBuilder
-
+    private lateinit var mFragment: Fragment
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         authBinding = ActivityAuthBinding.inflate(layoutInflater)
@@ -69,14 +71,13 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
 
         callbackManager = CallbackManager.Factory.create()
         loginManager = LoginManager.getInstance()
-
         return super.onCreateView(name, context, attrs)
 
     }
 
     @SuppressLint("MissingSuperCall")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-
+        super.onActivityResult(requestCode, resultCode, data)
         callbackManager.onActivityResult(
             requestCode,
             resultCode,
@@ -85,6 +86,17 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
         if (requestCode == Constants.GOOGLE_SIGN_IN_REQUEST_CODE) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             handleGoogleSignInResult(task)
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (::mFragment.isInitialized){
+            mFragment.onRequestPermissionsResult(requestCode, permissions, grantResults)
         }
     }
 
@@ -123,6 +135,8 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
     }
 
     override fun replaceCurrentFragment(fragment: Fragment) {
+        mAuthActivityViewModel.instance = fragment
+        mFragment = fragment
         replaceFragment(R.id.auth_container, fragment)
     }
 
@@ -155,11 +169,12 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
     }
 
     override fun userSignUp(authRequestBuilder: AuthRequestModel) {
+        authNetworkViewModel.userSingUp(authRequestBuilder)
 
     }
 
     override fun getCategories(categoryType: CategoryType) {
-        Log.d(TAG,"getCategories called")
+        Log.d(TAG, "getCategories called")
         mSongAndArtistViewModel.getCategoriesDataFromServer(categoryType)
     }
 
@@ -218,13 +233,22 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
             when (it.status) {
                 NetworkStatus.LOADING -> {
                     showProgressBar()
-                    Log.d(TAG,"Loading")
+                    Log.d(TAG, "Loading")
                 }
                 NetworkStatus.SUCCESS -> {
                     hideProgressBar()
                     val mResponseModel = it.t as ResponseModel
                     val userData = mResponseModel.data.category
-                    Log.d(TAG, "categories list is $userData")
+                    Utilities.showToast(this, "success")
+                    try {
+                        (mAuthActivityViewModel.instance as YourInterestImp).getCategoriesResponse(
+                            userData
+                        )
+                    } catch (e: Exception) {
+                        Log.d(TAG, "YourInterest Bug ${e.message}")
+                    }
+
+
                 }
                 NetworkStatus.ERROR -> {
                     hideProgressBar()
@@ -431,7 +455,7 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
                 }
                 NetworkStatus.SUCCESS -> {
                     hideProgressBar()
-                    PrefUtils.removeValue (this, CommonKeys.SIGNIN_BTN_ANIMATION)
+                    PrefUtils.removeValue(this, CommonKeys.SIGNIN_BTN_ANIMATION)
                     val data = it.t as ResponseModel
                     if (mAuthActivityViewModel.fragmentFlow == OtpType.FORGET_PASSWORD.name) {
                         replaceCurrentFragment(SignInFragment())
@@ -440,6 +464,36 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
                     } else {
                         Utilities.showToast(this, "signup flow")
                     }
+                }
+                NetworkStatus.EXPIRE -> {
+                    hideProgressBar()
+                    val error = it.error as ErrorResponse
+                    DialogUtils.errorAlert(
+                        this,
+                        getString(R.string.error_occurred),
+                        error.message
+                    )
+                }
+                NetworkStatus.ERROR -> {
+                    hideProgressBar()
+                    val error = it.error as ErrorResponse
+                    DialogUtils.errorAlert(
+                        this,
+                        getString(R.string.error_occurred),
+                        error.message
+                    )
+                }
+            }
+        })
+        authNetworkViewModel.userSignupResponse.observe(this, Observer {
+            when (it.status) {
+                NetworkStatus.LOADING -> {
+                    showProgressBar()
+                }
+                NetworkStatus.SUCCESS -> {
+                    hideProgressBar()
+                    val data = it.t as ResponseModel
+                    replaceCurrentFragment(YourInterestFragment())
                 }
                 NetworkStatus.EXPIRE -> {
                     hideProgressBar()

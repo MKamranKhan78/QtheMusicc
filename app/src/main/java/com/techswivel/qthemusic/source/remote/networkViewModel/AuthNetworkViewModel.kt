@@ -23,6 +23,10 @@ class AuthNetworkViewModel : BaseViewModel() {
     var forgotPasswordResponse: MutableLiveData<ApiResponse> = MutableLiveData()
     var otpVerificationResponse:MutableLiveData<ApiResponse> = MutableLiveData()
     var setPasswordResponse: MutableLiveData<ApiResponse> = MutableLiveData()
+    var userSignupResponse:MutableLiveData<ApiResponse> = MutableLiveData()
+
+
+
 
     fun logoutUser() {
 
@@ -296,8 +300,34 @@ class AuthNetworkViewModel : BaseViewModel() {
             override fun onRequestComplete() {
 
             }
+        })
 
+    }
+    fun userSingUp(authRequestModel: AuthRequestModel) {
+        mRemoteDataManager.signUp(authRequestModel).doOnSubscribe {
+            userSignupResponse.value= ApiResponse.loading()
+        }.subscribe(object :CustomObserver<Response<ResponseMain>>(){
+            override fun onSuccess(t: Response<ResponseMain>) {
+                if (t.isSuccessful){
+                    userSignupResponse.value= ApiResponse.success(t.body()?.response)
+                }
+            }
 
+            override fun onError(e: Throwable, isInternetError: Boolean, error: CustomError?) {
+                userSignupResponse.value = ApiResponse.error(
+                    error?.code?.let { code ->
+                        ErrorResponse(
+                            false,
+                            error.message,
+                            code
+                        )
+                    }
+                )
+            }
+
+            override fun onRequestComplete() {
+
+            }
         })
 
     }

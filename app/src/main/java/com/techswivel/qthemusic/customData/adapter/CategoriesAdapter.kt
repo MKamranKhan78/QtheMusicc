@@ -8,7 +8,7 @@ import com.techswivel.qthemusic.databinding.YourInterestResviewLayoutBinding
 
 import com.techswivel.qthemusic.models.Category
 
-class CategoriesAdapter(val context: Context, val list: List<Category>) :
+class CategoriesAdapter(val context: Context, val list: List<Category>?) :
     RecyclerView.Adapter<CategoriesAdapter.MyViewHolder>() {
     inner class MyViewHolder(val binding: YourInterestResviewLayoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -23,12 +23,12 @@ class CategoriesAdapter(val context: Context, val list: List<Category>) :
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        val categoryList = list[position]
+        val categoryList = list?.get(position)
         holder.binding.myCategory = categoryList
     }
 
     override fun getItemCount(): Int {
-        return list.size
+        return list?.size ?: 0
     }
 
 }

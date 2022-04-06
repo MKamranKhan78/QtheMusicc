@@ -19,7 +19,8 @@ interface AuthActivityImp : BaseInterface {
     fun verifyOtpRequest(authRequestBuilder: AuthRequestModel)
 
     fun setPasswordRequest(
-        authRequestBuilder: AuthRequestModel)
+        authRequestBuilder: AuthRequestModel
+    )
 
     fun popUpToAllFragments(fragment: Fragment)
     fun signInWithGoogle()

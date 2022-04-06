@@ -25,7 +25,7 @@ class DummyDataManager {
             val address = Address("Mughalpura, Lahore", "Lahore", "Punjab", "Pakistan", 5552)
             val subscription = Subscription(0, "My Name Is Wasi", 1000000.00f, "1:25")
             val notification = Notification(false, false)
-            val authModel=AuthModel(
+            val authModel = AuthModel(
                 "Waseen Asghar",
                 "waseem.asghar@techswivel.com",
                 "myjwt",
@@ -144,14 +144,24 @@ class DummyDataManager {
                 Category(
                     2,
                     "https://cdn.lifehack.org/wp-content/uploads/2015/09/rock-music-wallpapers.jpg",
-                    "ROCK"
+                    "Punjabi"
                 ),
                 Category(
                     1,
                     "https://cdn5.vectorstock.com/i/1000x1000/77/09/colorful-detailed-pop-music-can-vector-19847709.jpg",
-                    "POP"
+                    "Classical"
                 ),
-                
+                Category(null, null, "Rock"),
+                Category(null, null, "Country"),
+                Category(null, null, "Metal"),
+                Category(null, null, "Latin"),
+                Category(null, null, "JAZZ"),
+                Category(null, null, "Folk music"),
+                Category(null, null, "Electronic"),
+                Category(null, null, "Reggae"),
+                Category(null, null, "Alternative"),
+                Category(null, null, "Electronica")
+
             )
         }
 

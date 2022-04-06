@@ -2,39 +2,50 @@ package com.techswivel.qthemusic.ui.fragments.signUpFragment
 
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.lifecycle.ViewModelProvider
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.application.QTheMusicApplication
 import com.techswivel.qthemusic.databinding.FragmentSignUpBinding
-import com.techswivel.qthemusic.models.AuthModel
+import com.techswivel.qthemusic.models.AuthRequestBuilder
 import com.techswivel.qthemusic.ui.activities.authActivity.AuthActivityImp
-import com.techswivel.qthemusic.ui.activities.profileSettingScreen.ProfileSettingActivityImpl
 import com.techswivel.qthemusic.ui.base.BaseFragment
 import com.techswivel.qthemusic.ui.dialogFragments.chooserDialogFragment.ChooserDialogFragment
 import com.techswivel.qthemusic.ui.dialogFragments.genderDialogFragment.GenderSelectionDialogFragment
 import com.techswivel.qthemusic.ui.dialogFragments.whyWeAreAskingDialogFragment.WhyWeAreAskingDialogFragment
-import com.techswivel.qthemusic.ui.fragments.yourInterestFragment.YourInterestFragment
-import com.techswivel.qthemusic.utils.CommonKeys
-import com.techswivel.qthemusic.utils.Log
-import com.techswivel.qthemusic.utils.Utilities
+import com.google.firebase.messaging.FirebaseMessaging
+import com.techswivel.qthemusic.models.AuthModelBuilder
+import com.techswivel.qthemusic.source.local.preference.PrefUtils
+import com.techswivel.qthemusic.utils.*
+import org.w3c.dom.Comment
+import java.io.IOException
 
-class SignUpFragment : BaseFragment(), SignUpFragmentImp, ChooserDialogFragment.CallBack {
+
+class SignUpFragment : BaseFragment(), SignUpFragmentImp {
     companion object {
         private const val TAG = "SignUpFragment"
     }
 
+    private lateinit var mSingUpViewModel: SignUpViewModel
+    private lateinit var mChooserFragment:ChooserDialogFragment
     private lateinit var signUpBinding: FragmentSignUpBinding
+
     var year: Int = 0
     var month: Int = 0
     var day: Int = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        mSingUpViewModel = ViewModelProvider(this).get(SignUpViewModel::class.java)
 
     }
 
@@ -45,7 +56,11 @@ class SignUpFragment : BaseFragment(), SignUpFragmentImp, ChooserDialogFragment.
         // Inflate the layout for this fragment
         signUpBinding = FragmentSignUpBinding.inflate(layoutInflater, container, false)
 
-
+        FirebaseMessaging.getInstance().token.addOnSuccessListener {
+            Log.d(TAG, "Token Is $it")
+        }.addOnFailureListener {
+            Log.d(TAG, "exception is $it")
+        }
         return signUpBinding.root
     }
 
@@ -55,10 +70,81 @@ class SignUpFragment : BaseFragment(), SignUpFragmentImp, ChooserDialogFragment.
         clickListeners()
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        mChooserFragment.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
+
+    private fun createUserAndCallApi(
+        name: String?,
+        email: String?,
+        password: String?,
+        dob: Int?,
+        gender: String?,
+        completeAddress: String?,
+        city: String?,
+        state: String?,
+        country: String?,
+        zipCode: Int?,
+        profile: String?,
+        socialId: String?,
+        fcmToken: String?,
+        deviceIdentifier: String?,
+    ) {
+        val authModelBilder = AuthRequestBuilder()
+        authModelBilder.name = name
+        authModelBilder.dob = dob
+        authModelBilder.gender = gender
+        authModelBilder.completeAddress = completeAddress
+        authModelBilder.city = city
+        authModelBilder.state = state
+        authModelBilder.country = country
+        authModelBilder.zipCode = zipCode
+        authModelBilder.profile = profile
+        authModelBilder.socialId = socialId
+        authModelBilder.email = email
+        authModelBilder.password = password
+        authModelBilder.fcmToken = fcmToken
+        authModelBilder.deviceIdentifier = deviceIdentifier
+        val authModel = AuthRequestBuilder.builder(authModelBilder)
+        (mActivityListener as AuthActivityImp).userSignUp(authModel)
+    }
 
     @SuppressLint("SetTextI18n")
     @RequiresApi(Build.VERSION_CODES.M)
     private fun clickListeners() {
+        signUpBinding.tvLetGoProfileBtn.setOnClickListener {
+            if (signUpBinding.etUserDob.text.toString().isNotEmpty()) {
+                createUserAndCallApi(
+                    signUpBinding.etUserDob.text.toString(),
+                    "",
+                    "",
+                    454545454,
+                    signUpBinding.etUserGender.text.toString(),
+                    signUpBinding.etUserAddress.text.toString(),
+                    signUpBinding.etUserCity.text.toString(),
+                    signUpBinding.etUserState.text.toString(),
+                    signUpBinding.etUserCountry.text.toString(),
+                    566565,
+                    "",
+                    "",
+                    "",
+                    requireContext().toDeviceIdentifier()
+                )
+            } else {
+                signUpBinding.etUserDob.error = "Date Of Birth Required"
+            }
+        }
+
+
         signUpBinding.dobView.setOnClickListener {
             val datePicker = DatePickerDialog(
                 requireContext(), R.style.MyDatePickerStyle,
@@ -84,12 +170,31 @@ class SignUpFragment : BaseFragment(), SignUpFragmentImp, ChooserDialogFragment.
         }
 
         signUpBinding.profileImgSection.setOnClickListener {
-            val fragmentTransaction = requireActivity().supportFragmentManager.beginTransaction()
-            val dialogFragment = ChooserDialogFragment.newInstance(CommonKeys.TYPE_PHOTO, this)
-            dialogFragment.show(fragmentTransaction, "TAG")
-        }
-        signUpBinding.tvLetGoProfileBtn.setOnClickListener {
-            (mActivityListener as AuthActivityImp).replaceCurrentFragment(YourInterestFragment())
+            mChooserFragment = ChooserDialogFragment.newInstance(CommonKeys.TYPE_PHOTO,object :ChooserDialogFragment.CallBack{
+                override fun onActivityResult(mImageUri: List<Uri>?) {
+                    Log.e(TAG,"Uri is $mImageUri")
+                    mSingUpViewModel.uri = mImageUri?.get(0)
+                    val contentURI = mSingUpViewModel.uri
+                    try {
+                        val bitmap = MediaStore.Images.Media.getBitmap(
+                            QTheMusicApplication.getContext().contentResolver,
+                            contentURI
+                        )
+                        signUpBinding.ivUserProfilePic.setImageBitmap(bitmap)
+                        mSingUpViewModel.uri = contentURI
+
+                    } catch (e: IOException) {
+                        e.printStackTrace()
+                        Toast.makeText(
+                            QTheMusicApplication.getContext(),
+                            "Failed!",
+                            Toast.LENGTH_SHORT
+                        )
+                            .show()
+                    }
+                }
+            })
+            mChooserFragment.show(childFragmentManager, ChooserDialogFragment::class.java.toString())
         }
     }
 
@@ -117,14 +222,7 @@ class SignUpFragment : BaseFragment(), SignUpFragmentImp, ChooserDialogFragment.
 
     }
 
-    override fun onActivityResult(mImageUri: List<Uri>?) {
-        Log.d(TAG, "uri is $mImageUri")
-    }
-
     fun getMonths(int: Int): String {
-        val myData=int
-
-        Log.d(TAG,"myData is $myData")
         val data = listOf<String>(
             "January",
             "February",
@@ -139,13 +237,37 @@ class SignUpFragment : BaseFragment(), SignUpFragmentImp, ChooserDialogFragment.
             "November",
             "December"
         )
-        if (int==12){
+        return data[int.minus(1)]
+    }
 
-            return data[int.minus(1)]
-        }else{
-            Log.d(TAG,"else data is $int")
-            return data[int.minus(1)]
-        }
+    private fun showPictureDialog() {
+        val fragment = ChooserDialogFragment.newInstance(CommonKeys.TYPE_PHOTO,
+            object : ChooserDialogFragment.CallBack {
+                override fun onActivityResult(mImageUri: List<Uri>?) {
+                    mSingUpViewModel.uri = mImageUri?.get(0)
+                    val contentURI = mSingUpViewModel.uri
+                    try {
+                        val bitmap = MediaStore.Images.Media.getBitmap(
+                            QTheMusicApplication.getContext().contentResolver,
+                            contentURI
+                        )
+                       signUpBinding.ivUserProfilePic.setImageBitmap(bitmap)
+                        mSingUpViewModel.uri = contentURI
 
+                    } catch (e: IOException) {
+                        e.printStackTrace()
+                        Toast.makeText(
+                            QTheMusicApplication.getContext(),
+                            "Failed!",
+                            Toast.LENGTH_SHORT
+                        )
+                            .show()
+                    }
+
+                    //mBinding.profilePic.setImageBitmap(viewModel.uri)
+                    Log.e(TAG, "onActivityResult: return URi = ${mImageUri.toString()}")
+                }
+            })
+        fragment.show(childFragmentManager, ChooserDialogFragment::class.java.toString())
     }
 }

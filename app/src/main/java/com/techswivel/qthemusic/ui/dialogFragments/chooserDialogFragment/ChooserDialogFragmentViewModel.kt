@@ -21,7 +21,7 @@ class ChooserDialogFragmentViewModel : BaseViewModel() {
     var mImageUri: MutableList<Uri> = ArrayList()
     var mRequestCode: Int = -1
     var viewType = 0
-    val TAG="ChooserDialogFragmentViewModel"
+
     fun openGalleryForVideo() {
         getContentGallery.launch("video/*")
     }
@@ -32,12 +32,10 @@ class ChooserDialogFragmentViewModel : BaseViewModel() {
     }
 
     fun openGalleryIntent() {
-        Log.d(TAG,"openGalleryIntent Img")
         getContentGallery.launch("image/*")
     }
 
     fun openCameraIntent() {
-        Log.d(TAG,"openCameraIntent")
         viewModelScope.launch {
             getTmpFileUri().let { uri ->
                 imageLatestTmpUri = uri
