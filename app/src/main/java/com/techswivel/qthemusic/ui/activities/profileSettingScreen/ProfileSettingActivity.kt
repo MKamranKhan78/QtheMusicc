@@ -25,17 +25,6 @@ class ProfileSettingActivity : BaseActivity(), ProfileSettingActivityImpl {
 
     }
 
-    private fun openSettingFragment() {
-        popUpAllFragmentIncludeThis(ProfileSettingFragment::class.java.name)
-        openFragment(ProfileSettingFragment.newInstance())
-    }
-
-    private fun setToolBar() {
-        setUpActionBar(
-            mBinding.activityToolbar.toolbar, "", false, true
-        )
-        mBinding.activityToolbar.toolbarTitle.text = getString(R.string.settings)
-    }
 
     override fun onBackPressed() {
         when {
@@ -54,28 +43,6 @@ class ProfileSettingActivity : BaseActivity(), ProfileSettingActivityImpl {
         popUpAllFragmentIncludeThis(ProfileSettingFragment::class.java.name)
         openFragment(ProfileSettingFragment.newInstance())
         return super.onSupportNavigateUp()
-    }
-
-
-    private fun openFragment(fragment: Fragment) {
-        ::mFragment.set(fragment)
-        mFragment.let { fragmentInstance ->
-            fragmentInstance?.let { fragmentToBeReplaced ->
-                replaceFragment(mBinding.mainContainer.id, fragmentToBeReplaced)
-            }
-        }
-    }
-
-    override fun openProfileSettingFragmentWithPnone(phoneNumber: String?) {
-    }
-
-    override fun openProfileSettingFragmentWithName(authModel: AuthModel?) {
-    }
-
-    override fun openProfileSettingFragmentWithAddress(authModel: AuthModel?) {
-    }
-
-    override fun openProfileSettingFragmentWithGender(authModel: AuthModel?) {
     }
 
 
@@ -100,6 +67,40 @@ class ProfileSettingActivity : BaseActivity(), ProfileSettingActivityImpl {
     }
 
     override fun hideProgressBar() {
+    }
+
+    override fun openProfileSettingFragmentWithPnone(phoneNumber: String?) {
+    }
+
+    override fun openProfileSettingFragmentWithName(authModel: AuthModel?) {
+    }
+
+    override fun openProfileSettingFragmentWithAddress(authModel: AuthModel?) {
+    }
+
+    override fun openProfileSettingFragmentWithGender(authModel: AuthModel?) {
+    }
+
+
+    private fun openSettingFragment() {
+        popUpAllFragmentIncludeThis(ProfileSettingFragment::class.java.name)
+        openFragment(ProfileSettingFragment.newInstance())
+    }
+
+    private fun openFragment(fragment: Fragment) {
+        ::mFragment.set(fragment)
+        mFragment.let { fragmentInstance ->
+            fragmentInstance?.let { fragmentToBeReplaced ->
+                replaceFragment(mBinding.mainContainer.id, fragmentToBeReplaced)
+            }
+        }
+    }
+
+    private fun setToolBar() {
+        setUpActionBar(
+            mBinding.activityToolbar.toolbar, "", false, true
+        )
+        mBinding.activityToolbar.toolbarTitle.text = getString(R.string.settings)
     }
 
 }

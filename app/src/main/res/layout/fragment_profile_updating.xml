@@ -17,20 +17,25 @@
 
     </data>
 
-    <RelativeLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/black_gradiant_background">
+        android:background="@drawable/black_gradiant_background"
+        android:scrollbars="vertical">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <FrameLayout
-                android:layout_width="@dimen/_110dp"
-                android:layout_height="@dimen/_110dp"
-                android:id="@+id/imageviewProfileUpdatingScreen"
-                android:layout_centerHorizontal="true"
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <FrameLayout
+                    android:layout_width="@dimen/_110dp"
+                    android:layout_height="@dimen/_110dp"
+                    android:id="@+id/imageviewProfileUpdatingScreen"
+                    android:layout_centerHorizontal="true"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/_30dp">
 
@@ -385,6 +390,7 @@
                 android:layout_marginStart="@dimen/_20dp"
                 android:layout_marginTop="@dimen/_10dp"
                 android:layout_marginEnd="@dimen/_20dp"
+                android:layout_marginBottom="@dimen/_30dp"
                 app:cardBackgroundColor="#303033"
                 app:cardCornerRadius="@dimen/_10dp"
                 app:cardElevation="@dimen/_10dp"
@@ -461,6 +467,8 @@
             android:progressTint="@color/logout_button_color"
             android:visibility="gone" />
 
-    </RelativeLayout>
+        </RelativeLayout>
+    </ScrollView>
+
 
 </layout>
