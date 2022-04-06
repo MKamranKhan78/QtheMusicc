@@ -62,6 +62,69 @@ class AddAddressDialogFragment : BaseDialogFragment(), BaseInterface {
         setObserver()
     }
 
+
+    override fun showProgressBar() {
+    }
+
+    override fun hideProgressBar() {
+    }
+
+    private fun setObserver() {
+        authNetworkViewModel.profileUpdationResponse.observe(requireActivity()) { updateProfileResponse ->
+            when (updateProfileResponse.status) {
+                NetworkStatus.LOADING -> {
+                    mBinding.progressBar.visibility = View.VISIBLE
+                }
+                NetworkStatus.SUCCESS -> {
+                    mBinding.progressBar.visibility = View.GONE
+                    mProfileSettingActivityImpl.openProfileSettingFragmentWithAddress(viewModel.authModel)
+
+                    dismiss()
+                    Toast.makeText(
+                        QTheMusicApplication.getContext(),
+                        getString(R.string.address_successfully_updated),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                NetworkStatus.ERROR -> {
+                    mBinding.progressBar.visibility = View.GONE
+                    updateProfileResponse.error?.message?.let { error_message ->
+                        DialogUtils.errorAlert(
+                            QTheMusicApplication.getContext(),
+                            updateProfileResponse.error.code.toString(),
+                            updateProfileResponse.error.message
+                        )
+                    }
+                }
+                NetworkStatus.EXPIRE -> {
+                    mBinding.progressBar.visibility = View.GONE
+                    DialogUtils.sessionExpireAlert(
+                        QTheMusicApplication.getContext(),
+                        object : DialogUtils.CallBack {
+                            override fun onPositiveCallBack() {
+                                runBlocking {
+                                    DataStoreUtils.clearAllPreference()
+                                }
+                            }
+
+                            override fun onNegativeCallBack() {
+                            }
+                        })
+                }
+                NetworkStatus.COMPLETED -> {
+                    mBinding.progressBar.visibility = View.GONE
+                    dismiss()
+                    Log.v("Network_status", "completed")
+                }
+            }
+        }
+
+    }
+
+    private fun setCallBack(profileSettingActivityImpl: ProfileSettingActivityImpl) {
+        mProfileSettingActivityImpl = profileSettingActivityImpl
+    }
+
     private fun getBundleData() {
         viewModel.authModel = arguments?.getSerializable(CommonKeys.KEY_DATA) as AuthModel?
         mBinding.edCityId.setText(viewModel.authModel?.address?.city)
@@ -69,12 +132,6 @@ class AddAddressDialogFragment : BaseDialogFragment(), BaseInterface {
         mBinding.etCountryId.setText(viewModel.authModel?.address?.country)
         mBinding.etStateId.setText(viewModel.authModel?.address?.state)
         mBinding.etZipcodeId.setText(viewModel.authModel?.address?.zipCode.toString())
-    }
-
-    override fun showProgressBar() {
-    }
-
-    override fun hideProgressBar() {
     }
 
 
@@ -147,65 +204,12 @@ class AddAddressDialogFragment : BaseDialogFragment(), BaseInterface {
             ViewModelProvider(this).get(AddAddressDialogViewModel::class.java)
     }
 
-    private fun setObserver() {
-        authNetworkViewModel.profileUpdationResponse.observe(requireActivity()) { updateProfileResponse ->
-            when (updateProfileResponse.status) {
-                NetworkStatus.LOADING -> {
-                    mBinding.progressBar.visibility = View.VISIBLE
-                }
-                NetworkStatus.SUCCESS -> {
-                    mBinding.progressBar.visibility = View.GONE
-                    mProfileSettingActivityImpl.openProfileSettingFragmentWithAddress(viewModel.authModel)
 
-                    dismiss()
-                    Toast.makeText(
-                        QTheMusicApplication.getContext(),
-                        getString(R.string.address_successfully_updated),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-                NetworkStatus.ERROR -> {
-                    mBinding.progressBar.visibility = View.GONE
-                    updateProfileResponse.error?.message?.let { error_message ->
-                        DialogUtils.errorAlert(
-                            QTheMusicApplication.getContext(),
-                            updateProfileResponse.error.code.toString(),
-                            updateProfileResponse.error.message
-                        )
-                    }
-                }
-                NetworkStatus.EXPIRE -> {
-                    mBinding.progressBar.visibility = View.GONE
-                    DialogUtils.sessionExpireAlert(
-                        QTheMusicApplication.getContext(),
-                        object : DialogUtils.CallBack {
-                            override fun onPositiveCallBack() {
-                                runBlocking {
-                                    DataStoreUtils.clearAllPreference()
-                                }
-                            }
-
-                            override fun onNegativeCallBack() {
-                            }
-                        })
-                }
-                NetworkStatus.COMPLETED -> {
-                    mBinding.progressBar.visibility = View.GONE
-                    dismiss()
-                    Log.v("Network_status", "completed")
-                }
-            }
-        }
-
-    }
 
 
     private fun updateProfile(authModel: AuthModel) {
         authNetworkViewModel.updateProfile(authModel)
     }
 
-    private fun setCallBack(profileSettingActivityImpl: ProfileSettingActivityImpl) {
-        mProfileSettingActivityImpl = profileSettingActivityImpl
-    }
 
 }

@@ -63,31 +63,14 @@ class AddGenderDialogFragment : BaseDialogFragment(), BaseInterface {
         setObserver()
     }
 
-    private fun getBundleData() {
-        viewModel.authModel = arguments?.getSerializable(CommonKeys.KEY_DATA) as AuthModel?
-        if (viewModel.authModel?.gender == GenderType.MALE.toString()) {
-            mBinding.maleRB.isChecked = true
-            mBinding.femaleRB.isChecked = false
-            mBinding.nonBinaryRB.isChecked = false
-            mBinding.noAnswerRB.isChecked = false
-        } else if (viewModel.authModel?.gender == GenderType.FEMALE.toString()) {
-            mBinding.maleRB.isChecked = false
-            mBinding.femaleRB.isChecked = true
-            mBinding.nonBinaryRB.isChecked = false
-            mBinding.noAnswerRB.isChecked = false
-        } else if (viewModel.authModel?.gender == GenderType.NON_BINARY.toString()) {
-            mBinding.maleRB.isChecked = false
-            mBinding.femaleRB.isChecked = false
-            mBinding.nonBinaryRB.isChecked = true
-            mBinding.noAnswerRB.isChecked = false
-        } else if (viewModel.authModel?.gender == GenderType.NOT_ANSWERED.toString()) {
-            mBinding.maleRB.isChecked = false
-            mBinding.femaleRB.isChecked = false
-            mBinding.nonBinaryRB.isChecked = false
-            mBinding.noAnswerRB.isChecked = true
-        } else {
-            Log.v("isChecked", "nothing is checked")
-        }
+    override fun showProgressBar() {
+    }
+
+    override fun hideProgressBar() {
+    }
+
+    private fun setCallBack(profileSettingActivityImpl: ProfileSettingActivityImpl) {
+        mProfileSettingActivityImpl = profileSettingActivityImpl
     }
 
     private fun setObserver() {
@@ -141,19 +124,40 @@ class AddGenderDialogFragment : BaseDialogFragment(), BaseInterface {
 
     }
 
+    private fun getBundleData() {
+        viewModel.authModel = arguments?.getSerializable(CommonKeys.KEY_DATA) as AuthModel?
+        if (viewModel.authModel?.gender == GenderType.MALE.toString()) {
+            mBinding.maleRB.isChecked = true
+            mBinding.femaleRB.isChecked = false
+            mBinding.nonBinaryRB.isChecked = false
+            mBinding.noAnswerRB.isChecked = false
+        } else if (viewModel.authModel?.gender == GenderType.FEMALE.toString()) {
+            mBinding.maleRB.isChecked = false
+            mBinding.femaleRB.isChecked = true
+            mBinding.nonBinaryRB.isChecked = false
+            mBinding.noAnswerRB.isChecked = false
+        } else if (viewModel.authModel?.gender == GenderType.NON_BINARY.toString()) {
+            mBinding.maleRB.isChecked = false
+            mBinding.femaleRB.isChecked = false
+            mBinding.nonBinaryRB.isChecked = true
+            mBinding.noAnswerRB.isChecked = false
+        } else if (viewModel.authModel?.gender == GenderType.NOT_ANSWERED.toString()) {
+            mBinding.maleRB.isChecked = false
+            mBinding.femaleRB.isChecked = false
+            mBinding.nonBinaryRB.isChecked = false
+            mBinding.noAnswerRB.isChecked = true
+        } else {
+            Log.v("isChecked", "nothing is checked")
+        }
+    }
+
+
     private fun initViewModel() {
         viewModel =
             ViewModelProvider(this).get(AddGenderViewModel::class.java)
 
         netWorkViewModel =
             ViewModelProvider(this).get(AuthNetworkViewModel::class.java)
-    }
-
-
-    override fun showProgressBar() {
-    }
-
-    override fun hideProgressBar() {
     }
 
 
@@ -206,10 +210,6 @@ class AddGenderDialogFragment : BaseDialogFragment(), BaseInterface {
                 mBinding.maleRB.isChecked = false
             }
         })
-    }
-
-    private fun setCallBack(profileSettingActivityImpl: ProfileSettingActivityImpl) {
-        mProfileSettingActivityImpl = profileSettingActivityImpl
     }
 
     private fun updateProfile(authModel: AuthModel) {

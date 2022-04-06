@@ -1,5 +1,6 @@
 package com.techswivel.qthemusic.ui.activities.profileSettingScreen
 
+import androidx.fragment.app.Fragment
 import com.techswivel.qthemusic.customData.interfaces.BaseInterface
 import com.techswivel.qthemusic.models.AuthModel
 
@@ -8,4 +9,5 @@ interface ProfileSettingActivityImpl : BaseInterface {
     fun openProfileSettingFragmentWithName(authModel: AuthModel?)
     fun openProfileSettingFragmentWithAddress(authModel: AuthModel?)
     fun openProfileSettingFragmentWithGender(authModel: AuthModel?)
+    fun replaceCurrentFragment(fragment: Fragment)
 }

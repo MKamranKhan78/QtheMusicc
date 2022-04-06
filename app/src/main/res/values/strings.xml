@@ -159,4 +159,6 @@
     <string name="otp_send_successfully">Otp send successfully</string>
     <string name="enter_valid_no">Please enter a valid phone number</string>
     <string name="enter_no">Please enter phone number</string>
+    <string name="profile_updated">Profile successfully updated.</string>
+    <string name="profile_settings">Profile Settings</string>
 </resources>

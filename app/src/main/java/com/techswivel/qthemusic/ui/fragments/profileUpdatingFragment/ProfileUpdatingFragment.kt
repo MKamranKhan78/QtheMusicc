@@ -1,21 +1,16 @@
 package com.techswivel.qthemusic.ui.fragments.profileUpdatingFragment
 
 import android.annotation.SuppressLint
-import android.app.Activity.RESULT_OK
-import android.app.AlertDialog
 import android.app.DatePickerDialog
-import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.application.QTheMusicApplication
@@ -37,9 +32,8 @@ import com.techswivel.qthemusic.utils.CommonKeys
 import com.techswivel.qthemusic.utils.CommonKeys.Companion.KEY_USER_DOB
 import com.techswivel.qthemusic.utils.CommonKeys.Companion.KEY_USER_PHONE
 import com.techswivel.qthemusic.utils.DialogUtils
-import com.techswivel.qthemusic.utils.PermissionUtils
+import com.techswivel.qthemusic.utils.Log
 import kotlinx.coroutines.runBlocking
-import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.text.DateFormat
 import java.util.*
@@ -57,11 +51,7 @@ class ProfileUpdatingFragment : BaseFragment(), ProfileSettingActivityImpl {
     private lateinit var mBinding: FragmentProfileUpdatingBinding
     private lateinit var viewModel: ProfileUpdatingViewModel
     private lateinit var netWorkViewModel: AuthNetworkViewModel
-    private lateinit var dialogFragment: ChooserDialogFragment
-
-
-    private val GALLERY = 1
-    private val CAMERA = 2
+    private lateinit var chooserDialog: ChooserDialogFragment
 
     val mcurrentTime = Calendar.getInstance()
     val year = mcurrentTime.get(Calendar.YEAR)
@@ -79,7 +69,6 @@ class ProfileUpdatingFragment : BaseFragment(), ProfileSettingActivityImpl {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setToolBar()
         initViewModel()
         viewModel.authModel = viewModel.getPrefrencesData(QTheMusicApplication.getContext())
         bindViewModelWithView()
@@ -90,60 +79,66 @@ class ProfileUpdatingFragment : BaseFragment(), ProfileSettingActivityImpl {
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == GALLERY) {
-            if (data != null) {
-                val contentURI = data.data
-                try {
-                    val bitmap = MediaStore.Images.Media.getBitmap(
-                        QTheMusicApplication.getContext().contentResolver,
-                        contentURI
-                    )
-                    mBinding.profilePic.setImageBitmap(bitmap)
-                    viewModel.uri = contentURI
 
-                } catch (e: IOException) {
-                    e.printStackTrace()
-                    Toast.makeText(QTheMusicApplication.getContext(), "Failed!", Toast.LENGTH_SHORT)
-                        .show()
-                }
+    }
 
-                val authModelBilder = AuthModelBuilder()
-                authModelBilder.avatar = viewModel.uri.toString()
-                val authModel = AuthModelBuilder.build(authModelBilder)
-                PrefUtils.setString(
-                    QTheMusicApplication.getContext(),
-                    CommonKeys.KEY_USER_AVATAR,
-                    viewModel.uri.toString()
-                )
-                updateProfile(authModel)
-
-            }
-
-        } else if (requestCode == CAMERA) {
-
-            if (resultCode != RESULT_OK) {
-                return
-            } else {
-                val bitmap = data?.extras?.get("data") as Bitmap
-                mBinding.profilePic.setImageBitmap(bitmap)
-                val uri = getImageUri(QTheMusicApplication.getContext(), bitmap)
-                viewModel.uri = uri
-                val authModelBilder = AuthModelBuilder()
-                authModelBilder.avatar = viewModel.uri.toString()
-                val authModel = AuthModelBuilder.build(authModelBilder)
-                PrefUtils.setString(
-                    QTheMusicApplication.getContext(),
-                    CommonKeys.KEY_USER_AVATAR,
-                    viewModel.uri.toString()
-                )
-                updateProfile(authModel)
-            }
-
-        }
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        chooserDialog.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
 
 
+    override fun openProfileSettingFragmentWithPnone(phoneNumber: String?) {
+        mBinding.phoneNumberTvID.text = phoneNumber
+        PrefUtils.setString(QTheMusicApplication.getContext(), KEY_USER_PHONE, phoneNumber)
+        mBinding.numberAdditionTick.visibility = View.VISIBLE
+        mBinding.addPhoneNumberTextviewID.visibility = View.GONE
+    }
+
+    override fun openProfileSettingFragmentWithName(authModel: AuthModel?) {
+
+        // here is the auth model
+        PrefUtils.clearAllPrefData(QTheMusicApplication.getContext())
+        viewModel.setDataInSharedPrefrence(authModel)
+        viewModel.authModel = viewModel.getPrefrencesData(QTheMusicApplication.getContext())
+        mBinding.tvNameId.text = viewModel.authModel?.name
+        mBinding.textviewChangeNameID.text =
+            QTheMusicApplication.getContext().getString(R.string.change)
+    }
+
+    override fun openProfileSettingFragmentWithAddress(authModel: AuthModel?) {
+        PrefUtils.clearAllPrefData(QTheMusicApplication.getContext())
+        viewModel.setDataInSharedPrefrence(authModel)
+        viewModel.authModel = viewModel.getPrefrencesData(QTheMusicApplication.getContext())
+        mBinding.adressTextview.text = authModel?.address?.completeAddress
+        mBinding.textviewChangeAddressID.text =
+            QTheMusicApplication.getContext().getString(R.string.change)
+    }
+
+    override fun openProfileSettingFragmentWithGender(authModel: AuthModel?) {
+        PrefUtils.clearAllPrefData(QTheMusicApplication.getContext())
+        viewModel.setDataInSharedPrefrence(authModel)
+        viewModel.authModel = viewModel.getPrefrencesData(QTheMusicApplication.getContext())
+        mBinding.genderTextviewId.text = authModel?.gender
+        mBinding.textviewChangeGenderID.text =
+            QTheMusicApplication.getContext().getString(R.string.change)
+    }
+
+    override fun replaceCurrentFragment(fragment: Fragment) {
+
+    }
+
+    override fun showProgressBar() {
+        mBinding.progressBar.visibility = View.VISIBLE
+    }
+
+    override fun hideProgressBar() {
+        mBinding.progressBar.visibility = View.GONE
     }
 
     private fun setObserver() {
@@ -158,7 +153,7 @@ class ProfileUpdatingFragment : BaseFragment(), ProfileSettingActivityImpl {
 
                     Toast.makeText(
                         QTheMusicApplication.getContext(),
-                        "Profile Update successfully.",
+                        getString(R.string.profile_updated),
                         Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -213,7 +208,41 @@ class ProfileUpdatingFragment : BaseFragment(), ProfileSettingActivityImpl {
         }
 
         mBinding.changePhotoImageviewId.setOnClickListener {
-            picImageFromGallery()
+            chooserDialog = ChooserDialogFragment.newInstance(CommonKeys.TYPE_PHOTO,
+                object : ChooserDialogFragment.CallBack {
+                    override fun onActivityResult(mImageUri: List<Uri>?) {
+                        viewModel.uri = mImageUri?.get(0)
+                        val contentURI = viewModel.uri
+                        try {
+                            val bitmap = MediaStore.Images.Media.getBitmap(
+                                QTheMusicApplication.getContext().contentResolver,
+                                contentURI
+                            )
+                            mBinding.profilePic.setImageBitmap(bitmap)
+                            viewModel.uri = contentURI
+
+                        } catch (e: IOException) {
+                            e.printStackTrace()
+                            Toast.makeText(
+                                QTheMusicApplication.getContext(),
+                                "Failed!",
+                                Toast.LENGTH_SHORT
+                            )
+                                .show()
+                        }
+                        val authModelBilder = AuthModelBuilder()
+                        authModelBilder.avatar = viewModel.uri.toString()
+                        val authModel = AuthModelBuilder.build(authModelBilder)
+                        PrefUtils.setString(
+                            QTheMusicApplication.getContext(),
+                            CommonKeys.KEY_USER_AVATAR,
+                            viewModel.uri.toString()
+                        )
+                        updateProfile(authModel)
+                        Log.e(TAG, "onActivityResult: return URi = ${mImageUri.toString()}")
+                    }
+                })
+            chooserDialog.show(childFragmentManager, ChooserDialogFragment::class.java.toString())
         }
 
         mBinding.textviewChangeGenderID.setOnClickListener {
@@ -272,13 +301,6 @@ class ProfileUpdatingFragment : BaseFragment(), ProfileSettingActivityImpl {
     }
 
 
-    private fun setToolBar() {
-        setUpActionBar(
-            mBinding.fragmentToolbar.toolbar, "", true
-        )
-        mBinding.fragmentToolbar.toolbarTitle.text = getString(R.string.profileSetting)
-    }
-
     private fun bindViewModelWithView() {
         mBinding.viewModel = viewModel
         mBinding.executePendingBindings()
@@ -308,144 +330,6 @@ class ProfileUpdatingFragment : BaseFragment(), ProfileSettingActivityImpl {
 
         netWorkViewModel =
             ViewModelProvider(this).get(AuthNetworkViewModel::class.java)
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (::dialogFragment.isInitialized) {
-            dialogFragment.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        }
-        if ((grantResults.isNotEmpty() &&
-                    grantResults[0] == PackageManager.PERMISSION_GRANTED)
-        ) {
-            when (requestCode) {
-                PermissionUtils.PERMISSION_STORAGE -> {
-                    showPictureDialog()
-                }
-            }
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (!requireActivity().shouldShowRequestPermissionRationale(permissions[0])) {
-                DialogUtils.goToSystemLocationSetting(
-                    requireActivity(),
-                    getString(R.string.camera_permission_msg)
-                )
-            } else {
-                Toast.makeText(
-                    activity,
-                    resources.getString(R.string.permission_denied),
-                    Toast.LENGTH_LONG
-                ).show()
-            }
-        } else {
-            Toast.makeText(
-                activity,
-                resources.getString(R.string.permission_denied),
-                Toast.LENGTH_LONG
-            ).show()
-        }
-    }
-
-    private fun picImageFromGallery() {
-        if (PermissionUtils.isStoragePermissionGranted(requireContext())) {
-            showPictureDialog()
-        } else {
-            PermissionUtils.requestStoragePermission(requireActivity())
-        }
-        if (PermissionUtils.isStoragePermissionGranted(requireContext())) {
-            showPictureDialog()
-        } else {
-            PermissionUtils.requestStoragePermission(requireActivity())
-        }
-
-    }
-
-    private fun showPictureDialog() {
-        val pictureDialog = AlertDialog.Builder(requireContext())
-        pictureDialog.setTitle("Select Action")
-        val pictureDialogItems = arrayOf("Select photo from gallery", "Capture photo from camera")
-        pictureDialog.setItems(
-            pictureDialogItems
-        ) { dialog, which ->
-            when (which) {
-                0 -> choosePhotoFromGallary()
-                1 -> takePhotoFromCamera()
-            }
-        }
-        pictureDialog.show()
-    }
-
-    fun choosePhotoFromGallary() {
-        val galleryIntent = Intent(
-            Intent.ACTION_PICK,
-            MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-        )
-
-        startActivityForResult(galleryIntent, GALLERY)
-    }
-
-    private fun takePhotoFromCamera() {
-        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        startActivityForResult(intent, CAMERA)
-    }
-
-    override fun openProfileSettingFragmentWithPnone(phoneNumber: String?) {
-        mBinding.phoneNumberTvID.text = phoneNumber
-        PrefUtils.setString(QTheMusicApplication.getContext(), KEY_USER_PHONE, phoneNumber)
-        mBinding.numberAdditionTick.visibility = View.VISIBLE
-        mBinding.addPhoneNumberTextviewID.visibility = View.GONE
-    }
-
-    override fun openProfileSettingFragmentWithName(authModel: AuthModel?) {
-
-        // here is the auth model
-        PrefUtils.clearAllPrefData(QTheMusicApplication.getContext())
-        viewModel.setDataInSharedPrefrence(authModel)
-        viewModel.authModel = viewModel.getPrefrencesData(QTheMusicApplication.getContext())
-        mBinding.tvNameId.text = viewModel.authModel?.name
-        mBinding.textviewChangeNameID.text =
-            QTheMusicApplication.getContext().getString(R.string.change)
-    }
-
-    override fun openProfileSettingFragmentWithAddress(authModel: AuthModel?) {
-        PrefUtils.clearAllPrefData(QTheMusicApplication.getContext())
-        viewModel.setDataInSharedPrefrence(authModel)
-        viewModel.authModel = viewModel.getPrefrencesData(QTheMusicApplication.getContext())
-        mBinding.adressTextview.text = authModel?.address?.completeAddress
-        mBinding.textviewChangeAddressID.text =
-            QTheMusicApplication.getContext().getString(R.string.change)
-    }
-
-    override fun openProfileSettingFragmentWithGender(authModel: AuthModel?) {
-        PrefUtils.clearAllPrefData(QTheMusicApplication.getContext())
-        viewModel.setDataInSharedPrefrence(authModel)
-        viewModel.authModel = viewModel.getPrefrencesData(QTheMusicApplication.getContext())
-        mBinding.genderTextviewId.text = authModel?.gender
-        mBinding.textviewChangeGenderID.text =
-            QTheMusicApplication.getContext().getString(R.string.change)
-    }
-
-    override fun showProgressBar() {
-        mBinding.progressBar.visibility = View.VISIBLE
-    }
-
-    override fun hideProgressBar() {
-        mBinding.progressBar.visibility = View.GONE
-    }
-
-    fun getImageUri(inContext: Context, inImage: Bitmap): Uri? {
-        val bytes = ByteArrayOutputStream()
-        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
-        val path = MediaStore.Images.Media.insertImage(
-            inContext.getContentResolver(),
-            inImage,
-            "Title",
-            null
-        )
-        return Uri.parse(path)
     }
 
 }

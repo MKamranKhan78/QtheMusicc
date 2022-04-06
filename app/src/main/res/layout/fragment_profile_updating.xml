@@ -26,20 +26,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <include
-                android:id="@+id/fragmentToolbar"
-                layout="@layout/app_bar_blue_center_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
             <FrameLayout
                 android:layout_width="@dimen/_110dp"
                 android:layout_height="@dimen/_110dp"
                 android:id="@+id/imageviewProfileUpdatingScreen"
-                android:layout_below="@id/fragmentToolbar"
                 android:layout_centerHorizontal="true"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/_10dp">
+                android:layout_marginTop="@dimen/_30dp">
 
                 <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/profilePic"

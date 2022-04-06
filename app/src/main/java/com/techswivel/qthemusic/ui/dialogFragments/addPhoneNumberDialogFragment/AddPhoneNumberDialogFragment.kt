@@ -64,6 +64,20 @@ class AddPhoneNumberDialogFragment : BaseDialogFragment(), BaseInterface {
         setObserver()
     }
 
+    override fun showProgressBar() {
+        mBinding.progressBar.visibility = View.VISIBLE
+    }
+
+    override fun hideProgressBar() {
+        mBinding.progressBar.visibility = View.GONE
+
+    }
+
+    private fun setCallBack(profileSettingActivityImpl: ProfileSettingActivityImpl) {
+        mProfileSettingActivityImpl = profileSettingActivityImpl
+    }
+
+
     private fun setObserver() {
         mAuthNetworkViewModel.forgotPasswordResponse.observe(requireActivity()) { sendOtpResponse ->
             when (sendOtpResponse.status) {
@@ -161,18 +175,7 @@ class AddPhoneNumberDialogFragment : BaseDialogFragment(), BaseInterface {
 
     }
 
-    private fun setCallBack(profileSettingActivityImpl: ProfileSettingActivityImpl) {
-        mProfileSettingActivityImpl = profileSettingActivityImpl
-    }
 
-    override fun showProgressBar() {
-        mBinding.progressBar.visibility = View.VISIBLE
-    }
-
-    override fun hideProgressBar() {
-        mBinding.progressBar.visibility = View.GONE
-
-    }
 
 
 }

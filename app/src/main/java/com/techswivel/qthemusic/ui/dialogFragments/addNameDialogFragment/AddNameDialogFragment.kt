@@ -63,9 +63,12 @@ class AddNameDialogFragment : BaseDialogFragment(), BaseInterface {
 
     }
 
-    private fun getBundleData() {
-        viewModel.authModel = arguments?.getSerializable(CommonKeys.KEY_DATA) as AuthModel?
-        mBinding.etNameId.setText(viewModel.authModel?.name)
+    override fun showProgressBar() {
+
+    }
+
+    override fun hideProgressBar() {
+
     }
 
     private fun setObserver() {
@@ -119,6 +122,16 @@ class AddNameDialogFragment : BaseDialogFragment(), BaseInterface {
 
     }
 
+    private fun setCallBack(profileSettingActivityImpl: ProfileSettingActivityImpl) {
+        mProfileSettingActivityImpl = profileSettingActivityImpl
+    }
+
+    private fun getBundleData() {
+        viewModel.authModel = arguments?.getSerializable(CommonKeys.KEY_DATA) as AuthModel?
+        mBinding.etNameId.setText(viewModel.authModel?.name)
+    }
+
+
     private fun initViewModels() {
         authNetworkViewModel =
             ViewModelProvider(this).get(AuthNetworkViewModel::class.java)
@@ -126,13 +139,6 @@ class AddNameDialogFragment : BaseDialogFragment(), BaseInterface {
             ViewModelProvider(this).get(AddNameViewModel::class.java)
     }
 
-    override fun showProgressBar() {
-
-    }
-
-    override fun hideProgressBar() {
-
-    }
 
     private fun clickListener() {
         mBinding.imageviewCancelDialog.setOnClickListener {
@@ -159,9 +165,6 @@ class AddNameDialogFragment : BaseDialogFragment(), BaseInterface {
         authNetworkViewModel.updateProfile(authModel)
     }
 
-    private fun setCallBack(profileSettingActivityImpl: ProfileSettingActivityImpl) {
-        mProfileSettingActivityImpl = profileSettingActivityImpl
-    }
 
     private fun checkAllFields(): Boolean {
         if (mBinding.etNameId.length() == 0) {
