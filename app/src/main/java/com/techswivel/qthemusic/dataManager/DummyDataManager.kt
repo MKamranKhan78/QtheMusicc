@@ -12,7 +12,7 @@ class DummyDataManager {
             return Response.success(
                 ResponseMain(
                     ResponseModel(
-                        true,
+                        false,
                         "",
                         getDataList(),
                         null
@@ -147,20 +147,20 @@ class DummyDataManager {
                     "Punjabi"
                 ),
                 Category(
-                    1,
+                    3,
                     "https://cdn5.vectorstock.com/i/1000x1000/77/09/colorful-detailed-pop-music-can-vector-19847709.jpg",
                     "Classical"
                 ),
-                Category(null, null, "Rock"),
-                Category(null, null, "Country"),
-                Category(null, null, "Metal"),
-                Category(null, null, "Latin"),
-                Category(null, null, "JAZZ"),
-                Category(null, null, "Folk music"),
-                Category(null, null, "Electronic"),
-                Category(null, null, "Reggae"),
-                Category(null, null, "Alternative"),
-                Category(null, null, "Electronica")
+                Category(4, null, "Rock"),
+                Category(5, "","Country"),
+                Category(6, null, "Metal"),
+                Category(7, null, "Latin"),
+                Category(8, null, "JAZZ"),
+                Category(9, null, "Folk music"),
+                Category(10, null, "Electronic"),
+                Category(11, null, "Reggae"),
+                Category(12, null, "Alternative"),
+                Category(13, null, "Electronica")
 
             )
         }

@@ -40,6 +40,8 @@ class CommonKeys {
         const val KEY_USER_PLAN_DURATION = "_key_user_plan_duration"
         const val KEY_IS_INTEREST_SET="key_is_interest_set"
         const val KEY_FCM_TOKEN="key_fcm_token"
+        const val KEY_IS_ACCOUNT_CREATED="key_is_account_created"
+        const val KEY_USER_PHOTO="key_user_photo"
 
     }
 }

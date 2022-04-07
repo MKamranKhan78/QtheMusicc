@@ -5,6 +5,7 @@ import com.techswivel.qthemusic.customData.enums.CategoryType
 import com.techswivel.qthemusic.customData.interfaces.BaseInterface
 import com.techswivel.qthemusic.models.AuthModel
 import com.techswivel.qthemusic.models.AuthRequestModel
+import com.techswivel.qthemusic.models.Category
 import com.techswivel.qthemusic.source.remote.networkViewModel.*
 import java.io.Serializable
 
@@ -27,4 +28,5 @@ interface AuthActivityImp : BaseInterface {
     fun signInWithFacebook()
     fun userSignUp(authRequestBuilder: AuthRequestModel)
     fun getCategories(categoryType: CategoryType)
+    fun saveInterests(category: List<Category?>)
 }

@@ -6,13 +6,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.AttributeSet
 import android.view.View
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.facebook.CallbackManager
-import com.facebook.FacebookCallback
-import com.facebook.FacebookException
+import com.facebook.*
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -32,6 +29,7 @@ import com.techswivel.qthemusic.source.remote.networkViewModel.SongAndArtistsVie
 import com.techswivel.qthemusic.ui.activities.mainActivity.MainActivity
 import com.techswivel.qthemusic.ui.base.BaseActivity
 import com.techswivel.qthemusic.ui.fragments.forgotPasswordFragment.ForgotPassword
+import com.techswivel.qthemusic.ui.fragments.forgotPasswordFragment.ForgotPasswordImp
 import com.techswivel.qthemusic.ui.fragments.otpVerificationFragment.OtpVerification
 import com.techswivel.qthemusic.ui.fragments.setPasswordFragmetnt.SetPassword
 import com.techswivel.qthemusic.ui.fragments.signInFragment.SignInFragment
@@ -41,7 +39,8 @@ import com.techswivel.qthemusic.utils.CommonKeys
 import com.techswivel.qthemusic.utils.DialogUtils
 import com.techswivel.qthemusic.utils.Log
 import com.techswivel.qthemusic.utils.Utilities
-import java.io.Serializable
+import org.json.JSONException
+import org.json.JSONObject
 import java.util.*
 
 
@@ -95,7 +94,7 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (::mFragment.isInitialized){
+        if (::mFragment.isInitialized) {
             mFragment.onRequestPermissionsResult(requestCode, permissions, grantResults)
         }
     }
@@ -120,8 +119,10 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
     override fun forgotPasswordRequest(
         authRequestBuilder: AuthRequestModel
     ) {
+        Log.d(TAG,"forgot fun email ${authRequestBuilder.email}")
         mAuthActivityViewModel.userEmail = authRequestBuilder.email.toString()
         mAuthActivityViewModel.fragmentFlow = authRequestBuilder.otpType
+        Log.d(TAG,"forgot fun vm${mAuthActivityViewModel.userEmail}")
         authNetworkViewModel.sendOtpRequest(authRequestBuilder)
 
     }
@@ -178,12 +179,28 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
         mSongAndArtistViewModel.getCategoriesDataFromServer(categoryType)
     }
 
+    override fun saveInterests(category: List<Category?>) {
+        authNetworkViewModel.saveUserInterest(category)
+    }
+
     private fun handleGoogleSignInResult(completedTask: Task<GoogleSignInAccount>) {
         try {
             val account: GoogleSignInAccount = completedTask.getResult(ApiException::class.java)
             val authCode = account.serverAuthCode
             if (authCode != null) {
                 authNetworkViewModel.getGoogleToken(authCode)
+                mAuthActivityViewModel.userEmail=account.email
+                mAuthActivityViewModel.myBundle.putString(CommonKeys.KEY_USER_EMAIL, account.email)
+                mAuthActivityViewModel.myBundle.putString(
+                    CommonKeys.KEY_USER_NAME,
+                    account.displayName
+                )
+                mAuthActivityViewModel.myBundle.putString(
+                    CommonKeys.KEY_USER_PHOTO,
+                    account.photoUrl.toString()
+                )
+
+                Log.d(TAG,"Google Data is ${account.email} ${account.displayName}, vm email${mAuthActivityViewModel.userEmail}")
             } else {
                 Log.d(TAG, "ServerAuthCode Not Found")
             }
@@ -206,16 +223,39 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
             this,
             Arrays.asList(
                 getString(R.string.get_email_fb),
-                getString(R.string.fb_public_profile_args)
             )
         )
         loginManager.registerCallback(callbackManager,
             object : FacebookCallback<LoginResult?> {
                 override fun onSuccess(result: LoginResult?) {
                     val accessToken = result?.accessToken?.token
-                    authModelBilder.accessToken = accessToken
-                    val authModel = AuthRequestBuilder.builder(authModelBilder)
-                    userLoginRequest(authModel)
+//                    authModelBilder.accessToken = accessToken
+//                    val authModel = AuthRequestBuilder.builder(authModelBilder)
+//                    userLoginRequest(authModel)
+
+                    Log.d(TAG, "access token ${result?.accessToken?.token}")
+                    val graphRequest =
+                        GraphRequest.newMeRequest(result?.accessToken) { myObj, response ->
+                            try {
+                                Log.d(TAG,"try cal for graph")
+                                if (myObj != null) {
+                                    Log.d(TAG,"graph is not null")
+                                    if (myObj.has("id")) {
+                                        Log.d(TAG, "name is ${myObj.getString("name")}")
+                                        Log.d(TAG, "email is ${myObj.getString("email")}")
+                                        Log.d(TAG, "pic is ${myObj.getString("picture")}")
+                                    }
+                                }else{
+                                    Log.d(TAG,"graph is null")
+                                }
+                            } catch (e: Exception) {
+                                Log.d(TAG, "ex: ${e.message}")
+                            }
+                        }
+                    val bundle = Bundle()
+                    bundle.putString("fields", "name,email,id,picture.type{large}")
+                    graphRequest.parameters = bundle
+                    graphRequest.executeAsync()
                 }
 
                 override fun onCancel() {
@@ -229,6 +269,7 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
 
 
     private fun setAutNetworkViewModelObservers() {
+
         mSongAndArtistViewModel.categoriesResponse.observe(this, Observer {
             when (it.status) {
                 NetworkStatus.LOADING -> {
@@ -247,8 +288,6 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
                     } catch (e: Exception) {
                         Log.d(TAG, "YourInterest Bug ${e.message}")
                     }
-
-
                 }
                 NetworkStatus.ERROR -> {
                     hideProgressBar()
@@ -279,25 +318,39 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
                     showProgressBar()
                 }
                 NetworkStatus.SUCCESS -> {
+
                     hideProgressBar()
                     val mResponseModel = it.t as ResponseModel
-                    val userData = mResponseModel.data.authModel
-                    val userName = userData?.name
-                    val userProfile = userData?.avatar
-                    val userEmail = userData?.email
-                    val isInterestSet = userData?.isInterestsSet
-                    val userJwt = userData?.jwt
-                    PrefUtils.setString(this, CommonKeys.KEY_FIRST_NAME, userName)
-                    PrefUtils.setString(this, CommonKeys.KEY_USER_EMAIL, userEmail)
-                    PrefUtils.setString(this, CommonKeys.KEY_JWT, userJwt)
-                    PrefUtils.setString(this, CommonKeys.KEY_USER_AVATAR, userProfile)
-                    if (isInterestSet != null) {
-                        PrefUtils.setBoolean(this, CommonKeys.KEY_IS_INTEREST_SET, isInterestSet)
+                    if (mResponseModel.status) {
+                        Log.d(TAG, "status true called")
+                        val userData = mResponseModel.data.authModel
+                        val userName = userData?.name
+                        val userProfile = userData?.avatar
+                        val userEmail = userData?.email
+
+                        val userJwt = userData?.jwt
+                        PrefUtils.setString(this, CommonKeys.KEY_FIRST_NAME, userName)
+                        PrefUtils.setString(this, CommonKeys.KEY_USER_EMAIL, userEmail)
+                        PrefUtils.setString(this, CommonKeys.KEY_JWT, userJwt)
+                        PrefUtils.setString(this, CommonKeys.KEY_USER_AVATAR, userProfile)
+                        PrefUtils.setBoolean(this, CommonKeys.KEY_IS_LOGGED_IN, true)
+                        val isInterestSet =
+                            PrefUtils.getBoolean(this, CommonKeys.KEY_IS_INTEREST_SET)
+
+                        if (isInterestSet) {
+                            val intent = Intent(this@AuthActivity, MainActivity::class.java)
+                            startActivity(intent)
+                            finish()
+                        } else {
+                            replaceCurrentFragment(YourInterestFragment())
+                        }
+                    } else {
+                        Log.d(TAG, "status false")
+                        (mAuthActivityViewModel.instance as ForgotPasswordImp).accountNotExistsSendOtp(mAuthActivityViewModel.myBundle)
+                        Utilities.showToast(this, "account not exists")
                     }
-                    PrefUtils.setBoolean(this, CommonKeys.KEY_IS_LOGGED_IN, true)
-                    val intent = Intent(this@AuthActivity, MainActivity::class.java)
-                    startActivity(intent)
-                    finish()
+
+
                 }
                 NetworkStatus.ERROR -> {
                     hideProgressBar()
@@ -371,6 +424,7 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
                 }
                 NetworkStatus.SUCCESS -> {
                     hideProgressBar()
+                    Log.d(TAG,"email si ${mAuthActivityViewModel.userEmail}")
                     val data = it.t as ResponseModel
                     val bundle = Bundle()
                     bundle.putString(CommonKeys.USER_EMAIL, mAuthActivityViewModel.userEmail)
@@ -493,6 +547,7 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
                 NetworkStatus.SUCCESS -> {
                     hideProgressBar()
                     val data = it.t as ResponseModel
+                    PrefUtils.setBoolean(this, CommonKeys.KEY_IS_ACCOUNT_CREATED, true)
                     replaceCurrentFragment(YourInterestFragment())
                 }
                 NetworkStatus.EXPIRE -> {
@@ -514,6 +569,43 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
                     )
                 }
             }
+        })
+
+        authNetworkViewModel.saveInterestResponse.observe(this, Observer {
+            when (it.status) {
+                NetworkStatus.LOADING -> {
+                    showProgressBar()
+                }
+                NetworkStatus.SUCCESS -> {
+                    hideProgressBar()
+                    val data = it.t as ResponseModel
+                    PrefUtils.setBoolean(this, CommonKeys.KEY_IS_INTEREST_SET, true)
+                    PrefUtils.setBoolean(this, CommonKeys.KEY_IS_LOGGED_IN, true)
+                    val intent = Intent(this@AuthActivity, MainActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                    Log.d(TAG, "intersts save succssfully")
+                }
+                NetworkStatus.EXPIRE -> {
+                    hideProgressBar()
+                    val error = it.error as ErrorResponse
+                    DialogUtils.errorAlert(
+                        this,
+                        getString(R.string.error_occurred),
+                        error.message
+                    )
+                }
+                NetworkStatus.ERROR -> {
+                    hideProgressBar()
+                    val error = it.error as ErrorResponse
+                    DialogUtils.errorAlert(
+                        this,
+                        getString(R.string.error_occurred),
+                        error.message
+                    )
+                }
+            }
+
         })
     }
 

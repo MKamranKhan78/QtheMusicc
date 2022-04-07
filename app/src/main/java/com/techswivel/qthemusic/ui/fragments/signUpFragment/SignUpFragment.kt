@@ -170,31 +170,7 @@ class SignUpFragment : BaseFragment(), SignUpFragmentImp {
         }
 
         signUpBinding.profileImgSection.setOnClickListener {
-            mChooserFragment = ChooserDialogFragment.newInstance(CommonKeys.TYPE_PHOTO,object :ChooserDialogFragment.CallBack{
-                override fun onActivityResult(mImageUri: List<Uri>?) {
-                    Log.e(TAG,"Uri is $mImageUri")
-                    mSingUpViewModel.uri = mImageUri?.get(0)
-                    val contentURI = mSingUpViewModel.uri
-                    try {
-                        val bitmap = MediaStore.Images.Media.getBitmap(
-                            QTheMusicApplication.getContext().contentResolver,
-                            contentURI
-                        )
-                        signUpBinding.ivUserProfilePic.setImageBitmap(bitmap)
-                        mSingUpViewModel.uri = contentURI
-
-                    } catch (e: IOException) {
-                        e.printStackTrace()
-                        Toast.makeText(
-                            QTheMusicApplication.getContext(),
-                            "Failed!",
-                            Toast.LENGTH_SHORT
-                        )
-                            .show()
-                    }
-                }
-            })
-            mChooserFragment.show(childFragmentManager, ChooserDialogFragment::class.java.toString())
+            showPictureDialog()
         }
     }
 
@@ -241,33 +217,30 @@ class SignUpFragment : BaseFragment(), SignUpFragmentImp {
     }
 
     private fun showPictureDialog() {
-        val fragment = ChooserDialogFragment.newInstance(CommonKeys.TYPE_PHOTO,
-            object : ChooserDialogFragment.CallBack {
-                override fun onActivityResult(mImageUri: List<Uri>?) {
-                    mSingUpViewModel.uri = mImageUri?.get(0)
-                    val contentURI = mSingUpViewModel.uri
-                    try {
-                        val bitmap = MediaStore.Images.Media.getBitmap(
-                            QTheMusicApplication.getContext().contentResolver,
-                            contentURI
-                        )
-                       signUpBinding.ivUserProfilePic.setImageBitmap(bitmap)
-                        mSingUpViewModel.uri = contentURI
+        mChooserFragment = ChooserDialogFragment.newInstance(CommonKeys.TYPE_PHOTO,object :ChooserDialogFragment.CallBack{
+            override fun onActivityResult(mImageUri: List<Uri>?) {
+                Log.e(TAG,"Uri is $mImageUri")
+                mSingUpViewModel.uri = mImageUri?.get(0)
+                val contentURI = mSingUpViewModel.uri
+                try {
+                    val bitmap = MediaStore.Images.Media.getBitmap(
+                        QTheMusicApplication.getContext().contentResolver,
+                        contentURI
+                    )
+                    signUpBinding.ivUserProfilePic.setImageBitmap(bitmap)
+                    mSingUpViewModel.uri = contentURI
 
-                    } catch (e: IOException) {
-                        e.printStackTrace()
-                        Toast.makeText(
-                            QTheMusicApplication.getContext(),
-                            "Failed!",
-                            Toast.LENGTH_SHORT
-                        )
-                            .show()
-                    }
-
-                    //mBinding.profilePic.setImageBitmap(viewModel.uri)
-                    Log.e(TAG, "onActivityResult: return URi = ${mImageUri.toString()}")
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                    Toast.makeText(
+                        QTheMusicApplication.getContext(),
+                        "Failed!",
+                        Toast.LENGTH_SHORT
+                    )
+                        .show()
                 }
-            })
-        fragment.show(childFragmentManager, ChooserDialogFragment::class.java.toString())
+            }
+        })
+        mChooserFragment.show(childFragmentManager, ChooserDialogFragment::class.java.toString())
     }
 }

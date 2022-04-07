@@ -53,7 +53,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:foregroundGravity="center"
-
             android:layout_margin="@dimen/_30dp"
 
             />

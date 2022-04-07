@@ -16,7 +16,7 @@ import com.techswivel.qthemusic.utils.CommonKeys
 import com.techswivel.qthemusic.utils.Log
 
 
-class ForgotPassword : BaseFragment() {
+class ForgotPassword : BaseFragment(),ForgotPasswordImp {
     private lateinit var fragmentFlow: OtpType
     private lateinit var forgotViewModel: ForgotPasswordViewModel
 
@@ -57,8 +57,14 @@ class ForgotPassword : BaseFragment() {
         forgotbingding.btnSendCodeForgot.animation = animationDownToUp
 
         forgotbingding.ivBackForgotId.setOnClickListener {
-
             requireActivity().onBackPressed()
+        }
+
+        forgotbingding.socialIconsPortion.ivGoogleId.setOnClickListener {
+            (mActivityListener as AuthActivityImp).signInWithGoogle()
+        }
+        forgotbingding.socialIconsPortion.ivFbId.setOnClickListener {
+            (mActivityListener as AuthActivityImp).signInWithFacebook()
         }
     }
 
@@ -81,6 +87,7 @@ class ForgotPassword : BaseFragment() {
         authModelBilder.otpType = fragmentFlow.name
         authModelBilder.email = forgotbingding.etForgotEmailId.text.toString()
         val otpModel = AuthRequestBuilder.builder(authModelBilder)
+        Log.d(TAG,"otpModel $otpModel")
         (mActivityListener as AuthActivityImp).forgotPasswordRequest(otpModel)
         setObserverForViewModels()
     }
@@ -95,5 +102,20 @@ class ForgotPassword : BaseFragment() {
 
     companion object {
         private val TAG = "ForgotPassword"
+    }
+
+    override fun accountNotExistsSendOtp(bundle: Bundle) {
+
+        val email=bundle.getString(CommonKeys.KEY_USER_EMAIL)
+        Log.d(TAG,"receiced $email")
+        forgotbingding.etForgotEmailId.setText(email)
+    }
+
+    override fun showProgressBar() {
+
+    }
+
+    override fun hideProgressBar() {
+
     }
 }

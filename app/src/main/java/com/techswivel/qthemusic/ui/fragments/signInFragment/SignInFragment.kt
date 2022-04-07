@@ -54,6 +54,7 @@ class SignInFragment : BaseFragment() {
     }
 
     private fun initialization() {
+
         signInBinding.obj = signInViewModel
         Glide.with(requireContext()).load(R.drawable.laura_music)
             .transform(BlurImageView(requireContext())).into(signInBinding.ivSigninBg)
@@ -61,7 +62,11 @@ class SignInFragment : BaseFragment() {
 
     private fun clickListeners() {
         signInBinding.tvSignUpBtn.setOnClickListener {
-            (mActivityListener as AuthActivityImp).replaceCurrentFragment(SignUpFragment())
+            val bundle = Bundle()
+            bundle.putSerializable(CommonKeys.OTP_TYPE, OtpType.EMAIL)
+            val fortgotPasword = ForgotPassword()
+            fortgotPasword.arguments = bundle
+            (mActivityListener as AuthActivityImp).replaceCurrentFragment(fortgotPasword)
         }
         signInBinding.btnSignIn.setOnClickListener {
             if (
