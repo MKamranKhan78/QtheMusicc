@@ -20,12 +20,12 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@drawable/black_gradiant_background"
         android:scrollbars="vertical">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/black_gradiant_background">
+            android:layout_height="match_parent">
 
             <TextView
                 android:id="@+id/freeAccountText"
@@ -298,9 +298,6 @@
                     android:thumb="@drawable/thumb"
                     app:track="@drawable/track" />
 
-                <!--isArtistChecked="@{viewModel.authModel.notification.isArtistUpdateEnabled()}"
-                isChecked="@{viewModel.authModel.notification.isNotificationEnabled()}"
-                -->
 
             </RelativeLayout>
 

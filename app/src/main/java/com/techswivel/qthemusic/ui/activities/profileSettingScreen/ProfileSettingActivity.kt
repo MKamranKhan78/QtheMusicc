@@ -1,6 +1,5 @@
 package com.techswivel.qthemusic.ui.activities.profileSettingScreen
 
-import android.app.Activity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.techswivel.qthemusic.R
@@ -29,8 +28,7 @@ class ProfileSettingActivity : BaseActivity(), ProfileSettingActivityImpl {
     override fun onBackPressed() {
         when {
             getEntryCount() <= 1 -> {
-                setResult(Activity.RESULT_CANCELED)
-                this.finishAffinity()
+                finish()
             }
             else -> {
                 this.onBackPressed()
@@ -40,11 +38,11 @@ class ProfileSettingActivity : BaseActivity(), ProfileSettingActivityImpl {
 
 
     override fun onSupportNavigateUp(): Boolean {
+        mBinding.activityToolbar.toolbarTitle.text = getString(R.string.settings)
         popUpAllFragmentIncludeThis(ProfileSettingFragment::class.java.name)
         openFragment(ProfileSettingFragment.newInstance())
         return super.onSupportNavigateUp()
     }
-
 
     override fun onRequestPermissionsResult(
         requestCode: Int,

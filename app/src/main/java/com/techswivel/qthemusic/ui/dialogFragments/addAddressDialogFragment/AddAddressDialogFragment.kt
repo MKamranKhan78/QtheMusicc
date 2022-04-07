@@ -64,21 +64,23 @@ class AddAddressDialogFragment : BaseDialogFragment(), BaseInterface {
 
 
     override fun showProgressBar() {
+        mBinding.progressBar.visibility = View.VISIBLE
+
     }
 
     override fun hideProgressBar() {
+        mBinding.progressBar.visibility = View.GONE
     }
 
     private fun setObserver() {
         authNetworkViewModel.profileUpdationResponse.observe(requireActivity()) { updateProfileResponse ->
             when (updateProfileResponse.status) {
                 NetworkStatus.LOADING -> {
-                    mBinding.progressBar.visibility = View.VISIBLE
+                    showProgressBar()
                 }
                 NetworkStatus.SUCCESS -> {
-                    mBinding.progressBar.visibility = View.GONE
                     mProfileSettingActivityImpl.openProfileSettingFragmentWithAddress(viewModel.authModel)
-
+                    hideProgressBar()
                     dismiss()
                     Toast.makeText(
                         QTheMusicApplication.getContext(),
@@ -87,7 +89,7 @@ class AddAddressDialogFragment : BaseDialogFragment(), BaseInterface {
                     ).show()
                 }
                 NetworkStatus.ERROR -> {
-                    mBinding.progressBar.visibility = View.GONE
+                    hideProgressBar()
                     updateProfileResponse.error?.message?.let { error_message ->
                         DialogUtils.errorAlert(
                             QTheMusicApplication.getContext(),
@@ -97,7 +99,7 @@ class AddAddressDialogFragment : BaseDialogFragment(), BaseInterface {
                     }
                 }
                 NetworkStatus.EXPIRE -> {
-                    mBinding.progressBar.visibility = View.GONE
+                    hideProgressBar()
                     DialogUtils.sessionExpireAlert(
                         QTheMusicApplication.getContext(),
                         object : DialogUtils.CallBack {
@@ -112,7 +114,7 @@ class AddAddressDialogFragment : BaseDialogFragment(), BaseInterface {
                         })
                 }
                 NetworkStatus.COMPLETED -> {
-                    mBinding.progressBar.visibility = View.GONE
+                    hideProgressBar()
                     dismiss()
                     Log.v("Network_status", "completed")
                 }

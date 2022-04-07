@@ -64,9 +64,11 @@ class AddGenderDialogFragment : BaseDialogFragment(), BaseInterface {
     }
 
     override fun showProgressBar() {
+        mBinding.progressBar.visibility = View.VISIBLE
     }
 
     override fun hideProgressBar() {
+        mBinding.progressBar.visibility = View.GONE
     }
 
     private fun setCallBack(profileSettingActivityImpl: ProfileSettingActivityImpl) {
@@ -77,10 +79,10 @@ class AddGenderDialogFragment : BaseDialogFragment(), BaseInterface {
         netWorkViewModel.profileUpdationResponse.observe(requireActivity()) { updateProfileResponse ->
             when (updateProfileResponse.status) {
                 NetworkStatus.LOADING -> {
-                    mBinding.progressBar.visibility = View.VISIBLE
+                    showProgressBar()
                 }
                 NetworkStatus.SUCCESS -> {
-                    mBinding.progressBar.visibility = View.GONE
+                    hideProgressBar()
                     mProfileSettingActivityImpl.openProfileSettingFragmentWithGender(viewModel.authModel)
                     dismiss()
                     Toast.makeText(
@@ -90,7 +92,7 @@ class AddGenderDialogFragment : BaseDialogFragment(), BaseInterface {
                     ).show()
                 }
                 NetworkStatus.ERROR -> {
-                    mBinding.progressBar.visibility = View.GONE
+                    hideProgressBar()
                     updateProfileResponse.error?.message?.let { error_message ->
                         DialogUtils.errorAlert(
                             QTheMusicApplication.getContext(),
@@ -100,7 +102,7 @@ class AddGenderDialogFragment : BaseDialogFragment(), BaseInterface {
                     }
                 }
                 NetworkStatus.EXPIRE -> {
-                    mBinding.progressBar.visibility = View.GONE
+                    hideProgressBar()
                     DialogUtils.sessionExpireAlert(
                         QTheMusicApplication.getContext(),
                         object : DialogUtils.CallBack {
@@ -115,7 +117,7 @@ class AddGenderDialogFragment : BaseDialogFragment(), BaseInterface {
                         })
                 }
                 NetworkStatus.COMPLETED -> {
-                    mBinding.progressBar.visibility = View.GONE
+                    hideProgressBar()
                     dismiss()
                     Log.v("Network_status", "completed")
                 }

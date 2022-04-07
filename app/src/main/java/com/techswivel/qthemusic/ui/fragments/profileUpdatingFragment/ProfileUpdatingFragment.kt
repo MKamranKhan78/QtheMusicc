@@ -145,11 +145,11 @@ class ProfileUpdatingFragment : BaseFragment(), ProfileSettingActivityImpl {
         netWorkViewModel.profileUpdationResponse.observe(requireActivity()) { updateProfileResponse ->
             when (updateProfileResponse.status) {
                 NetworkStatus.LOADING -> {
-                    mBinding.progressBar.visibility = View.VISIBLE
+                    showProgressBar()
 
                 }
                 NetworkStatus.SUCCESS -> {
-                    mBinding.progressBar.visibility = View.GONE
+                    hideProgressBar()
 
                     Toast.makeText(
                         QTheMusicApplication.getContext(),
@@ -158,7 +158,7 @@ class ProfileUpdatingFragment : BaseFragment(), ProfileSettingActivityImpl {
                     ).show()
                 }
                 NetworkStatus.ERROR -> {
-                    mBinding.progressBar.visibility = View.GONE
+                    hideProgressBar()
                     updateProfileResponse.error?.message?.let { error_message ->
                         DialogUtils.errorAlert(
                             QTheMusicApplication.getContext(),
@@ -168,7 +168,7 @@ class ProfileUpdatingFragment : BaseFragment(), ProfileSettingActivityImpl {
                     }
                 }
                 NetworkStatus.EXPIRE -> {
-                    mBinding.progressBar.visibility = View.GONE
+                    hideProgressBar()
                     DialogUtils.sessionExpireAlert(
                         QTheMusicApplication.getContext(),
                         object : DialogUtils.CallBack {
@@ -183,7 +183,7 @@ class ProfileUpdatingFragment : BaseFragment(), ProfileSettingActivityImpl {
                         })
                 }
                 NetworkStatus.COMPLETED -> {
-                    mBinding.progressBar.visibility = View.GONE
+                    hideProgressBar()
                 }
             }
         }

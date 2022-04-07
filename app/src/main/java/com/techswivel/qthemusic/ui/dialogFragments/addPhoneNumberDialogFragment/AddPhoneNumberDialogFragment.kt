@@ -82,10 +82,10 @@ class AddPhoneNumberDialogFragment : BaseDialogFragment(), BaseInterface {
         mAuthNetworkViewModel.forgotPasswordResponse.observe(requireActivity()) { sendOtpResponse ->
             when (sendOtpResponse.status) {
                 NetworkStatus.LOADING -> {
-                    mBinding.progressBar.visibility = View.VISIBLE
+                    showProgressBar()
                 }
                 NetworkStatus.SUCCESS -> {
-                    mBinding.progressBar.visibility = View.GONE
+                    hideProgressBar()
                     mProfileSettingActivityImpl.openProfileSettingFragmentWithPnone(viewModel.number)
                     dismiss()
                     Toast.makeText(
@@ -96,7 +96,7 @@ class AddPhoneNumberDialogFragment : BaseDialogFragment(), BaseInterface {
 
                 }
                 NetworkStatus.ERROR -> {
-                    mBinding.progressBar.visibility = View.GONE
+                    hideProgressBar()
                     sendOtpResponse.error?.message?.let { error_message ->
                         DialogUtils.errorAlert(
                             QTheMusicApplication.getContext(),
@@ -106,7 +106,7 @@ class AddPhoneNumberDialogFragment : BaseDialogFragment(), BaseInterface {
                     }
                 }
                 NetworkStatus.EXPIRE -> {
-                    mBinding.progressBar.visibility = View.GONE
+                    hideProgressBar()
                     DialogUtils.sessionExpireAlert(
                         QTheMusicApplication.getContext(),
                         object : DialogUtils.CallBack {
@@ -121,7 +121,7 @@ class AddPhoneNumberDialogFragment : BaseDialogFragment(), BaseInterface {
                         })
                 }
                 NetworkStatus.COMPLETED -> {
-                    mBinding.progressBar.visibility = View.GONE
+                    hideProgressBar()
                     dismiss()
                     Log.v("Network_status", "completed")
                 }
