@@ -5,7 +5,6 @@ import android.app.DatePickerDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,6 +31,7 @@ import com.techswivel.qthemusic.utils.CommonKeys
 import com.techswivel.qthemusic.utils.CommonKeys.Companion.KEY_USER_DOB
 import com.techswivel.qthemusic.utils.CommonKeys.Companion.KEY_USER_PHONE
 import com.techswivel.qthemusic.utils.DialogUtils
+import com.techswivel.qthemusic.utils.ImageUtils
 import com.techswivel.qthemusic.utils.Log
 import kotlinx.coroutines.runBlocking
 import java.io.IOException
@@ -214,11 +214,13 @@ class ProfileUpdatingFragment : BaseFragment(), ProfileSettingActivityImpl {
                         viewModel.uri = mImageUri?.get(0)
                         val contentURI = viewModel.uri
                         try {
-                            val bitmap = MediaStore.Images.Media.getBitmap(
-                                QTheMusicApplication.getContext().contentResolver,
-                                contentURI
-                            )
-                            mBinding.profilePic.setImageBitmap(bitmap)
+                            if (contentURI != null) {
+                                viewModel.bitmap = ImageUtils.getBitmapFromUri(
+                                    contentURI,
+                                    QTheMusicApplication.getContext()
+                                )
+                            }
+                            mBinding.profilePic.setImageBitmap(viewModel.bitmap)
                             viewModel.uri = contentURI
 
                         } catch (e: IOException) {
@@ -299,7 +301,6 @@ class ProfileUpdatingFragment : BaseFragment(), ProfileSettingActivityImpl {
         // for disabling the past date
         datePicker.getDatePicker().setMinDate(System.currentTimeMillis() - 1000)
     }
-
 
     private fun bindViewModelWithView() {
         mBinding.viewModel = viewModel
