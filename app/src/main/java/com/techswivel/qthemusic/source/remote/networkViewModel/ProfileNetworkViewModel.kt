@@ -18,6 +18,7 @@ class ProfileNetworkViewModel :BaseViewModel() {
 
     var playlistResponse: MutableLiveData<ApiResponse> = MutableLiveData()
     var savePlaylistResponse: MutableLiveData<ApiResponse> = MutableLiveData()
+    var deletePlaylistResponse: MutableLiveData<ApiResponse> = MutableLiveData()
 
 
     fun getPlayListFromServer() {
@@ -122,6 +123,60 @@ class ProfileNetworkViewModel :BaseViewModel() {
 
             override fun onRequestComplete() {
                 savePlaylistResponse.value = ApiResponse.complete()
+            }
+        })
+    }
+
+
+    fun deletePlaylist(playlistID: Int) {
+        RemoteDataManager.deletePlaylist(playlistID).doOnSubscribe {
+            deletePlaylistResponse.value = ApiResponse.loading()
+        }?.subscribe(object : CustomObserver<Response<ResponseMain>>() {
+            override fun onSuccess(t: Response<ResponseMain>) {
+                when {
+                    t.isSuccessful -> {
+                        deletePlaylistResponse.postValue(
+                            ApiResponse.success(t.body()?.response)
+                        )
+                    }
+                    t.code() == 403 -> {
+                        val error: ResponseMain? = ErrorUtils.parseError(t)
+                        val errorData = ErrorResponse(
+                            error?.response?.status ?: false,
+                            error?.response?.message ?: QTheMusicApplication.getContext()
+                                .getString(R.string.something_wrong),
+                            t.code()
+                        )
+                        deletePlaylistResponse.value = ApiResponse.expire(errorData)
+                    }
+                    else -> {
+                        val error: ResponseMain? = ErrorUtils.parseError(t)
+                        deletePlaylistResponse.value = ApiResponse.error(
+                            ErrorResponse(
+                                error?.response?.status ?: false,
+                                error?.response?.message ?: QTheMusicApplication.getContext()
+                                    .getString(R.string.something_wrong),
+                                t.code()
+                            )
+                        )
+                    }
+                }
+            }
+
+            override fun onError(e: Throwable, isInternetError: Boolean, error: CustomError?) {
+                deletePlaylistResponse.value = ApiResponse.error(
+                    error?.code?.let { code ->
+                        ErrorResponse(
+                            false,
+                            error.message,
+                            code
+                        )
+                    }
+                )
+            }
+
+            override fun onRequestComplete() {
+                deletePlaylistResponse.value = ApiResponse.complete()
             }
         })
     }

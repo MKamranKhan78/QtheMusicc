@@ -4,4 +4,5 @@ import com.techswivel.qthemusic.models.PlaylistModel
 
 interface PlaylistFragmentImpl {
     fun openPlayListFragment(playlistModel: PlaylistModel)
+    fun openPlayListFragmentWithPlaylistModel(playlistModel: PlaylistModel?)
 }

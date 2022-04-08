@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.customData.adapter.RecyclerViewAdapter
 import com.techswivel.qthemusic.customData.enums.AdapterType
+import com.techswivel.qthemusic.customData.enums.DeleteViewType
 import com.techswivel.qthemusic.customData.enums.NetworkStatus
 import com.techswivel.qthemusic.customData.interfaces.BaseInterface
 import com.techswivel.qthemusic.databinding.FragmentPlaylistBinding
@@ -18,6 +19,8 @@ import com.techswivel.qthemusic.models.ResponseModel
 import com.techswivel.qthemusic.source.remote.networkViewModel.ProfileNetworkViewModel
 import com.techswivel.qthemusic.ui.base.RecyclerViewBaseFragment
 import com.techswivel.qthemusic.ui.dialogFragments.createPlaylistDialogFragment.CreatePlaylistDialogFragment
+import com.techswivel.qthemusic.ui.dialogFragments.deletionViewBottomSheetDialog.DeletionViewBottomSheetDialogFragment
+import com.techswivel.qthemusic.utils.CommonKeys
 import com.techswivel.qthemusic.utils.DialogUtils
 
 
@@ -28,6 +31,7 @@ class PlaylistFragment : RecyclerViewBaseFragment(), BaseInterface,
     private lateinit var viewModel: PlaylistFragmentViewModel
     private lateinit var mPlaylistAdapter: RecyclerViewAdapter
     private lateinit var profileNetworViewModel: ProfileNetworkViewModel
+    private lateinit var deletionBottomSheetDialog: DeletionViewBottomSheetDialogFragment
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -69,12 +73,38 @@ class PlaylistFragment : RecyclerViewBaseFragment(), BaseInterface,
 
     override fun onItemClick(data: Any?, position: Int) {
         super.onItemClick(data, position)
-        // open bottom view fragment for deleting playlist
+        val playlistModel = data as PlaylistModel
+        val bundle = Bundle()
+
+        bundle.putString(CommonKeys.KEY_DATA, DeleteViewType.PLAY_LIST.toString())
+        playlistModel.let { playListModel ->
+            bundle.putSerializable(CommonKeys.KEY_DATA, playListModel)
+        }
+/*        playlistModel.playListId?.let { playlistId ->
+            bundle.putInt(CommonKeys.KEY_DATA, playlistId)
+        }*/
+        deletionBottomSheetDialog = DeletionViewBottomSheetDialogFragment.newInstance(bundle, this)
+        deletionBottomSheetDialog.show(
+            requireActivity().supportFragmentManager,
+            deletionBottomSheetDialog.tag
+        )
 
     }
 
     override fun onViewClicked(view: View, data: Any?) {
         super.onViewClicked(view, data)
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    override fun openPlayListFragment(playlistModel: PlaylistModel) {
+        viewModel.mPlaylist.add(playlistModel)
+        mPlaylistAdapter.notifyItemInserted(viewModel.mPlaylist.size)
+    }
+
+    override fun openPlayListFragmentWithPlaylistModel(playlistModel: PlaylistModel?) {
+        val index = viewModel.mPlaylist.indexOf(playlistModel as PlaylistModel)
+        viewModel.mPlaylist.remove(playlistModel)
+        mPlaylistAdapter.notifyItemRemoved(index)
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -159,12 +189,6 @@ class PlaylistFragment : RecyclerViewBaseFragment(), BaseInterface,
             ViewModelProvider(this).get(PlaylistFragmentViewModel::class.java)
         profileNetworViewModel =
             ViewModelProvider(this).get(ProfileNetworkViewModel::class.java)
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    override fun openPlayListFragment(playlistModel: PlaylistModel) {
-        viewModel.mPlaylist.add(playlistModel)
-        mPlaylistAdapter.notifyItemInserted(viewModel.mPlaylist.size)
     }
 
 
