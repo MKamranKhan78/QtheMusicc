@@ -53,10 +53,6 @@ class ProfileUpdatingFragment : BaseFragment(), ProfileSettingActivityImpl {
     private lateinit var netWorkViewModel: AuthNetworkViewModel
     private lateinit var chooserDialog: ChooserDialogFragment
 
-    val mcurrentTime = Calendar.getInstance()
-    val year = mcurrentTime.get(Calendar.YEAR)
-    val month = mcurrentTime.get(Calendar.MONTH)
-    val day = mcurrentTime.get(Calendar.DAY_OF_MONTH)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -262,8 +258,8 @@ class ProfileUpdatingFragment : BaseFragment(), ProfileSettingActivityImpl {
                 requireContext(), R.style.MyDatePickerStyle,
                 { view, year, month, dayOfMonth ->
                     // change date into millis
-                    mcurrentTime.set(year, month, dayOfMonth)
-                    viewModel.dateInMillis = mcurrentTime.getTimeInMillis()
+                    viewModel.mcurrentTime.set(year, month, dayOfMonth)
+                    viewModel.dateInMillis = viewModel.mcurrentTime.getTimeInMillis()
                     updateUserDateOfBirth()
                     val dateObj = Date(viewModel.dateInMillis as Long)
                     mBinding.tvDateOfBirth.setText(
@@ -272,9 +268,9 @@ class ProfileUpdatingFragment : BaseFragment(), ProfileSettingActivityImpl {
                     mBinding.textviewChangeDobID.text =
                         QTheMusicApplication.getContext().getString(R.string.change)
                 },
-                year,
-                month,
-                day
+                viewModel.year,
+                viewModel.month,
+                viewModel.day
             )
             openDatePicker(datePicker)
 
