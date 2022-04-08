@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -37,34 +36,32 @@
 
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:orientation="vertical"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/_10dp"
                 android:layout_toLeftOf="@id/item_menu_button_id"
                 android:layout_toEndOf="@id/imageAudioSong"
-                android:layout_marginStart="@dimen/_10dp"
-                android:layout_centerVertical="true"
-                android:layout_height="wrap_content">
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
-                    android:fontFamily="@font/manrope_regular"
-                    android:textSize="@dimen/_14sp"
-                    android:minLines="1"
-                    android:maxLines="1"
+                    android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/_20dp"
                     android:ellipsize="end"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/color_white_text_profile"
+                    android:fontFamily="@font/manrope_regular"
+                    android:maxLines="1"
+                    android:minLines="1"
                     android:text="@{obj.playListTitle.toString()}"
-                    />
+                    android:textColor="@color/color_white_text_profile"
+                    android:textSize="@dimen/_14sp" />
 
                 <TextView
+                    setNomberOfSong="@{obj.totalSongs}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="@dimen/_10sp"
                     android:fontFamily="@font/manrope_regular"
                     android:textColor="@color/color_light_grey"
-                    setNomberOfSong="@{obj.totalSongs}"
-                    />
+                    android:textSize="@dimen/_10sp" />
 
 
             </LinearLayout>

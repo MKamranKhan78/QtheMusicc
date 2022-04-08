@@ -32,7 +32,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/tvNoDataFound"
         android:visibility="gone"
-        android:textColor="@color/color_light_grey"
+        android:textColor="@color/logout_button_color"
         android:layout_centerInParent="true"
         android:text="@string/no_data_found"/>
 </RelativeLayout>

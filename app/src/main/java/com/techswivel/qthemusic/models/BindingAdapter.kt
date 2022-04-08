@@ -23,7 +23,11 @@ object BindingAdapter {
     @JvmStatic
     @BindingAdapter("setNomberOfSong")
     fun setNomberOfSong(textView: TextView, no_of_songs: Int?) {
-        textView.text = "$no_of_songs songs"
+        if (no_of_songs == null) {
+            textView.text = "0 songs"
+        } else {
+            textView.text = "$no_of_songs songs"
+        }
     }
 
     @SuppressLint("SetTextI18n")

@@ -5,6 +5,7 @@
     <color name="colorAccent">#BA011A</color>
     <color name="color_white">#ffff</color>
     <color name="color_black">#000</color>
+    <color name="transparent_color">#00000000</color>
     <color name="color_white_text_profile">#FFFFFF</color>
     <color name="color_enable_button">#1F72A3</color>
     <color name="color_disable_button">#AFAFAF</color>
@@ -32,6 +33,7 @@
     <color name="color_black_landing_background">#000000</color>
     <color name="color_center_black_landing_background">#313131</color>
     <color name="color_white_text">#ffffffff</color>
+    <color name="light_gray_color">#84818A66</color>
     <color name="premium_button_color">#D3A42E</color>
     <color name="logout_button_color">#BA011A</color>
 

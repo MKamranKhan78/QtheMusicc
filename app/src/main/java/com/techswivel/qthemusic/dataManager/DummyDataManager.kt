@@ -42,9 +42,16 @@ class DummyDataManager {
                 authModel,
                 getRecommendedSongsDummyData(),
                 getCategoriesDummyData(),
-                getSongsDummyData()
+                getSongsDummyData(),
+                getDummyPlaylist(),
+                getDummyPlaylistResponse()
             )
         }
+
+        private fun getDummyPlaylistResponse(): PlaylistModel {
+            return PlaylistModel(10, "Dummy Playlist", null)
+        }
+
 
         private fun getRecommendedSongsDummyData(): RecommendedSongsResponse {
             return RecommendedSongsResponse(
@@ -153,6 +160,42 @@ class DummyDataManager {
                 ),
             )
         }
+
+        private fun getDummyPlaylist(): List<PlaylistModel> {
+            return arrayListOf(
+                PlaylistModel(
+                    1,
+                    "Emotional songs",
+                    30
+                ),
+                PlaylistModel(
+                    2,
+                    "Hamd e bari tala",
+                    40
+                ),
+                PlaylistModel(
+                    3,
+                    "For Sleeping time",
+                    100
+                ),
+                PlaylistModel(
+                    4,
+                    "Naat",
+                    12
+                ),
+                PlaylistModel(
+                    5,
+                    "Punjabi songs",
+                    25
+                ),
+                PlaylistModel(
+                    6,
+                    "New Songs",
+                    50
+                )
+            )
+        }
+
 
         fun getDummyAuthDetails(): AuthModel {
             val address = Address(
