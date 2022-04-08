@@ -8,6 +8,7 @@
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
         <item name="android:statusBarColor" tools:ignore="NewApi">@color/app_bar_clr
         </item>
+        <item name="android:windowContentTransitions" tools:targetApi="lollipop">true</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
@@ -28,6 +29,7 @@
         <item name="android:textSize">12sp</item>
         <item name="fontFamily">@font/manrope_regular</item>
     </style>
+
     <style name="MyDatePickerStyle" parent="Theme.AppCompat.Light.Dialog">
         <item name="colorAccent">@color/color_black_landing_background</item>
         <!--selected Item color-->

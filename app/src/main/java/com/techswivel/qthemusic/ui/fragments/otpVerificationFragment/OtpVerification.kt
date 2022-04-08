@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.os.CountDownTimer
 import android.text.Editable
 import android.text.TextWatcher
+import android.transition.TransitionInflater
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,14 +19,22 @@ import com.techswivel.qthemusic.models.AuthRequestBuilder
 import com.techswivel.qthemusic.ui.activities.authActivity.AuthActivityImp
 import com.techswivel.qthemusic.ui.base.BaseFragment
 import com.techswivel.qthemusic.utils.CommonKeys
+import com.techswivel.qthemusic.utils.Log
 import com.techswivel.qthemusic.utils.Utilities
 
 class OtpVerification : BaseFragment() {
+    val TAG="OtpVerification"
     private lateinit var mOtpViewBinding: FragmentOtpVerificationBinding
     private lateinit var mVerifyOtpViewModel: OtpVerificationViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+            initViewModels()
+        mVerifyOtpViewModel.fragmentFlow = arguments?.getSerializable(CommonKeys.OTP_TYPE) as OtpType
+        if (mVerifyOtpViewModel.fragmentFlow==OtpType.EMAIL){
+            Log.d(TAG,"otp type is email")
+            sharedElementEnterTransition = TransitionInflater.from(requireContext())
+                .inflateTransition(R.transition.abc)
+        }
     }
 
     override fun onCreateView(
@@ -38,7 +47,7 @@ class OtpVerification : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initViewModels()
+
         initialization()
         clickListeners()
         getUserOtp()
@@ -53,7 +62,7 @@ class OtpVerification : BaseFragment() {
 
     private fun initialization() {
         mOtpViewBinding.otp1Id.requestFocus()
-       mVerifyOtpViewModel.fragmentFlow = arguments?.getSerializable(CommonKeys.OTP_TYPE) as OtpType
+
         mVerifyOtpViewModel.email = arguments?.getString(CommonKeys.USER_EMAIL).toString()
         mOtpViewBinding.tvEmailWhereSndOtp.text = mVerifyOtpViewModel.email
     }
@@ -63,10 +72,9 @@ class OtpVerification : BaseFragment() {
 
             mVerifyOtpViewModel.otpCode =
                 mVerifyOtpViewModel.etOtpOne + mVerifyOtpViewModel.etOtpTwo + mVerifyOtpViewModel.etOtpThree + mVerifyOtpViewModel.etOtpFour + mVerifyOtpViewModel.etOtpFive
-            if (mVerifyOtpViewModel.otpCode.length < 5 || mVerifyOtpViewModel.otpCode != "11111") {
+            if (mVerifyOtpViewModel.otpCode.length < 5) {
                 Utilities.showToast(requireContext(), getString(R.string.enter_valid_otp))
             } else {
-                mVerifyOtpViewModel.countDownTimer.cancel()
                 createAndSendVerifyOtpRequest(
                     mVerifyOtpViewModel.otpCode.toInt(),
                     mVerifyOtpViewModel.email
@@ -78,7 +86,7 @@ class OtpVerification : BaseFragment() {
             authModelBilder.otpType = mVerifyOtpViewModel.fragmentFlow.name
             authModelBilder.email = mVerifyOtpViewModel.email
             val otpModel = AuthRequestBuilder.builder(authModelBilder)
-            (mActivityListener as AuthActivityImp).forgotPasswordRequest(otpModel)
+            (mActivityListener as AuthActivityImp).forgotPasswordRequest(otpModel,null,null)
             mOtpViewBinding.tvResendBtn.visibility = View.INVISIBLE
             mOtpViewBinding.tvOtpResendTimerTag.visibility = View.VISIBLE
             mOtpViewBinding.tvOtpResentTimer.visibility = View.VISIBLE

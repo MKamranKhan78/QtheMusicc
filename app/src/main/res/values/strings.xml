@@ -145,6 +145,8 @@
     <string name="your_interest_msg">Select 2 to 5 topics according to your interests.</string>
     <string name="email_is_required">Email is  Required</string>
     <string name="password_is_required">Password is  Required</string>
+    <string name="terms_tag_msg">By clicking sign up, you agree to the User Agreement, Privacy Policy, and Cookie Policy.</string>
+    <string name="sigup_mstg">Sign Up to get started.</string>
 
 
 </resources>

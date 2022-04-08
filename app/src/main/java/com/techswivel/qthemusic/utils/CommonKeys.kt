@@ -42,6 +42,7 @@ class CommonKeys {
         const val KEY_FCM_TOKEN="key_fcm_token"
         const val KEY_IS_ACCOUNT_CREATED="key_is_account_created"
         const val KEY_USER_PHOTO="key_user_photo"
+        const val USER_PASSWORD="user_password"
 
     }
 }

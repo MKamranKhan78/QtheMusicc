@@ -14,6 +14,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.application.QTheMusicApplication
 import com.techswivel.qthemusic.databinding.FragmentSignUpBinding
@@ -37,7 +38,7 @@ class SignUpFragment : BaseFragment(), SignUpFragmentImp {
     }
 
     private lateinit var mSingUpViewModel: SignUpViewModel
-    private lateinit var mChooserFragment:ChooserDialogFragment
+    private lateinit var mChooserFragment: ChooserDialogFragment
     private lateinit var signUpBinding: FragmentSignUpBinding
 
     var year: Int = 0
@@ -61,13 +62,16 @@ class SignUpFragment : BaseFragment(), SignUpFragmentImp {
         }.addOnFailureListener {
             Log.d(TAG, "exception is $it")
         }
+
         return signUpBinding.root
     }
+
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         clickListeners()
+        initialization()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -81,6 +85,17 @@ class SignUpFragment : BaseFragment(), SignUpFragmentImp {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         mChooserFragment.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
+
+    private fun initialization() {
+        val email = arguments?.getString(CommonKeys.KEY_USER_EMAIL)
+        val name = arguments?.getString(CommonKeys.KEY_USER_NAME)
+        val photo = arguments?.getString(CommonKeys.KEY_USER_PHOTO)
+        val UserPassword=arguments?.getString(CommonKeys.USER_PASSWORD)
+        signUpBinding.etUserName.setText(name)
+        Glide.with(requireContext()).load(photo)
+            .into(signUpBinding.ivUserProfilePic)
+        Log.d(TAG, "$email $name  user passrd$UserPassword")
     }
 
     private fun createUserAndCallApi(
@@ -217,30 +232,31 @@ class SignUpFragment : BaseFragment(), SignUpFragmentImp {
     }
 
     private fun showPictureDialog() {
-        mChooserFragment = ChooserDialogFragment.newInstance(CommonKeys.TYPE_PHOTO,object :ChooserDialogFragment.CallBack{
-            override fun onActivityResult(mImageUri: List<Uri>?) {
-                Log.e(TAG,"Uri is $mImageUri")
-                mSingUpViewModel.uri = mImageUri?.get(0)
-                val contentURI = mSingUpViewModel.uri
-                try {
-                    val bitmap = MediaStore.Images.Media.getBitmap(
-                        QTheMusicApplication.getContext().contentResolver,
-                        contentURI
-                    )
-                    signUpBinding.ivUserProfilePic.setImageBitmap(bitmap)
-                    mSingUpViewModel.uri = contentURI
+        mChooserFragment = ChooserDialogFragment.newInstance(CommonKeys.TYPE_PHOTO,
+            object : ChooserDialogFragment.CallBack {
+                override fun onActivityResult(mImageUri: List<Uri>?) {
+                    Log.e(TAG, "Uri is $mImageUri")
+                    mSingUpViewModel.uri = mImageUri?.get(0)
+                    val contentURI = mSingUpViewModel.uri
+                    try {
+                        val bitmap = MediaStore.Images.Media.getBitmap(
+                            QTheMusicApplication.getContext().contentResolver,
+                            contentURI
+                        )
+                        signUpBinding.ivUserProfilePic.setImageBitmap(bitmap)
+                        mSingUpViewModel.uri = contentURI
 
-                } catch (e: IOException) {
-                    e.printStackTrace()
-                    Toast.makeText(
-                        QTheMusicApplication.getContext(),
-                        "Failed!",
-                        Toast.LENGTH_SHORT
-                    )
-                        .show()
+                    } catch (e: IOException) {
+                        e.printStackTrace()
+                        Toast.makeText(
+                            QTheMusicApplication.getContext(),
+                            "Failed!",
+                            Toast.LENGTH_SHORT
+                        )
+                            .show()
+                    }
                 }
-            }
-        })
+            })
         mChooserFragment.show(childFragmentManager, ChooserDialogFragment::class.java.toString())
     }
 }

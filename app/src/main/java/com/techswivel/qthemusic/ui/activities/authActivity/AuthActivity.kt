@@ -33,6 +33,7 @@ import com.techswivel.qthemusic.ui.fragments.forgotPasswordFragment.ForgotPasswo
 import com.techswivel.qthemusic.ui.fragments.otpVerificationFragment.OtpVerification
 import com.techswivel.qthemusic.ui.fragments.setPasswordFragmetnt.SetPassword
 import com.techswivel.qthemusic.ui.fragments.signInFragment.SignInFragment
+import com.techswivel.qthemusic.ui.fragments.signUpFragment.SignUpFragment
 import com.techswivel.qthemusic.ui.fragments.yourInterestFragment.YourInterestFragment
 import com.techswivel.qthemusic.ui.fragments.yourInterestFragment.YourInterestImp
 import com.techswivel.qthemusic.utils.CommonKeys
@@ -54,6 +55,8 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
     private lateinit var loginManager: LoginManager
     private lateinit var authModelBilder: AuthRequestBuilder
     private lateinit var mFragment: Fragment
+    var myView: View? = null
+    var myString: String? = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         authBinding = ActivityAuthBinding.inflate(layoutInflater)
@@ -117,12 +120,14 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
     }
 
     override fun forgotPasswordRequest(
-        authRequestBuilder: AuthRequestModel
+        authRequestBuilder: AuthRequestModel, view: View?, string: String?
     ) {
-        Log.d(TAG,"forgot fun email ${authRequestBuilder.email}")
+        myView = view
+        myString = string
+        Log.d(TAG, "forgot fun email ${authRequestBuilder.email}")
         mAuthActivityViewModel.userEmail = authRequestBuilder.email.toString()
         mAuthActivityViewModel.fragmentFlow = authRequestBuilder.otpType
-        Log.d(TAG,"forgot fun vm${mAuthActivityViewModel.userEmail}")
+        Log.d(TAG, "forgot fun vm${mAuthActivityViewModel.fragmentFlow}")
         authNetworkViewModel.sendOtpRequest(authRequestBuilder)
 
     }
@@ -154,6 +159,8 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
         authRequestBuilder: AuthRequestModel
     ) {
         authNetworkViewModel.requestToSetPassword(authRequestBuilder)
+        mAuthActivityViewModel.userPassword = authRequestBuilder.password
+        Log.d(TAG, "pass is ${mAuthActivityViewModel.userPassword}")
         mAuthActivityViewModel.fragmentFlow = authRequestBuilder.otpType
     }
 
@@ -183,24 +190,29 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
         authNetworkViewModel.saveUserInterest(category)
     }
 
+    override fun replaceCurrentFragmentWithAnimation(
+        fragment: Fragment,
+        view: View,
+        string: String
+    ) {
+        replaceFragmentWithAnimation(R.id.auth_container, fragment, view, string)
+    }
+
     private fun handleGoogleSignInResult(completedTask: Task<GoogleSignInAccount>) {
         try {
             val account: GoogleSignInAccount = completedTask.getResult(ApiException::class.java)
             val authCode = account.serverAuthCode
             if (authCode != null) {
                 authNetworkViewModel.getGoogleToken(authCode)
-                mAuthActivityViewModel.userEmail=account.email
-                mAuthActivityViewModel.myBundle.putString(CommonKeys.KEY_USER_EMAIL, account.email)
-                mAuthActivityViewModel.myBundle.putString(
-                    CommonKeys.KEY_USER_NAME,
-                    account.displayName
-                )
-                mAuthActivityViewModel.myBundle.putString(
-                    CommonKeys.KEY_USER_PHOTO,
-                    account.photoUrl.toString()
-                )
+                mAuthActivityViewModel.userEmail = account.email
+                mAuthActivityViewModel.userName = account.displayName
+                mAuthActivityViewModel.userPhotoUrl = account.photoUrl.toString()
 
-                Log.d(TAG,"Google Data is ${account.email} ${account.displayName}, vm email${mAuthActivityViewModel.userEmail}")
+
+                Log.d(
+                    TAG,
+                    "Google Data is ${mAuthActivityViewModel.userName} ${mAuthActivityViewModel.userPhotoUrl}, vm email${mAuthActivityViewModel.userEmail}"
+                )
             } else {
                 Log.d(TAG, "ServerAuthCode Not Found")
             }
@@ -237,16 +249,16 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
                     val graphRequest =
                         GraphRequest.newMeRequest(result?.accessToken) { myObj, response ->
                             try {
-                                Log.d(TAG,"try cal for graph")
+                                Log.d(TAG, "try cal for graph")
                                 if (myObj != null) {
-                                    Log.d(TAG,"graph is not null")
+                                    Log.d(TAG, "graph is not null")
                                     if (myObj.has("id")) {
                                         Log.d(TAG, "name is ${myObj.getString("name")}")
                                         Log.d(TAG, "email is ${myObj.getString("email")}")
                                         Log.d(TAG, "pic is ${myObj.getString("picture")}")
                                     }
-                                }else{
-                                    Log.d(TAG,"graph is null")
+                                } else {
+                                    Log.d(TAG, "graph is null")
                                 }
                             } catch (e: Exception) {
                                 Log.d(TAG, "ex: ${e.message}")
@@ -346,7 +358,9 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
                         }
                     } else {
                         Log.d(TAG, "status false")
-                        (mAuthActivityViewModel.instance as ForgotPasswordImp).accountNotExistsSendOtp(mAuthActivityViewModel.myBundle)
+                        (mAuthActivityViewModel.instance as ForgotPasswordImp).accountNotExistsSendOtp(
+                            mAuthActivityViewModel.userEmail
+                        )
                         Utilities.showToast(this, "account not exists")
                     }
 
@@ -424,15 +438,26 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
                 }
                 NetworkStatus.SUCCESS -> {
                     hideProgressBar()
-                    Log.d(TAG,"email si ${mAuthActivityViewModel.userEmail}")
+                    Log.d(TAG, "email si ${mAuthActivityViewModel.userEmail}")
                     val data = it.t as ResponseModel
                     val bundle = Bundle()
                     bundle.putString(CommonKeys.USER_EMAIL, mAuthActivityViewModel.userEmail)
+                    Log.d(TAG, "data is ${mAuthActivityViewModel.userEmail}")
                     bundle.putSerializable(CommonKeys.OTP_TYPE, OtpType.FORGET_PASSWORD)
                     val otpVerification = OtpVerification()
                     otpVerification.arguments = bundle
-                    replaceCurrentFragment(otpVerification)
-
+                    if (mAuthActivityViewModel.fragmentFlow == OtpType.EMAIL.name) {
+                        Log.d(TAG,"eamil flow called ")
+                        replaceFragmentWithAnimation(
+                            R.id.auth_container,
+                            otpVerification,
+                            myView!!,
+                            myString!!
+                        )
+                    } else {
+                        Log.d(TAG,"else called ")
+                        replaceCurrentFragment(otpVerification)
+                    }
                 }
                 NetworkStatus.EXPIRE -> {
                     hideProgressBar()
@@ -465,18 +490,21 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
                     NetworkStatus.SUCCESS -> {
                         hideProgressBar()
                         val data = it.t as ResponseModel
-                        val bundle = Bundle()
-                        bundle.putSerializable(
+
+                        mAuthActivityViewModel.myBundle.putSerializable(
                             CommonKeys.OTP_TYPE,
                             mAuthActivityViewModel.fragmentFlow
                         )
-                        bundle.putString(
+                        mAuthActivityViewModel.myBundle.putString(
                             CommonKeys.USER_OTP,
                             mAuthActivityViewModel.userOtp.toString()
                         )
-                        bundle.putString(CommonKeys.USER_EMAIL, mAuthActivityViewModel.userEmail)
+                        mAuthActivityViewModel.myBundle.putString(
+                            CommonKeys.USER_EMAIL,
+                            mAuthActivityViewModel.userEmail
+                        )
                         val setPassword = SetPassword()
-                        setPassword.arguments = bundle
+                        setPassword.arguments = mAuthActivityViewModel.myBundle
                         PrefUtils.setBoolean(this, CommonKeys.START_TIMER, false)
                         replaceCurrentFragment(setPassword)
 
@@ -516,7 +544,16 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
                         popUpAllFragmentIncludeThis(ForgotPassword::class.java.name)
 
                     } else {
-                        Utilities.showToast(this, "signup flow")
+                        val signUpFragment = SignUpFragment()
+                        mAuthActivityViewModel.myBundle.putString(
+                            CommonKeys.USER_PASSWORD,
+                            mAuthActivityViewModel.userPassword
+                        )
+                        val datad =
+                            mAuthActivityViewModel.myBundle.getString(CommonKeys.USER_PASSWORD)
+                        Log.d(TAG, "else passord is $datad")
+                        signUpFragment.arguments = mAuthActivityViewModel.myBundle
+                        replaceCurrentFragment(signUpFragment)
                     }
                 }
                 NetworkStatus.EXPIRE -> {
