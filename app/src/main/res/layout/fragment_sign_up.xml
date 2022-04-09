@@ -114,6 +114,7 @@
                 android:maxLines="1"
                 android:paddingTop="@dimen/_20dp"
                 android:paddingBottom="@dimen/_16dp"
+                android:paddingEnd="@dimen/_40dp"
                 android:textColor="@color/color_white"
                 android:textColorHighlight="@color/color_white"
                 android:textColorHint="@color/color_white"

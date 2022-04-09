@@ -30,6 +30,7 @@ import com.techswivel.qthemusic.source.local.preference.PrefUtils
 import com.techswivel.qthemusic.utils.*
 import org.w3c.dom.Comment
 import java.io.IOException
+import java.util.*
 
 
 class SignUpFragment : BaseFragment(), SignUpFragmentImp {
@@ -41,9 +42,6 @@ class SignUpFragment : BaseFragment(), SignUpFragmentImp {
     private lateinit var mChooserFragment: ChooserDialogFragment
     private lateinit var signUpBinding: FragmentSignUpBinding
 
-    var year: Int = 0
-    var month: Int = 0
-    var day: Int = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mSingUpViewModel = ViewModelProvider(this).get(SignUpViewModel::class.java)
@@ -59,6 +57,7 @@ class SignUpFragment : BaseFragment(), SignUpFragmentImp {
 
         FirebaseMessaging.getInstance().token.addOnSuccessListener {
             Log.d(TAG, "Token Is $it")
+            mSingUpViewModel.myToken = it
         }.addOnFailureListener {
             Log.d(TAG, "exception is $it")
         }
@@ -88,14 +87,17 @@ class SignUpFragment : BaseFragment(), SignUpFragmentImp {
     }
 
     private fun initialization() {
-        val email = arguments?.getString(CommonKeys.KEY_USER_EMAIL)
-        val name = arguments?.getString(CommonKeys.KEY_USER_NAME)
-        val photo = arguments?.getString(CommonKeys.KEY_USER_PHOTO)
-        val UserPassword=arguments?.getString(CommonKeys.USER_PASSWORD)
-        signUpBinding.etUserName.setText(name)
-        Glide.with(requireContext()).load(photo)
+        mSingUpViewModel.email = arguments?.getString(CommonKeys.KEY_USER_EMAIL).toString()
+        mSingUpViewModel.name = arguments?.getString(CommonKeys.KEY_USER_NAME).toString()
+        mSingUpViewModel.photo = arguments?.getString(CommonKeys.KEY_USER_PHOTO).toString()
+        mSingUpViewModel.UserPassword = arguments?.getString(CommonKeys.USER_PASSWORD).toString()
+        signUpBinding.etUserName.setText(mSingUpViewModel.name)
+        Glide.with(requireContext()).load(mSingUpViewModel.photo)
             .into(signUpBinding.ivUserProfilePic)
-        Log.d(TAG, "$email $name  user passrd$UserPassword")
+        Log.d(
+            TAG,
+            "${mSingUpViewModel.email} ${mSingUpViewModel.name}  user passrd ${mSingUpViewModel.UserPassword} "
+        )
     }
 
     private fun createUserAndCallApi(
@@ -140,18 +142,18 @@ class SignUpFragment : BaseFragment(), SignUpFragmentImp {
             if (signUpBinding.etUserDob.text.toString().isNotEmpty()) {
                 createUserAndCallApi(
                     signUpBinding.etUserDob.text.toString(),
-                    "",
-                    "",
-                    454545454,
+                    mSingUpViewModel.email,
+                    mSingUpViewModel.UserPassword,
+                    mSingUpViewModel.date.time.toInt(),
                     signUpBinding.etUserGender.text.toString(),
                     signUpBinding.etUserAddress.text.toString(),
                     signUpBinding.etUserCity.text.toString(),
                     signUpBinding.etUserState.text.toString(),
                     signUpBinding.etUserCountry.text.toString(),
-                    566565,
+                    454545454,
+                    mSingUpViewModel.photo,
                     "",
-                    "",
-                    "",
+                    mSingUpViewModel.myToken,
                     requireContext().toDeviceIdentifier()
                 )
             } else {
@@ -165,14 +167,12 @@ class SignUpFragment : BaseFragment(), SignUpFragmentImp {
                 requireContext(), R.style.MyDatePickerStyle,
                 { view, year, month, dayOfMonth ->
                     // change date into millis
-
-                    Log.d(TAG, "date is $year ${month.plus(1)} $dayOfMonth")
-
+                    mSingUpViewModel.date= Date(year,month,dayOfMonth)
                     signUpBinding.etUserDob.setText("$dayOfMonth ${getMonths(month.plus(1))} $year")
                 },
-                year,
-                month,
-                day
+                mSingUpViewModel.year,
+                mSingUpViewModel.month,
+                mSingUpViewModel.day
             )
             openDatePicker(datePicker)
         }

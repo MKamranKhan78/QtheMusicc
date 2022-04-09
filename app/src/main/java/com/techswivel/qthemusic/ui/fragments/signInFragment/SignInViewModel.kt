@@ -6,4 +6,5 @@ class SignInViewModel : BindingValidationViewModel() {
     var showAnimation=false
     var emailFromUser = ""
     var passwordFromUser = ""
+    var myToken=""
 }

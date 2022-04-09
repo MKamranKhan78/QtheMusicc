@@ -12,6 +12,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
+import com.google.firebase.messaging.FirebaseMessaging
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.customData.enums.*
 import com.techswivel.qthemusic.databinding.FragmentSignInBinding
@@ -20,6 +21,7 @@ import com.techswivel.qthemusic.source.local.preference.PrefUtils
 import com.techswivel.qthemusic.ui.activities.authActivity.AuthActivityImp
 import com.techswivel.qthemusic.ui.base.BaseFragment
 import com.techswivel.qthemusic.ui.fragments.forgotPasswordFragment.ForgotPassword
+import com.techswivel.qthemusic.ui.fragments.signUpFragment.SignUpFragment
 import com.techswivel.qthemusic.utils.*
 
 
@@ -50,7 +52,12 @@ class SignInFragment : BaseFragment() {
     }
 
     private fun initialization() {
-
+        FirebaseMessaging.getInstance().token.addOnSuccessListener {
+            Log.d(TAG, "Token Is $it")
+           signInViewModel.myToken=it
+        }.addOnFailureListener {
+            Log.d(TAG, "exception is $it")
+        }
         signInBinding.obj = signInViewModel
         Glide.with(requireContext()).load(R.drawable.laura_music)
             .transform(BlurImageView(requireContext())).into(signInBinding.ivSigninBg)
@@ -85,7 +92,7 @@ class SignInFragment : BaseFragment() {
                     signInBinding.etLoginPassword.text.toString(),
                     null,
                     LoginType.SIMPLE.name,
-                    "kljsdjklsdfkljsdf",
+                    signInViewModel.myToken,
                     context?.toDeviceIdentifier(),
                     null
                 )
@@ -98,19 +105,7 @@ class SignInFragment : BaseFragment() {
             fortgotPasword.arguments = bundle
             (mActivityListener as AuthActivityImp).replaceCurrentFragmentWithAnimation(fortgotPasword,signInBinding.btnSignIn,"my_button_transition")
 
-   //         val fragmentManager: FragmentManager = requireActivity().supportFragmentManager
-//            val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
-//            fragmentTransaction.addSharedElement(signInBinding.btnSignIn,"my_button_transition")
-//            fragmentTransaction.replace(R.id.auth_container, fortgotPasword)
-//            fragmentTransaction.addToBackStack(TAG)
-//            fragmentTransaction.commit()
 
-//            PrefUtils.setBoolean(requireContext(), CommonKeys.SIGNIN_BTN_ANIMATION, true)
-//            val bundle = Bundle()
-//            bundle.putSerializable(CommonKeys.OTP_TYPE, OtpType.FORGET_PASSWORD)
-//            val fortgotPasword = ForgotPassword()
-//            fortgotPasword.arguments = bundle
-//            (mActivityListener as AuthActivityImp).replaceCurrentFragment(fortgotPasword)
         }
 
         signInBinding.signSocialPortion.ivGoogleId.setOnClickListener {

@@ -15,6 +15,7 @@ import com.techswivel.qthemusic.constant.Constants
 import com.techswivel.qthemusic.customData.enums.OtpType
 import com.techswivel.qthemusic.databinding.FragmentOtpVerificationBinding
 
+
 import com.techswivel.qthemusic.models.AuthRequestBuilder
 import com.techswivel.qthemusic.ui.activities.authActivity.AuthActivityImp
 import com.techswivel.qthemusic.ui.base.BaseFragment
@@ -33,7 +34,9 @@ class OtpVerification : BaseFragment() {
         if (mVerifyOtpViewModel.fragmentFlow==OtpType.EMAIL){
             Log.d(TAG,"otp type is email")
             sharedElementEnterTransition = TransitionInflater.from(requireContext())
-                .inflateTransition(R.transition.abc)
+                .inflateTransition(R.transition.abcd)
+        }else{
+            Log.d(TAG,"type is ${mVerifyOtpViewModel.fragmentFlow}")
         }
     }
 
@@ -61,10 +64,13 @@ class OtpVerification : BaseFragment() {
     }
 
     private fun initialization() {
-        mOtpViewBinding.otp1Id.requestFocus()
 
+        mOtpViewBinding.otp1Id.requestFocus()
         mVerifyOtpViewModel.email = arguments?.getString(CommonKeys.USER_EMAIL).toString()
         mOtpViewBinding.tvEmailWhereSndOtp.text = mVerifyOtpViewModel.email
+        val name=arguments?.getString(CommonKeys.KEY_USER_NAME)
+        Log.d(TAG,"email si ${mVerifyOtpViewModel.email} name is $name ")
+
     }
 
     private fun clickListeners() {

@@ -29,7 +29,7 @@ class ForgotPassword : BaseFragment(), ForgotPasswordImp {
         if (fragmentFlow == OtpType.EMAIL) {
             Log.d(TAG,"email flow")
             sharedElementReturnTransition = TransitionInflater.from(requireContext())
-                .inflateTransition(R.transition.animation_top_to_bottom)
+                .inflateTransition(R.transition.abc)
         }
 
     }
@@ -80,6 +80,7 @@ class ForgotPassword : BaseFragment(), ForgotPasswordImp {
 
     private fun onClickListener() {
         forgotbingding.btnSendCodeForgot.setOnClickListener {
+            Log.d(TAG,"button clicked")
             if (
                 forgotbingding.etForgotEmailId.text.toString().isNullOrEmpty() ||
                 forgotViewModel.isEmailTextValid.get() != true

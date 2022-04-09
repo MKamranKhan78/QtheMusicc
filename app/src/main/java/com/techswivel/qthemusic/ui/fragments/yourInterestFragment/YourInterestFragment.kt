@@ -22,14 +22,16 @@ import com.techswivel.qthemusic.utils.Utilities
 class YourInterestFragment : RecyclerViewBaseFragment(), YourInterestImp {
     private lateinit var mYourInterestBinding: FragmentYourInterestBinding
     private lateinit var adpater: CategoriesAdapter
-    private lateinit var mYourInterestViewModel: YourInterestViewModel
+    lateinit var categoryResponseList: List<Category?>
+    lateinit var categoriesListForApiRequest: ArrayList<Category>
+    lateinit var selectedCategoriesList: MutableList<String?>
     override fun onPrepareAdapter(adapterType: AdapterType?): RecyclerView.Adapter<*> {
         return adpater
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mYourInterestViewModel = ViewModelProvider(this).get(YourInterestViewModel::class.java)
+
     }
 
     override fun onCreateView(
@@ -37,20 +39,21 @@ class YourInterestFragment : RecyclerViewBaseFragment(), YourInterestImp {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+
         mYourInterestBinding = FragmentYourInterestBinding.inflate(layoutInflater, container, false)
         (mActivityListener as AuthActivityImp).getCategories(CategoryType.RECOMMENDED)
-        mYourInterestViewModel.categoriesListForApiRequest = ArrayList()
+        categoriesListForApiRequest = ArrayList()
         onClickListeners()
         return mYourInterestBinding.root
     }
 
     private fun onClickListeners() {
         mYourInterestBinding.btnInterestLetsGo.setOnClickListener {
-            if (mYourInterestViewModel.categoriesListForApiRequest.size>=2){
-                    Log.d(TAG,"size is ${mYourInterestViewModel.categoriesListForApiRequest.size}")
-                (mActivityListener as AuthActivityImp).saveInterests(mYourInterestViewModel.categoriesListForApiRequest)
-            }else{
-                Utilities.showToast(requireContext(),"Select at least 2 topics")
+            if (categoriesListForApiRequest.size >= 2) {
+                Log.d(TAG, "size is ${categoriesListForApiRequest.size}")
+                (mActivityListener as AuthActivityImp).saveInterests(categoriesListForApiRequest)
+            } else {
+                Utilities.showToast(requireContext(), "Select at least 2 topics")
             }
 
         }
@@ -59,7 +62,7 @@ class YourInterestFragment : RecyclerViewBaseFragment(), YourInterestImp {
     @SuppressLint("NotifyDataSetChanged")
     override fun getCategoriesResponse(lis: List<Category>?) {
         if (lis != null) {
-            mYourInterestViewModel.categoryResponseList = lis
+           categoryResponseList = lis
         }
         adpater = CategoriesAdapter(requireContext(), lis, this)
         Log.d(TAG, "list is $lis")
@@ -76,13 +79,19 @@ class YourInterestFragment : RecyclerViewBaseFragment(), YourInterestImp {
 
     override fun getSelectedCategories(lis: MutableList<String?>) {
         Log.d(TAG, "called $lis")
-        mYourInterestViewModel.selectedCategoriesList = lis
-        mYourInterestViewModel.categoriesListForApiRequest.clear()
-        for (i in mYourInterestViewModel.categoryResponseList) {
+       selectedCategoriesList = lis
+    categoriesListForApiRequest.clear()
+        for (i in categoryResponseList) {
             val tittle = i?.categoryTitle
-            if (mYourInterestViewModel.selectedCategoriesList.contains(tittle)) {
-                mYourInterestViewModel.categoriesListForApiRequest.add(Category(i?.categoryId, i?.categoryTitle, null))
-                Log.d(TAG, "list is now ${mYourInterestViewModel.categoriesListForApiRequest}")
+            if (selectedCategoriesList.contains(tittle)) {
+                categoriesListForApiRequest.add(
+                    Category(
+                        i?.categoryId,
+                        i?.categoryTitle,
+                        null
+                    )
+                )
+                Log.d(TAG, "list is now ${categoriesListForApiRequest}")
             }
         }
     }

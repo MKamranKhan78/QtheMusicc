@@ -111,7 +111,7 @@
     <string name="confirm_password">Confirm Password</string>
     <string name="done">Done</string>
     <string name="invalid_email">Enter valid email</string>
-    <string name="invalid_password">Enter valid password</string>
+    <string name="invalid_password">Enter valid password (at least have 8 character, 1 capital or small letter, 1 special character or 1 number)</string>
     <string name="error_occurred">Error Occurred</string>
     <string name="get_email_fb">email</string>
     <string name="enter_valid_otp">OTP must have 5 digits</string>
