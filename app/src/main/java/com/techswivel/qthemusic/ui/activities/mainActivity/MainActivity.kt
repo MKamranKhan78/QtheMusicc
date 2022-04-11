@@ -12,6 +12,7 @@ import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.databinding.ActivityMainBinding
 import com.techswivel.qthemusic.ui.base.BaseActivity
 import com.techswivel.qthemusic.ui.fragments.homeFragment.HomeFragment
+import com.techswivel.qthemusic.ui.fragments.searchScreen.SearchScreenFragment
 import com.techswivel.qthemusic.utils.ActivityUtils
 import com.techswivel.qthemusic.ui.fragments.underDevelopmentMessageFragment.profile_landing_screen.ProfileLandingFragment
 
@@ -58,7 +59,7 @@ class MainActivity : BaseActivity() {
                     openHomeFragment()
                 }
                 R.id.bottom_nav_search -> {
-                    openUnderDevelopmentFragment()
+                    openSearchScreenFragment()
                 }
                 R.id.bottom_nav_categories -> {
                     openUnderDevelopmentFragment()
@@ -90,6 +91,9 @@ class MainActivity : BaseActivity() {
 
     private fun openLandingProfileFragment() {
         openFragment(ProfileLandingFragment())
+    }
+    private fun openSearchScreenFragment(){
+        openFragment(SearchScreenFragment())
     }
 
     private fun openUnderDevelopmentFragment() {

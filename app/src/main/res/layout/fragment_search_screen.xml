@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_for_forgot_password"
+        tools:context=".ui.fragments.searchScreen.SearchScreenFragment">
+
+        <TextView
+            android:id="@+id/recent_play_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_24dp"
+            android:fontFamily="@font/manrope_bold"
+            android:text="@string/recently_played"
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/_18sp"
+            android:layout_marginStart="@dimen/_20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_songs"
+            style="@style/TabButtonTextStyle"
+            android:layout_width="@dimen/_100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10dp"
+            android:background="@drawable/selected_tab_background"
+            android:text="@string/str_songs"
+            app:layout_constraintStart_toStartOf="@id/recent_play_tag"
+            app:layout_constraintTop_toBottomOf="@id/recent_play_tag" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_albums"
+            style="@style/TabButtonTextStyle"
+            android:layout_width="@dimen/_100dp"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/btn_songs"
+            android:background="@drawable/unselected_tab_background"
+            android:text="@string/str_albums"
+            app:layout_constraintBottom_toBottomOf="@id/btn_songs"
+            app:layout_constraintEnd_toStartOf="@id/btn_artists"
+            app:layout_constraintStart_toEndOf="@+id/btn_songs"
+            app:layout_constraintTop_toTopOf="@id/btn_songs" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_artists"
+            style="@style/TabButtonTextStyle"
+            android:layout_width="@dimen/_100dp"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/btn_albums"
+            android:background="@drawable/unselected_tab_background"
+            android:text="@string/str_artists"
+            app:layout_constraintStart_toEndOf="@id/btn_albums"
+            app:layout_constraintTop_toTopOf="@id/btn_albums" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
