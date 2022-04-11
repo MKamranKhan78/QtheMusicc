@@ -106,6 +106,7 @@ class ProfileSettingFragment : BaseFragment() {
                         Toast.LENGTH_SHORT
                     ).show()
                     PrefUtils.clearAllPrefData(requireContext())
+                    PrefUtils.setBoolean(requireContext(),CommonKeys.KEY_IS_INTEREST_SET,true)
                     val intent = Intent(requireContext(), AuthActivity::class.java)
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
                     startActivity(intent)

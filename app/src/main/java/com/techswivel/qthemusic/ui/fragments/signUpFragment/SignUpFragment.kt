@@ -55,16 +55,18 @@ class SignUpFragment : BaseFragment(), SignUpFragmentImp {
         // Inflate the layout for this fragment
         signUpBinding = FragmentSignUpBinding.inflate(layoutInflater, container, false)
 
-        FirebaseMessaging.getInstance().token.addOnSuccessListener {
-            Log.d(TAG, "Token Is $it")
-            mSingUpViewModel.myToken = it
-        }.addOnFailureListener {
-            Log.d(TAG, "exception is $it")
-        }
+        getFcmToken()
 
         return signUpBinding.root
     }
 
+    private fun getFcmToken() {
+        FirebaseMessaging.getInstance().token.addOnSuccessListener {
+            mSingUpViewModel.myToken = it
+        }.addOnFailureListener {
+            Log.d(TAG, "exception is $it")
+        }
+    }
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -90,14 +92,11 @@ class SignUpFragment : BaseFragment(), SignUpFragmentImp {
         mSingUpViewModel.email = arguments?.getString(CommonKeys.KEY_USER_EMAIL).toString()
         mSingUpViewModel.name = arguments?.getString(CommonKeys.KEY_USER_NAME).toString()
         mSingUpViewModel.photo = arguments?.getString(CommonKeys.KEY_USER_PHOTO).toString()
+        mSingUpViewModel.socailId=arguments?.getString(CommonKeys.SOCIAL_ID).toString()
         mSingUpViewModel.UserPassword = arguments?.getString(CommonKeys.USER_PASSWORD).toString()
         signUpBinding.etUserName.setText(mSingUpViewModel.name)
         Glide.with(requireContext()).load(mSingUpViewModel.photo)
             .into(signUpBinding.ivUserProfilePic)
-        Log.d(
-            TAG,
-            "${mSingUpViewModel.email} ${mSingUpViewModel.name}  user passrd ${mSingUpViewModel.UserPassword} "
-        )
     }
 
     private fun createUserAndCallApi(
@@ -136,9 +135,11 @@ class SignUpFragment : BaseFragment(), SignUpFragmentImp {
     }
 
     @SuppressLint("SetTextI18n")
-    @RequiresApi(Build.VERSION_CODES.M)
     private fun clickListeners() {
         signUpBinding.tvLetGoProfileBtn.setOnClickListener {
+
+            mSingUpViewModel.zipCode = signUpBinding.etZipCode.text.toString()
+
             if (signUpBinding.etUserDob.text.toString().isNotEmpty()) {
                 createUserAndCallApi(
                     signUpBinding.etUserDob.text.toString(),
@@ -150,14 +151,14 @@ class SignUpFragment : BaseFragment(), SignUpFragmentImp {
                     signUpBinding.etUserCity.text.toString(),
                     signUpBinding.etUserState.text.toString(),
                     signUpBinding.etUserCountry.text.toString(),
-                    454545454,
+                    mSingUpViewModel.zipCode.toInt(),
                     mSingUpViewModel.photo,
-                    "",
+                    mSingUpViewModel.socailId,
                     mSingUpViewModel.myToken,
                     requireContext().toDeviceIdentifier()
                 )
             } else {
-                signUpBinding.etUserDob.error = "Date Of Birth Required"
+                signUpBinding.etUserDob.error = getString(R.string.dob_req)
             }
         }
 
@@ -167,8 +168,8 @@ class SignUpFragment : BaseFragment(), SignUpFragmentImp {
                 requireContext(), R.style.MyDatePickerStyle,
                 { view, year, month, dayOfMonth ->
                     // change date into millis
-                    mSingUpViewModel.date= Date(year,month,dayOfMonth)
-                    signUpBinding.etUserDob.setText("$dayOfMonth ${getMonths(month.plus(1))} $year")
+                    mSingUpViewModel.date = Date(year, month, dayOfMonth)
+                    signUpBinding.etUserDob.setText("$dayOfMonth ${Utilities.getMonths(month.plus(1))} $year")
                 },
                 mSingUpViewModel.year,
                 mSingUpViewModel.month,
@@ -189,14 +190,18 @@ class SignUpFragment : BaseFragment(), SignUpFragmentImp {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.M)
+
     private fun openDatePicker(datePicker: DatePickerDialog) {
         datePicker.show()
         // its not changing color by xml style so this is used to change ok and cancel button color.
-        datePicker.getButton(DatePickerDialog.BUTTON_POSITIVE)
-            .setTextColor(QTheMusicApplication.getContext().getColor(R.color.color_black))
-        datePicker.getButton(DatePickerDialog.BUTTON_NEGATIVE)
-            .setTextColor(QTheMusicApplication.getContext().getColor(R.color.color_black))
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            datePicker.getButton(DatePickerDialog.BUTTON_POSITIVE)
+                .setTextColor(QTheMusicApplication.getContext().getColor(R.color.color_black))
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            datePicker.getButton(DatePickerDialog.BUTTON_NEGATIVE)
+                .setTextColor(QTheMusicApplication.getContext().getColor(R.color.color_black))
+        }
         // for disabling the past date
         datePicker.getDatePicker().setMinDate(System.currentTimeMillis() - 1000)
     }
@@ -213,29 +218,10 @@ class SignUpFragment : BaseFragment(), SignUpFragmentImp {
 
     }
 
-    fun getMonths(int: Int): String {
-        val data = listOf<String>(
-            "January",
-            "February",
-            "March",
-            "April",
-            "May",
-            "June",
-            "July",
-            "August",
-            "September",
-            "October",
-            "November",
-            "December"
-        )
-        return data[int.minus(1)]
-    }
-
     private fun showPictureDialog() {
         mChooserFragment = ChooserDialogFragment.newInstance(CommonKeys.TYPE_PHOTO,
             object : ChooserDialogFragment.CallBack {
                 override fun onActivityResult(mImageUri: List<Uri>?) {
-                    Log.e(TAG, "Uri is $mImageUri")
                     mSingUpViewModel.uri = mImageUri?.get(0)
                     val contentURI = mSingUpViewModel.uri
                     try {

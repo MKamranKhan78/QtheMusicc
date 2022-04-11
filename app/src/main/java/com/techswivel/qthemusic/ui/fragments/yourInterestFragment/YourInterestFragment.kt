@@ -61,20 +61,25 @@ class YourInterestFragment : RecyclerViewBaseFragment(), YourInterestImp {
 
     @SuppressLint("NotifyDataSetChanged")
     override fun getCategoriesResponse(lis: List<Category>?) {
+        Log.d(TAG,"getCategories list is caled ")
         if (lis != null) {
            categoryResponseList = lis
-        }
-        adpater = CategoriesAdapter(requireContext(), lis, this)
-        Log.d(TAG, "list is $lis")
-        val layoutManager = FlexboxLayoutManager(requireContext())
-        layoutManager.justifyContent = JustifyContent.CENTER
-        layoutManager.alignItems = AlignItems.CENTER
-        layoutManager.flexDirection = FlexDirection.ROW
-        layoutManager.flexWrap = FlexWrap.WRAP
-        mYourInterestBinding.recViewYourInterests.layoutManager = layoutManager
+            adpater = CategoriesAdapter(requireContext(), lis, this)
+            Log.d(TAG, "list is $lis")
+            Log.d(TAG,"getCategories list is here ")
+            val layoutManager = FlexboxLayoutManager(requireContext())
+            layoutManager.justifyContent = JustifyContent.CENTER
+            layoutManager.alignItems = AlignItems.CENTER
+            layoutManager.flexDirection = FlexDirection.ROW
+            layoutManager.flexWrap = FlexWrap.WRAP
+            mYourInterestBinding.recViewYourInterests.layoutManager = layoutManager
 
-        mYourInterestBinding.recViewYourInterests.adapter = adpater
-        adpater.notifyDataSetChanged()
+            mYourInterestBinding.recViewYourInterests.adapter = adpater
+            adpater.notifyDataSetChanged()
+        }else{
+            Log.d(TAG,"getCategories is null ")
+        }
+
     }
 
     override fun getSelectedCategories(lis: MutableList<String?>) {

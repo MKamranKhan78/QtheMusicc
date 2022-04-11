@@ -73,4 +73,21 @@ object Utilities {
         val df = DecimalFormat("#.##")
         return df.format(number).toFloat()
     }
+    fun getMonths(int: Int): String {
+        val data = listOf<String>(
+            "January",
+            "February",
+            "March",
+            "April",
+            "May",
+            "June",
+            "July",
+            "August",
+            "September",
+            "October",
+            "November",
+            "December"
+        )
+        return data[int.minus(1)]
+    }
 }

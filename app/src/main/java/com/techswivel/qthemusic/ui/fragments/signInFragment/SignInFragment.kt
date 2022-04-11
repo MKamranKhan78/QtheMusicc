@@ -32,7 +32,7 @@ class SignInFragment : BaseFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         sharedElementReturnTransition = TransitionInflater.from(requireContext())
-            .inflateTransition(R.transition.animation_top_to_bottom)
+            .inflateTransition(R.transition.animation_sign_in_btn)
 
     }
 

@@ -24,26 +24,27 @@ import com.techswivel.qthemusic.utils.Log
 import com.techswivel.qthemusic.utils.Utilities
 
 class OtpVerification : BaseFragment() {
-    val TAG="OtpVerification"
+    companion object {
+        private val TAG = "OtpVerification"
+    }
+
     private lateinit var mOtpViewBinding: FragmentOtpVerificationBinding
     private lateinit var mVerifyOtpViewModel: OtpVerificationViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-            initViewModels()
-        mVerifyOtpViewModel.fragmentFlow = arguments?.getSerializable(CommonKeys.OTP_TYPE) as OtpType
-        if (mVerifyOtpViewModel.fragmentFlow==OtpType.EMAIL){
-            Log.d(TAG,"otp type is email")
+        initViewModels()
+        mVerifyOtpViewModel.fragmentFlow =
+            arguments?.getSerializable(CommonKeys.OTP_TYPE) as OtpType
+        if (mVerifyOtpViewModel.fragmentFlow == OtpType.EMAIL) {
             sharedElementEnterTransition = TransitionInflater.from(requireContext())
-                .inflateTransition(R.transition.abcd)
-        }else{
-            Log.d(TAG,"type is ${mVerifyOtpViewModel.fragmentFlow}")
+                .inflateTransition(R.transition.slide_from_left_bottom)
         }
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View{
+    ): View {
         mOtpViewBinding = FragmentOtpVerificationBinding.inflate(layoutInflater, container, false)
         return mOtpViewBinding.root
     }
@@ -68,9 +69,6 @@ class OtpVerification : BaseFragment() {
         mOtpViewBinding.otp1Id.requestFocus()
         mVerifyOtpViewModel.email = arguments?.getString(CommonKeys.USER_EMAIL).toString()
         mOtpViewBinding.tvEmailWhereSndOtp.text = mVerifyOtpViewModel.email
-        val name=arguments?.getString(CommonKeys.KEY_USER_NAME)
-        Log.d(TAG,"email si ${mVerifyOtpViewModel.email} name is $name ")
-
     }
 
     private fun clickListeners() {
@@ -92,7 +90,7 @@ class OtpVerification : BaseFragment() {
             authModelBilder.otpType = mVerifyOtpViewModel.fragmentFlow.name
             authModelBilder.email = mVerifyOtpViewModel.email
             val otpModel = AuthRequestBuilder.builder(authModelBilder)
-            (mActivityListener as AuthActivityImp).forgotPasswordRequest(otpModel,null,null)
+            (mActivityListener as AuthActivityImp).forgotPasswordRequest(otpModel, null, null)
             mOtpViewBinding.tvResendBtn.visibility = View.INVISIBLE
             mOtpViewBinding.tvOtpResendTimerTag.visibility = View.VISIBLE
             mOtpViewBinding.tvOtpResentTimer.visibility = View.VISIBLE

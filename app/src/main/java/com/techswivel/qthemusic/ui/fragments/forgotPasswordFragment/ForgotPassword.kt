@@ -25,11 +25,11 @@ class ForgotPassword : BaseFragment(), ForgotPasswordImp {
         super.onCreate(savedInstanceState)
         fragmentFlow = arguments?.getSerializable(CommonKeys.OTP_TYPE) as OtpType
         sharedElementEnterTransition = TransitionInflater.from(requireContext())
-            .inflateTransition(R.transition.animation_bottom_to_top)
+            .inflateTransition(R.transition.animation_sign_in_btn)
         if (fragmentFlow == OtpType.EMAIL) {
             Log.d(TAG,"email flow")
             sharedElementReturnTransition = TransitionInflater.from(requireContext())
-                .inflateTransition(R.transition.abc)
+                .inflateTransition(R.transition.slide_from_left_bottom)
         }
 
     }
@@ -63,9 +63,6 @@ class ForgotPassword : BaseFragment(), ForgotPasswordImp {
             forgotbingding.tvTagForgotId.text = getString(R.string.sign_up)
             forgotbingding.tvForgotMsgId.text = getString(R.string.sigup_mstg)
         }
-
-
-
         forgotbingding.ivBackForgotId.setOnClickListener {
             requireActivity().onBackPressed()
         }

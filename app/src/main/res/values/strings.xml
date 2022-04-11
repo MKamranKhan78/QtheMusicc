@@ -147,6 +147,7 @@
     <string name="password_is_required">Password is  Required</string>
     <string name="terms_tag_msg">By clicking sign up, you agree to the User Agreement, Privacy Policy, and Cookie Policy.</string>
     <string name="sigup_mstg">Sign Up to get started.</string>
+    <string name="dob_req">Date Of Birth Required</string>
 
 
 </resources>

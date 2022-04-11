@@ -10,9 +10,11 @@ class SignUpViewModel: BaseViewModel() {
     var email=""
     var name=""
     var photo=""
+    var socailId=""
     var UserPassword=""
     var year: Int = 0
     var month: Int = 0
     var day: Int = 0
     lateinit var date: Date
+    var zipCode=""
 }

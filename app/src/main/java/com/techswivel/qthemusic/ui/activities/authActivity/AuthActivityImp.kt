@@ -31,4 +31,5 @@ interface AuthActivityImp : BaseInterface {
     fun getCategories(categoryType: CategoryType)
     fun saveInterests(category: List<Category?>)
     fun replaceCurrentFragmentWithAnimation(fragment: Fragment,view: View,string: String)
+    fun replaceCurrentFragmentWithoutAddingToBackStack(fragment: Fragment)
 }
