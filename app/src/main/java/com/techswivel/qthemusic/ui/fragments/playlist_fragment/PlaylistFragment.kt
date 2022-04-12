@@ -5,9 +5,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.techswivel.qthemusic.R
+import com.techswivel.qthemusic.application.QTheMusicApplication
 import com.techswivel.qthemusic.customData.adapter.RecyclerViewAdapter
 import com.techswivel.qthemusic.customData.enums.AdapterType
 import com.techswivel.qthemusic.customData.enums.DeleteViewType
@@ -75,24 +77,26 @@ class PlaylistFragment : RecyclerViewBaseFragment(), BaseInterface,
         super.onItemClick(data, position)
         val playlistModel = data as PlaylistModel
         val bundle = Bundle()
+        playlistModel.let { playListModel ->
+            bundle.putSerializable(CommonKeys.KEY_DATA, playListModel)
+        }
+        Toast.makeText(
+            QTheMusicApplication.getContext(),
+            playlistModel.playListTitle,
+            Toast.LENGTH_SHORT
+        ).show()
+    }
+
+    override fun onViewClicked(view: View, data: Any?) {
+        super.onViewClicked(view, data)
+        val playlistModel = data as PlaylistModel
+        val bundle = Bundle()
 
         bundle.putString(CommonKeys.KEY_DATA, DeleteViewType.PLAY_LIST.toString())
         playlistModel.let { playListModel ->
             bundle.putSerializable(CommonKeys.KEY_DATA, playListModel)
         }
-/*        playlistModel.playListId?.let { playlistId ->
-            bundle.putInt(CommonKeys.KEY_DATA, playlistId)
-        }*/
-        deletionBottomSheetDialog = DeletionViewBottomSheetDialogFragment.newInstance(bundle, this)
-        deletionBottomSheetDialog.show(
-            requireActivity().supportFragmentManager,
-            deletionBottomSheetDialog.tag
-        )
-
-    }
-
-    override fun onViewClicked(view: View, data: Any?) {
-        super.onViewClicked(view, data)
+        openBottomSheetDialog(bundle)
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -166,7 +170,6 @@ class PlaylistFragment : RecyclerViewBaseFragment(), BaseInterface,
             mBinding.recyclerviewPlaylist,
             AdapterType.PLAYLIST
         )
-
     }
 
 
@@ -191,5 +194,12 @@ class PlaylistFragment : RecyclerViewBaseFragment(), BaseInterface,
             ViewModelProvider(this).get(ProfileNetworkViewModel::class.java)
     }
 
+    private fun openBottomSheetDialog(bundle: Bundle) {
+        deletionBottomSheetDialog = DeletionViewBottomSheetDialogFragment.newInstance(bundle, this)
+        deletionBottomSheetDialog.show(
+            requireActivity().supportFragmentManager,
+            deletionBottomSheetDialog.tag
+        )
+    }
 
 }

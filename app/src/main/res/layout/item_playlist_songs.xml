@@ -20,14 +20,13 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/color_black_landing_background"
-        >
+        android:background="@color/color_black_landing_background">
 
         <RelativeLayout
             android:id="@+id/rl_trending_song"
             android:layout_width="match_parent"
-            android:layout_margin="@dimen/_20dp"
             android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_20dp"
             tools:ignore="UselessParent">
 
             <ImageView
@@ -71,19 +70,19 @@
 
             </LinearLayout>
 
-                <ImageView
-                    android:layout_width="@dimen/_30dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:id="@+id/item_menu_button_id"
-                    android:layout_marginEnd="@dimen/_0dp"
-                    android:onClick="@{(view)-> click.onViewClick(view,obj)}"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:src="@drawable/ic_item_menu_dots"
-                    tools:ignore="ContentDescription" />
+            <ImageView
+                android:id="@+id/item_menu_button_id"
+                android:layout_width="@dimen/_30dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                android:layout_marginEnd="@dimen/_0dp"
+                android:onClick="@{(view)-> click.onViewClick(view,obj)}"
+                android:src="@drawable/ic_item_menu_dots"
+                tools:ignore="ContentDescription" />
 
-            </RelativeLayout>
         </RelativeLayout>
+    </RelativeLayout>
 
 </layout>

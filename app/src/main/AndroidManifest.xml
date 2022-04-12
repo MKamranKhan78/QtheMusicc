@@ -12,8 +12,11 @@
     <uses-permission
         android:name="com.google.android.gms.permission.AD_ID"
         tools:node="remove" />
-
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
+    <queries>
+        <package android:name="com.facebook.katana" />
+    </queries>
 
     <application
         android:name=".application.QTheMusicApplication"
@@ -25,7 +28,9 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-
+        <activity
+            android:name=".ui.activities.playlistActivity.PlaylistActivity"
+            android:exported="false" />
         <activity
             android:name=".ui.activities.playerActivity.PlayerActivity"
             android:exported="false" />
@@ -39,19 +44,24 @@
             android:name=".ui.activities.splashActivity.SplashActivity"
             android:exported="true"
             android:screenOrientation="portrait">
-            <!--uncomment this intent filter-->
-            <!--<intent-filter>
+
+            <!-- uncomment this intent filter -->
+            <!--
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>-->
+            </intent-filter>
+            -->
         </activity>
         <activity
             android:name=".ui.activities.mainActivity.MainActivity"
-            android:screenOrientation="portrait"
-            android:exported="true">
-            <!--remove this intent filter and exported true from here-->
+            android:exported="true"
+            android:screenOrientation="portrait">
+
+            <!-- remove this intent filter and exported true from here -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -63,7 +73,6 @@
             android:screenOrientation="portrait" />
 
         <service android:name=".services.PlayerBackgroundService" />
-
         <service
             android:name=".source.remote.firebase.FirebaseNotificationService"
             android:exported="false">
@@ -111,7 +120,4 @@
         </provider>
     </application>
 
-    <queries>
-        <package android:name="com.facebook.katana" />
-    </queries>
 </manifest>
