@@ -31,6 +31,7 @@ import com.techswivel.qthemusic.models.*
 import com.techswivel.qthemusic.source.local.preference.PrefUtils
 import com.techswivel.qthemusic.source.remote.networkViewModel.AuthNetworkViewModel
 import com.techswivel.qthemusic.ui.activities.mainActivity.MainActivity
+import com.techswivel.qthemusic.ui.activities.profileSettingScreen.ProfileSettingActivity
 import com.techswivel.qthemusic.ui.base.BaseActivity
 import com.techswivel.qthemusic.ui.fragments.forgotPasswordFragment.ForgotPassword
 import com.techswivel.qthemusic.ui.fragments.otpVerificationFragment.OtpVerification
@@ -51,17 +52,49 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
     private lateinit var callbackManager: CallbackManager
     private lateinit var loginManager: LoginManager
     private lateinit var authModelBilder: AuthRequestBuilder
+    private lateinit var mAuthActivityViewModel: AuthActivityViewModel
+
     var fragmentFlow: Serializable? = ""
     var userEmail: String? = ""
     var userOtp: Int? = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         authBinding = ActivityAuthBinding.inflate(layoutInflater)
-        authNetworkViewModel = ViewModelProvider(this).get(AuthNetworkViewModel::class.java)
-        setAutNetworkViewModelObservers()
         authModelBilder = AuthRequestBuilder()
-        replaceFragmentWithoutAddingToBackStack(R.id.auth_container, SignInFragment())
+        initViewModel()
+        getBundleData()
+        setAutNetworkViewModelObservers()
         setContentView(authBinding.root)
+    }
+
+    private fun initViewModel() {
+        authNetworkViewModel = ViewModelProvider(this).get(AuthNetworkViewModel::class.java)
+        mAuthActivityViewModel = ViewModelProvider(this).get(AuthActivityViewModel::class.java)
+
+    }
+
+    private fun getBundleData() {
+        val bundle = intent.extras
+
+
+        val phone = bundle?.getString(CommonKeys.KEY_PHONE_NUMBER)
+        val otpType = bundle?.getString(CommonKeys.KEY_ENUM)
+
+
+        if (otpType == OtpType.PHONE_NUMBER.name) {
+            mAuthActivityViewModel.phoneNumber = phone
+            mAuthActivityViewModel.fragmentFlow = otpType
+            authModelBilder.phoneNumber = mAuthActivityViewModel.phoneNumber
+            val authModel = AuthRequestBuilder.builder(authModelBilder)
+            forgotPasswordRequest(authModel, null)
+            val bundle = Bundle()
+            bundle.putString(CommonKeys.KEY_PHONE_NUMBER, mAuthActivityViewModel.phoneNumber)
+            val otpVerification = OtpVerification()
+            otpVerification.arguments = bundle
+            replaceFragmentWithoutAddingToBackStack(R.id.auth_container, otpVerification)
+        } else {
+            replaceFragmentWithoutAddingToBackStack(R.id.auth_container, SignInFragment())
+        }
     }
 
     override fun onCreateView(name: String, context: Context, attrs: AttributeSet): View? {
@@ -340,10 +373,27 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
                         bundle.putSerializable(CommonKeys.APP_FLOW, fragmentFlow)
                         bundle.putString(CommonKeys.USER_OTP, userOtp.toString())
                         bundle.putString(CommonKeys.USER_EMAIL, userEmail)
+
                         val setPassword = SetPassword()
                         setPassword.arguments = bundle
                         PrefUtils.setBoolean(this, CommonKeys.START_TIMER, false)
-                        replaceCurrentFragment(setPassword)
+
+                        if (mAuthActivityViewModel.fragmentFlow == OtpType.PHONE_NUMBER.name) {
+                            val bundle = Bundle()
+                            bundle.putString(
+                                CommonKeys.KEY_PHONE_NUMBER,
+                                mAuthActivityViewModel.phoneNumber
+                            )
+
+                            val intent = Intent(this, ProfileSettingActivity::class.java)
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+                            intent.putExtras(bundle)
+                            startActivity(intent)
+                            this.finish()
+                        } else {
+                            replaceCurrentFragment(setPassword)
+                        }
+
 
                     }
                     NetworkStatus.EXPIRE -> {

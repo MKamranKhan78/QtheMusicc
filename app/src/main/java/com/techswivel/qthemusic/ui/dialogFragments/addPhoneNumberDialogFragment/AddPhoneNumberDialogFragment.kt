@@ -167,7 +167,7 @@ class AddPhoneNumberDialogFragment : BaseDialogFragment(), BaseInterface {
         val numberString = edtPhoneNumber.text.toString()
 
         return if (ccp.isValid) {
-            viewModel.number = ccp.fullNumber
+            viewModel.number = "+" + ccp.fullNumber
             true
         } else {
             false

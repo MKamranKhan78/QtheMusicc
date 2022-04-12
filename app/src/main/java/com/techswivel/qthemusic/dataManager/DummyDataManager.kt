@@ -182,7 +182,7 @@ class DummyDataManager {
                  ,
                  null//"03034949594"
                  ,
-                 "FEMALE",
+                 "Female",
                  false,
                  address,
                  subscription,

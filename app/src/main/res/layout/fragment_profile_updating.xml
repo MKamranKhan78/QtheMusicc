@@ -213,8 +213,9 @@
                     android:padding="@dimen/_14dp">
 
                     <LinearLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_toStartOf="@id/textviewChangeNameID"
                         android:layout_marginStart="@dimen/_10dp"
                         android:orientation="vertical"
                         tools:ignore="RelativeOverlap">
@@ -228,10 +229,13 @@
                             android:textSize="@dimen/_14sp" />
 
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
                             android:id="@+id/tvNameId"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
                             android:fontFamily="@font/manrope_regular"
+                            android:maxLines="1"
+                            android:minLines="1"
                             android:text="@{viewModel.authModel.name == null ? @string/not_added : viewModel.authModel.name}"
                             android:textColor="@color/view_profile_text_color"
                             android:textSize="@dimen/_14sp" />

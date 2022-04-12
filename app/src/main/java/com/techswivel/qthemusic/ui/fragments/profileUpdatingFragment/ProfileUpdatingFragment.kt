@@ -13,10 +13,13 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.application.QTheMusicApplication
+import com.techswivel.qthemusic.customData.enums.GenderType
 import com.techswivel.qthemusic.customData.enums.NetworkStatus
+import com.techswivel.qthemusic.customData.enums.OtpType
 import com.techswivel.qthemusic.databinding.FragmentProfileUpdatingBinding
 import com.techswivel.qthemusic.models.AuthModel
 import com.techswivel.qthemusic.models.AuthModelBuilder
+import com.techswivel.qthemusic.models.AuthRequestModel
 import com.techswivel.qthemusic.source.local.preference.DataStoreUtils
 import com.techswivel.qthemusic.source.local.preference.PrefUtils
 import com.techswivel.qthemusic.source.remote.networkViewModel.AuthNetworkViewModel
@@ -39,7 +42,8 @@ import java.text.DateFormat
 import java.util.*
 
 
-class ProfileUpdatingFragment : BaseFragment(), ProfileSettingActivityImpl {
+class ProfileUpdatingFragment : BaseFragment(), ProfileSettingActivityImpl,
+    ProfileUpdatingFragmentImpl {
 
     companion object {
         fun newInstance() = ProfileUpdatingFragment()
@@ -70,6 +74,20 @@ class ProfileUpdatingFragment : BaseFragment(), ProfileSettingActivityImpl {
         bindViewModelWithView()
         clickListeners()
         setObserver()
+        getDataFromBundle()
+
+    }
+
+    private fun getDataFromBundle() {
+        val phone = arguments?.getString(CommonKeys.KEY_PHONE_NUMBER)
+        if (phone != null) {
+            mBinding.phoneNumberTvID.text = phone
+            PrefUtils.setString(QTheMusicApplication.getContext(), KEY_USER_PHONE, phone)
+            mBinding.numberAdditionTick.visibility = View.VISIBLE
+            mBinding.addPhoneNumberTextviewID.visibility = View.GONE
+        } else {
+            Log.v("TAG", TAG)
+        }
 
     }
 
@@ -90,10 +108,9 @@ class ProfileUpdatingFragment : BaseFragment(), ProfileSettingActivityImpl {
 
 
     override fun openProfileSettingFragmentWithPnone(phoneNumber: String?) {
-        mBinding.phoneNumberTvID.text = phoneNumber
-        PrefUtils.setString(QTheMusicApplication.getContext(), KEY_USER_PHONE, phoneNumber)
-        mBinding.numberAdditionTick.visibility = View.VISIBLE
-        mBinding.addPhoneNumberTextviewID.visibility = View.GONE
+        (mActivityListener as ProfileSettingActivityImpl).openAuthActivityWithPhoneNo(
+            phoneNumber, OtpType.PHONE_NUMBER
+        )
     }
 
     override fun openProfileSettingFragmentWithName(authModel: AuthModel?) {
@@ -120,12 +137,29 @@ class ProfileUpdatingFragment : BaseFragment(), ProfileSettingActivityImpl {
         PrefUtils.clearAllPrefData(QTheMusicApplication.getContext())
         viewModel.setDataInSharedPrefrence(authModel)
         viewModel.authModel = viewModel.getPrefrencesData(QTheMusicApplication.getContext())
-        mBinding.genderTextviewId.text = authModel?.gender
+        if (authModel?.gender == GenderType.MALE.toString()) {
+            mBinding.genderTextviewId.text = getString(R.string.male)
+        } else if (authModel?.gender == GenderType.FEMALE.toString()) {
+            mBinding.genderTextviewId.text = getString(R.string.female)
+        } else if (authModel?.gender == GenderType.NON_BINARY.toString()) {
+            mBinding.genderTextviewId.text = getString(R.string.nonbinary)
+        } else {
+            mBinding.genderTextviewId.text = getString(R.string.no_answer)
+        }
+
         mBinding.textviewChangeGenderID.text =
             QTheMusicApplication.getContext().getString(R.string.change)
     }
 
     override fun replaceCurrentFragment(fragment: Fragment) {
+
+    }
+
+    override fun openAuthActivityWithPhoneNo(phoneNumber: String?, otpType: OtpType) {
+
+    }
+
+    override fun verifyOtpRequest(authRequestBuilder: AuthRequestModel) {
 
     }
 
@@ -294,8 +328,6 @@ class ProfileUpdatingFragment : BaseFragment(), ProfileSettingActivityImpl {
             .setTextColor(QTheMusicApplication.getContext().getColor(R.color.color_black))
         datePicker.getButton(DatePickerDialog.BUTTON_NEGATIVE)
             .setTextColor(QTheMusicApplication.getContext().getColor(R.color.color_black))
-        // for disabling the past date
-        datePicker.getDatePicker().setMinDate(System.currentTimeMillis() - 1000)
     }
 
     private fun bindViewModelWithView() {
@@ -327,6 +359,13 @@ class ProfileUpdatingFragment : BaseFragment(), ProfileSettingActivityImpl {
 
         netWorkViewModel =
             ViewModelProvider(this).get(AuthNetworkViewModel::class.java)
+    }
+
+    override fun openUpdatingFragment(phone: String?) {
+        mBinding.phoneNumberTvID.text = phone
+        PrefUtils.setString(QTheMusicApplication.getContext(), KEY_USER_PHONE, phone)
+        mBinding.numberAdditionTick.visibility = View.VISIBLE
+        mBinding.addPhoneNumberTextviewID.visibility = View.GONE
     }
 
 }

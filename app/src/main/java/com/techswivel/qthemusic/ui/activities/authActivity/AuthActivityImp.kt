@@ -4,7 +4,6 @@ import androidx.fragment.app.Fragment
 import com.techswivel.qthemusic.customData.interfaces.BaseInterface
 import com.techswivel.qthemusic.models.AuthModel
 import com.techswivel.qthemusic.models.AuthRequestModel
-import com.techswivel.qthemusic.source.remote.networkViewModel.*
 import java.io.Serializable
 
 interface AuthActivityImp : BaseInterface {
