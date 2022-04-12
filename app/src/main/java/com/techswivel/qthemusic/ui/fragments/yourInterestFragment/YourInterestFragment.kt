@@ -8,30 +8,36 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.flexbox.*
+import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.customData.adapter.CategoriesAdapter
+import com.techswivel.qthemusic.customData.adapter.RecyclerViewAdapter
 import com.techswivel.qthemusic.customData.enums.AdapterType
 import com.techswivel.qthemusic.customData.enums.CategoryType
+import com.techswivel.qthemusic.customData.enums.NetworkStatus
+import com.techswivel.qthemusic.customData.interfaces.BaseInterface
 import com.techswivel.qthemusic.databinding.FragmentYourInterestBinding
 import com.techswivel.qthemusic.models.Category
+import com.techswivel.qthemusic.models.ResponseModel
+import com.techswivel.qthemusic.source.remote.networkViewModel.SongAndArtistsViewModel
 import com.techswivel.qthemusic.ui.activities.authActivity.AuthActivityImp
 import com.techswivel.qthemusic.ui.base.RecyclerViewBaseFragment
+import com.techswivel.qthemusic.utils.DialogUtils
 import com.techswivel.qthemusic.utils.Log
 import com.techswivel.qthemusic.utils.Utilities
 
-class YourInterestFragment : RecyclerViewBaseFragment(), YourInterestImp {
+class YourInterestFragment : RecyclerViewBaseFragment(), YourInterestImp,
+    RecyclerViewAdapter.CallBack, BaseInterface {
     private lateinit var mYourInterestBinding: FragmentYourInterestBinding
-    private lateinit var adpater: CategoriesAdapter
-    lateinit var categoryResponseList: List<Category?>
-    lateinit var categoriesListForApiRequest: ArrayList<Category>
-    lateinit var selectedCategoriesList: MutableList<String?>
-    override fun onPrepareAdapter(adapterType: AdapterType?): RecyclerView.Adapter<*> {
-        return adpater
-    }
-
+    private lateinit var mViewModel: YourInterestViewModel
+    private lateinit var categoryResponseList: List<Category?>
+    private lateinit var categoriesListForApiRequest: ArrayList<Category>
+    private lateinit var selectedCategoriesList: MutableList<String?>
+    private lateinit var mCategoriesAdapter: RecyclerViewAdapter
+    private lateinit var mSongAndArtistViewModel: SongAndArtistsViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        mViewModel = ViewModelProvider(this).get(YourInterestViewModel::class.java)
+        mSongAndArtistViewModel = ViewModelProvider(this).get(SongAndArtistsViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -41,19 +47,25 @@ class YourInterestFragment : RecyclerViewBaseFragment(), YourInterestImp {
         // Inflate the layout for this fragment
 
         mYourInterestBinding = FragmentYourInterestBinding.inflate(layoutInflater, container, false)
-        (mActivityListener as AuthActivityImp).getCategories(CategoryType.RECOMMENDED)
         categoriesListForApiRequest = ArrayList()
         onClickListeners()
+        mSongAndArtistViewModel.getCategoriesDataFromServer(CategoryType.RECOMMENDED)
         return mYourInterestBinding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setUpAdapter()
+        setObserver()
+    }
     private fun onClickListeners() {
         mYourInterestBinding.btnInterestLetsGo.setOnClickListener {
-            if (categoriesListForApiRequest.size >= 2) {
-                Log.d(TAG, "size is ${categoriesListForApiRequest.size}")
-                (mActivityListener as AuthActivityImp).saveInterests(categoriesListForApiRequest)
-            } else {
+            if (categoriesListForApiRequest.size <= 2) {
                 Utilities.showToast(requireContext(), "Select at least 2 topics")
+            } else if (categoriesListForApiRequest.size > 5) {
+                Utilities.showToast(requireContext(), "You can select maximum 5 topics")
+            } else {
+                (mActivityListener as AuthActivityImp).saveInterests(categoriesListForApiRequest)
             }
 
         }
@@ -61,31 +73,21 @@ class YourInterestFragment : RecyclerViewBaseFragment(), YourInterestImp {
 
     @SuppressLint("NotifyDataSetChanged")
     override fun getCategoriesResponse(lis: List<Category>?) {
-        Log.d(TAG,"getCategories list is caled ")
         if (lis != null) {
-           categoryResponseList = lis
-            adpater = CategoriesAdapter(requireContext(), lis, this)
-            Log.d(TAG, "list is $lis")
-            Log.d(TAG,"getCategories list is here ")
-            val layoutManager = FlexboxLayoutManager(requireContext())
-            layoutManager.justifyContent = JustifyContent.CENTER
-            layoutManager.alignItems = AlignItems.CENTER
-            layoutManager.flexDirection = FlexDirection.ROW
-            layoutManager.flexWrap = FlexWrap.WRAP
-            mYourInterestBinding.recViewYourInterests.layoutManager = layoutManager
-
-            mYourInterestBinding.recViewYourInterests.adapter = adpater
-            adpater.notifyDataSetChanged()
-        }else{
-            Log.d(TAG,"getCategories is null ")
+            categoryResponseList = lis
+          //  mViewModel.mCategoryResponseList=lis as List<Category>?
+//            adpater = CategoriesAdapter(requireContext(), lis, this)
+//            setUpFlexBoxRecViewForYourInterest(mYourInterestBinding.recViewYourInterests, adpater)
+        } else {
+            Log.d(TAG, "getCategories is null ")
         }
 
     }
 
     override fun getSelectedCategories(lis: MutableList<String?>) {
         Log.d(TAG, "called $lis")
-       selectedCategoriesList = lis
-    categoriesListForApiRequest.clear()
+        selectedCategoriesList = lis
+        categoriesListForApiRequest.clear()
         for (i in categoryResponseList) {
             val tittle = i?.categoryTitle
             if (selectedCategoriesList.contains(tittle)) {
@@ -112,5 +114,83 @@ class YourInterestFragment : RecyclerViewBaseFragment(), YourInterestImp {
 
     companion object {
         private val TAG = "YourInterestFragment"
+    }
+
+    override fun inflateLayoutFromId(position: Int, data: Any?): Int {
+        return R.layout.your_interest_resview_layout
+    }
+
+    override fun onNoDataFound() {
+
+    }
+
+    override fun onPrepareAdapter(adapterType: AdapterType?): RecyclerView.Adapter<*> {
+        return mCategoriesAdapter
+    }
+
+    override fun onItemClick(data: Any?, position: Int) {
+        super.onItemClick(data, position)
+        val mCategory = data as Category
+        Utilities.showToast(requireContext(),mCategory.categoryTitle.toString())
+    }
+
+    override fun onViewClicked(view: View, data: Any?) {
+        super.onViewClicked(view, data)
+    }
+
+    private fun setUpAdapter() {
+        mCategoriesAdapter = RecyclerViewAdapter(this, mViewModel.mCategoryResponseList)
+        setUpFlexBoxRecViewForYourInterest(
+            mYourInterestBinding.recViewYourInterests,
+            AdapterType.YOUR_INTERESTS
+        )
+    }
+    private fun setObserver() {
+        mSongAndArtistViewModel.categoriesResponse.observe(viewLifecycleOwner) { playlistDataResponse ->
+            when (playlistDataResponse.status) {
+                NetworkStatus.LOADING -> {
+                    showProgressBar()
+                }
+                NetworkStatus.SUCCESS -> {
+                    hideProgressBar()
+                    mViewModel.mCategoryResponseList.clear()
+                    val response = playlistDataResponse.t as ResponseModel
+                    val playlist = response.data.category
+
+                    if (!playlist.isNullOrEmpty()) {
+                        mViewModel.mCategoryResponseList.addAll(playlist)
+                    } else {
+                       // mBinding.tvNoDataFound.visibility = View.VISIBLE
+                    }
+                    if (::mCategoriesAdapter.isInitialized)
+                        mCategoriesAdapter.notifyDataSetChanged()
+                }
+                NetworkStatus.ERROR -> {
+                    hideProgressBar()
+                    playlistDataResponse.error?.message?.let { it1 ->
+                        DialogUtils.errorAlert(
+                            requireContext(),
+                            playlistDataResponse.error.code.toString(),
+                            playlistDataResponse.error.message
+                        )
+                    }
+                }
+                NetworkStatus.EXPIRE -> {
+                    hideProgressBar()
+                    DialogUtils.sessionExpireAlert(requireContext(),
+                        object : DialogUtils.CallBack {
+                            override fun onPositiveCallBack() {
+                               mViewModel.clearAppSession(requireActivity())
+                            }
+
+                            override fun onNegativeCallBack() {
+                            }
+                        })
+                }
+                NetworkStatus.COMPLETED -> {
+                    hideProgressBar()
+                }
+            }
+        }
     }
 }

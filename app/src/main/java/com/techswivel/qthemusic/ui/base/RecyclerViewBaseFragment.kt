@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
+import com.google.android.flexbox.*
+import com.techswivel.qthemusic.customData.adapter.CategoriesAdapter
 import com.techswivel.qthemusic.customData.adapter.VerticalSpaceItemDecoration
 import com.techswivel.qthemusic.customData.enums.AdapterType
 
@@ -97,5 +99,26 @@ abstract class RecyclerViewBaseFragment : BaseFragment() {
     }
 
     protected abstract fun onPrepareAdapter(adapterType: AdapterType?): RecyclerView.Adapter<*>
-
+//    fun setUpFlexBoxRecViewForYourInterest(
+//        recyclerView: RecyclerView,
+//        adapter: CategoriesAdapter
+//    ) {
+//        val layoutManager = FlexboxLayoutManager(requireContext())
+//        layoutManager.justifyContent = JustifyContent.CENTER
+//        layoutManager.alignItems = AlignItems.CENTER
+//        layoutManager.flexDirection = FlexDirection.ROW
+//        layoutManager.flexWrap = FlexWrap.WRAP
+//        recyclerView.layoutManager=layoutManager
+//        recyclerView.adapter=adapter
+//    }
+    protected open fun setUpFlexBoxRecViewForYourInterest(pRecyclerView: RecyclerView, adapterType: AdapterType?) {
+        val layoutManager = FlexboxLayoutManager(requireContext())
+        layoutManager.justifyContent = JustifyContent.CENTER
+        layoutManager.alignItems = AlignItems.CENTER
+        layoutManager.flexDirection = FlexDirection.ROW
+        layoutManager.flexWrap = FlexWrap.WRAP
+        pRecyclerView.layoutManager=layoutManager
+        val mAdapter: RecyclerView.Adapter<*> = onPrepareAdapter(adapterType)
+        pRecyclerView.adapter = mAdapter
+    }
 }

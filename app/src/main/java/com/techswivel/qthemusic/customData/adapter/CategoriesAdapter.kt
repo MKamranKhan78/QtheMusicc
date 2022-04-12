@@ -19,11 +19,6 @@ class CategoriesAdapter(val context: Context, val list: List<Category>?,val your
 
     inner class MyViewHolder(val binding: YourInterestResviewLayoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        init {
-//                binding.layoutMainRecView.setOnClickListener {
-//                    Utilities.showToast(context,"${list?.get(absoluteAdapterPosition)}")
-//                }
-        }
 
     }
 
@@ -38,7 +33,7 @@ class CategoriesAdapter(val context: Context, val list: List<Category>?,val your
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
 
         val categoryList = list?.get(position)
-        holder.binding.myCategory = categoryList
+       // holder.binding.myCategory = categoryList
 
         holder.binding.layoutMainRecView.setOnClickListener {
 
@@ -53,7 +48,6 @@ class CategoriesAdapter(val context: Context, val list: List<Category>?,val your
                 holder.binding.layoutMainRecView.setBackgroundResource(R.drawable.shape_bg_your_interest_selected)
                 Log.d(TAG, "mList is $selectedCategoryList")
                 yourInterestImp.getSelectedCategories(selectedCategoryList)
-
             }
         }
 

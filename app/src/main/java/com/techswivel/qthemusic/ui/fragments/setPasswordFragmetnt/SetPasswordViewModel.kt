@@ -1,9 +1,9 @@
 package com.techswivel.qthemusic.ui.fragments.setPasswordFragmetnt
 
+import com.techswivel.qthemusic.models.AuthRequestModel
 import com.techswivel.qthemusic.ui.base.BindingValidationViewModel
+import java.io.Serializable
 
 class SetPasswordViewModel : BindingValidationViewModel() {
-    var userEmail = ""
-    var userOtp = ""
-
+    lateinit var mBuilder:AuthRequestModel
 }

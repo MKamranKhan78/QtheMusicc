@@ -12,7 +12,6 @@ import com.techswivel.qthemusic.ui.base.BaseDialogFragment
 
 class WhyWeAreAskingDialogFragment : BaseDialogFragment(){
     private lateinit var mWhyAskingDialogBinding: FragmentWhyWeAreAskingDialogBinding
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NO_FRAME, android.R.style.Theme_Material_Dialog_MinWidth)

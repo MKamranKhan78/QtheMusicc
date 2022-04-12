@@ -26,6 +26,7 @@ import com.techswivel.qthemusic.ui.dialogFragments.genderDialogFragment.GenderSe
 import com.techswivel.qthemusic.ui.dialogFragments.whyWeAreAskingDialogFragment.WhyWeAreAskingDialogFragment
 import com.google.firebase.messaging.FirebaseMessaging
 import com.techswivel.qthemusic.models.AuthModelBuilder
+import com.techswivel.qthemusic.models.AuthRequestModel
 import com.techswivel.qthemusic.source.local.preference.PrefUtils
 import com.techswivel.qthemusic.utils.*
 import org.w3c.dom.Comment
@@ -55,18 +56,10 @@ class SignUpFragment : BaseFragment(), SignUpFragmentImp {
         // Inflate the layout for this fragment
         signUpBinding = FragmentSignUpBinding.inflate(layoutInflater, container, false)
 
-        getFcmToken()
-
         return signUpBinding.root
     }
 
-    private fun getFcmToken() {
-        FirebaseMessaging.getInstance().token.addOnSuccessListener {
-            mSingUpViewModel.myToken = it
-        }.addOnFailureListener {
-            Log.d(TAG, "exception is $it")
-        }
-    }
+
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -89,13 +82,10 @@ class SignUpFragment : BaseFragment(), SignUpFragmentImp {
     }
 
     private fun initialization() {
-        mSingUpViewModel.email = arguments?.getString(CommonKeys.KEY_USER_EMAIL).toString()
-        mSingUpViewModel.name = arguments?.getString(CommonKeys.KEY_USER_NAME).toString()
-        mSingUpViewModel.photo = arguments?.getString(CommonKeys.KEY_USER_PHOTO).toString()
-        mSingUpViewModel.socailId=arguments?.getString(CommonKeys.SOCIAL_ID).toString()
-        mSingUpViewModel.UserPassword = arguments?.getString(CommonKeys.USER_PASSWORD).toString()
+      mSingUpViewModel.mBuilder=arguments?.getSerializable(CommonKeys.AUTH_BUILDER_MODEL) as AuthRequestModel
+        Log.d(TAG,"dat is ${mSingUpViewModel.mBuilder.password} ${mSingUpViewModel.mBuilder.profile} ${mSingUpViewModel.mBuilder.name}")
         signUpBinding.etUserName.setText(mSingUpViewModel.name)
-        Glide.with(requireContext()).load(mSingUpViewModel.photo)
+        Glide.with(requireContext()).load(mSingUpViewModel.mBuilder.profile)
             .into(signUpBinding.ivUserProfilePic)
     }
 
@@ -141,22 +131,7 @@ class SignUpFragment : BaseFragment(), SignUpFragmentImp {
             mSingUpViewModel.zipCode = signUpBinding.etZipCode.text.toString()
 
             if (signUpBinding.etUserDob.text.toString().isNotEmpty()) {
-                createUserAndCallApi(
-                    signUpBinding.etUserDob.text.toString(),
-                    mSingUpViewModel.email,
-                    mSingUpViewModel.UserPassword,
-                    mSingUpViewModel.date.time.toInt(),
-                    signUpBinding.etUserGender.text.toString(),
-                    signUpBinding.etUserAddress.text.toString(),
-                    signUpBinding.etUserCity.text.toString(),
-                    signUpBinding.etUserState.text.toString(),
-                    signUpBinding.etUserCountry.text.toString(),
-                    mSingUpViewModel.zipCode.toInt(),
-                    mSingUpViewModel.photo,
-                    mSingUpViewModel.socailId,
-                    mSingUpViewModel.myToken,
-                    requireContext().toDeviceIdentifier()
-                )
+                getFcmToken()
             } else {
                 signUpBinding.etUserDob.error = getString(R.string.dob_req)
             }
@@ -169,8 +144,7 @@ class SignUpFragment : BaseFragment(), SignUpFragmentImp {
                 { view, year, month, dayOfMonth ->
                     // change date into millis
                     mSingUpViewModel.date = Date(year, month, dayOfMonth)
-                    signUpBinding.etUserDob.setText("$dayOfMonth ${Utilities.getMonths(month.plus(1))} $year")
-                },
+                    signUpBinding.etUserDob.setText("$dayOfMonth ${Utilities.getMonths(month.plus(1))} $year") },
                 mSingUpViewModel.year,
                 mSingUpViewModel.month,
                 mSingUpViewModel.day
@@ -189,8 +163,31 @@ class SignUpFragment : BaseFragment(), SignUpFragmentImp {
             showPictureDialog()
         }
     }
+    private fun getFcmToken() {
+        FirebaseMessaging.getInstance().token.addOnSuccessListener {
+            mSingUpViewModel.myToken = it
+            createUserAndCallApi(
+                signUpBinding.etUserDob.text.toString(),
+                mSingUpViewModel.mBuilder.email,
+                mSingUpViewModel.mBuilder.password,
+                mSingUpViewModel.date.time.toInt(),
+                signUpBinding.etUserGender.text.toString(),
+                signUpBinding.etUserAddress.text.toString(),
+                signUpBinding.etUserCity.text.toString(),
+                signUpBinding.etUserState.text.toString(),
+                signUpBinding.etUserCountry.text.toString(),
+                454545,
+                mSingUpViewModel.photo,
+                mSingUpViewModel.socailId,
+                mSingUpViewModel.myToken,
+                requireContext().toDeviceIdentifier()
+            )
 
 
+        }.addOnFailureListener {
+            Log.d(TAG, "exception is $it")
+        }
+    }
     private fun openDatePicker(datePicker: DatePickerDialog) {
         datePicker.show()
         // its not changing color by xml style so this is used to change ok and cancel button color.

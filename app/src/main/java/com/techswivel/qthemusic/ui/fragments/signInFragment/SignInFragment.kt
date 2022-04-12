@@ -52,12 +52,6 @@ class SignInFragment : BaseFragment() {
     }
 
     private fun initialization() {
-        FirebaseMessaging.getInstance().token.addOnSuccessListener {
-            Log.d(TAG, "Token Is $it")
-           signInViewModel.myToken=it
-        }.addOnFailureListener {
-            Log.d(TAG, "exception is $it")
-        }
         signInBinding.obj = signInViewModel
         Glide.with(requireContext()).load(R.drawable.laura_music)
             .transform(BlurImageView(requireContext())).into(signInBinding.ivSigninBg)
@@ -70,7 +64,11 @@ class SignInFragment : BaseFragment() {
             bundle.putSerializable(CommonKeys.OTP_TYPE, OtpType.EMAIL)
             val fortgotPasword = ForgotPassword()
             fortgotPasword.arguments = bundle
-            (mActivityListener as AuthActivityImp).replaceCurrentFragmentWithAnimation(fortgotPasword,signInBinding.btnSignIn,"my_button_transition")
+            (mActivityListener as AuthActivityImp).replaceCurrentFragmentWithAnimation(
+                fortgotPasword,
+                signInBinding.btnSignIn,
+                "my_button_transition"
+            )
         }
         signInBinding.btnSignIn.setOnClickListener {
             if (
@@ -82,20 +80,12 @@ class SignInFragment : BaseFragment() {
                 signInBinding.etLoginPassword.text.isNullOrEmpty() ||
                 signInViewModel.isPasswordTextValid.get() != true
             ) {
-                signInBinding.etLoginPassword.error =getString(R.string.password_is_required)
+                signInBinding.etLoginPassword.error = getString(R.string.password_is_required)
             } else if (
                 signInViewModel.isEmailTextValid.get() == true &&
                 signInViewModel.isPasswordTextValid.get() == true
             ) {
-                createUserAndCallApi(
-                    signInBinding.etLoginEmail.toString(),
-                    signInBinding.etLoginPassword.text.toString(),
-                    null,
-                    LoginType.SIMPLE.name,
-                    signInViewModel.myToken,
-                    context?.toDeviceIdentifier(),
-                    null
-                )
+                getFcmToken()
             }
         }
         signInBinding.tvForgotPassword.setOnClickListener {
@@ -103,8 +93,11 @@ class SignInFragment : BaseFragment() {
             bundle.putSerializable(CommonKeys.OTP_TYPE, OtpType.FORGET_PASSWORD)
             val fortgotPasword = ForgotPassword()
             fortgotPasword.arguments = bundle
-            (mActivityListener as AuthActivityImp).replaceCurrentFragmentWithAnimation(fortgotPasword,signInBinding.btnSignIn,"my_button_transition")
-
+            (mActivityListener as AuthActivityImp).replaceCurrentFragmentWithAnimation(
+                fortgotPasword,
+                signInBinding.btnSignIn,
+                "my_button_transition"
+            )
 
         }
 
@@ -115,6 +108,23 @@ class SignInFragment : BaseFragment() {
         signInBinding.signSocialPortion.ivFbId.setOnClickListener {
             (mActivityListener as AuthActivityImp).signInWithFacebook()
 
+        }
+    }
+
+    private fun getFcmToken() {
+        FirebaseMessaging.getInstance().token.addOnSuccessListener {
+            signInViewModel.myToken = it
+            createUserAndCallApi(
+                signInBinding.etLoginEmail.toString(),
+                signInBinding.etLoginPassword.text.toString(),
+                null,
+                LoginType.SIMPLE.name,
+                signInViewModel.myToken,
+                context?.toDeviceIdentifier(),
+                null
+            )
+        }.addOnFailureListener {
+            Log.d(TAG, "exception is $it")
         }
     }
 

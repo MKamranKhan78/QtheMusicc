@@ -9,17 +9,25 @@ import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.customData.enums.OtpType
 import com.techswivel.qthemusic.databinding.FragmentSetPasswordBinding
 import com.techswivel.qthemusic.models.AuthRequestBuilder
+import com.techswivel.qthemusic.models.AuthRequestModel
 import com.techswivel.qthemusic.ui.activities.authActivity.AuthActivityImp
 import com.techswivel.qthemusic.ui.base.BaseFragment
 import com.techswivel.qthemusic.utils.CommonKeys
+import com.techswivel.qthemusic.utils.Log
 import java.io.Serializable
 
 
 class SetPassword : BaseFragment() {
-    lateinit var passwordBinding: FragmentSetPasswordBinding
-    lateinit var setPasswordViewModel: SetPasswordViewModel
+    private lateinit var passwordBinding: FragmentSetPasswordBinding
+    private lateinit var setPasswordViewModel: SetPasswordViewModel
+
+    companion object {
+        private val TAG = "SetPassword"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
     }
 
     override fun onCreateView(
@@ -41,10 +49,14 @@ class SetPassword : BaseFragment() {
     }
 
     private fun widgetInitialization() {
-
-        setPasswordViewModel.userEmail = arguments?.getString(CommonKeys.USER_EMAIL).toString()
-        setPasswordViewModel.userOtp = arguments?.getString(CommonKeys.USER_OTP).toString()
+        setPasswordViewModel.mBuilder =
+            arguments?.getSerializable(CommonKeys.AUTH_BUILDER_MODEL) as AuthRequestModel
         passwordBinding.obj = setPasswordViewModel
+
+        Log.d(
+            TAG,
+            "data is ${setPasswordViewModel.mBuilder.otpType}${setPasswordViewModel.mBuilder.otp}"
+        )
     }
 
     private fun onClickListener() {
@@ -83,8 +95,8 @@ class SetPassword : BaseFragment() {
 
     private fun createAndSendSetPasswordRequest() {
         val authModelBilder = AuthRequestBuilder()
-        authModelBilder.email = setPasswordViewModel.userEmail
-        authModelBilder.otp = setPasswordViewModel.userOtp.toInt()
+        authModelBilder.email =setPasswordViewModel.mBuilder.email
+        authModelBilder.otp = setPasswordViewModel.mBuilder.otp
         authModelBilder.password = passwordBinding.etSetPasswordConfirmId.text.toString()
         val setPasswordModel = AuthRequestBuilder.builder(authModelBilder)
         (mActivityListener as AuthActivityImp).setPasswordRequest(

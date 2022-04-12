@@ -12,6 +12,6 @@ class OtpVerificationViewModel :BaseViewModel(){
     var etOtpThree = ""
     var etOtpFour = ""
     var etOtpFive = ""
-    lateinit var fragmentFlow: OtpType
+    var fragmentFlow= ""
     lateinit var countDownTimer: CountDownTimer
 }

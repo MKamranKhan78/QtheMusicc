@@ -14,6 +14,7 @@ import com.techswivel.qthemusic.ui.activities.authActivity.AuthActivityImp
 import com.techswivel.qthemusic.ui.base.BaseFragment
 import com.techswivel.qthemusic.utils.CommonKeys
 import com.techswivel.qthemusic.utils.Log
+import java.lang.Exception
 
 
 class ForgotPassword : BaseFragment(), ForgotPasswordImp {
@@ -91,13 +92,13 @@ class ForgotPassword : BaseFragment(), ForgotPasswordImp {
     }
 
     private fun createAndSendOtpRequest() {
+
         val authModelBilder = AuthRequestBuilder()
         authModelBilder.otpType = fragmentFlow.name
-        authModelBilder.email = forgotbingding.etForgotEmailId.text.toString()
-        Log.d(TAG, "email is ${forgotbingding.etForgotEmailId.text.toString()}")
+        authModelBilder.email =forgotbingding.etForgotEmailId.text.toString()
         val otpModel = AuthRequestBuilder.builder(authModelBilder)
 
-        Log.d(TAG, "otpModel ${otpModel.email}")
+        Log.d(TAG, "otpModel ${otpModel.otpType} ${otpModel.email}")
         (mActivityListener as AuthActivityImp).forgotPasswordRequest(otpModel,forgotbingding.tvPolicyTag,"my_otp_transection")
 
     }

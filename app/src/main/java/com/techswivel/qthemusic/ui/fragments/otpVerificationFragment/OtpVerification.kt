@@ -17,6 +17,7 @@ import com.techswivel.qthemusic.databinding.FragmentOtpVerificationBinding
 
 
 import com.techswivel.qthemusic.models.AuthRequestBuilder
+import com.techswivel.qthemusic.models.AuthRequestModel
 import com.techswivel.qthemusic.ui.activities.authActivity.AuthActivityImp
 import com.techswivel.qthemusic.ui.base.BaseFragment
 import com.techswivel.qthemusic.utils.CommonKeys
@@ -33,9 +34,9 @@ class OtpVerification : BaseFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initViewModels()
-        mVerifyOtpViewModel.fragmentFlow =
-            arguments?.getSerializable(CommonKeys.OTP_TYPE) as OtpType
-        if (mVerifyOtpViewModel.fragmentFlow == OtpType.EMAIL) {
+        val myData = arguments?.getSerializable(CommonKeys.AUTH_BUILDER_MODEL) as AuthRequestModel
+        mVerifyOtpViewModel.fragmentFlow = myData.otpType.toString()
+        if (mVerifyOtpViewModel.fragmentFlow == OtpType.EMAIL.name) {
             sharedElementEnterTransition = TransitionInflater.from(requireContext())
                 .inflateTransition(R.transition.slide_from_left_bottom)
         }
@@ -87,7 +88,7 @@ class OtpVerification : BaseFragment() {
         }
         mOtpViewBinding.tvResendBtn.setOnClickListener {
             val authModelBilder = AuthRequestBuilder()
-            authModelBilder.otpType = mVerifyOtpViewModel.fragmentFlow.name
+            authModelBilder.otpType = mVerifyOtpViewModel.fragmentFlow
             authModelBilder.email = mVerifyOtpViewModel.email
             val otpModel = AuthRequestBuilder.builder(authModelBilder)
             (mActivityListener as AuthActivityImp).forgotPasswordRequest(otpModel, null, null)

@@ -44,19 +44,17 @@ import java.util.*
 
 
 class AuthActivity : BaseActivity(), AuthActivityImp {
-    private lateinit var authBinding: ActivityAuthBinding
-    private lateinit var googleSinInClient: GoogleSignInClient
-    lateinit var authNetworkViewModel: AuthNetworkViewModel
+    private lateinit var mAuthBinding: ActivityAuthBinding
+    private lateinit var mGoogleSinInClient: GoogleSignInClient
+    lateinit var mAuthNetworkViewModel: AuthNetworkViewModel
     private lateinit var mAuthActivityViewModel: AuthActivityViewModel
-    private lateinit var mSongAndArtistViewModel: SongAndArtistsViewModel
-    private lateinit var mFragment: Fragment
+
+    private lateinit var mCurrentFragment: Fragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        authBinding = ActivityAuthBinding.inflate(layoutInflater)
+        mAuthBinding = ActivityAuthBinding.inflate(layoutInflater)
         init()
-        mAuthActivityViewModel.authModelBilder = AuthRequestBuilder()
-
         mAuthActivityViewModel.isAccountCreated =
             PrefUtils.getBoolean(this, CommonKeys.KEY_IS_ACCOUNT_CREATED)
         mAuthActivityViewModel.isInterestSelected =
@@ -68,16 +66,7 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
         } else {
             replaceFragmentWithoutAddingToBackStack(R.id.auth_container, SignInFragment())
         }
-        setContentView(authBinding.root)
-    }
-
-    private fun init() {
-        authNetworkViewModel = ViewModelProvider(this).get(AuthNetworkViewModel::class.java)
-        mAuthActivityViewModel = ViewModelProvider(this).get(AuthActivityViewModel::class.java)
-        mSongAndArtistViewModel = ViewModelProvider(this).get(SongAndArtistsViewModel::class.java)
-        mAuthActivityViewModel.callbackManager = CallbackManager.Factory.create()
-        mAuthActivityViewModel.loginManager = LoginManager.getInstance()
-        setAutNetworkViewModelObservers()
+        setContentView(mAuthBinding.root)
     }
 
     override fun onCreateView(name: String, context: Context, attrs: AttributeSet): View? {
@@ -106,20 +95,19 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (::mFragment.isInitialized) {
-            mFragment.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (::mCurrentFragment.isInitialized) {
+            mCurrentFragment.onRequestPermissionsResult(requestCode, permissions, grantResults)
         }
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        PrefUtils.removeValue(this, CommonKeys.SIGNIN_BTN_ANIMATION)
     }
 
     override fun userLoginRequest(
         authRequestBuilder: AuthRequestModel
     ) {
-        authNetworkViewModel.userLogin(authRequestBuilder)
+        mAuthNetworkViewModel.userLogin(authRequestBuilder)
     }
 
     override fun navigateToHomeScreenAfterLogin(authModel: AuthModel?) {
@@ -129,31 +117,34 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
     }
 
     override fun forgotPasswordRequest(
-        authRequestBuilder: AuthRequestModel, view: View?, string: String?
+        authRequestBuilder: AuthRequestModel, sharedViews: View?, transitionName: String?
     ) {
-        mAuthActivityViewModel.myView = view
-        mAuthActivityViewModel.myString = string
+
+        mAuthActivityViewModel.sharedView = sharedViews
+        mAuthActivityViewModel.myTransitionName = transitionName
+        mAuthActivityViewModel.authRequestModel = authRequestBuilder
         mAuthActivityViewModel.userEmail = authRequestBuilder.email.toString()
-        mAuthActivityViewModel.fragmentFlow = authRequestBuilder.otpType
-        authNetworkViewModel.sendOtpRequest(authRequestBuilder)
+        mAuthActivityViewModel.otpType = authRequestBuilder.otpType
+        mAuthNetworkViewModel.sendOtpRequest(authRequestBuilder)
+
 
     }
 
     override fun showProgressBar() {
-        authBinding.authProgressBar.visibility = View.VISIBLE
+        mAuthBinding.authProgressBar.visibility = View.VISIBLE
     }
 
     override fun hideProgressBar() {
-        authBinding.authProgressBar.visibility = View.INVISIBLE
+        mAuthBinding.authProgressBar.visibility = View.INVISIBLE
     }
 
     override fun replaceCurrentFragment(fragment: Fragment) {
-        mFragment = fragment
+        mCurrentFragment = fragment
         replaceFragment(R.id.auth_container, fragment)
     }
 
     override fun replaceCurrentFragmentWithoutAddingToBackStack(fragment: Fragment) {
-        mFragment = fragment
+        mCurrentFragment = fragment
         replaceFragmentWithoutAddingToBackStack(R.id.auth_container, fragment)
     }
 
@@ -161,21 +152,17 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
         authRequestBuilder: AuthRequestModel,
 
         ) {
-        authNetworkViewModel.verifyOtpResponse(authRequestBuilder)
+        mAuthNetworkViewModel.verifyOtpResponse(authRequestBuilder)
         mAuthActivityViewModel.userEmail = authRequestBuilder.email
-        mAuthActivityViewModel.userOtp = authRequestBuilder.otp
+        mAuthActivityViewModel.authRequestModel.otp = authRequestBuilder.otp
+        Log.d(TAG, "otp is ${mAuthActivityViewModel.authRequestModel.otp}")
     }
 
     override fun setPasswordRequest(
         authRequestBuilder: AuthRequestModel
     ) {
-        authNetworkViewModel.requestToSetPassword(authRequestBuilder)
-        mAuthActivityViewModel.userPassword = authRequestBuilder.password
-        mAuthActivityViewModel.myBundle.putString(
-            CommonKeys.USER_PASSWORD,
-            mAuthActivityViewModel.userPassword
-        )
-        mAuthActivityViewModel.fragmentFlow = authRequestBuilder.otpType
+        mAuthNetworkViewModel.requestToSetPassword(authRequestBuilder)
+        mAuthActivityViewModel.authRequestModel.password = authRequestBuilder.password
     }
 
     override fun popUpToAllFragments(fragment: Fragment) {
@@ -191,16 +178,16 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
     }
 
     override fun userSignUp(authRequestBuilder: AuthRequestModel) {
-        authNetworkViewModel.userSingUp(authRequestBuilder)
+        mAuthNetworkViewModel.userSingUp(authRequestBuilder)
 
     }
 
     override fun getCategories(categoryType: CategoryType) {
-        mSongAndArtistViewModel.getCategoriesDataFromServer(categoryType)
+     //   mSongAndArtistViewModel.getCategoriesDataFromServer(categoryType)
     }
 
     override fun saveInterests(category: List<Category?>) {
-        authNetworkViewModel.saveUserInterest(category)
+        mAuthNetworkViewModel.saveUserInterest(category)
     }
 
     override fun replaceCurrentFragmentWithAnimation(
@@ -208,21 +195,30 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
         view: View,
         string: String
     ) {
-        mFragment = fragment
+        mCurrentFragment = fragment
         replaceFragmentWithAnimation(R.id.auth_container, fragment, view, string)
     }
 
+    private fun init() {
+        mAuthNetworkViewModel = ViewModelProvider(this).get(AuthNetworkViewModel::class.java)
+        mAuthActivityViewModel = ViewModelProvider(this).get(AuthActivityViewModel::class.java)
+
+        mAuthActivityViewModel.callbackManager = CallbackManager.Factory.create()
+        mAuthActivityViewModel.loginManager = LoginManager.getInstance()
+        setAutNetworkViewModelObservers()
+    }
 
     private fun handleGoogleSignInResult(completedTask: Task<GoogleSignInAccount>) {
         try {
             val account: GoogleSignInAccount = completedTask.getResult(ApiException::class.java)
             val authCode = account.serverAuthCode
             if (authCode != null) {
-                authNetworkViewModel.getGoogleToken(authCode)
-                mAuthActivityViewModel.myEmail = account.email
-                mAuthActivityViewModel.userName = account.displayName
-                mAuthActivityViewModel.userPhotoUrl = account.photoUrl.toString()
-                mAuthActivityViewModel.socialId=account.id
+                mAuthNetworkViewModel.getGoogleToken(authCode)
+                mAuthActivityViewModel.authModelBilder.email = account.email
+                mAuthActivityViewModel.authModelBilder.name = account.displayName
+                mAuthActivityViewModel.authModelBilder.profile = account.photoUrl.toString()
+
+                Log.d(TAG,"profile is ${mAuthActivityViewModel.authModelBilder.profile}")
             } else {
                 Log.d(TAG, "ServerAuthCode Not Found")
             }
@@ -234,14 +230,14 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
 
     private fun signInGoogle() {
 
-        googleSinInClient = GoogleSignIn.getClient(this, QTheMusicApplication.getGso())
-        val signInIntent = googleSinInClient.signInIntent
+        mGoogleSinInClient = GoogleSignIn.getClient(this, QTheMusicApplication.getGso())
+        val signInIntent = mGoogleSinInClient.signInIntent
         startActivityForResult(signInIntent, Constants.GOOGLE_SIGN_IN_REQUEST_CODE)
 
     }
 
     private fun signInFacebook() {
-      mAuthActivityViewModel.loginManager.logInWithReadPermissions(
+        mAuthActivityViewModel.loginManager.logInWithReadPermissions(
             this,
             Arrays.asList(
                 getString(R.string.get_email_fb),
@@ -253,7 +249,8 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
                 override fun onSuccess(result: LoginResult?) {
                     val accessToken = result?.accessToken?.token
                     mAuthActivityViewModel.authModelBilder.accessToken = accessToken
-                    val authModel = AuthRequestBuilder.builder(mAuthActivityViewModel.authModelBilder)
+                    val authModel =
+                        AuthRequestBuilder.builder(mAuthActivityViewModel.authModelBilder)
                     userLoginRequest(authModel)
                     Log.d(TAG, "access token ${result?.accessToken?.token}")
                     val graphRequest =
@@ -261,10 +258,12 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
                             try {
                                 if (myObj != null) {
                                     if (myObj.has("id")) {
-                                        mAuthActivityViewModel.myEmail = myObj.getString("email")
-                                        mAuthActivityViewModel.userName =myObj.getString("name")
-                                        mAuthActivityViewModel.userPhotoUrl = myObj.getString("picture")
-                                        mAuthActivityViewModel.socialId=myObj.getString("id")
+                                        mAuthActivityViewModel.authModelBilder.email =
+                                            myObj.getString("email")
+                                        mAuthActivityViewModel.authModelBilder.name =
+                                            myObj.getString("name")
+                                        mAuthActivityViewModel.authModelBilder.profile =
+                                            myObj.getString("picture")
                                     }
                                 } else {
                                     Log.d(TAG, "graph is null")
@@ -290,48 +289,48 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
 
     private fun setAutNetworkViewModelObservers() {
 
-        mSongAndArtistViewModel.categoriesResponse.observe(this, Observer {
-            when (it.status) {
-                NetworkStatus.LOADING -> {
-                    showProgressBar()
-                    Log.d(TAG, "Loading")
-                }
-                NetworkStatus.SUCCESS -> {
-                    hideProgressBar()
-                    val mResponseModel = it.t as ResponseModel
-                    val userData = mResponseModel.data.category
-                        try {
-                            (mFragment as YourInterestImp).getCategoriesResponse(
-                                userData
-                            )
-                        } catch (e: Exception) {
-                            Log.d(TAG, "failed ${e.message}")
-                        }
-                }
-                NetworkStatus.ERROR -> {
-                    hideProgressBar()
-                    val error = it.error as ErrorResponse
-                    DialogUtils.errorAlert(
-                        this,
-                        getString(R.string.error_occurred),
-                        error.message
-                    )
-                }
-                NetworkStatus.EXPIRE -> {
-                    hideProgressBar()
-                    val error = it.error as ErrorResponse
-                    DialogUtils.errorAlert(
-                        this,
-                        getString(R.string.error_occurred),
-                        error.message
-                    )
-                }
-                NetworkStatus.COMPLETED -> {
-                }
-            }
-        })
+//        mSongAndArtistViewModel.categoriesResponse.observe(this, Observer {
+//            when (it.status) {
+//                NetworkStatus.LOADING -> {
+//                    showProgressBar()
+//                    Log.d(TAG, "Loading")
+//                }
+//                NetworkStatus.SUCCESS -> {
+//                    hideProgressBar()
+//                    val mResponseModel = it.t as ResponseModel
+//                    val userData = mResponseModel.data.category
+//                    try {
+//                        (mCurrentFragment as YourInterestImp).getCategoriesResponse(
+//                            userData
+//                        )
+//                    } catch (e: Exception) {
+//                        Log.d(TAG, "failed ${e.message}")
+//                    }
+//                }
+//                NetworkStatus.ERROR -> {
+//                    hideProgressBar()
+//                    val error = it.error as ErrorResponse
+//                    DialogUtils.errorAlert(
+//                        this,
+//                        getString(R.string.error_occurred),
+//                        error.message
+//                    )
+//                }
+//                NetworkStatus.EXPIRE -> {
+//                    hideProgressBar()
+//                    val error = it.error as ErrorResponse
+//                    DialogUtils.errorAlert(
+//                        this,
+//                        getString(R.string.error_occurred),
+//                        error.message
+//                    )
+//                }
+//                NetworkStatus.COMPLETED -> {
+//                }
+//            }
+//        })
 
-        authNetworkViewModel.signinUserResponse.observe(this, Observer {
+        mAuthNetworkViewModel.signinUserResponse.observe(this, Observer {
             when (it.status) {
                 NetworkStatus.LOADING -> {
                     showProgressBar()
@@ -363,13 +362,11 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
                         }
                     } else {
                         Log.d(TAG, "status false")
-                        (mFragment as ForgotPasswordImp).accountNotExistsSendOtp(
-                            mAuthActivityViewModel.myEmail
+                        (mCurrentFragment as ForgotPasswordImp).accountNotExistsSendOtp(
+                            mAuthActivityViewModel.authRequestModel.email
                         )
                         Utilities.showToast(this, "account not exists")
                     }
-
-
                 }
                 NetworkStatus.ERROR -> {
                     hideProgressBar()
@@ -393,7 +390,7 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
                 }
             }
         })
-        authNetworkViewModel.googleSignResponse.observe(this, Observer {
+        mAuthNetworkViewModel.googleSignResponse.observe(this, Observer {
             when (it.status) {
                 NetworkStatus.LOADING -> {
                     showProgressBar()
@@ -406,7 +403,8 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
                         mAuthActivityViewModel.authModelBilder.accessToken = data.accessToken
                         mAuthActivityViewModel.authModelBilder.loginType = LoginType.SOCIAL.name
                         mAuthActivityViewModel.authModelBilder.socialSite = SocialSites.GMAIL.name
-                        val authModel = AuthRequestBuilder.builder(mAuthActivityViewModel.authModelBilder)
+                        val authModel =
+                            AuthRequestBuilder.builder(mAuthActivityViewModel.authModelBilder)
                         userLoginRequest(authModel)
                     } else {
                         DialogUtils.errorAlert(
@@ -436,50 +434,30 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
                 }
             }
         })
-        authNetworkViewModel.forgotPasswordResponse.observe(this, Observer {
+        mAuthNetworkViewModel.otpObserver.observe(this, Observer {
             when (it.status) {
                 NetworkStatus.LOADING -> {
                     showProgressBar()
                 }
                 NetworkStatus.SUCCESS -> {
                     hideProgressBar()
-                    Log.d(
-                        TAG,
-                        "email si ${mAuthActivityViewModel.myEmail}  name ${mAuthActivityViewModel.userName} img ${mAuthActivityViewModel.userPhotoUrl}"
-                    )
                     val data = it.t as ResponseModel
-
-                    mAuthActivityViewModel.myBundle.putString(
-                        CommonKeys.USER_EMAIL,
-                        mAuthActivityViewModel.myEmail
+                    val bundle = Bundle()
+                    bundle.putSerializable(
+                        CommonKeys.AUTH_BUILDER_MODEL,
+                        mAuthActivityViewModel.authRequestModel
                     )
-                    mAuthActivityViewModel.myBundle.putString(
-                        CommonKeys.KEY_USER_NAME,
-                        mAuthActivityViewModel.userName
-                    )
-                    if (mAuthActivityViewModel.fragmentFlow == OtpType.EMAIL.name) {
-                        mAuthActivityViewModel.myBundle.putSerializable(
-                            CommonKeys.OTP_TYPE,
-                            OtpType.EMAIL
-                        )
-                    } else {
-                        mAuthActivityViewModel.myBundle.putSerializable(
-                            CommonKeys.OTP_TYPE,
-                            OtpType.FORGET_PASSWORD
-                        )
-                    }
-
                     val otpVerification = OtpVerification()
-                    otpVerification.arguments = mAuthActivityViewModel.myBundle
-                    if (mAuthActivityViewModel.fragmentFlow == OtpType.EMAIL.name) {
+                    otpVerification.arguments = bundle
+                    if (mAuthActivityViewModel.otpType == OtpType.EMAIL.name) {
                         Log.d(TAG, "eamil flow called ")
-                        mAuthActivityViewModel.myView?.let { it1 ->
-                            mAuthActivityViewModel.myString?.let { it2 ->
+                        mAuthActivityViewModel.sharedView?.let { sharedView ->
+                            mAuthActivityViewModel.myTransitionName?.let { transition ->
                                 replaceFragmentWithAnimation(
                                     R.id.auth_container,
                                     otpVerification,
-                                    it1,
-                                    it2
+                                    sharedView,
+                                    transition
                                 )
                             }
                         }
@@ -509,7 +487,7 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
             }
         })
 
-        authNetworkViewModel.otpVerificationResponse.observe(
+        mAuthNetworkViewModel.otpVerificationResponse.observe(
             this,
             Observer {
                 when (it.status) {
@@ -522,7 +500,7 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
 
                         mAuthActivityViewModel.myBundle.putSerializable(
                             CommonKeys.OTP_TYPE,
-                            mAuthActivityViewModel.fragmentFlow
+                            mAuthActivityViewModel.otpType
                         )
                         mAuthActivityViewModel.myBundle.putString(
                             CommonKeys.USER_OTP,
@@ -532,8 +510,13 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
                             CommonKeys.USER_EMAIL,
                             mAuthActivityViewModel.userEmail
                         )
+                        val bundle = Bundle()
+                        bundle.putSerializable(
+                            CommonKeys.AUTH_BUILDER_MODEL,
+                            mAuthActivityViewModel.authRequestModel
+                        )
                         val setPassword = SetPassword()
-                        setPassword.arguments = mAuthActivityViewModel.myBundle
+                        setPassword.arguments = bundle
                         PrefUtils.setBoolean(this, CommonKeys.START_TIMER, false)
                         replaceCurrentFragment(setPassword)
 
@@ -559,7 +542,7 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
                 }
             })
 
-        authNetworkViewModel.setPasswordResponse.observe(this, Observer {
+        mAuthNetworkViewModel.setPasswordResponse.observe(this, Observer {
             when (it.status) {
                 NetworkStatus.LOADING -> {
                     showProgressBar()
@@ -568,22 +551,18 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
                     hideProgressBar()
                     PrefUtils.removeValue(this, CommonKeys.SIGNIN_BTN_ANIMATION)
                     val data = it.t as ResponseModel
-                    if (mAuthActivityViewModel.fragmentFlow == OtpType.FORGET_PASSWORD.name) {
+                    if (mAuthActivityViewModel.authRequestModel.otpType == OtpType.FORGET_PASSWORD.name) {
                         replaceCurrentFragment(SignInFragment())
                         popUpAllFragmentIncludeThis(ForgotPassword::class.java.name)
 
                     } else {
                         val signUpFragment = SignUpFragment()
-                        mAuthActivityViewModel.myBundle.putString(
-                            CommonKeys.KEY_USER_PHOTO,
-                            mAuthActivityViewModel.userPhotoUrl
+                        val bundle = Bundle()
+                        bundle.putSerializable(
+                            CommonKeys.AUTH_BUILDER_MODEL,
+                            mAuthActivityViewModel.authRequestModel
                         )
-                        mAuthActivityViewModel.myBundle.putString(
-                            CommonKeys.KEY_USER_EMAIL,
-                            mAuthActivityViewModel.myEmail
-                        )
-                        mAuthActivityViewModel.myBundle.putString(CommonKeys.SOCIAL_ID,mAuthActivityViewModel.socialId)
-                        signUpFragment.arguments = mAuthActivityViewModel.myBundle
+                        signUpFragment.arguments = bundle
                         replaceCurrentFragment(signUpFragment)
                     }
                 }
@@ -607,15 +586,89 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
                 }
             }
         })
-        authNetworkViewModel.userSignupResponse.observe(this, Observer {
+        mAuthNetworkViewModel.userSignupResponse.observe(this, Observer {
             when (it.status) {
                 NetworkStatus.LOADING -> {
                     showProgressBar()
                 }
                 NetworkStatus.SUCCESS -> {
                     hideProgressBar()
-                    val data = it.t as ResponseModel
+                    val responseModel = it.t as ResponseModel
+                    val userData = responseModel.data
                     PrefUtils.setBoolean(this, CommonKeys.KEY_IS_ACCOUNT_CREATED, true)
+                    PrefUtils.setBoolean(this, CommonKeys.KEY_IS_INTEREST_SET, false)
+                    PrefUtils.setString(this, CommonKeys.KEY_USER_NAME, userData.authModel?.name)
+                    PrefUtils.setString(this, CommonKeys.KEY_USER_EMAIL, userData.authModel?.email)
+                    PrefUtils.setString(
+                        this,
+                        CommonKeys.KEY_USER_AVATAR,
+                        userData.authModel?.avatar
+                    )
+                    PrefUtils.setString(
+                        this,
+                        CommonKeys.KEY_USER_GENDER,
+                        userData.authModel?.gender
+                    )
+                    PrefUtils.setString(this, CommonKeys.KEY_JWT, userData.authModel?.jwt)
+                    PrefUtils.setString(
+                        this,
+                        CommonKeys.KEY_USER_PHONE,
+                        userData.authModel?.phoneNumber
+                    )
+                    PrefUtils.setString(
+                        this,
+                        CommonKeys.KEY_USER_ADRESS,
+                        userData.authModel?.address?.completeAddress
+                    )
+                    PrefUtils.setString(
+                        this,
+                        CommonKeys.KEY_USER_CITY,
+                        userData.authModel?.address?.city
+                    )
+                    PrefUtils.setString(
+                        this,
+                        CommonKeys.KEY_USER_STATE,
+                        userData.authModel?.address?.state
+                    )
+                    PrefUtils.setString(
+                        this,
+                        CommonKeys.KEY_USER_COUNTRY,
+                        userData.authModel?.address?.country
+                    )
+                    userData.authModel?.notification?.isNotificationEnabled?.let { notification ->
+                        PrefUtils.setBoolean(
+                            this, CommonKeys.KEY_USER_ENABLE_NOTIFICATION,
+                            notification
+                        )
+                    }
+                    userData.authModel?.notification?.isArtistUpdateEnabled?.let { notification ->
+                        PrefUtils.setBoolean(
+                            this, CommonKeys.KEY_USER_ADRESS,
+                            notification
+                        )
+                    }
+                    PrefUtils.setString(
+                        this,
+                        CommonKeys.KEY_USER_PLAN_DURATION,
+                        userData.authModel?.subscription?.planDuration
+                    )
+                    userData.authModel?.subscription?.planId?.let { planId ->
+                        PrefUtils.setInt(
+                            this, CommonKeys.KEY_USER_PLAN_ID,
+                            planId
+                        )
+                    }
+                    PrefUtils.setString(
+                        this,
+                        CommonKeys.KEY_USER_PLAN_TITLE,
+                        userData.authModel?.subscription?.planTitle
+                    )
+                    userData.authModel?.subscription?.planPrice?.let { planPrize ->
+                        PrefUtils.setFloat(
+                            this, CommonKeys.KEY_USER_PLAN_PRIZE,
+                            planPrize
+                        )
+                    }
                     replaceCurrentFragment(YourInterestFragment())
                 }
                 NetworkStatus.EXPIRE -> {
@@ -639,7 +692,7 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
             }
         })
 
-        authNetworkViewModel.saveInterestResponse.observe(this, Observer {
+        mAuthNetworkViewModel.saveInterestResponse.observe(this, Observer {
             when (it.status) {
                 NetworkStatus.LOADING -> {
                     showProgressBar()

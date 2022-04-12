@@ -44,6 +44,7 @@ class CommonKeys {
         const val KEY_USER_PHOTO="key_user_photo"
         const val USER_PASSWORD="user_password"
         const val SOCIAL_ID="social_id"
-
+        const val KEY_USER_JWT="key_user_jwt"
+        const val   AUTH_BUILDER_MODEL="auth_builder_model"
     }
 }
