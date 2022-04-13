@@ -5,11 +5,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.techswivel.qthemusic.R
-import com.techswivel.qthemusic.application.QTheMusicApplication
 import com.techswivel.qthemusic.customData.adapter.RecyclerViewAdapter
 import com.techswivel.qthemusic.customData.enums.AdapterType
 import com.techswivel.qthemusic.customData.enums.DeleteViewType
@@ -19,6 +17,7 @@ import com.techswivel.qthemusic.databinding.FragmentPlaylistBinding
 import com.techswivel.qthemusic.models.PlaylistModel
 import com.techswivel.qthemusic.models.ResponseModel
 import com.techswivel.qthemusic.source.remote.networkViewModel.ProfileNetworkViewModel
+import com.techswivel.qthemusic.ui.activities.playlistActivity.PlaylistActivityImpl
 import com.techswivel.qthemusic.ui.base.RecyclerViewBaseFragment
 import com.techswivel.qthemusic.ui.dialogFragments.createPlaylistDialogFragment.CreatePlaylistDialogFragment
 import com.techswivel.qthemusic.ui.dialogFragments.deletionViewBottomSheetDialog.DeletionViewBottomSheetDialogFragment
@@ -28,6 +27,11 @@ import com.techswivel.qthemusic.utils.DialogUtils
 
 class PlaylistFragment : RecyclerViewBaseFragment(), BaseInterface,
     RecyclerViewAdapter.CallBack, PlaylistFragmentImpl {
+
+    companion object {
+        @JvmStatic
+        fun newInstance() = PlaylistFragment()
+    }
 
     private lateinit var mBinding: FragmentPlaylistBinding
     private lateinit var viewModel: PlaylistFragmentViewModel
@@ -80,11 +84,8 @@ class PlaylistFragment : RecyclerViewBaseFragment(), BaseInterface,
         playlistModel.let { playListModel ->
             bundle.putSerializable(CommonKeys.KEY_DATA, playListModel)
         }
-        Toast.makeText(
-            QTheMusicApplication.getContext(),
-            playlistModel.playListTitle,
-            Toast.LENGTH_SHORT
-        ).show()
+        (mActivityListener as PlaylistActivityImpl).openSongsFragment(bundle)
+//        ActivityUtils.launchFragment(QTheMusicApplication.getContext(),SongsFragment::class.java.name)
     }
 
     override fun onViewClicked(view: View, data: Any?) {

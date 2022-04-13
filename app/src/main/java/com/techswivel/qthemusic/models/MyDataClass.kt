@@ -16,9 +16,13 @@ class MyDataClass(
     val playlistModel: List<PlaylistModel>?,
     @Expose
     @SerializedName("playlist")
-    val playlistModelResponse: PlaylistModel?
+    val playlistModelResponse: PlaylistModel?,
+    @Expose
+    @SerializedName("songs")
+    val songList: List<Song>?
 ) {
     constructor() : this(
+        null,
         null,
         null,
         null,

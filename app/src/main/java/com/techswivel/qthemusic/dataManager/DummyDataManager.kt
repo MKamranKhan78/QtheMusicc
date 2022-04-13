@@ -44,7 +44,8 @@ class DummyDataManager {
                 getCategoriesDummyData(),
                 getSongsDummyData(),
                 getDummyPlaylist(),
-                getDummyPlaylistResponse()
+                getDummyPlaylistResponse(),
+                getDummySongs()
             )
         }
 
@@ -192,6 +193,115 @@ class DummyDataManager {
                     6,
                     "New Songs",
                     50
+                )
+            )
+        }
+
+
+        private fun getDummySongs(): List<Song> {
+            return arrayListOf(
+                Song(
+                    1,
+                    "Emotional songs",
+                    "atif aslam",
+                    11,
+                    21,
+                    "https://cdn.lifehack.org/wp-content/uploads/2015/09/rock-music-wallpapers.jpg",
+                    true,
+                    true,
+                    "this is the lyrics of the song",
+                    1,
+                    "https://cdn.lifehack.org/wp-content/uploads/2015/09/rock-music-wallpapers.jpg",
+                    5678,
+                    1,
+                    SongStatus.FREE,
+                    "dil dil pakistan",
+                    "https://cdn.lifehack.org/wp-content/uploads/2015/09/rock-music-wallpapers.jpg"
+                ), Song(
+                    1,
+                    "Emotional songs",
+                    "atif aslam",
+                    23,
+                    10,
+                    "https://cdn.lifehack.org/wp-content/uploads/2015/09/rock-music-wallpapers.jpg",
+                    true,
+                    true,
+                    "this is the lyrics of the song",
+                    2,
+                    "https://cdn.lifehack.org/wp-content/uploads/2015/09/rock-music-wallpapers.jpg",
+                    5678,
+                    1,
+                    SongStatus.PREMIUM,
+                    "jazba junoon",
+                    "https://cdn.lifehack.org/wp-content/uploads/2015/09/rock-music-wallpapers.jpg"
+                ), Song(
+                    1,
+                    "Emotional songs",
+                    "atif aslam",
+                    23,
+                    10,
+                    "https://cdn.lifehack.org/wp-content/uploads/2015/09/rock-music-wallpapers.jpg",
+                    true,
+                    true,
+                    "this is the lyrics of the song",
+                    3,
+                    "https://cdn.lifehack.org/wp-content/uploads/2015/09/rock-music-wallpapers.jpg",
+                    5678,
+                    1,
+                    SongStatus.PURCHASED,
+                    "ae watan ae watan",
+                    "https://cdn.lifehack.org/wp-content/uploads/2015/09/rock-music-wallpapers.jpg"
+                ), Song(
+                    1,
+                    "Emotional songs",
+                    "atif aslam",
+                    23,
+                    10,
+                    "https://cdn.lifehack.org/wp-content/uploads/2015/09/rock-music-wallpapers.jpg",
+                    true,
+                    true,
+                    "this is the lyrics of the song",
+                    4,
+                    "https://cdn.lifehack.org/wp-content/uploads/2015/09/rock-music-wallpapers.jpg",
+                    5678,
+                    1,
+                    SongStatus.DOWNLOADED,
+                    "pakistan zindabad",
+                    "https://cdn.lifehack.org/wp-content/uploads/2015/09/rock-music-wallpapers.jpg"
+                ), Song(
+                    1,
+                    "Emotional songs",
+                    "atif aslam",
+                    23,
+                    10,
+                    "https://cdn.lifehack.org/wp-content/uploads/2015/09/rock-music-wallpapers.jpg",
+                    true,
+                    true,
+                    "this is the lyrics of the song",
+                    5,
+                    "https://cdn.lifehack.org/wp-content/uploads/2015/09/rock-music-wallpapers.jpg",
+                    5678,
+                    1,
+                    SongStatus.DELETED,
+                    "Allah o akbar",
+                    "https://cdn.lifehack.org/wp-content/uploads/2015/09/rock-music-wallpapers.jpg"
+                ), Song(
+                    1,
+                    "Emotional songs",
+                    "atif aslam",
+                    23,
+                    10,
+                    "https://cdn.lifehack.org/wp-content/uploads/2015/09/rock-music-wallpapers.jpg",
+                    true,
+                    true,
+                    "this is the lyrics of the song",
+                    6,
+                    "https://cdn.lifehack.org/wp-content/uploads/2015/09/rock-music-wallpapers.jpg",
+                    5678,
+                    1,
+                    SongStatus.FREE,
+                    "love song",
+                    "https://cdn.lifehack.org/wp-content/uploads/2015/09/rock-music-wallpapers.jpg"
                 )
             )
         }

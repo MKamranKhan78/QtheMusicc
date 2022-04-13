@@ -8,7 +8,7 @@
 
         <variable
             name="obj"
-            type="com.techswivel.qthemusic.models.PlaylistModel" />
+            type="com.techswivel.qthemusic.models.Song" />
 
         <variable
             name="click"
@@ -33,8 +33,8 @@
                 android:id="@+id/imageAudioSong"
                 android:layout_width="@dimen/_45dp"
                 android:layout_height="@dimen/_45dp"
-                android:scaleType="fitXY"
-                android:src="@drawable/ic_audio_song_icon"
+                setImageViewImage="@{obj.coverImageUrl}"
+                android:scaleType="centerCrop"
                 tools:ignore="ContentDescription" />
 
 
@@ -55,12 +55,12 @@
                     android:fontFamily="@font/manrope_regular"
                     android:maxLines="1"
                     android:minLines="1"
-                    android:text="@{obj.playListTitle.toString()}"
+                    android:text="@{obj.songTitle}"
                     android:textColor="@color/color_white_text_profile"
                     android:textSize="@dimen/_14sp" />
 
                 <TextView
-                    setNomberOfSong="@{obj.totalSongs}"
+                    setNomberOfSong="@{obj.songDuration}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/manrope_regular"

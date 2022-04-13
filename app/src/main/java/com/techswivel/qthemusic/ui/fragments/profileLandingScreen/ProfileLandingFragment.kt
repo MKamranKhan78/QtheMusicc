@@ -8,10 +8,10 @@ import androidx.lifecycle.ViewModelProvider
 import com.techswivel.dfaktfahrerapp.ui.fragments.underDevelopmentMessageFragment.UnderDevelopmentMessageFragment
 import com.techswivel.qthemusic.application.QTheMusicApplication
 import com.techswivel.qthemusic.databinding.FragmentProfileLandingBinding
+import com.techswivel.qthemusic.ui.activities.playlistActivity.PlaylistActivity
 import com.techswivel.qthemusic.ui.activities.profileSettingScreen.ProfileSettingActivity
 import com.techswivel.qthemusic.ui.activities.serverSettingActivity.ServerSettingActivity
 import com.techswivel.qthemusic.ui.base.BaseFragment
-import com.techswivel.qthemusic.ui.fragments.playlist_fragment.PlaylistFragment
 import com.techswivel.qthemusic.utils.ActivityUtils
 
 class ProfileLandingFragment : BaseFragment() {
@@ -61,9 +61,9 @@ class ProfileLandingFragment : BaseFragment() {
             )
         }
         mBinding.playListTextView.setOnClickListener {
-            ActivityUtils.launchFragment(
-                requireContext(),
-                PlaylistFragment::class.java.name
+            ActivityUtils.startNewActivity(
+                requireActivity(),
+                PlaylistActivity::class.java
             )
         }
         mBinding.favoriteSongTextview.setOnClickListener {

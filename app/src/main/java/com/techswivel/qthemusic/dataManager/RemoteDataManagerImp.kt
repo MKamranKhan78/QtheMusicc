@@ -8,6 +8,7 @@ import retrofit2.Response
 interface RemoteDataManagerImp {
     fun getRecommendedSongsData(recommendedSongsBodyModel: RecommendedSongsBodyModel): Observable<Response<ResponseMain>>
     fun getPlayListFromServer(): Observable<Response<ResponseMain>>
+    fun getSongsFromServer(songsBodyModel: SongsBodyModel): Observable<Response<ResponseMain>>
     fun savePlaylist(playlistModel: PlaylistModel): Observable<Response<ResponseMain>>
     fun deletePlaylist(playlistId: Int): Observable<Response<ResponseMain>>
     fun getCategoriesData(categoryType: CategoryType): Observable<Response<ResponseMain>>
