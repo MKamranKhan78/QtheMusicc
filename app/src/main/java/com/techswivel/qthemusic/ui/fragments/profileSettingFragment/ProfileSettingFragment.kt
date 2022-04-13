@@ -1,6 +1,5 @@
 package com.techswivel.qthemusic.ui.fragments.underDevelopmentMessageFragment.profile_setting_fragment
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,15 +7,14 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.techswivel.dfaktfahrerapp.ui.fragments.underDevelopmentMessageFragment.UnderDevelopmentMessageFragment
+import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.application.QTheMusicApplication
 import com.techswivel.qthemusic.customData.enums.NetworkStatus
 import com.techswivel.qthemusic.databinding.FragmentProfileSettingBinding
 import com.techswivel.qthemusic.models.AuthModel
 import com.techswivel.qthemusic.models.AuthModelBuilder
 import com.techswivel.qthemusic.source.local.preference.DataStoreUtils
-import com.techswivel.qthemusic.source.local.preference.PrefUtils
 import com.techswivel.qthemusic.source.remote.networkViewModel.AuthNetworkViewModel
-import com.techswivel.qthemusic.ui.activities.authActivity.AuthActivity
 import com.techswivel.qthemusic.ui.activities.profileSettingScreen.ProfileSettingActivityImpl
 import com.techswivel.qthemusic.ui.base.BaseFragment
 import com.techswivel.qthemusic.ui.fragments.profileUpdatingFragment.ProfileUpdatingFragment
@@ -105,15 +103,10 @@ class ProfileSettingFragment : BaseFragment() {
                     Log.v("Network_status", "success")
                     Toast.makeText(
                         QTheMusicApplication.getContext(),
-                        "Logout successful",
+                        getString(R.string.logout_successfully),
                         Toast.LENGTH_SHORT
                     ).show()
-                    PrefUtils.clearAllPrefData(QTheMusicApplication.getContext())
-                    val intent = Intent(requireContext(), AuthActivity::class.java)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-                    startActivity(intent)
-                    requireActivity().finish()
-
+                    viewModel.clearAppSession(requireActivity())
                 }
                 NetworkStatus.ERROR -> {
                     logoutResponse.error?.message?.let { error_message ->

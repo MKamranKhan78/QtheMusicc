@@ -64,6 +64,7 @@
     <string name="str_underdevelopment_feature">Underdevelopment feature</string>
     <string name="str_playing_from">PLAYING FROM</string>
     <string name="log_out">Log Out</string>
+    <string name="logout_successfully">Logout Successfully</string>
     <string name="privacy_policy">Privacy Policy</string>
     <string name="terms_and_conditions">Terms and Conditions</string>
     <string name="about_qmusic">About QMusic</string>

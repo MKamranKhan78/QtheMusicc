@@ -31,7 +31,6 @@ import com.techswivel.qthemusic.models.*
 import com.techswivel.qthemusic.source.local.preference.PrefUtils
 import com.techswivel.qthemusic.source.remote.networkViewModel.AuthNetworkViewModel
 import com.techswivel.qthemusic.ui.activities.mainActivity.MainActivity
-import com.techswivel.qthemusic.ui.activities.profileSettingScreen.ProfileSettingActivity
 import com.techswivel.qthemusic.ui.base.BaseActivity
 import com.techswivel.qthemusic.ui.fragments.forgotPasswordFragment.ForgotPassword
 import com.techswivel.qthemusic.ui.fragments.otpVerificationFragment.OtpVerification
@@ -62,7 +61,7 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
         authBinding = ActivityAuthBinding.inflate(layoutInflater)
         authModelBilder = AuthRequestBuilder()
         initViewModel()
-        getBundleData()
+        replaceFragmentWithoutAddingToBackStack(R.id.auth_container, SignInFragment())
         setAutNetworkViewModelObservers()
         setContentView(authBinding.root)
     }
@@ -73,29 +72,6 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
 
     }
 
-    private fun getBundleData() {
-        val bundle = intent.extras
-
-
-        val phone = bundle?.getString(CommonKeys.KEY_PHONE_NUMBER)
-        val otpType = bundle?.getString(CommonKeys.KEY_ENUM)
-
-
-        if (otpType == OtpType.PHONE_NUMBER.name) {
-            mAuthActivityViewModel.phoneNumber = phone
-            mAuthActivityViewModel.fragmentFlow = otpType
-            authModelBilder.phoneNumber = mAuthActivityViewModel.phoneNumber
-            val authModel = AuthRequestBuilder.builder(authModelBilder)
-            forgotPasswordRequest(authModel, null)
-            val bundle = Bundle()
-            bundle.putString(CommonKeys.KEY_PHONE_NUMBER, mAuthActivityViewModel.phoneNumber)
-            val otpVerification = OtpVerification()
-            otpVerification.arguments = bundle
-            replaceFragmentWithoutAddingToBackStack(R.id.auth_container, otpVerification)
-        } else {
-            replaceFragmentWithoutAddingToBackStack(R.id.auth_container, SignInFragment())
-        }
-    }
 
     override fun onCreateView(name: String, context: Context, attrs: AttributeSet): View? {
 
@@ -377,23 +353,7 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
                         val setPassword = SetPassword()
                         setPassword.arguments = bundle
                         PrefUtils.setBoolean(this, CommonKeys.START_TIMER, false)
-
-                        if (mAuthActivityViewModel.fragmentFlow == OtpType.PHONE_NUMBER.name) {
-                            val bundle = Bundle()
-                            bundle.putString(
-                                CommonKeys.KEY_PHONE_NUMBER,
-                                mAuthActivityViewModel.phoneNumber
-                            )
-
-                            val intent = Intent(this, ProfileSettingActivity::class.java)
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-                            intent.putExtras(bundle)
-                            startActivity(intent)
-                            this.finish()
-                        } else {
-                            replaceCurrentFragment(setPassword)
-                        }
-
+                        replaceCurrentFragment(setPassword)
 
                     }
                     NetworkStatus.EXPIRE -> {

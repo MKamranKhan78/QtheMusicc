@@ -15,13 +15,11 @@ import com.techswivel.qthemusic.models.Address
 import com.techswivel.qthemusic.models.AuthModel
 import com.techswivel.qthemusic.models.Notification
 import com.techswivel.qthemusic.models.Subscription
-import com.techswivel.qthemusic.source.local.preference.DataStoreUtils
 import com.techswivel.qthemusic.source.local.preference.PrefUtils
 import com.techswivel.qthemusic.source.remote.rxjava.DisposableManager
 import com.techswivel.qthemusic.ui.activities.splashActivity.SplashActivity
 import com.techswivel.qthemusic.utils.ActivityUtils
 import com.techswivel.qthemusic.utils.CommonKeys
-import kotlinx.coroutines.runBlocking
 
 
 abstract class BaseViewModel : ViewModel() {
@@ -193,11 +191,10 @@ abstract class BaseViewModel : ViewModel() {
         return authModel
     }
 
+
     fun clearAppSession(activity: Activity) {
-        runBlocking {
-            DataStoreUtils.clearAllPreference()
-            mLocalDataManager.deleteAllLocalData()
-        }
+
+        PrefUtils.clearAllPrefData(QTheMusicApplication.getContext())
         ActivityUtils.startNewActivity(
             activity,
             SplashActivity::class.java,

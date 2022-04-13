@@ -32,7 +32,6 @@ class OtpVerification : BaseFragment() {
 
     private lateinit var viewBinding: FragmentOtpVerificationBinding
     private lateinit var verifyOtpViewModel: OtpVerificationViewModel
-    var phone: String? = null
     private lateinit var countDownTimer: CountDownTimer
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,13 +79,11 @@ class OtpVerification : BaseFragment() {
         viewBinding.btnConfirmCode.setOnClickListener {
 
             if (verifyOtpViewModel.fragmentFlow == OtpType.PHONE_NUMBER) {
-                Utilities.showToast(requireContext(), "if")
                 val authModelBilder = AuthRequestBuilder()
                 authModelBilder.phoneNumber = verifyOtpViewModel.phoneNumber
                 val otpModel = AuthRequestBuilder.builder(authModelBilder)
                 (mActivityListener as ProfileSettingActivityImpl).verifyOtpRequest(otpModel)
             } else {
-                Utilities.showToast(requireContext(), "else")
                 verifyOtpViewModel.otpCode =
                     verifyOtpViewModel.etOtpOne + verifyOtpViewModel.etOtpTwo + verifyOtpViewModel.etOtpThree + verifyOtpViewModel.etOtpFour + verifyOtpViewModel.etOtpFive
                 if (verifyOtpViewModel.otpCode.length < 5 || verifyOtpViewModel.otpCode != "11111") {

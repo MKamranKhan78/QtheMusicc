@@ -78,19 +78,6 @@ class ProfileUpdatingFragment : BaseFragment(), ProfileSettingActivityImpl,
 
     }
 
-    private fun getDataFromBundle() {
-        val phone = arguments?.getString(CommonKeys.KEY_PHONE_NUMBER)
-        if (phone != null) {
-            mBinding.phoneNumberTvID.text = phone
-            PrefUtils.setString(QTheMusicApplication.getContext(), KEY_USER_PHONE, phone)
-            mBinding.numberAdditionTick.visibility = View.VISIBLE
-            mBinding.addPhoneNumberTextviewID.visibility = View.GONE
-        } else {
-            Log.v("TAG", TAG)
-        }
-
-    }
-
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -170,6 +157,14 @@ class ProfileUpdatingFragment : BaseFragment(), ProfileSettingActivityImpl,
     override fun hideProgressBar() {
         mBinding.progressBar.visibility = View.GONE
     }
+
+    override fun openUpdatingFragment(phone: String?) {
+        mBinding.phoneNumberTvID.text = phone
+        PrefUtils.setString(QTheMusicApplication.getContext(), KEY_USER_PHONE, phone)
+        mBinding.numberAdditionTick.visibility = View.VISIBLE
+        mBinding.addPhoneNumberTextviewID.visibility = View.GONE
+    }
+
 
     private fun setObserver() {
         netWorkViewModel.profileUpdationResponse.observe(requireActivity()) { updateProfileResponse ->
@@ -361,11 +356,19 @@ class ProfileUpdatingFragment : BaseFragment(), ProfileSettingActivityImpl,
             ViewModelProvider(this).get(AuthNetworkViewModel::class.java)
     }
 
-    override fun openUpdatingFragment(phone: String?) {
-        mBinding.phoneNumberTvID.text = phone
-        PrefUtils.setString(QTheMusicApplication.getContext(), KEY_USER_PHONE, phone)
-        mBinding.numberAdditionTick.visibility = View.VISIBLE
-        mBinding.addPhoneNumberTextviewID.visibility = View.GONE
+
+    private fun getDataFromBundle() {
+        val phone = arguments?.getString(CommonKeys.KEY_PHONE_NUMBER)
+        if (phone != null) {
+            mBinding.phoneNumberTvID.text = phone
+            PrefUtils.setString(QTheMusicApplication.getContext(), KEY_USER_PHONE, phone)
+            mBinding.numberAdditionTick.visibility = View.VISIBLE
+            mBinding.addPhoneNumberTextviewID.visibility = View.GONE
+        } else {
+            Log.v("TAG", TAG)
+        }
+
     }
+
 
 }

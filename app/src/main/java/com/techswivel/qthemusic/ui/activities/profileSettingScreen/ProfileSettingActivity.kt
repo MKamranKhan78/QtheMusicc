@@ -41,26 +41,6 @@ class ProfileSettingActivity : BaseActivity(), ProfileSettingActivityImpl {
     }
 
 
-
-    override fun onBackPressed() {
-        val count = supportFragmentManager.backStackEntryCount
-        if (count == 1) {
-            this.finish()
-        } else {
-            supportFragmentManager.popBackStackImmediate()
-        }
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        val count = supportFragmentManager.backStackEntryCount
-        if (count == 1) {
-            this.finish()
-        } else {
-            supportFragmentManager.popBackStackImmediate()
-        }
-        return super.onSupportNavigateUp()
-    }
-
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -72,6 +52,41 @@ class ProfileSettingActivity : BaseActivity(), ProfileSettingActivityImpl {
         }
     }
 
+    override fun onBackPressed() {
+
+        if (getEntryCount() == 3) {
+            mBinding.activityToolbar.toolbarTitle.text = getString(R.string.profile_settings)
+
+        }
+        if (getEntryCount() == 2) {
+            mBinding.activityToolbar.toolbarTitle.text = getString(R.string.settings)
+
+        }
+        if (getEntryCount() == 1) {
+            this.finish()
+        } else {
+            supportFragmentManager.popBackStackImmediate()
+        }
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        if (getEntryCount() == 3) {
+            mBinding.activityToolbar.toolbarTitle.text = getString(R.string.profile_settings)
+
+        }
+        if (getEntryCount() == 2) {
+            mBinding.activityToolbar.toolbarTitle.text = getString(R.string.settings)
+
+        }
+
+        if (getEntryCount() == 1) {
+            this.finish()
+        } else {
+            supportFragmentManager.popBackStackImmediate()
+        }
+        return super.onSupportNavigateUp()
+    }
+
     override fun replaceCurrentFragment(fragment: Fragment) {
         mBinding.activityToolbar.toolbarTitle.text = getString(R.string.profile_settings)
         mFragmentt = fragment
@@ -79,6 +94,7 @@ class ProfileSettingActivity : BaseActivity(), ProfileSettingActivityImpl {
     }
 
     override fun openAuthActivityWithPhoneNo(phoneNumber: String?, otpType: OtpType) {
+        mBinding.activityToolbar.toolbarTitle.text = ""
         viewModel.phone = phoneNumber
         val bundle = Bundle()
         bundle.putString(CommonKeys.KEY_PHONE_NUMBER, phoneNumber)
@@ -120,7 +136,9 @@ class ProfileSettingActivity : BaseActivity(), ProfileSettingActivityImpl {
                     }
                     NetworkStatus.SUCCESS -> {
                         hideProgressBar()
-                        openFragmentWithoutAddingBackStack(ProfileUpdatingFragment())
+                        openProfileUpdatingFragment(ProfileUpdatingFragment())
+                        mBinding.activityToolbar.toolbarTitle.text =
+                            getString(R.string.profile_settings)
                         (mFragmentt as ProfileUpdatingFragmentImpl).openUpdatingFragment(viewModel.phone)
                         Toast.makeText(
                             this,
@@ -172,7 +190,7 @@ class ProfileSettingActivity : BaseActivity(), ProfileSettingActivityImpl {
         }
     }
 
-    private fun openFragmentWithoutAddingBackStack(fragment: Fragment) {
+    private fun openProfileUpdatingFragment(fragment: Fragment) {
         ::mFragment.set(fragment)
         mFragment.let { fragmentInstance ->
             fragmentInstance?.let { fragmentToBeReplaced ->
