@@ -24,8 +24,6 @@ class AuthNetworkViewModel : BaseViewModel() {
     var otpVerificationResponse:MutableLiveData<ApiResponse> = MutableLiveData()
     var setPasswordResponse: MutableLiveData<ApiResponse> = MutableLiveData()
     var userSignupResponse:MutableLiveData<ApiResponse> = MutableLiveData()
-    var saveInterestResponse:MutableLiveData<ApiResponse> = MutableLiveData()
-
     fun logoutUser() {
 
         mRemoteDataManager.logoutUser(QTheMusicApplication.getContext().toDeviceIdentifier())
@@ -329,34 +327,5 @@ class AuthNetworkViewModel : BaseViewModel() {
         })
 
     }
-    fun saveUserInterest(category: List<Category?>) {
-        mRemoteDataManager.saveInterest(category).doOnSubscribe {
-            saveInterestResponse.value= ApiResponse.loading()
-        }.subscribe(object :CustomObserver<Response<ResponseMain>>(){
-            override fun onSuccess(t: Response<ResponseMain>) {
-                if (t.isSuccessful){
-                    saveInterestResponse.value= ApiResponse.success(t.body()?.response)
-                }
-            }
-
-            override fun onError(e: Throwable, isInternetError: Boolean, error: CustomError?) {
-                saveInterestResponse.value = ApiResponse.error(
-                    error?.code?.let { code ->
-                        ErrorResponse(
-                            false,
-                            error.message,
-                            code
-                        )
-                    }
-                )
-            }
-
-            override fun onRequestComplete() {
-
-            }
-        })
-
-    }
-
 
 }

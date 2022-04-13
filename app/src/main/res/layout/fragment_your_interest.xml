@@ -75,8 +75,17 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
-
-
+        <ProgressBar
+            android:id="@+id/auth_progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminateTint="@color/sign_up_btn"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toTopOf="@id/btn_interest_lets_go"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginBottom="@dimen/_50dp"
+            />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

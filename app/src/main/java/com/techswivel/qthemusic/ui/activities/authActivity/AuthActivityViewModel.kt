@@ -2,9 +2,9 @@ package com.techswivel.qthemusic.ui.activities.authActivity
 
 import android.os.Bundle
 import android.view.View
-import androidx.fragment.app.Fragment
 import com.facebook.CallbackManager
 import com.facebook.login.LoginManager
+import com.techswivel.qthemusic.models.AuthModel
 import com.techswivel.qthemusic.models.AuthRequestBuilder
 import com.techswivel.qthemusic.models.AuthRequestModel
 import com.techswivel.qthemusic.ui.base.BaseViewModel
@@ -21,15 +21,16 @@ class AuthActivityViewModel : BaseViewModel() {
     var myBundle = Bundle()
     var isAccountCreated: Boolean = false
     var isInterestSelected: Boolean = false
+    var isLogin:Boolean=false
     var sharedView: View? = null
     var myTransitionName: String? = ""
     lateinit var callbackManager: CallbackManager
     lateinit var loginManager: LoginManager
-    lateinit var authModelBilder: AuthRequestBuilder
+    lateinit var authRequestBilder: AuthRequestBuilder
     lateinit var authRequestModel: AuthRequestModel
 
     init {
-        authModelBilder = AuthRequestBuilder()
+        authRequestBilder = AuthRequestBuilder()
         authRequestModel = AuthRequestModel()
     }
 

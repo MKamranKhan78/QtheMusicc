@@ -3,7 +3,7 @@ package com.techswivel.qthemusic.ui.fragments.signUpFragment
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.content.Intent
-import android.content.pm.PackageManager
+import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -25,11 +25,8 @@ import com.techswivel.qthemusic.ui.dialogFragments.chooserDialogFragment.Chooser
 import com.techswivel.qthemusic.ui.dialogFragments.genderDialogFragment.GenderSelectionDialogFragment
 import com.techswivel.qthemusic.ui.dialogFragments.whyWeAreAskingDialogFragment.WhyWeAreAskingDialogFragment
 import com.google.firebase.messaging.FirebaseMessaging
-import com.techswivel.qthemusic.models.AuthModelBuilder
 import com.techswivel.qthemusic.models.AuthRequestModel
-import com.techswivel.qthemusic.source.local.preference.PrefUtils
 import com.techswivel.qthemusic.utils.*
-import org.w3c.dom.Comment
 import java.io.IOException
 import java.util.*
 
@@ -39,14 +36,12 @@ class SignUpFragment : BaseFragment(), SignUpFragmentImp {
         private const val TAG = "SignUpFragment"
     }
 
-    private lateinit var mSingUpViewModel: SignUpViewModel
-    private lateinit var mChooserFragment: ChooserDialogFragment
-    private lateinit var signUpBinding: FragmentSignUpBinding
+    private lateinit var mViewModel: SignUpViewModel
+    private lateinit var mBinding: FragmentSignUpBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mSingUpViewModel = ViewModelProvider(this).get(SignUpViewModel::class.java)
-
+        mViewModel = ViewModelProvider(this).get(SignUpViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -54,12 +49,10 @@ class SignUpFragment : BaseFragment(), SignUpFragmentImp {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        signUpBinding = FragmentSignUpBinding.inflate(layoutInflater, container, false)
+        mBinding = FragmentSignUpBinding.inflate(layoutInflater, container, false)
 
-        return signUpBinding.root
+        return mBinding.root
     }
-
-
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -78,15 +71,32 @@ class SignUpFragment : BaseFragment(), SignUpFragmentImp {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        mChooserFragment.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        mViewModel.mChooserFragment.onRequestPermissionsResult(
+            requestCode,
+            permissions,
+            grantResults
+        )
+    }
+
+    override fun showProgressBar() {
+
+    }
+
+    override fun hideProgressBar() {
+
     }
 
     private fun initialization() {
-      mSingUpViewModel.mBuilder=arguments?.getSerializable(CommonKeys.AUTH_BUILDER_MODEL) as AuthRequestModel
-        Log.d(TAG,"dat is ${mSingUpViewModel.mBuilder.password} ${mSingUpViewModel.mBuilder.profile} ${mSingUpViewModel.mBuilder.name}")
-        signUpBinding.etUserName.setText(mSingUpViewModel.name)
-        Glide.with(requireContext()).load(mSingUpViewModel.mBuilder.profile)
-            .into(signUpBinding.ivUserProfilePic)
+        mViewModel.mBuilder =
+            arguments?.getSerializable(CommonKeys.AUTH_BUILDER_MODEL) as AuthRequestBuilder
+        mViewModel.name=mViewModel.mBuilder.name.toString()
+        mBinding.etUserName.setText(mViewModel.name)
+        val myPhoto=mViewModel.mBuilder.profile
+        if (myPhoto?.isNotEmpty() == true){
+            Glide.with(requireContext()).load(mViewModel.mBuilder.profile)
+                .into(mBinding.ivUserProfilePic)
+        }
+
     }
 
     private fun createUserAndCallApi(
@@ -101,7 +111,6 @@ class SignUpFragment : BaseFragment(), SignUpFragmentImp {
         country: String?,
         zipCode: Int?,
         profile: String?,
-        socialId: String?,
         fcmToken: String?,
         deviceIdentifier: String?,
     ) {
@@ -115,7 +124,6 @@ class SignUpFragment : BaseFragment(), SignUpFragmentImp {
         authModelBilder.country = country
         authModelBilder.zipCode = zipCode
         authModelBilder.profile = profile
-        authModelBilder.socialId = socialId
         authModelBilder.email = email
         authModelBilder.password = password
         authModelBilder.fcmToken = fcmToken
@@ -126,60 +134,59 @@ class SignUpFragment : BaseFragment(), SignUpFragmentImp {
 
     @SuppressLint("SetTextI18n")
     private fun clickListeners() {
-        signUpBinding.tvLetGoProfileBtn.setOnClickListener {
+        mBinding.tvLetGoProfileBtn.setOnClickListener {
 
-            mSingUpViewModel.zipCode = signUpBinding.etZipCode.text.toString()
-
-            if (signUpBinding.etUserDob.text.toString().isNotEmpty()) {
+            if (mBinding.etUserDob.text.toString().isNotEmpty()) {
                 getFcmToken()
             } else {
-                signUpBinding.etUserDob.error = getString(R.string.dob_req)
+                mBinding.etUserDob.error = getString(R.string.dob_req)
             }
         }
 
 
-        signUpBinding.dobView.setOnClickListener {
+        mBinding.dobView.setOnClickListener {
             val datePicker = DatePickerDialog(
                 requireContext(), R.style.MyDatePickerStyle,
                 { view, year, month, dayOfMonth ->
                     // change date into millis
-                    mSingUpViewModel.date = Date(year, month, dayOfMonth)
-                    signUpBinding.etUserDob.setText("$dayOfMonth ${Utilities.getMonths(month.plus(1))} $year") },
-                mSingUpViewModel.year,
-                mSingUpViewModel.month,
-                mSingUpViewModel.day
+                    mViewModel.date = Date(year, month, dayOfMonth)
+                    mBinding.etUserDob.setText("$dayOfMonth ${Utilities.getMonths(month.plus(1))} $year")
+                },
+                mViewModel.year,
+                mViewModel.month,
+                mViewModel.day
             )
             openDatePicker(datePicker)
         }
-        signUpBinding.tvWhyWeAreAskingTag.setOnClickListener {
+        mBinding.tvWhyWeAreAskingTag.setOnClickListener {
             WhyWeAreAskingDialogFragment().show(parentFragmentManager, TAG)
 
         }
-        signUpBinding.genderView.setOnClickListener {
+        mBinding.genderView.setOnClickListener {
             GenderSelectionDialogFragment.newInstance(this).show(parentFragmentManager, TAG)
         }
 
-        signUpBinding.profileImgSection.setOnClickListener {
+        mBinding.profileImgSection.setOnClickListener {
             showPictureDialog()
         }
     }
+
     private fun getFcmToken() {
         FirebaseMessaging.getInstance().token.addOnSuccessListener {
-            mSingUpViewModel.myToken = it
+            mViewModel.myToken = it
             createUserAndCallApi(
-                signUpBinding.etUserDob.text.toString(),
-                mSingUpViewModel.mBuilder.email,
-                mSingUpViewModel.mBuilder.password,
-                mSingUpViewModel.date.time.toInt(),
-                signUpBinding.etUserGender.text.toString(),
-                signUpBinding.etUserAddress.text.toString(),
-                signUpBinding.etUserCity.text.toString(),
-                signUpBinding.etUserState.text.toString(),
-                signUpBinding.etUserCountry.text.toString(),
-                454545,
-                mSingUpViewModel.photo,
-                mSingUpViewModel.socailId,
-                mSingUpViewModel.myToken,
+                mBinding.etUserDob.text.toString(),
+                mViewModel.mBuilder.email,
+                mViewModel.mBuilder.password,
+                mViewModel.date.time.toInt(),
+                mBinding.etUserGender.text.toString(),
+                mBinding.etUserAddress.text.toString(),
+                mBinding.etUserCity.text.toString(),
+                mBinding.etUserState.text.toString(),
+                mBinding.etUserCountry.text.toString(),
+                mViewModel.zipCode,
+                mViewModel.photo,
+                mViewModel.myToken,
                 requireContext().toDeviceIdentifier()
             )
 
@@ -188,6 +195,7 @@ class SignUpFragment : BaseFragment(), SignUpFragmentImp {
             Log.d(TAG, "exception is $it")
         }
     }
+
     private fun openDatePicker(datePicker: DatePickerDialog) {
         datePicker.show()
         // its not changing color by xml style so this is used to change ok and cancel button color.
@@ -204,30 +212,38 @@ class SignUpFragment : BaseFragment(), SignUpFragmentImp {
     }
 
     override fun getGender(gender: String?) {
-        signUpBinding.etUserGender.setText(gender)
-    }
-
-    override fun showProgressBar() {
-
-    }
-
-    override fun hideProgressBar() {
-
+        mBinding.etUserGender.setText(gender)
     }
 
     private fun showPictureDialog() {
-        mChooserFragment = ChooserDialogFragment.newInstance(CommonKeys.TYPE_PHOTO,
+        mViewModel.mChooserFragment = ChooserDialogFragment.newInstance(CommonKeys.TYPE_PHOTO,
             object : ChooserDialogFragment.CallBack {
                 override fun onActivityResult(mImageUri: List<Uri>?) {
-                    mSingUpViewModel.uri = mImageUri?.get(0)
-                    val contentURI = mSingUpViewModel.uri
+                    mViewModel.uri = mImageUri?.get(0)
+                    val contentURI = mViewModel.uri
                     try {
-                        val bitmap = MediaStore.Images.Media.getBitmap(
-                            QTheMusicApplication.getContext().contentResolver,
-                            contentURI
-                        )
-                        signUpBinding.ivUserProfilePic.setImageBitmap(bitmap)
-                        mSingUpViewModel.uri = contentURI
+                        Log.d(TAG,"try caleed")
+                        if (Build.VERSION.SDK_INT < 28) {
+                            Log.d(TAG,"build 28 caldde")
+                            val bitmap = MediaStore.Images.Media.getBitmap(
+                                requireActivity().contentResolver,
+                                contentURI
+                            )
+                            mBinding.ivUserProfilePic.setImageBitmap(bitmap)
+                        } else {
+                            Log.d(TAG,"bulid greater than 28 called")
+                            val source =
+                                contentURI?.let { uri ->
+                                    ImageDecoder.createSource(
+                                        requireActivity().contentResolver,
+                                        uri
+                                    )
+                                }
+                            val bitmap = source?.let { ImageDecoder.decodeBitmap(it) }
+                            Log.d(TAG,"bulid greater than 28 called bitmap is ${bitmap}")
+                            mBinding.ivUserProfilePic.setImageBitmap(bitmap)
+                        }
+                        mViewModel.uri = contentURI
 
                     } catch (e: IOException) {
                         e.printStackTrace()
@@ -240,6 +256,9 @@ class SignUpFragment : BaseFragment(), SignUpFragmentImp {
                     }
                 }
             })
-        mChooserFragment.show(childFragmentManager, ChooserDialogFragment::class.java.toString())
+        mViewModel.mChooserFragment.show(
+            childFragmentManager,
+            ChooserDialogFragment::class.java.toString()
+        )
     }
 }

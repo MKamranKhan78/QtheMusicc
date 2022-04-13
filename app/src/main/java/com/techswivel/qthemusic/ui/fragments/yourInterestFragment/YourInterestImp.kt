@@ -5,5 +5,4 @@ import com.techswivel.qthemusic.models.Category
 
 interface YourInterestImp : BaseInterface {
     fun getCategoriesResponse(lis:List<Category>?)
-    fun getSelectedCategories(lis: MutableList<String?>)
 }

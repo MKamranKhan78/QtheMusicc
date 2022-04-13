@@ -16,6 +16,7 @@ import com.techswivel.qthemusic.ui.activities.authActivity.AuthActivity
 import com.techswivel.qthemusic.ui.activities.mainActivity.MainActivity
 import com.techswivel.qthemusic.ui.base.BaseActivity
 import com.techswivel.qthemusic.utils.CommonKeys
+import com.techswivel.qthemusic.utils.Log
 import com.techswivel.qthemusic.utils.PermissionUtils
 
 class SplashActivity : BaseActivity() {
@@ -24,7 +25,7 @@ class SplashActivity : BaseActivity() {
     private lateinit var mViewModel: SplashViewModel
     private lateinit var mBinding: ActivitySplashBinding
     private val mRunnable: Runnable = Runnable {
-        if (mViewModel.isUserLogin){
+        if (mViewModel.isUserLogin && mViewModel.isInterestSet){
             mActivityIntent=Intent(this,MainActivity::class.java)
         }else{
             mActivityIntent = Intent(this, AuthActivity::class.java)
@@ -45,7 +46,7 @@ class SplashActivity : BaseActivity() {
             this,
             ViewModelProvider.NewInstanceFactory()
         ).get(SplashViewModel::class.java)
-        mViewModel.isUserLogin=PrefUtils.getBoolean(this,CommonKeys.KEY_IS_LOGGED_IN)
+
         System.loadLibrary(Constants.CPP_LIBRARY_NAME)
 
         @Suppress("DEPRECATION")

@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 import com.google.android.flexbox.*
-import com.techswivel.qthemusic.customData.adapter.CategoriesAdapter
 import com.techswivel.qthemusic.customData.adapter.VerticalSpaceItemDecoration
 import com.techswivel.qthemusic.customData.enums.AdapterType
 

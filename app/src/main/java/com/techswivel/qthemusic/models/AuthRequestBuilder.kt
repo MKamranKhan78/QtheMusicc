@@ -36,8 +36,6 @@ class AuthRequestBuilder : Serializable {
     fun zipCode(zipCode: Int?) = apply { this.zipCode = zipCode }
     fun socialId(socialId: String?) = apply { this.socialId = socialId }
     fun profile(profile: String?) = apply { this.profile = profile }
-
-
     fun loginType(loginType: String?) = apply { this.loginType = loginType }
     fun socialSite(socialSite: String?) = apply { this.socialSite = socialSite }
     fun fcmToken(fcmToken: String?) = apply { this.fcmToken = fcmToken }
@@ -52,8 +50,8 @@ class AuthRequestBuilder : Serializable {
     companion object {
 
         fun builder(builder: AuthRequestBuilder) = AuthRequestModel(
-            builder.email,
             builder.name,
+            builder.email,
             builder.dob,
             builder.gender,
             builder.completeAddress,

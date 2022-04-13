@@ -29,8 +29,7 @@
                 android:layout_gravity="center|center_horizontal"
                 android:background="@drawable/shape_bg_add_profile_main_img_view"
                 android:scaleType="centerCrop"
-                app:shapeAppearanceOverlay="@style/circleImageView"
-                android:src="@drawable/ic_main_add_profile_user" />
+                app:shapeAppearanceOverlay="@style/circleImageView" />
 
             <ImageView
                 android:id="@+id/iv_user_change_profile"

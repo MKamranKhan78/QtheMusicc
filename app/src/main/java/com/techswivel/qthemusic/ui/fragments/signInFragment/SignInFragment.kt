@@ -6,10 +6,6 @@ import android.transition.TransitionInflater
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
-import androidx.core.view.ViewCompat
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.google.firebase.messaging.FirebaseMessaging
@@ -17,18 +13,15 @@ import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.customData.enums.*
 import com.techswivel.qthemusic.databinding.FragmentSignInBinding
 import com.techswivel.qthemusic.models.*
-import com.techswivel.qthemusic.source.local.preference.PrefUtils
 import com.techswivel.qthemusic.ui.activities.authActivity.AuthActivityImp
 import com.techswivel.qthemusic.ui.base.BaseFragment
 import com.techswivel.qthemusic.ui.fragments.forgotPasswordFragment.ForgotPassword
-import com.techswivel.qthemusic.ui.fragments.signUpFragment.SignUpFragment
 import com.techswivel.qthemusic.utils.*
 
 
 class SignInFragment : BaseFragment() {
-    private lateinit var signInViewModel: SignInViewModel
-    private lateinit var signInBinding: FragmentSignInBinding
-
+    private lateinit var mViewModel: SignInViewModel
+    private lateinit var mBinding: FragmentSignInBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         sharedElementReturnTransition = TransitionInflater.from(requireContext())
@@ -40,8 +33,8 @@ class SignInFragment : BaseFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        signInBinding = FragmentSignInBinding.inflate(layoutInflater, container, false)
-        return signInBinding.root
+        mBinding = FragmentSignInBinding.inflate(layoutInflater, container, false)
+        return mBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -52,60 +45,60 @@ class SignInFragment : BaseFragment() {
     }
 
     private fun initialization() {
-        signInBinding.obj = signInViewModel
+        mBinding.obj = mViewModel
         Glide.with(requireContext()).load(R.drawable.laura_music)
-            .transform(BlurImageView(requireContext())).into(signInBinding.ivSigninBg)
+            .transform(BlurImageView(requireContext())).into(mBinding.ivSigninBg)
     }
 
     @SuppressLint("ResourceType")
     private fun clickListeners() {
-        signInBinding.tvSignUpBtn.setOnClickListener {
+        mBinding.tvSignUpBtn.setOnClickListener {
             val bundle = Bundle()
             bundle.putSerializable(CommonKeys.OTP_TYPE, OtpType.EMAIL)
             val fortgotPasword = ForgotPassword()
             fortgotPasword.arguments = bundle
             (mActivityListener as AuthActivityImp).replaceCurrentFragmentWithAnimation(
                 fortgotPasword,
-                signInBinding.btnSignIn,
+                mBinding.btnSignIn,
                 "my_button_transition"
             )
         }
-        signInBinding.btnSignIn.setOnClickListener {
+        mBinding.btnSignIn.setOnClickListener {
             if (
-                signInBinding.etLoginEmail.text.isNullOrEmpty() ||
-                signInViewModel.isEmailTextValid.get() != true
+                mBinding.etLoginEmail.text.isNullOrEmpty() ||
+                mViewModel.isEmailTextValid.get() != true
             ) {
-                signInBinding.etLoginEmail.error = getString(R.string.email_is_required)
+                mBinding.etLoginEmail.error = getString(R.string.email_is_required)
             } else if (
-                signInBinding.etLoginPassword.text.isNullOrEmpty() ||
-                signInViewModel.isPasswordTextValid.get() != true
+                mBinding.etLoginPassword.text.isNullOrEmpty() ||
+                mViewModel.isPasswordTextValid.get() != true
             ) {
-                signInBinding.etLoginPassword.error = getString(R.string.password_is_required)
+                mBinding.etLoginPassword.error = getString(R.string.password_is_required)
             } else if (
-                signInViewModel.isEmailTextValid.get() == true &&
-                signInViewModel.isPasswordTextValid.get() == true
+                mViewModel.isEmailTextValid.get() == true &&
+                mViewModel.isPasswordTextValid.get() == true
             ) {
                 getFcmToken()
             }
         }
-        signInBinding.tvForgotPassword.setOnClickListener {
+        mBinding.tvForgotPassword.setOnClickListener {
             val bundle = Bundle()
             bundle.putSerializable(CommonKeys.OTP_TYPE, OtpType.FORGET_PASSWORD)
             val fortgotPasword = ForgotPassword()
             fortgotPasword.arguments = bundle
             (mActivityListener as AuthActivityImp).replaceCurrentFragmentWithAnimation(
                 fortgotPasword,
-                signInBinding.btnSignIn,
+                mBinding.btnSignIn,
                 "my_button_transition"
             )
 
         }
 
-        signInBinding.signSocialPortion.ivGoogleId.setOnClickListener {
+        mBinding.signSocialPortion.ivGoogleId.setOnClickListener {
             (mActivityListener as AuthActivityImp).signInWithGoogle()
         }
 
-        signInBinding.signSocialPortion.ivFbId.setOnClickListener {
+        mBinding.signSocialPortion.ivFbId.setOnClickListener {
             (mActivityListener as AuthActivityImp).signInWithFacebook()
 
         }
@@ -113,13 +106,13 @@ class SignInFragment : BaseFragment() {
 
     private fun getFcmToken() {
         FirebaseMessaging.getInstance().token.addOnSuccessListener {
-            signInViewModel.myToken = it
+            mViewModel.myToken = it
             createUserAndCallApi(
-                signInBinding.etLoginEmail.toString(),
-                signInBinding.etLoginPassword.text.toString(),
+                mBinding.etLoginEmail.toString(),
+                mBinding.etLoginPassword.text.toString(),
                 null,
                 LoginType.SIMPLE.name,
-                signInViewModel.myToken,
+                mViewModel.myToken,
                 context?.toDeviceIdentifier(),
                 null
             )
@@ -151,6 +144,6 @@ class SignInFragment : BaseFragment() {
     }
 
     private fun initViewModel() {
-        signInViewModel = ViewModelProvider(this).get(SignInViewModel::class.java)
+        mViewModel = ViewModelProvider(this).get(SignInViewModel::class.java)
     }
 }
