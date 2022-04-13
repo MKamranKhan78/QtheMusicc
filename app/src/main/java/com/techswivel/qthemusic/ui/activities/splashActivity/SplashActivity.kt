@@ -12,6 +12,7 @@ import com.techswivel.qthemusic.constant.Constants
 import com.techswivel.qthemusic.databinding.ActivitySplashBinding
 
 import com.techswivel.qthemusic.ui.activities.authActivity.AuthActivity
+import com.techswivel.qthemusic.ui.activities.mainActivity.MainActivity
 import com.techswivel.qthemusic.ui.base.BaseActivity
 import com.techswivel.qthemusic.utils.PermissionUtils
 
@@ -21,7 +22,7 @@ class SplashActivity : BaseActivity() {
     private lateinit var mViewModel: SplashViewModel
     private lateinit var mBinding: ActivitySplashBinding
     private val mRunnable: Runnable = Runnable {
-        mActivityIntent = Intent(this, AuthActivity::class.java)
+        mActivityIntent = Intent(this, MainActivity::class.java)
         if (!isFinishing) {
             startActivity(mActivityIntent)
             finish()
