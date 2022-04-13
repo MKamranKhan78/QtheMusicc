@@ -1,14 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.activities.mainActivity.MainActivity">
+    android:layout_height="match_parent">
 
-    <!--here we will add toolbar-->
+    <include
+        android:id="@+id/activityToolbar"
+        layout="@layout/app_bar_white_center_title_with_menu_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <FrameLayout
         android:id="@+id/mainContainer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
+        android:layout_height="match_parent"
+        android:layout_below="@id/activityToolbar" />
 
 </RelativeLayout>

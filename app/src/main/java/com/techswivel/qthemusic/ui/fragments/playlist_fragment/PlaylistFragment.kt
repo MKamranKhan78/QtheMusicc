@@ -85,7 +85,6 @@ class PlaylistFragment : RecyclerViewBaseFragment(), BaseInterface,
             bundle.putSerializable(CommonKeys.KEY_DATA, playListModel)
         }
         (mActivityListener as PlaylistActivityImpl).openSongsFragment(bundle)
-//        ActivityUtils.launchFragment(QTheMusicApplication.getContext(),SongsFragment::class.java.name)
     }
 
     override fun onViewClicked(view: View, data: Any?) {
