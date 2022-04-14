@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="android.view.View" />
+
+        <variable
+            name="click"
+            type="com.techswivel.qthemusic.customData.interfaces.AdapterOnClick" />
+
+        <variable
+            name="obj"
+            type="com.techswivel.qthemusic.models.Song" />
+
+        <variable
+            name="songStatus"
+            type="com.techswivel.qthemusic.customData.enums.SongStatus" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10dp"
+        android:layout_marginBottom="@dimen/_10dp"
+        >
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/shapeableImageView"
+            android:layout_width="@dimen/_60dp"
+            android:layout_height="@dimen/_60dp"
+            android:layout_marginStart="@dimen/_24dp"
+            android:scaleType="fitXY"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:setImageViewImage="@{obj.coverImageUrl}"
+            app:shapeAppearanceOverlay="@style/circleImageViewRecentPlayView" />
+
+        <TextView
+            android:id="@+id/tv_search_song_tittle_"
+            android:layout_width="@dimen/_0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_24dp"
+            android:layout_marginEnd="@dimen/_24dp"
+            android:text="@{obj.songTitle}"
+            android:fontFamily="@font/manrope_regular"
+            android:textSize="@dimen/_14sp"
+            android:textColor="@color/color_white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/tv_search_song_duration_"
+            app:layout_constraintStart_toEndOf="@+id/shapeableImageView"
+            app:layout_constraintTop_toTopOf="@+id/shapeableImageView" />
+
+        <TextView
+            android:id="@+id/tv_search_song_duration_"
+            android:layout_width="@dimen/_0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="3:02"
+            android:fontFamily="@font/manrope_regular"
+            android:textSize="@dimen/_14sp"
+            android:textColor="@color/color_light_grey"
+            app:layout_constraintBottom_toBottomOf="@+id/shapeableImageView"
+            app:layout_constraintEnd_toEndOf="@+id/tv_search_song_tittle_"
+            app:layout_constraintStart_toStartOf="@+id/tv_search_song_tittle_"
+            app:layout_constraintTop_toBottomOf="@+id/tv_search_song_tittle_" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

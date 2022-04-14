@@ -236,7 +236,6 @@ class HomeFragment : RecyclerViewBaseFragment() {
                     }
                     if (::mRecommendedForYouAdapter.isInitialized)
                         mRecommendedForYouAdapter.notifyDataSetChanged()
-
                 }
                 NetworkStatus.ERROR -> {
                     recommendedSongsDataResponse.error?.message?.let { it1 ->

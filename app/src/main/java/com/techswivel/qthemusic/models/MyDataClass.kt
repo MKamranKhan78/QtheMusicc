@@ -10,12 +10,16 @@ class MyDataClass(
     val recommendedSongsResponse: RecommendedSongsResponse?,
     @SerializedName("category")
     var category: List<Category>?,
-    var songsResponse: SongsResponse?
+    var songsResponse: SongsResponse?,
+    val Languages: List<Language>?,
+    val songs: List<Song>?
 ) {
     constructor() : this(
         null,
         null,
         null,
-        null
+        null,
+        null,
+        null,
     )
 }

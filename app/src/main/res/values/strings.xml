@@ -126,4 +126,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="recently_played">Recently Played</string>
     <string name="search">Search</string>
+    <string name="all_songs">All</string>
+    <string name="eng_songs">English</string>
+    <string name="urdu_songs">Urdu</string>
 </resources>

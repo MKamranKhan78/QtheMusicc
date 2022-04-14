@@ -3,6 +3,6 @@ package com.techswivel.qthemusic.source.local.database
 import androidx.room.Entity
 
 @Entity
-data class SongsTable(
+data class Songs(
     val songTittle:String
 )
