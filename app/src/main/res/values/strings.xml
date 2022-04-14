@@ -132,5 +132,7 @@
     <string name="playlist_created">Playlist created</string>
     <string name="options">Options</string>
     <string name="delete_playlist">Delete playlist</string>
+    <string name="remove_from_playlist">Remove from playlist</string>
     <string name="playlist_deleted">Playlist Deleted</string>
+    <string name="song_deleted">Song Deleted</string>
 </resources>

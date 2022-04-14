@@ -9,6 +9,7 @@ import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.techswivel.qthemusic.R
+import com.techswivel.qthemusic.utils.Utilities
 import com.techswivel.qthemusic.utils.Utilities.roundOffDecimal
 
 object BindingAdapter {
@@ -29,6 +30,18 @@ object BindingAdapter {
             textView.text = "$no_of_songs songs"
         }
     }
+
+
+    @SuppressLint("SetTextI18n", "DefaultLocale")
+    @JvmStatic
+    @BindingAdapter("setSongDuration")
+    fun setSongDuration(textView: TextView, song_duration: Int?) {
+        if (song_duration != null) {
+            val duration = Utilities.formatSongDuration(song_duration.toLong())
+            textView.text = duration
+        }
+    }
+
 
     @SuppressLint("SetTextI18n")
     @JvmStatic

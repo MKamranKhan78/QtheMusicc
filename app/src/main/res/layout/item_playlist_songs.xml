@@ -60,12 +60,12 @@
                     android:textSize="@dimen/_14sp" />
 
                 <TextView
-                    setNomberOfSong="@{obj.songDuration}"
+                    setSongDuration="@{obj.songDuration}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/manrope_regular"
                     android:textColor="@color/color_light_grey"
-                    android:textSize="@dimen/_10sp" />
+                    android:textSize="@dimen/_14sp" />
 
 
             </LinearLayout>

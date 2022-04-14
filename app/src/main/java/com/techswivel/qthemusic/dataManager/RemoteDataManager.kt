@@ -5,6 +5,7 @@ import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.application.QTheMusicApplication
 import com.techswivel.qthemusic.constant.Constants
 import com.techswivel.qthemusic.customData.enums.CategoryType
+import com.techswivel.qthemusic.customData.enums.PlaylistUpdationType
 import com.techswivel.qthemusic.dataManager.DummyDataManager.Companion.getDummyAuthDetails
 import com.techswivel.qthemusic.dataManager.DummyDataManager.Companion.getResponseDummyData
 import com.techswivel.qthemusic.models.*
@@ -44,6 +45,18 @@ object RemoteDataManager : BaseDataManager(), RemoteDataManagerImp {
     }
 
     override fun getSongsFromServer(songsBodyModel: SongsBodyModel): Observable<Response<ResponseMain>> {
+        return Observable.create { observer ->
+            // observer.onError(Throwable("This is dummy thorwable if you want to test failed case."))
+            observer.onNext(getResponseDummyData())
+            observer.onComplete()
+        }
+    }
+
+    override fun updatePlayList(
+        songId: Int,
+        remove: PlaylistUpdationType,
+        playlistId: Int?
+    ): Observable<Response<ResponseMain>> {
         return Observable.create { observer ->
             // observer.onError(Throwable("This is dummy thorwable if you want to test failed case."))
             observer.onNext(getResponseDummyData())

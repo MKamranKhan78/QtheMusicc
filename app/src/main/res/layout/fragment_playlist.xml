@@ -6,15 +6,8 @@
     android:background="@color/color_black"
     tools:context=".ui.fragments.playlist_fragment.PlaylistFragment">
 
-    <include
-        android:id="@+id/activityToolbar"
-        layout="@layout/app_bar_white_center_title_with_menu_image"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
-        android:layout_below="@id/activityToolbar"
         android:id="@+id/recyclerviewPlaylist"
         android:layout_height="match_parent">
 

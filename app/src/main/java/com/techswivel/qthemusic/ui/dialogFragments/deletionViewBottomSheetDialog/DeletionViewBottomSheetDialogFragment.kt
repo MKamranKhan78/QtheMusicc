@@ -9,18 +9,22 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.application.QTheMusicApplication
+import com.techswivel.qthemusic.customData.enums.DeleteViewType
 import com.techswivel.qthemusic.customData.enums.NetworkStatus
+import com.techswivel.qthemusic.customData.enums.PlaylistUpdationType
 import com.techswivel.qthemusic.customData.interfaces.BaseInterface
 import com.techswivel.qthemusic.databinding.FragmentDeletionViewBottomSheetDialogBinding
 import com.techswivel.qthemusic.models.PlaylistModel
+import com.techswivel.qthemusic.models.Song
 import com.techswivel.qthemusic.source.remote.networkViewModel.ProfileNetworkViewModel
+import com.techswivel.qthemusic.source.remote.networkViewModel.SongAndArtistsViewModel
 import com.techswivel.qthemusic.ui.fragments.playlist_fragment.PlaylistFragmentImpl
+import com.techswivel.qthemusic.utils.CommonKeys
 import com.techswivel.qthemusic.utils.CommonKeys.Companion.KEY_DATA
 import com.techswivel.qthemusic.utils.DialogUtils
 
 
 class DeletionViewBottomSheetDialogFragment : BottomSheetDialogFragment(), BaseInterface {
-
 
     companion object {
         fun newInstance(bundle: Bundle, playlistFragmentImpl: PlaylistFragmentImpl) =
@@ -34,6 +38,7 @@ class DeletionViewBottomSheetDialogFragment : BottomSheetDialogFragment(), BaseI
     private lateinit var viewModel: DeletionBottomSheetDialogViewModel
     private lateinit var profileNetworViewModel: ProfileNetworkViewModel
     private lateinit var mPlaylistFragmentImpl: PlaylistFragmentImpl
+    private lateinit var mSongAndArtistsViewModel: SongAndArtistsViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -104,6 +109,53 @@ class DeletionViewBottomSheetDialogFragment : BottomSheetDialogFragment(), BaseI
                 }
             }
         }
+
+        mSongAndArtistsViewModel.deleteSongRespomse.observe(viewLifecycleOwner) { songDeletingResponse ->
+            when (songDeletingResponse.status) {
+                NetworkStatus.LOADING -> {
+                    showProgressBar()
+                }
+                NetworkStatus.SUCCESS -> {
+                    hideProgressBar()
+                    dismiss()
+                    viewModel.songId?.let { songId ->
+                        mPlaylistFragmentImpl.openSongFragmentWithSongModel(
+                            viewModel.song
+                        )
+                    }
+                    Toast.makeText(
+                        QTheMusicApplication.getContext(),
+                        getString(R.string.song_deleted),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                NetworkStatus.ERROR -> {
+                    hideProgressBar()
+                    songDeletingResponse.error?.message?.let { it1 ->
+                        DialogUtils.errorAlert(
+                            requireContext(),
+                            songDeletingResponse.error.code.toString(),
+                            songDeletingResponse.error.message
+                        )
+                    }
+                }
+                NetworkStatus.EXPIRE -> {
+                    hideProgressBar()
+                    DialogUtils.sessionExpireAlert(requireContext(),
+                        object : DialogUtils.CallBack {
+                            override fun onPositiveCallBack() {
+                                viewModel.clearAppSession(requireActivity())
+                            }
+
+                            override fun onNegativeCallBack() {
+                            }
+                        })
+                }
+                NetworkStatus.COMPLETED -> {
+                    hideProgressBar()
+                }
+            }
+        }
     }
 
     override fun showProgressBar() {
@@ -116,18 +168,37 @@ class DeletionViewBottomSheetDialogFragment : BottomSheetDialogFragment(), BaseI
 
     private fun getDataFromBundle() {
         if (arguments?.isEmpty != true) {
-            viewModel.playlistModel = arguments?.getSerializable(KEY_DATA) as PlaylistModel
-            viewModel.playlistId = viewModel.playlistModel?.playListId
-//            viewModel.deletingViewType =arguments?.getString(KEY_DATA)
+            viewModel.deletingViewType =
+                arguments?.getSerializable(CommonKeys.KEY_DELETE_VIEW_TYPE) as DeleteViewType
+            if (viewModel.deletingViewType == DeleteViewType.PLAY_LIST) {
+                viewModel.playlistModel = arguments?.getSerializable(KEY_DATA) as PlaylistModel
+                viewModel.playlistId = viewModel.playlistModel?.playListId
+                mBinding.deletePlaylistTextview.text = getString(R.string.delete_playlist)
+            } else {
+                viewModel.song = arguments?.getParcelable(CommonKeys.KEY_DATA) as Song?
+                viewModel.playlistId = arguments?.getInt(CommonKeys.KEY_PLAYLIST_ID)
+                viewModel.songId = viewModel.song?.songId
+                mBinding.deletePlaylistTextview.text = getString(R.string.remove_from_playlist)
+            }
         }
     }
 
     private fun clickListeners() {
         mBinding.deletePlaylistTextview.setOnClickListener {
-            viewModel.playlistId?.let { playlistId ->
-                profileNetworViewModel.deletePlaylist(
-                    playlistId
-                )
+            if (viewModel.deletingViewType == DeleteViewType.PLAY_LIST) {
+                viewModel.playlistId?.let { playlistId ->
+                    profileNetworViewModel.deletePlaylist(
+                        playlistId
+                    )
+                }
+            } else {
+                viewModel.songId?.let { songId ->
+                    mSongAndArtistsViewModel.updatePlayList(
+                        songId,
+                        PlaylistUpdationType.REMOVE,
+                        viewModel.playlistId
+                    )
+                }
             }
         }
         mBinding.imageviewCancelDialog.setOnClickListener {
@@ -141,6 +212,8 @@ class DeletionViewBottomSheetDialogFragment : BottomSheetDialogFragment(), BaseI
             ViewModelProvider(this).get(DeletionBottomSheetDialogViewModel::class.java)
         profileNetworViewModel =
             ViewModelProvider(this).get(ProfileNetworkViewModel::class.java)
+        mSongAndArtistsViewModel =
+            ViewModelProvider(this).get(SongAndArtistsViewModel::class.java)
     }
 
     private fun setCallBack(playlistFragmentImpl: PlaylistFragmentImpl) {

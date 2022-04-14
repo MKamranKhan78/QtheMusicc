@@ -5,6 +5,8 @@ class CommonKeys {
         const val PROFILE_LANDING_DATA = "_key_user_data"
         const val KEY_FRAGMENT = "_key_fragment"
         const val KEY_DATA = "_key_data_"
+        const val KEY_DELETE_VIEW_TYPE = "_key_delete_view_type_"
+        const val KEY_PLAYLIST_ID = "_key_playlist_id_"
         const val KEY_JWT = "_key_jwt"
         const val KEY_FIRST_NAME = "_key_first_name_"
         const val KEY_LAST_NAME = "_key_last_name_"
@@ -12,9 +14,9 @@ class CommonKeys {
         const val KEY_IS_LOGGED_IN = "_key_is_logged_in"
         const val TYPE_VIDEO = 1
         const val TYPE_PHOTO = 2
-        const val APP_FLOW="app_flow"
-        const val START_TIMER="Start_Timer"
-        const val USER_EMAIL="user_email"
+        const val APP_FLOW = "app_flow"
+        const val START_TIMER = "Start_Timer"
+        const val USER_EMAIL = "user_email"
         const val USER_OTP="user_otp"
         const val SIGNIN_BTN_ANIMATION="sigin_btn_animation"
         const val KEY_DATA_MODEL = "_key_data_model_"

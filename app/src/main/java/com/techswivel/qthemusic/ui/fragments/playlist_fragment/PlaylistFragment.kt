@@ -16,10 +16,10 @@ import com.techswivel.qthemusic.customData.interfaces.BaseInterface
 import com.techswivel.qthemusic.databinding.FragmentPlaylistBinding
 import com.techswivel.qthemusic.models.PlaylistModel
 import com.techswivel.qthemusic.models.ResponseModel
+import com.techswivel.qthemusic.models.Song
 import com.techswivel.qthemusic.source.remote.networkViewModel.ProfileNetworkViewModel
 import com.techswivel.qthemusic.ui.activities.playlistActivity.PlaylistActivityImpl
 import com.techswivel.qthemusic.ui.base.RecyclerViewBaseFragment
-import com.techswivel.qthemusic.ui.dialogFragments.createPlaylistDialogFragment.CreatePlaylistDialogFragment
 import com.techswivel.qthemusic.ui.dialogFragments.deletionViewBottomSheetDialog.DeletionViewBottomSheetDialogFragment
 import com.techswivel.qthemusic.utils.CommonKeys
 import com.techswivel.qthemusic.utils.DialogUtils
@@ -29,8 +29,12 @@ class PlaylistFragment : RecyclerViewBaseFragment(), BaseInterface,
     RecyclerViewAdapter.CallBack, PlaylistFragmentImpl {
 
     companion object {
-        @JvmStatic
         fun newInstance() = PlaylistFragment()
+
+        fun newInstance(bundle: Bundle) =
+            PlaylistFragment().apply {
+                arguments = bundle
+            }
     }
 
     private lateinit var mBinding: FragmentPlaylistBinding
@@ -51,11 +55,9 @@ class PlaylistFragment : RecyclerViewBaseFragment(), BaseInterface,
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViewModel()
-        setUpToolBar()
         profileNetworViewModel.getPlayListFromServer()
         setUpAdapter()
         setObserver()
-        clickListeners()
     }
 
     override fun inflateLayoutFromId(position: Int, data: Any?): Int {
@@ -96,11 +98,13 @@ class PlaylistFragment : RecyclerViewBaseFragment(), BaseInterface,
         playlistModel.let { playListModel ->
             bundle.putSerializable(CommonKeys.KEY_DATA, playListModel)
         }
+        bundle.putSerializable(CommonKeys.KEY_DELETE_VIEW_TYPE, DeleteViewType.PLAY_LIST)
         openBottomSheetDialog(bundle)
     }
 
     @SuppressLint("NotifyDataSetChanged")
     override fun openPlayListFragment(playlistModel: PlaylistModel) {
+        mBinding.tvNoDataFound.visibility = View.GONE
         viewModel.mPlaylist.add(playlistModel)
         mPlaylistAdapter.notifyItemInserted(viewModel.mPlaylist.size)
     }
@@ -108,7 +112,16 @@ class PlaylistFragment : RecyclerViewBaseFragment(), BaseInterface,
     override fun openPlayListFragmentWithPlaylistModel(playlistModel: PlaylistModel?) {
         val index = viewModel.mPlaylist.indexOf(playlistModel as PlaylistModel)
         viewModel.mPlaylist.remove(playlistModel)
+        if (viewModel.mPlaylist.size == 0) {
+            mBinding.tvNoDataFound.visibility = View.VISIBLE
+        } else {
+            mBinding.tvNoDataFound.visibility = View.GONE
+        }
         mPlaylistAdapter.notifyItemRemoved(index)
+    }
+
+    override fun openSongFragmentWithSongModel(song: Song?) {
+
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -162,29 +175,12 @@ class PlaylistFragment : RecyclerViewBaseFragment(), BaseInterface,
         }
     }
 
-
-
     private fun setUpAdapter() {
         mPlaylistAdapter = RecyclerViewAdapter(this, viewModel.mPlaylist)
         setUpRecyclerView(
             mBinding.recyclerviewPlaylist,
             AdapterType.PLAYLIST
         )
-    }
-
-
-    private fun clickListeners() {
-        mBinding.activityToolbar.addPlaylistId.setOnClickListener {
-            val fragmentTransaction =
-                requireActivity().supportFragmentManager.beginTransaction()
-            val dialogFragment = CreatePlaylistDialogFragment.newInstance(this)
-            dialogFragment.show(fragmentTransaction, TAG)
-        }
-    }
-
-    private fun setUpToolBar() {
-        setUpActionBar(mBinding.activityToolbar.toolbar, "", true)
-        mBinding.activityToolbar.toolbarTitle.text = getString(R.string.playlists)
     }
 
     private fun initViewModel() {
