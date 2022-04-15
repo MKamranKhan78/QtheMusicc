@@ -45,7 +45,31 @@ class DummyDataManager {
                 getSongsDummyData(),
                 getDummyPlaylist(),
                 getDummyPlaylistResponse(),
-                getDummySongs()
+                getDummySongs(),
+                getDummyFollowingArtist()
+            )
+        }
+
+        private fun getDummyFollowingArtist(): List<Artist> {
+            return arrayListOf(
+                Artist(
+
+                    "https://media.timeout.com/images/101659805/image.jpg",
+                    1,
+                    "Hamdan Ali"
+                ),
+                Artist(
+
+                    "https://cdn.lifehack.org/wp-content/uploads/2015/09/rock-music-wallpapers.jpg",
+                    2,
+                    "Hassan"
+                ),
+                Artist(
+
+                    "https://cdn5.vectorstock.com/i/1000x1000/77/09/colorful-detailed-pop-music-can-vector-19847709.jpg",
+                    3,
+                    "Salman"
+                ),
             )
         }
 
@@ -206,7 +230,7 @@ class DummyDataManager {
                     "atif aslam",
                     11,
                     21,
-                    "https://cdn.lifehack.org/wp-content/uploads/2015/09/rock-music-wallpapers.jpg",
+                    "https://m.media-amazon.com/images/M/MV5BOWQyYmJiOWUtNzkzYS00YWJlLWI5YjgtYTg4MjI0MmM1N2ZkXkEyXkFqcGdeQXVyNjE0ODc0MDc@._V1_.jpg",
                     true,
                     true,
                     "this is the lyrics of the song",
@@ -240,7 +264,7 @@ class DummyDataManager {
                     "atif aslam",
                     23,
                     10,
-                    "https://cdn.lifehack.org/wp-content/uploads/2015/09/rock-music-wallpapers.jpg",
+                    "https://m.media-amazon.com/images/M/MV5BOWQyYmJiOWUtNzkzYS00YWJlLWI5YjgtYTg4MjI0MmM1N2ZkXkEyXkFqcGdeQXVyNjE0ODc0MDc@._V1_.jpg",
                     true,
                     true,
                     "this is the lyrics of the song",
@@ -274,7 +298,7 @@ class DummyDataManager {
                     "atif aslam",
                     23,
                     10,
-                    "https://cdn.lifehack.org/wp-content/uploads/2015/09/rock-music-wallpapers.jpg",
+                    "https://m.media-amazon.com/images/M/MV5BOWQyYmJiOWUtNzkzYS00YWJlLWI5YjgtYTg4MjI0MmM1N2ZkXkEyXkFqcGdeQXVyNjE0ODc0MDc@._V1_.jpg",
                     true,
                     true,
                     "this is the lyrics of the song",

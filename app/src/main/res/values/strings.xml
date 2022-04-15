@@ -81,7 +81,7 @@
     <string name="buying_history">Buying History</string>
     <string name="downloaded">Downloaded</string>
     <string name="listening_history">Listening History</string>
-    <string name="following_artist">Following Artist</string>
+    <string name="following_artist">Following Artists</string>
     <string name="purchased_songs">Purchased Songs</string>
     <string name="purchased_albums">Purchased Albums</string>
     <string name="favorite_songs">Favorite Songs</string>
@@ -135,4 +135,6 @@
     <string name="remove_from_playlist">Remove from playlist</string>
     <string name="playlist_deleted">Playlist Deleted</string>
     <string name="song_deleted">Song Deleted</string>
+    <string name="unfollow">Unfollow</string>
+    <string name="artist_unfollow">Artist unfollow successfully.</string>
 </resources>

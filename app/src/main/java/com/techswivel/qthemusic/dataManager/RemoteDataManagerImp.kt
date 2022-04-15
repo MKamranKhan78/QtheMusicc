@@ -10,6 +10,8 @@ interface RemoteDataManagerImp {
     fun getRecommendedSongsData(recommendedSongsBodyModel: RecommendedSongsBodyModel): Observable<Response<ResponseMain>>
     fun getPlayListFromServer(): Observable<Response<ResponseMain>>
     fun getSongsFromServer(songsBodyModel: SongsBodyModel): Observable<Response<ResponseMain>>
+    fun getFollowingArtist(): Observable<Response<ResponseMain>>
+    fun unfollowArtist(artistId: Int, follow: Boolean): Observable<Response<ResponseMain>>
     fun updatePlayList(
         songId: Int,
         remove: PlaylistUpdationType,

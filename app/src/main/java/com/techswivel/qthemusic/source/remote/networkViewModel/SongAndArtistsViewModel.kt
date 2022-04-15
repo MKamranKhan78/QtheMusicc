@@ -15,6 +15,8 @@ import retrofit2.Response
 
 class SongAndArtistsViewModel : BaseViewModel() {
     var songlistResponse: MutableLiveData<ApiResponse> = MutableLiveData()
+    var followingArtistResponse: MutableLiveData<ApiResponse> = MutableLiveData()
+    var artistFollowResponse: MutableLiveData<ApiResponse> = MutableLiveData()
     var deleteSongRespomse: MutableLiveData<ApiResponse> = MutableLiveData()
     private var mRecommendedSongsResponse: MutableLiveData<ApiResponse> = MutableLiveData()
 
@@ -195,6 +197,113 @@ class SongAndArtistsViewModel : BaseViewModel() {
 
             override fun onRequestComplete() {
                 mSongsResponse.value = ApiResponse.complete()
+            }
+        })
+    }
+
+    fun getFollowingArtist() {
+        RemoteDataManager.getFollowingArtist().doOnSubscribe {
+            followingArtistResponse.value = ApiResponse.loading()
+        }?.subscribe(object : CustomObserver<Response<ResponseMain>>() {
+            override fun onSuccess(t: Response<ResponseMain>) {
+                when {
+                    t.isSuccessful -> {
+                        followingArtistResponse.postValue(
+                            ApiResponse.success(t.body()?.response)
+                        )
+                    }
+                    t.code() == 403 -> {
+                        val error: ResponseMain? = ErrorUtils.parseError(t)
+                        val errorData = ErrorResponse(
+                            error?.response?.status ?: false,
+                            error?.response?.message ?: QTheMusicApplication.getContext()
+                                .getString(R.string.something_wrong),
+                            t.code()
+                        )
+                        followingArtistResponse.value = ApiResponse.expire(errorData)
+                    }
+                    else -> {
+                        val error: ResponseMain? = ErrorUtils.parseError(t)
+                        followingArtistResponse.value = ApiResponse.error(
+                            ErrorResponse(
+                                error?.response?.status ?: false,
+                                error?.response?.message ?: QTheMusicApplication.getContext()
+                                    .getString(R.string.something_wrong),
+                                t.code()
+                            )
+                        )
+                    }
+                }
+            }
+
+            override fun onError(e: Throwable, isInternetError: Boolean, error: CustomError?) {
+                followingArtistResponse.value = ApiResponse.error(
+                    error?.code?.let { code ->
+                        ErrorResponse(
+                            false,
+                            error.message,
+                            code
+                        )
+                    }
+                )
+            }
+
+            override fun onRequestComplete() {
+                followingArtistResponse.value = ApiResponse.complete()
+            }
+        })
+    }
+
+
+    fun unfollowArtist(artistId: Int, follow: Boolean) {
+        RemoteDataManager.unfollowArtist(artistId, follow).doOnSubscribe {
+            artistFollowResponse.value = ApiResponse.loading()
+        }?.subscribe(object : CustomObserver<Response<ResponseMain>>() {
+            override fun onSuccess(t: Response<ResponseMain>) {
+                when {
+                    t.isSuccessful -> {
+                        artistFollowResponse.postValue(
+                            ApiResponse.success(t.body()?.response)
+                        )
+                    }
+                    t.code() == 403 -> {
+                        val error: ResponseMain? = ErrorUtils.parseError(t)
+                        val errorData = ErrorResponse(
+                            error?.response?.status ?: false,
+                            error?.response?.message ?: QTheMusicApplication.getContext()
+                                .getString(R.string.something_wrong),
+                            t.code()
+                        )
+                        artistFollowResponse.value = ApiResponse.expire(errorData)
+                    }
+                    else -> {
+                        val error: ResponseMain? = ErrorUtils.parseError(t)
+                        artistFollowResponse.value = ApiResponse.error(
+                            ErrorResponse(
+                                error?.response?.status ?: false,
+                                error?.response?.message ?: QTheMusicApplication.getContext()
+                                    .getString(R.string.something_wrong),
+                                t.code()
+                            )
+                        )
+                    }
+                }
+            }
+
+            override fun onError(e: Throwable, isInternetError: Boolean, error: CustomError?) {
+                artistFollowResponse.value = ApiResponse.error(
+                    error?.code?.let { code ->
+                        ErrorResponse(
+                            false,
+                            error.message,
+                            code
+                        )
+                    }
+                )
+            }
+
+            override fun onRequestComplete() {
+                artistFollowResponse.value = ApiResponse.complete()
             }
         })
     }

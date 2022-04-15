@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">#000000</color>
     <color name="colorAccent">#BA011A</color>
     <color name="color_white">#ffff</color>
+    <color name="color_light_white">#3C3C3C</color>
     <color name="color_black">#000</color>
     <color name="transparent_color">#00000000</color>
     <color name="color_white_text_profile">#FFFFFF</color>
@@ -25,6 +26,7 @@
     <color name="mtrl_textinput_default_box_stroke_color">#84818AA1</color>
     <color name="btn_text_clr"> #FBFAFC</color>
     <color name="color_grey">#545454</color>
+    <color name="green_border_color">#28B446</color>
     <color name="color_light_grey">#99999F</color>
     <color name="color_red">#BA011A</color>
     <color name="color_red_overlay">#99BA011A</color>

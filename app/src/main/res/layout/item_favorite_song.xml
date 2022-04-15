@@ -30,7 +30,6 @@
             android:layout_margin="@dimen/_20dp"
             tools:ignore="UselessParent">
 
-
             <androidx.cardview.widget.CardView
                 android:id="@+id/cv_cover_image"
                 android:layout_width="@dimen/_45dp"
@@ -54,7 +53,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="@dimen/_10dp"
-                android:layout_toStartOf="@id/item_menu_button_id"
+                android:layout_toLeftOf="@id/play_button_id"
                 android:layout_toEndOf="@id/cv_cover_image"
                 android:orientation="vertical">
 
@@ -82,16 +81,13 @@
             </LinearLayout>
 
             <ImageView
-                android:id="@+id/item_menu_button_id"
+                android:id="@+id/play_button_id"
                 android:layout_width="@dimen/_30dp"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/_30dp"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_gravity="center"
-                android:layout_marginEnd="@dimen/_0dp"
-                android:onClick="@{(view)-> click.onViewClick(view,obj)}"
-                android:src="@drawable/ic_item_menu_dots"
-                tools:ignore="ContentDescription" />
+                android:src="@drawable/ic_icon_play" />
 
         </RelativeLayout>
     </RelativeLayout>
