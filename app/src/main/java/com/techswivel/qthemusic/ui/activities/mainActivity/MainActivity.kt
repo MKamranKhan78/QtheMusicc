@@ -3,6 +3,7 @@ package com.techswivel.qthemusic.ui.activities.mainActivity
 import android.app.Activity
 import android.os.Build
 import android.os.Bundle
+import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -16,7 +17,7 @@ import com.techswivel.qthemusic.ui.fragments.searchScreen.SearchScreenFragment
 import com.techswivel.qthemusic.utils.ActivityUtils
 import com.techswivel.qthemusic.ui.fragments.underDevelopmentMessageFragment.profile_landing_screen.ProfileLandingFragment
 
-class MainActivity : BaseActivity(),MaintActivityImp {
+class MainActivity : BaseActivity(), MaintActivityImp {
 
     private lateinit var mBinding: ActivityMainBinding
     private lateinit var viewModel: MainActivityViewModel
@@ -92,7 +93,8 @@ class MainActivity : BaseActivity(),MaintActivityImp {
     private fun openLandingProfileFragment() {
         openFragment(ProfileLandingFragment())
     }
-    private fun openSearchScreenFragment(){
+
+    private fun openSearchScreenFragment() {
         openFragment(SearchScreenFragment())
     }
 
@@ -113,5 +115,13 @@ class MainActivity : BaseActivity(),MaintActivityImp {
 
     override fun replaceFragment(fragment: Fragment) {
         openFragment(fragment)
+    }
+
+    override fun showBottomNavigation() {
+        mBinding.bottomNavigation.visibility = View.VISIBLE
+    }
+
+    override fun hideBottomNavigation() {
+        mBinding.bottomNavigation.visibility = View.GONE
     }
 }

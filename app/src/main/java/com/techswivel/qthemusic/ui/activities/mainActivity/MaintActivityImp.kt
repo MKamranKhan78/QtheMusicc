@@ -4,4 +4,6 @@ import androidx.fragment.app.Fragment
 
 interface MaintActivityImp {
     fun replaceFragment(fragment:Fragment)
+    fun showBottomNavigation()
+    fun hideBottomNavigation()
 }

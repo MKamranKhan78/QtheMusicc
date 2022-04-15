@@ -12,23 +12,20 @@ import com.techswivel.dfaktfahrerapp.ui.fragments.underDevelopmentMessageFragmen
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.customData.adapter.RecyclerViewAdapter
 import com.techswivel.qthemusic.customData.enums.*
+import com.techswivel.qthemusic.customData.enums.AdapterType
 import com.techswivel.qthemusic.databinding.FragmentHomeBinding
-import com.techswivel.qthemusic.models.RecommendedSongsBodyBuilder
-import com.techswivel.qthemusic.models.ResponseModel
-import com.techswivel.qthemusic.models.Song
-import com.techswivel.qthemusic.models.SongsBodyBuilder
+import com.techswivel.qthemusic.models.*
 import com.techswivel.qthemusic.source.remote.networkViewModel.SongAndArtistsViewModel
 import com.techswivel.qthemusic.ui.activities.playerActivity.PlayerActivity
 import com.techswivel.qthemusic.ui.base.RecyclerViewBaseFragment
-import com.techswivel.qthemusic.utils.ActivityUtils
-import com.techswivel.qthemusic.utils.CommonKeys
-import com.techswivel.qthemusic.utils.DialogUtils
+import com.techswivel.qthemusic.utils.*
 
 class HomeFragment : RecyclerViewBaseFragment() {
 
     companion object {
         @JvmStatic
         fun newInstance() = HomeFragment()
+        private val TAG="HomeFragment"
     }
 
     private lateinit var binding: FragmentHomeBinding
@@ -93,6 +90,13 @@ class HomeFragment : RecyclerViewBaseFragment() {
 
                         override fun onNoDataFound() {
 
+                        }
+
+                        override fun onItemClick(data: Any?, position: Int) {
+                            super.onItemClick(data, position)
+                            Utilities.showToast(requireContext(),"data is ")
+                            val datad=data as Album
+                            Log.d(TAG,"data is ${datad}")
                         }
 
                         override fun onViewClicked(view: View, data: Any?) {

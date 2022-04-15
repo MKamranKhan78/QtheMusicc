@@ -1,7 +1,6 @@
 package com.techswivel.qthemusic.ui.fragments.searchQueryFragment
 
 import android.annotation.SuppressLint
-import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -9,10 +8,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import android.widget.Button
+import android.widget.TextView
 import android.widget.TextView.OnEditorActionListener
-import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
@@ -21,16 +18,10 @@ import com.techswivel.qthemusic.customData.adapter.RecyclerViewAdapter
 import com.techswivel.qthemusic.customData.enums.*
 import com.techswivel.qthemusic.customData.enums.AdapterType
 import com.techswivel.qthemusic.databinding.FragmentSearchQueryBinding
-import com.techswivel.qthemusic.models.ErrorResponse
-import com.techswivel.qthemusic.models.QueryRequestModel
-import com.techswivel.qthemusic.models.ResponseModel
-import com.techswivel.qthemusic.models.Song
-import com.techswivel.qthemusic.source.local.preference.PrefUtils
+import com.techswivel.qthemusic.models.*
 import com.techswivel.qthemusic.source.remote.networkViewModel.SongAndArtistsViewModel
-import com.techswivel.qthemusic.ui.activities.playerActivity.PlayerActivity
+import com.techswivel.qthemusic.ui.activities.mainActivity.MaintActivityImp
 import com.techswivel.qthemusic.ui.base.RecyclerViewBaseFragment
-import com.techswivel.qthemusic.ui.fragments.forgotPasswordFragment.ForgotPassword
-import com.techswivel.qthemusic.ui.fragments.signInFragment.SignInFragment
 import com.techswivel.qthemusic.utils.*
 
 
@@ -44,7 +35,7 @@ class SearchQueryFragment : RecyclerViewBaseFragment() {
     private lateinit var mViewModel: SearchQueryViewModel
     private lateinit var mSearchAdapter: RecyclerViewAdapter
     private lateinit var mLanguagesAdapter: RecyclerViewAdapter
-
+    private var lastView: View? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,12 +56,16 @@ class SearchQueryFragment : RecyclerViewBaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initialization()
-        setUpRecyclerView(mBinding.recyclerViewSearch, AdapterType.SEARCHED_SONGS)
-        setUpHorizentalRecyclerView(mBinding.recyclerLanguages, 8, AdapterType.LANGUAGES)
+        mBinding.btnAllSongs.setBackgroundResource(R.drawable.shape_bg_your_interest_selected)
         setListeners()
-        setRecyclerview()
         setObserverForViewModel()
+        (mActivityListener as MaintActivityImp).hideBottomNavigation()
+    }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        (mActivityListener as MaintActivityImp).showBottomNavigation()
+        Utilities.hideSoftKeyBoard(requireContext(), mBinding.etSearchBox)
     }
 
     override fun onPrepareAdapter(adapterType: AdapterType?): RecyclerView.Adapter<*> {
@@ -83,7 +78,7 @@ class SearchQueryFragment : RecyclerViewBaseFragment() {
                         }
 
                         override fun onNoDataFound() {
-
+                            Log.e(TAG, "No Data Found")
                         }
 
                         override fun onViewClicked(view: View, data: Any?) {
@@ -101,11 +96,23 @@ class SearchQueryFragment : RecyclerViewBaseFragment() {
                         }
 
                         override fun onNoDataFound() {
-
+                            Log.e(TAG, "No Data Found")
                         }
 
                         override fun onViewClicked(view: View, data: Any?) {
-
+                            val mLanguages = data as Language
+                            lastView?.setBackgroundResource(R.drawable.shape_bg_your_interest_recview)
+                            lastView = view
+                            view.setBackgroundResource(R.drawable.shape_bg_your_interest_selected)
+                            mBinding.btnAllSongs.setBackgroundResource(R.drawable.shape_bg_your_interest_recview)
+                            mViewModel.languageTittle = mLanguages.languageTitle
+                            mViewModel.languagesId = mLanguages.languageId
+                            if (mViewModel.queryToSearch.isNotEmpty()) {
+                                createRequestOrCallApi(
+                                    mViewModel.queryToSearch,
+                                    mLanguages.languageId
+                                )
+                            }
                         }
                     }, mViewModel.searchedLanguagesDataList)
 
@@ -114,23 +121,29 @@ class SearchQueryFragment : RecyclerViewBaseFragment() {
         }
     }
 
+
     private fun initViewModel() {
         mViewModel = ViewModelProvider(this).get(SearchQueryViewModel::class.java)
         mSongsAndArtistsViewModel = ViewModelProvider(this).get(SongAndArtistsViewModel::class.java)
     }
 
-    private fun initialization() {}
+    private fun initialization() {
+        setUpRecyclerView(mBinding.recyclerViewSearch, AdapterType.SEARCHED_SONGS)
+        setUpHorizentalRecyclerView(mBinding.recyclerLanguages, 8, AdapterType.LANGUAGES)
+        mBinding.etSearchBox.requestFocus()
+        Utilities.showSoftKeyBoard(requireContext(), mBinding.etSearchBox)
+    }
 
     private fun setListeners() {
         mBinding.ivBackBtnQuery.setOnClickListener {
             requireActivity().onBackPressed()
         }
         mBinding.etSearchBox.addTextChangedListener(object : TextWatcher {
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                if (s.isNotEmpty()) {
-
+            override fun onTextChanged(query: CharSequence, start: Int, before: Int, count: Int) {
+                if (query.isNotEmpty()) {
+                    mViewModel.queryToSearch = query.toString()
+                    createRequestOrCallApi(mViewModel.queryToSearch, null)
                 }
-
             }
 
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
@@ -138,6 +151,13 @@ class SearchQueryFragment : RecyclerViewBaseFragment() {
             }
 
             override fun afterTextChanged(s: Editable) {
+                if (s.toString().isEmpty()) {
+                    Log.d(TAG, "EditText Is Empty")
+                    mBinding.recyclerLanguages.visibility = View.INVISIBLE
+                    mBinding.recyclerViewSearch.visibility = View.INVISIBLE
+                    mBinding.btnAllSongs.visibility = View.INVISIBLE
+                }
+
             }
         })
 
@@ -145,9 +165,8 @@ class SearchQueryFragment : RecyclerViewBaseFragment() {
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
 
                 if (v.text.toString().isNotEmpty()) {
-                    val queryRequestModel = QueryRequestModel(v.text.toString(), 1)
-                    mSongsAndArtistsViewModel.getSearchedSongsFromServer(queryRequestModel)
-
+                    mViewModel.queryToSearch = v.text.toString()
+                    createRequestOrCallApi(mViewModel.queryToSearch, null)
                 }
                 return@OnEditorActionListener true
             }
@@ -155,49 +174,28 @@ class SearchQueryFragment : RecyclerViewBaseFragment() {
         })
 
 
-//        mBinding.btnAllSongs.setOnClickListener {
-//            mViewModel.selectedTab = Languages.ALL
-//            updateSelectedTabBackground(
-//                mBinding.btnAllSongs,
-//                mBinding.btnEnglishSongs,
-//                mBinding.btnUrduSongs
-//            )
-//        }
-//
-//        mBinding.btnEnglishSongs.setOnClickListener {
-//            mViewModel.selectedTab = Languages.ENGLISH
-//
-//            updateSelectedTabBackground(
-//                mBinding.btnEnglishSongs,
-//                mBinding.btnUrduSongs,
-//                mBinding.btnAllSongs
-//            )
-//
-//        }
-//
-//        mBinding.btnUrduSongs.setOnClickListener {
-//            mViewModel.selectedTab = Languages.URDU
-//            updateSelectedTabBackground(
-//                mBinding.btnUrduSongs,
-//                mBinding.btnEnglishSongs,
-//                mBinding.btnAllSongs
-//            )
-//
-//        }
+        mBinding.btnAllSongs.setOnClickListener {
+            lastView?.let { mLastView ->
+                updateSelectedTabBackground(
+                    mBinding.btnAllSongs,
+                    mLastView
+                )
+                if (mViewModel.queryToSearch.isNotEmpty()) {
+                    createRequestOrCallApi(mViewModel.queryToSearch, null)
+                }
+
+            }
+        }
     }
 
-    private fun updateSelectedTabBackground(
-        selectedTab: Button,
-        unselectedTab1: Button,
-        unselectedTab2: Button
-    ) {
-        selectedTab.setBackgroundResource(R.drawable.selected_tab_background)
-        unselectedTab1.setBackgroundResource(R.drawable.unselected_tab_background)
-        unselectedTab2.setBackgroundResource(R.drawable.unselected_tab_background)
+    private fun updateSelectedTabBackground(selectedTab: TextView, unselectedTab1: View) {
+        selectedTab.setBackgroundResource(R.drawable.shape_bg_your_interest_selected)
+        unselectedTab1.setBackgroundResource(R.drawable.shape_bg_your_interest_recview)
     }
 
-    private fun setRecyclerview() {
-        setUpRecyclerView(mBinding.recyclerViewSearch, AdapterType.SEARCHED_SONGS)
+    private fun createRequestOrCallApi(query: String?, languagesId: Int?) {
+        val queryRequestModel = QueryRequestModel(query, languagesId)
+        mSongsAndArtistsViewModel.getSearchedSongsFromServer(queryRequestModel)
 
     }
 
@@ -207,24 +205,30 @@ class SearchQueryFragment : RecyclerViewBaseFragment() {
             when (it.status) {
                 NetworkStatus.LOADING -> {
                     Log.d(TAG, "LOADING Called")
+                    showProgress()
                 }
                 NetworkStatus.SUCCESS -> {
+                    hideProgress()
                     mViewModel.searchedSongsDataList.clear()
                     mViewModel.searchedLanguagesDataList.clear()
-                    Log.d(TAG, "Success Called")
+                    mBinding.recyclerLanguages.visibility = View.VISIBLE
+                    mBinding.recyclerViewSearch.visibility = View.VISIBLE
                     val data = it.t as ResponseModel
-                    val myData = data.data.songs
-                    val myLang = data.data.Languages
-                    if (myLang != null) {
-                        mViewModel.searchedLanguagesDataList.addAll(myLang)
+                    val mySongs = data.data.songs
+                    val myLanguages = data.data.Languages
+                    Log.d(TAG, "Success Called $myLanguages")
+                    if (myLanguages != null) {
+                        mBinding.btnAllSongs.visibility = View.VISIBLE
+                        mViewModel.searchedLanguagesDataList.addAll(myLanguages)
                         mLanguagesAdapter.notifyDataSetChanged()
                     }
-                    if (myData != null) {
-                        mViewModel.searchedSongsDataList.addAll(myData)
+                    if (mySongs != null) {
+                        mViewModel.searchedSongsDataList.addAll(mySongs)
                         mSearchAdapter.notifyDataSetChanged()
                     }
                 }
                 NetworkStatus.EXPIRE -> {
+                    hideProgress()
                     val error = it.error as ErrorResponse
                     DialogUtils.errorAlert(
                         requireContext(),
@@ -233,6 +237,7 @@ class SearchQueryFragment : RecyclerViewBaseFragment() {
                     )
                 }
                 NetworkStatus.ERROR -> {
+                    hideProgress()
                     val error = it.error as ErrorResponse
                     DialogUtils.errorAlert(
                         requireContext(),
@@ -242,5 +247,13 @@ class SearchQueryFragment : RecyclerViewBaseFragment() {
                 }
             }
         })
+    }
+
+    private fun showProgress() {
+        mBinding.progressId.visibility = View.VISIBLE
+    }
+
+    private fun hideProgress() {
+        mBinding.progressId.visibility = View.INVISIBLE
     }
 }

@@ -5,9 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.Toast
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.techswivel.qthemusic.R
@@ -18,13 +15,8 @@ import com.techswivel.qthemusic.models.Album
 import com.techswivel.qthemusic.models.Artist
 import com.techswivel.qthemusic.models.Song
 import com.techswivel.qthemusic.ui.activities.mainActivity.MaintActivityImp
-import com.techswivel.qthemusic.ui.activities.playerActivity.PlayerActivity
 import com.techswivel.qthemusic.ui.base.RecyclerViewBaseFragment
 import com.techswivel.qthemusic.ui.fragments.searchQueryFragment.SearchQueryFragment
-import com.techswivel.qthemusic.utils.ActivityUtils
-import com.techswivel.qthemusic.utils.CommonKeys
-import com.techswivel.qthemusic.utils.Utilities
-
 
 class SearchScreenFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.CallBack {
     companion object {
