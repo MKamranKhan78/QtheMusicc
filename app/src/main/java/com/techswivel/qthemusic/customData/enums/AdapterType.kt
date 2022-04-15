@@ -5,5 +5,6 @@ enum class AdapterType {
     WHATS_YOUR_MOOD,
     TRENDING_SONGS,
     RECENT_PLAY,
-    SEARCHED_SONGS
+    SEARCHED_SONGS,
+    LANGUAGES
 }

@@ -11,16 +11,15 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.TextView.OnEditorActionListener
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.customData.adapter.RecyclerViewAdapter
+import com.techswivel.qthemusic.customData.enums.*
 import com.techswivel.qthemusic.customData.enums.AdapterType
-import com.techswivel.qthemusic.customData.enums.Languages
-import com.techswivel.qthemusic.customData.enums.NetworkStatus
-import com.techswivel.qthemusic.customData.enums.OtpType
 import com.techswivel.qthemusic.databinding.FragmentSearchQueryBinding
 import com.techswivel.qthemusic.models.ErrorResponse
 import com.techswivel.qthemusic.models.QueryRequestModel
@@ -28,16 +27,14 @@ import com.techswivel.qthemusic.models.ResponseModel
 import com.techswivel.qthemusic.models.Song
 import com.techswivel.qthemusic.source.local.preference.PrefUtils
 import com.techswivel.qthemusic.source.remote.networkViewModel.SongAndArtistsViewModel
+import com.techswivel.qthemusic.ui.activities.playerActivity.PlayerActivity
 import com.techswivel.qthemusic.ui.base.RecyclerViewBaseFragment
 import com.techswivel.qthemusic.ui.fragments.forgotPasswordFragment.ForgotPassword
 import com.techswivel.qthemusic.ui.fragments.signInFragment.SignInFragment
-import com.techswivel.qthemusic.utils.CommonKeys
-import com.techswivel.qthemusic.utils.DialogUtils
-import com.techswivel.qthemusic.utils.Log
-import com.techswivel.qthemusic.utils.Utilities
+import com.techswivel.qthemusic.utils.*
 
 
-class SearchQueryFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.CallBack {
+class SearchQueryFragment : RecyclerViewBaseFragment() {
     companion object {
         private val TAG = "SearchQueryFragment"
     }
@@ -46,6 +43,7 @@ class SearchQueryFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.Call
     private lateinit var mSongsAndArtistsViewModel: SongAndArtistsViewModel
     private lateinit var mViewModel: SearchQueryViewModel
     private lateinit var mSearchAdapter: RecyclerViewAdapter
+    private lateinit var mLanguagesAdapter: RecyclerViewAdapter
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,7 +65,8 @@ class SearchQueryFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.Call
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initialization()
-        mSearchAdapter= RecyclerViewAdapter(this,mViewModel.searchedSongsDataList)
+        setUpRecyclerView(mBinding.recyclerViewSearch, AdapterType.SEARCHED_SONGS)
+        setUpHorizentalRecyclerView(mBinding.recyclerLanguages, 8, AdapterType.LANGUAGES)
         setListeners()
         setRecyclerview()
         setObserverForViewModel()
@@ -75,15 +74,44 @@ class SearchQueryFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.Call
     }
 
     override fun onPrepareAdapter(adapterType: AdapterType?): RecyclerView.Adapter<*> {
-        return mSearchAdapter
-    }
+        return when (adapterType) {
+            AdapterType.SEARCHED_SONGS -> {
+                mSearchAdapter =
+                    RecyclerViewAdapter(object : RecyclerViewAdapter.CallBack {
+                        override fun inflateLayoutFromId(position: Int, data: Any?): Int {
+                            return R.layout.rec_view_searched_layout
+                        }
 
-    override fun inflateLayoutFromId(position: Int, data: Any?): Int {
-        return R.layout.rec_view_searched_layout
-    }
+                        override fun onNoDataFound() {
 
-    override fun onNoDataFound() {
-       Log.d(TAG,"no data found")
+                        }
+
+                        override fun onViewClicked(view: View, data: Any?) {
+
+                        }
+                    }, mViewModel.searchedSongsDataList)
+
+                mSearchAdapter
+            }
+            else -> {
+                mLanguagesAdapter =
+                    RecyclerViewAdapter(object : RecyclerViewAdapter.CallBack {
+                        override fun inflateLayoutFromId(position: Int, data: Any?): Int {
+                            return R.layout.rec_view_languages
+                        }
+
+                        override fun onNoDataFound() {
+
+                        }
+
+                        override fun onViewClicked(view: View, data: Any?) {
+
+                        }
+                    }, mViewModel.searchedLanguagesDataList)
+
+                mLanguagesAdapter
+            }
+        }
     }
 
     private fun initViewModel() {
@@ -94,6 +122,9 @@ class SearchQueryFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.Call
     private fun initialization() {}
 
     private fun setListeners() {
+        mBinding.ivBackBtnQuery.setOnClickListener {
+            requireActivity().onBackPressed()
+        }
         mBinding.etSearchBox.addTextChangedListener(object : TextWatcher {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 if (s.isNotEmpty()) {
@@ -114,7 +145,7 @@ class SearchQueryFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.Call
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
 
                 if (v.text.toString().isNotEmpty()) {
-                    val queryRequestModel = QueryRequestModel("waeem", 1)
+                    val queryRequestModel = QueryRequestModel(v.text.toString(), 1)
                     mSongsAndArtistsViewModel.getSearchedSongsFromServer(queryRequestModel)
 
                 }
@@ -124,35 +155,35 @@ class SearchQueryFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.Call
         })
 
 
-        mBinding.btnAllSongs.setOnClickListener {
-            mViewModel.selectedTab = Languages.ALL
-            updateSelectedTabBackground(
-                mBinding.btnAllSongs,
-                mBinding.btnEnglishSongs,
-                mBinding.btnUrduSongs
-            )
-        }
-
-        mBinding.btnEnglishSongs.setOnClickListener {
-            mViewModel.selectedTab = Languages.ENGLISH
-
-            updateSelectedTabBackground(
-                mBinding.btnEnglishSongs,
-                mBinding.btnUrduSongs,
-                mBinding.btnAllSongs
-            )
-
-        }
-
-        mBinding.btnUrduSongs.setOnClickListener {
-            mViewModel.selectedTab = Languages.URDU
-            updateSelectedTabBackground(
-                mBinding.btnUrduSongs,
-                mBinding.btnEnglishSongs,
-                mBinding.btnAllSongs
-            )
-
-        }
+//        mBinding.btnAllSongs.setOnClickListener {
+//            mViewModel.selectedTab = Languages.ALL
+//            updateSelectedTabBackground(
+//                mBinding.btnAllSongs,
+//                mBinding.btnEnglishSongs,
+//                mBinding.btnUrduSongs
+//            )
+//        }
+//
+//        mBinding.btnEnglishSongs.setOnClickListener {
+//            mViewModel.selectedTab = Languages.ENGLISH
+//
+//            updateSelectedTabBackground(
+//                mBinding.btnEnglishSongs,
+//                mBinding.btnUrduSongs,
+//                mBinding.btnAllSongs
+//            )
+//
+//        }
+//
+//        mBinding.btnUrduSongs.setOnClickListener {
+//            mViewModel.selectedTab = Languages.URDU
+//            updateSelectedTabBackground(
+//                mBinding.btnUrduSongs,
+//                mBinding.btnEnglishSongs,
+//                mBinding.btnAllSongs
+//            )
+//
+//        }
     }
 
     private fun updateSelectedTabBackground(
@@ -164,10 +195,12 @@ class SearchQueryFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.Call
         unselectedTab1.setBackgroundResource(R.drawable.unselected_tab_background)
         unselectedTab2.setBackgroundResource(R.drawable.unselected_tab_background)
     }
-    private fun setRecyclerview(){
-        setUpRecyclerView(mBinding.recyclerViewSearch,AdapterType.SEARCHED_SONGS)
+
+    private fun setRecyclerview() {
+        setUpRecyclerView(mBinding.recyclerViewSearch, AdapterType.SEARCHED_SONGS)
 
     }
+
     @SuppressLint("NotifyDataSetChanged")
     private fun setObserverForViewModel() {
         mSongsAndArtistsViewModel.mSearchedSongResponse.observe(viewLifecycleOwner, Observer {
@@ -177,10 +210,15 @@ class SearchQueryFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.Call
                 }
                 NetworkStatus.SUCCESS -> {
                     mViewModel.searchedSongsDataList.clear()
+                    mViewModel.searchedLanguagesDataList.clear()
                     Log.d(TAG, "Success Called")
                     val data = it.t as ResponseModel
                     val myData = data.data.songs
                     val myLang = data.data.Languages
+                    if (myLang != null) {
+                        mViewModel.searchedLanguagesDataList.addAll(myLang)
+                        mLanguagesAdapter.notifyDataSetChanged()
+                    }
                     if (myData != null) {
                         mViewModel.searchedSongsDataList.addAll(myData)
                         mSearchAdapter.notifyDataSetChanged()

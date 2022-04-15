@@ -16,7 +16,7 @@
         <LinearLayout
             android:id="@+id/search_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/_55dp"
             android:layout_margin="@dimen/_20dp"
             android:background="@drawable/shape_search_view_bacgruond"
             android:orientation="horizontal"
@@ -24,19 +24,19 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
+                android:id="@+id/iv_back_btn_query"
                 android:layout_width="@dimen/_0dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="@dimen/_16dp"
-                android:layout_marginEnd="@dimen/_12dp"
                 android:layout_weight="1"
-                android:padding="@dimen/_10dp"
+                android:padding="@dimen/_12dp"
                 android:src="@drawable/ic_icon_ionic_ios_arrow_back" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/et_search_box_layout"
                 android:layout_width="@dimen/_0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="9"
                 android:background="@null"
                 app:boxStrokeColor="@color/card_view_signin"
@@ -49,27 +49,25 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_search_box"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_marginTop="@dimen/_4dp"
                     android:backgroundTint="@android:color/transparent"
                     android:fontFamily="@font/manrope_regular"
-                    android:maxLines="1"
                     android:imeOptions="actionSearch"
                     android:inputType="text"
-                    android:paddingTop="@dimen/_12dp"
-                    android:paddingBottom="@dimen/_12dp"
+                    android:maxLines="1"
+                    android:paddingTop="@dimen/_10dp"
+                    android:paddingBottom="@dimen/_14dp"
                     android:textColor="@color/sign_up_btn"
                     android:textColorHighlight="@color/color_white"
                     android:textColorHint="@color/color_white"
                     android:textSize="@dimen/_18sp" />
             </com.google.android.material.textfield.TextInputLayout>
-
         </LinearLayout>
 
-        <androidx.appcompat.widget.AppCompatButton
+        <TextView
             android:id="@+id/btn_all_songs"
-            style="@style/TabButtonTextStyle"
-            android:layout_width="@dimen/_100dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_14dp"
             android:background="@drawable/selected_tab_background"
@@ -77,27 +75,39 @@
             app:layout_constraintStart_toStartOf="@id/search_layout"
             app:layout_constraintTop_toBottomOf="@id/search_layout" />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_english_songs"
-            style="@style/TabButtonTextStyle"
-            android:layout_width="@dimen/_100dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/unselected_tab_background"
-            android:text="@string/eng_songs"
-            app:layout_constraintBottom_toBottomOf="@id/btn_all_songs"
-            app:layout_constraintEnd_toStartOf="@id/btn_urdu_songs"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_languages"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/_0dp"
+            android:layout_marginTop="@dimen/_16dp"
+            android:layout_marginStart="@dimen/_8dp"
             app:layout_constraintStart_toEndOf="@+id/btn_all_songs"
-            app:layout_constraintTop_toTopOf="@id/btn_all_songs" />
+            app:layout_constraintTop_toTopOf="@+id/btn_all_songs"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_all_songs"
+            />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_urdu_songs"
-            style="@style/TabButtonTextStyle"
-            android:layout_width="@dimen/_100dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/unselected_tab_background"
-            android:text="@string/urdu_songs"
-            app:layout_constraintStart_toEndOf="@id/btn_english_songs"
-            app:layout_constraintTop_toTopOf="@id/btn_english_songs" />
+
+        <!--        <androidx.appcompat.widget.AppCompatButton-->
+        <!--            android:id="@+id/btn_english_songs"-->
+        <!--            style="@style/TabButtonTextStyle"-->
+        <!--            android:layout_width="@dimen/_100dp"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:background="@drawable/unselected_tab_background"-->
+        <!--            android:text="@string/eng_songs"-->
+        <!--            app:layout_constraintBottom_toBottomOf="@id/btn_all_songs"-->
+        <!--            app:layout_constraintEnd_toStartOf="@id/btn_urdu_songs"-->
+        <!--            app:layout_constraintStart_toEndOf="@+id/btn_all_songs"-->
+        <!--            app:layout_constraintTop_toTopOf="@id/btn_all_songs" />-->
+
+        <!--        <androidx.appcompat.widget.AppCompatButton-->
+        <!--            android:id="@+id/btn_urdu_songs"-->
+        <!--            style="@style/TabButtonTextStyle"-->
+        <!--            android:layout_width="@dimen/_100dp"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:background="@drawable/unselected_tab_background"-->
+        <!--            android:text="@string/urdu_songs"-->
+        <!--            app:layout_constraintStart_toEndOf="@id/btn_english_songs"-->
+        <!--            app:layout_constraintTop_toTopOf="@id/btn_english_songs" />-->
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view_search"
@@ -105,7 +115,7 @@
             android:layout_height="@dimen/_0dp"
             android:layout_marginTop="@dimen/_20dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_urdu_songs"
+            app:layout_constraintTop_toBottomOf="@+id/recycler_languages"
 
             />
 
