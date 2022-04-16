@@ -14,6 +14,7 @@ import com.techswivel.qthemusic.ui.activities.serverSettingActivity.ServerSettin
 import com.techswivel.qthemusic.ui.base.BaseFragment
 import com.techswivel.qthemusic.ui.fragments.favoriteSongFragment.FavoriteSongFragment
 import com.techswivel.qthemusic.ui.fragments.followingArtistFragment.FollowingArtistFragment
+import com.techswivel.qthemusic.ui.fragments.purchasedSongFragment.PurchasedSongFragment
 import com.techswivel.qthemusic.utils.ActivityUtils
 
 class ProfileLandingFragment : BaseFragment() {
@@ -83,7 +84,7 @@ class ProfileLandingFragment : BaseFragment() {
         mBinding.purchaseSongTextView.setOnClickListener {
             ActivityUtils.launchFragment(
                 requireContext(),
-                UnderDevelopmentMessageFragment::class.java.name
+                PurchasedSongFragment::class.java.name
             )
         }
         mBinding.followingArtistTextview.setOnClickListener {

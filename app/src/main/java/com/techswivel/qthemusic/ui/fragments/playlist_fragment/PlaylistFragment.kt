@@ -5,9 +5,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.techswivel.qthemusic.R
+import com.techswivel.qthemusic.application.QTheMusicApplication
 import com.techswivel.qthemusic.customData.adapter.RecyclerViewAdapter
 import com.techswivel.qthemusic.customData.enums.AdapterType
 import com.techswivel.qthemusic.customData.enums.DeleteViewType
@@ -23,6 +25,7 @@ import com.techswivel.qthemusic.ui.base.RecyclerViewBaseFragment
 import com.techswivel.qthemusic.ui.dialogFragments.deletionViewBottomSheetDialog.DeletionViewBottomSheetDialogFragment
 import com.techswivel.qthemusic.utils.CommonKeys
 import com.techswivel.qthemusic.utils.DialogUtils
+import com.techswivel.qthemusic.utils.Log
 
 
 class PlaylistFragment : RecyclerViewBaseFragment(), BaseInterface,
@@ -102,11 +105,43 @@ class PlaylistFragment : RecyclerViewBaseFragment(), BaseInterface,
         openBottomSheetDialog(bundle)
     }
 
+    // here we will be add change.
+/*
     @SuppressLint("NotifyDataSetChanged")
     override fun openPlayListFragment(playlistModel: PlaylistModel) {
         mBinding.tvNoDataFound.visibility = View.GONE
         viewModel.mPlaylist.add(playlistModel)
         mPlaylistAdapter.notifyItemInserted(viewModel.mPlaylist.size)
+    }
+*/
+    @SuppressLint("NotifyDataSetChanged")
+    override fun openPlayListFragment(playlistModel: PlaylistModel) {
+        for (i in 0 until viewModel.mPlaylist.size) {
+            Log.v("djfhdjhfdhjfhd", viewModel.mPlaylist.get(i).toString())
+        }
+
+        val isExist = isExist(playlistModel)
+        if (isExist == true) {
+            Toast.makeText(
+                QTheMusicApplication.getContext(),
+                "Playlist already exist",
+                Toast.LENGTH_SHORT
+            ).show()
+        } else {
+            mBinding.tvNoDataFound.visibility = View.GONE
+            viewModel.mPlaylist.add(playlistModel)
+            mPlaylistAdapter.notifyItemInserted(viewModel.mPlaylist.size)
+        }
+    }
+
+
+    fun isExist(playlistModel: PlaylistModel): Boolean {
+        for (i in 0 until viewModel.mPlaylist.size) {
+            if (viewModel.mPlaylist.get(i).equals(playlistModel)) {
+                return true
+            }
+        }
+        return false
     }
 
     override fun openPlayListFragmentWithPlaylistModel(playlistModel: PlaylistModel?) {
