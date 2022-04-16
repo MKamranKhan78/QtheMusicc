@@ -3,6 +3,7 @@ package com.techswivel.qthemusic.models
 
 import com.google.gson.annotations.SerializedName
 import com.techswivel.qthemusic.customData.enums.AlbumStatus
+import java.io.Serializable
 
 data class Album(
     @SerializedName("albumCoverImageUrl")
@@ -15,4 +16,4 @@ data class Album(
     var albumTitle: String?,
     @SerializedName("numberOfSongs")
     var numberOfSongs: Int?
-)
+):Serializable

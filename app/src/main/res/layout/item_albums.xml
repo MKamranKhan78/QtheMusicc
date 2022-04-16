@@ -32,6 +32,7 @@
             android:layout_height="@dimen/_120dp"
             android:background="@android:color/transparent"
             app:cardCornerRadius="@dimen/_10dp"
+            android:onClick="@{(view) -> click.onViewClick(view, obj)}"
             app:cardElevation="@dimen/_8dp">
 
             <ImageView

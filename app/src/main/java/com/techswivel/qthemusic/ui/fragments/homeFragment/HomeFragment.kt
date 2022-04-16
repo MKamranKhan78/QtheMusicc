@@ -16,8 +16,10 @@ import com.techswivel.qthemusic.customData.enums.AdapterType
 import com.techswivel.qthemusic.databinding.FragmentHomeBinding
 import com.techswivel.qthemusic.models.*
 import com.techswivel.qthemusic.source.remote.networkViewModel.SongAndArtistsViewModel
+import com.techswivel.qthemusic.ui.activities.mainActivity.MaintActivityImp
 import com.techswivel.qthemusic.ui.activities.playerActivity.PlayerActivity
 import com.techswivel.qthemusic.ui.base.RecyclerViewBaseFragment
+import com.techswivel.qthemusic.ui.fragments.albumDetailsFragment.AlbumDetailsFragment
 import com.techswivel.qthemusic.utils.*
 
 class HomeFragment : RecyclerViewBaseFragment() {
@@ -25,7 +27,7 @@ class HomeFragment : RecyclerViewBaseFragment() {
     companion object {
         @JvmStatic
         fun newInstance() = HomeFragment()
-        private val TAG="HomeFragment"
+        private val TAG = "HomeFragment"
     }
 
     private lateinit var binding: FragmentHomeBinding
@@ -94,15 +96,15 @@ class HomeFragment : RecyclerViewBaseFragment() {
 
                         override fun onItemClick(data: Any?, position: Int) {
                             super.onItemClick(data, position)
-                            Utilities.showToast(requireContext(),"data is ")
-                            val datad=data as Album
-                            Log.d(TAG,"data is ${datad}")
+
                         }
 
                         override fun onViewClicked(view: View, data: Any?) {
-                            val songModel = data as Song
+
                             when (view.id) {
                                 R.id.cv_recommended_song -> {
+                                    Log.d(TAG, "cv_recommended_song called")
+                                    val songModel = data as Song
                                     if (songModel.songStatus == SongStatus.PREMIUM) {
                                         Toast.makeText(
                                             requireContext(),
@@ -131,6 +133,28 @@ class HomeFragment : RecyclerViewBaseFragment() {
                                             R.anim.null_transition
                                         )
                                     }
+                                }
+                                R.id.cv_main_image -> {
+                                    val mAlbum = data as Album
+                                    Log.d(TAG, "cv_main_image called")
+                                    val bundle = Bundle()
+                                    bundle.putSerializable(CommonKeys.KEY_ALBUM_DETAILS, mAlbum)
+                                    val albumDetailsFragment = AlbumDetailsFragment()
+                                    albumDetailsFragment.arguments = bundle
+                                    (mActivityListener as MaintActivityImp).replaceFragment(
+                                        albumDetailsFragment
+                                    )
+
+//                                    for (i in  viewModel.songsList.indices){
+//                                        if (viewModel.songsList[i].albumId==mAlbum.albumId){
+//                                            Log.d(TAG,"i is $i")
+//                                            Log.d(TAG,"album Id is ${mAlbum.albumId} songAlbumId is ${viewModel.songsList[i].albumId} ")
+//                                            Log.d(TAG,"dat is here ${viewModel.songsListToSend}")
+//                                        }else{
+//                                            Log.d(TAG,"no data found")
+//                                        }
+//                                    }
+
                                 }
                             }
                         }
@@ -230,7 +254,15 @@ class HomeFragment : RecyclerViewBaseFragment() {
                     val songsList = response.data.recommendedSongsResponse?.songs
                     val albumsList = response.data.recommendedSongsResponse?.albums
                     val artistsList = response.data.recommendedSongsResponse?.artist
-
+                    if (!albumsList.isNullOrEmpty()) {
+                        viewModel.albumList.clear()
+                        viewModel.albumList.addAll(albumsList)
+                    }
+                    if (!songsList.isNullOrEmpty()) {
+                        viewModel.songsList.clear()
+                        viewModel.songsList.addAll(songsList)
+                        Log.d(TAG, "Songs are ${viewModel.songsList}")
+                    }
                     if (!songsList.isNullOrEmpty() && viewModel.selectedTab == RecommendedSongsType.SONGS) {
                         viewModel.recommendedSongsDataList.addAll(songsList)
                     } else if (!albumsList.isNullOrEmpty() && viewModel.selectedTab == RecommendedSongsType.ALBUM) {

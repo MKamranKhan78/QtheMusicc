@@ -6,5 +6,6 @@ enum class AdapterType {
     TRENDING_SONGS,
     RECENT_PLAY,
     SEARCHED_SONGS,
-    LANGUAGES
+    LANGUAGES,
+    ALBUM_SONGS
 }

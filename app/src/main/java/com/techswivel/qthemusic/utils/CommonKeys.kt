@@ -38,5 +38,6 @@ class CommonKeys {
         const val KEY_USER_ADRESS = "_key_user_address"
         const val KEY_USER_PLAN_PRIZE = "_key_user_plan_prize"
         const val KEY_USER_PLAN_DURATION = "_key_user_plan_duration"
+        const val KEY_ALBUM_DETAILS="key_album_details"
     }
 }

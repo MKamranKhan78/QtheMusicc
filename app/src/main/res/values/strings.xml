@@ -129,4 +129,5 @@
     <string name="all_songs">All</string>
     <string name="eng_songs">English</string>
     <string name="urdu_songs">Urdu</string>
+    <string name="_songs">\ Songs\</string>
 </resources>
