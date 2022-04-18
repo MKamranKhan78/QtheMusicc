@@ -13,6 +13,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.techswivel.qthemusic.R
+import com.techswivel.qthemusic.application.QTheMusicApplication
 
 
 object DialogUtils {
@@ -205,6 +206,12 @@ object DialogUtils {
             dialog.dismiss()
         }
         alertDialog.show()
+        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
+            QTheMusicApplication.getContext().getResources().getColor(R.color.color_black)
+        );
+        alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(
+            QTheMusicApplication.getContext().getResources().getColor(R.color.color_black)
+        );
     }
 
     interface CallBack {

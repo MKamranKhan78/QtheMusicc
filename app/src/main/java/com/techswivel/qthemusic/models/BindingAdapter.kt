@@ -9,6 +9,8 @@ import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.techswivel.qthemusic.R
+import java.text.DateFormat
+import java.util.*
 import com.techswivel.qthemusic.utils.Utilities.roundOffDecimal
 
 object BindingAdapter {
@@ -27,17 +29,26 @@ object BindingAdapter {
             "$" + roundOffDecimal(subscription?.planPrice).toString() + " / " + subscription?.planDuration
     }
 
-    /*@JvmStatic
-    @BindingAdapter(value = ["isChecked", "isArtistChecked"])
-    fun isChecked(view: SwitchCompat, enabled: Boolean, artistChecked: Boolean) {
-        if (enabled == false) {
-            view.isEnabled = false
-            view.isChecked = false
+    @JvmStatic
+    @BindingAdapter("setDate")
+    fun setDate(textView: TextView?, dateInMillis: Long) {
+        if (dateInMillis.toInt() != 0) {
+            val dateObj = dateInMillis.let { dateInMillis ->
+                Date(dateInMillis)
+            }
+            textView?.text = DateFormat.getDateInstance(DateFormat.LONG).format(dateObj)
         } else {
-            view.isEnabled = true
-            view.isChecked = artistChecked
+            textView?.text = textView?.context?.getString(R.string.not_added)
         }
-    }*/
+
+    }
+
+    @JvmStatic
+    @BindingAdapter("setDateOfBirth")
+    fun setDateOfBirth(textView: TextView, text: String?) {
+        textView.text = text
+    }
+
 
     @JvmStatic
     @BindingAdapter("setImageViewImage")

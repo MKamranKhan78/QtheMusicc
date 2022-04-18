@@ -20,4 +20,5 @@ interface RemoteDataManagerImp {
     fun signUp(authRequestModel: AuthRequestModel): Observable<Response<ResponseMain>>
     fun saveInterest(category: List<Category?>): Observable<Response<ResponseMain>>
 
+
 }

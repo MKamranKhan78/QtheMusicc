@@ -218,25 +218,27 @@ class DummyDataManager {
                 true
             )
 
-            val subscription = Subscription(
-                1,
-                "Standard Plan",
-                10.56f,
-                "Month"
-            )
-            val authModel = AuthModel(
-                "Usman Khan",
-                "kamran@gmail.com",
-                "https://ca.slack-edge.com/TH6CHMP7Z-U01RL9JUJG1-0a9af450bd4f-512",
-                "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9",
-                76475859,
-                "03034949594",
-                "MALE",
-                false,
-                address,
-                subscription,
-                notification
-            )
+             val subscription = Subscription(
+                 1,
+                 "Standard Plan",
+                 10.00f,
+                 "Month"
+             )
+             val authModel = AuthModel(
+                 "Kamran Khan",
+                 "kamran@gmail.com",
+                 "https://ca.slack-edge.com/TH6CHMP7Z-U01RL9JUJG1-0a9af450bd4f-512",
+                 "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9",
+                 347387499859//0
+                 ,
+                 null//"03034949594"
+                 ,
+                 "Female",
+                 false,
+                 address,
+                 subscription,
+                 notification
+             )
             return authModel
         }
 

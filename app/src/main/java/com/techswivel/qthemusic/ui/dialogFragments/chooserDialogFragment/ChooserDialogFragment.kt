@@ -34,7 +34,6 @@ class ChooserDialogFragment : BaseDialogFragment() {
     private var callBack: CallBack? = null
 
     companion object {
-
         private const val TAG = "ChooserDialogFragment"
 
         @JvmStatic
@@ -103,7 +102,6 @@ class ChooserDialogFragment : BaseDialogFragment() {
                     dismiss()
                 }
             }
-
         viewModel.getContentCameraImage =
             registerForActivityResult(ActivityResultContracts.TakePicture()) { isSuccess ->
                 if (isSuccess) {
@@ -142,9 +140,9 @@ class ChooserDialogFragment : BaseDialogFragment() {
                     }
                 }
             } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                if (permissions.isNotEmpty() && !requireActivity().shouldShowRequestPermissionRationale(
+                if (((permissions.isNotEmpty()) && (!requireActivity().shouldShowRequestPermissionRationale(
                         permissions[0]
-                    )
+                    )))
                 ) {
                     if (viewModel.mRequestCode == CAMERA_PICKER_REQUEST_CODE || viewModel.mRequestCode == VIDEO_CAMERA_PICKER_REQUEST_CODE) {
                         DialogUtils.goToSystemLocationSetting(

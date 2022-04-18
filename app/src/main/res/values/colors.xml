@@ -23,6 +23,7 @@
     <color name="app_bar_clr">#F9000000</color>
     <color name="mtrl_textinput_default_box_stroke_color">#84818AA1</color>
     <color name="btn_text_clr">#FBFAFC</color>
+
     <color name="color_grey">#545454</color>
     <color name="color_light_grey">#99999F</color>
     <color name="color_red">#BA011A</color>
@@ -33,7 +34,10 @@
     <color name="color_center_black_landing_background">#313131</color>
     <color name="color_white_text">#ffffffff</color>
     <color name="premium_button_color">#D3A42E</color>
+    <color name="light_gray_color">#84818A66</color>
     <color name="logout_button_color">#BA011A</color>
+    <color name="backgroundPrimary">#EDEEF0</color>
+
 
     <color name="shimmer_placeholder">#dddddd</color>
     <color name="bg_add_profile_main_iv_clc">#505050</color>

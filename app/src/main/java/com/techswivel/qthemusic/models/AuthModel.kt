@@ -13,7 +13,7 @@ data class AuthModel(
     @SerializedName("jwt")
     var jwt: String?,
     @SerializedName("dOB")
-    var dOB: Int?,
+    var dOB: Long?,
     @SerializedName("phoneNumber")
     var phoneNumber: String?,
     @SerializedName("gender")

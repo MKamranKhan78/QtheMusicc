@@ -113,6 +113,7 @@ object RemoteDataManager : BaseDataManager(), RemoteDataManagerImp {
         }
     }
 
+
     override fun verifyOtpRequest(authRequestModel: AuthRequestModel): Observable<Response<ResponseMain>> {
         return Observable.create { observer ->
             observer.onNext(getResponseDummyData())
@@ -126,6 +127,7 @@ object RemoteDataManager : BaseDataManager(), RemoteDataManagerImp {
             observer.onComplete()
         }
     }
+
 
     override fun signUp(authRequestModel: AuthRequestModel): Observable<Response<ResponseMain>> {
         return Observable.create{observer->

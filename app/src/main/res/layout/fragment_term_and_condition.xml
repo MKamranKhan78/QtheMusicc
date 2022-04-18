@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.techswivel.qthemusic.ui.fragments.termAndConditionFragment.TermAndConditionViewModel" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/black_gradiant_background">
+
+        <include
+            android:id="@+id/fragmentToolbar"
+            layout="@layout/app_bar_blue_center_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/description_peragraph"
+            android:layout_below="@id/fragmentToolbar"
+            android:text="@{viewModel.isTermAndCondition == true ?@string/term_and_codition_text:@string/privacy_policy_text}"
+            android:layout_margin="@dimen/_20dp"
+            android:layout_marginTop="@dimen/_30dp"
+            android:fontFamily="@font/manrope_semibold"
+            android:textColor="@color/color_white_text_profile"
+            android:textSize="@dimen/_14sp" />
+
+    </RelativeLayout>
+
+</layout>

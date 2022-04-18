@@ -1,7 +1,12 @@
 package com.techswivel.qthemusic.utils
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.ImageDecoder
+import android.net.Uri
+import android.os.Build
+import android.provider.MediaStore
 
 import java.io.File
 import java.io.FileOutputStream
@@ -45,5 +50,21 @@ object ImageUtils {
 
     fun getTemporalFile(context: Context, payload: String): File {
         return File(context.externalCacheDir, BASE_IMAGE_NAME + payload)
+    }
+
+    @SuppressLint("NewApi")
+    fun getBitmapFromUri(selectedPhotoUri: Uri, context: Context): Bitmap? {
+        val bitmap = when {
+            Build.VERSION.SDK_INT < 28 -> MediaStore.Images.Media.getBitmap(
+                context.contentResolver,
+                selectedPhotoUri
+            )
+            else -> {
+                val source =
+                    context.contentResolver?.let { ImageDecoder.createSource(it, selectedPhotoUri) }
+                source?.let { ImageDecoder.decodeBitmap(it) }
+            }
+        }
+        return bitmap
     }
 }

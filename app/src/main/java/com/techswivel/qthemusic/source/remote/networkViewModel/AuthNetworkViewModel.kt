@@ -31,35 +31,35 @@ class AuthNetworkViewModel : BaseViewModel() {
                 logoutResponse.value = ApiResponse.loading()
             }?.subscribe(object : CustomObserver<Response<ResponseMain>>() {
                 override fun onSuccess(t: Response<ResponseMain>) {
-                    when {
-                        t.isSuccessful -> {
-                            logoutResponse.postValue(
-                                ApiResponse.success(t.body()?.response)
-                            )
-                        }
-                        t.code() == 403 -> {
-                            val error: ResponseMain? = ErrorUtils.parseError(t)
-                            val errorData = ErrorResponse(
+                when {
+                    t.isSuccessful -> {
+                        logoutResponse.postValue(
+                            ApiResponse.success(t.body()?.response)
+                        )
+                    }
+                    t.code() == 403 -> {
+                        val error: ResponseMain? = ErrorUtils.parseError(t)
+                        val errorData = ErrorResponse(
+                            error?.response?.status ?: false,
+                            error?.response?.message ?: QTheMusicApplication.getContext()
+                                .getString(R.string.something_wrong),
+                            t.code()
+                        )
+                        logoutResponse.value = ApiResponse.expire(errorData)
+                    }
+                    else -> {
+                        val error: ResponseMain? = ErrorUtils.parseError(t)
+                        logoutResponse.value = ApiResponse.error(
+                            ErrorResponse(
                                 error?.response?.status ?: false,
                                 error?.response?.message ?: QTheMusicApplication.getContext()
                                     .getString(R.string.something_wrong),
                                 t.code()
                             )
-                            logoutResponse.value = ApiResponse.expire(errorData)
-                        }
-                        else -> {
-                            val error: ResponseMain? = ErrorUtils.parseError(t)
-                            logoutResponse.value = ApiResponse.error(
-                                ErrorResponse(
-                                    error?.response?.status ?: false,
-                                    error?.response?.message ?: QTheMusicApplication.getContext()
-                                        .getString(R.string.something_wrong),
-                                    t.code()
-                                )
-                            )
-                        }
+                        )
                     }
                 }
+            }
 
                 override fun onError(e: Throwable, isInternetError: Boolean, error: CustomError?) {
                     logoutResponse.value = ApiResponse.error(
@@ -78,6 +78,9 @@ class AuthNetworkViewModel : BaseViewModel() {
                 }
             })
     }
+
+
+
 
     fun updateProfile(authModel: AuthModel) {
 

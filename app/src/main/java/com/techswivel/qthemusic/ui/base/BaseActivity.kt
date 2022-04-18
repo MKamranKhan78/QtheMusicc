@@ -85,6 +85,7 @@ abstract class BaseActivity : AppCompatActivity() {
             .commit()
     }
 
+
     protected open fun popUpAllFragmentIncludeThis(pClassName: String?) {
         fragmentManager.popBackStack(pClassName, FragmentManager.POP_BACK_STACK_INCLUSIVE)
     }

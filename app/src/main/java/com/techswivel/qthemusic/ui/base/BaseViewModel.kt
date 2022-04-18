@@ -15,14 +15,11 @@ import com.techswivel.qthemusic.models.Address
 import com.techswivel.qthemusic.models.AuthModel
 import com.techswivel.qthemusic.models.Notification
 import com.techswivel.qthemusic.models.Subscription
-import com.techswivel.qthemusic.source.local.preference.DataStoreUtils
 import com.techswivel.qthemusic.source.local.preference.PrefUtils
 import com.techswivel.qthemusic.source.remote.rxjava.DisposableManager
-import com.techswivel.qthemusic.ui.activities.mainActivity.MainActivity
 import com.techswivel.qthemusic.ui.activities.splashActivity.SplashActivity
 import com.techswivel.qthemusic.utils.ActivityUtils
 import com.techswivel.qthemusic.utils.CommonKeys
-import kotlinx.coroutines.runBlocking
 
 
 abstract class BaseViewModel : ViewModel() {
@@ -54,6 +51,16 @@ abstract class BaseViewModel : ViewModel() {
         PrefUtils.setBoolean(QTheMusicApplication.getContext(),CommonKeys.KEY_IS_LOGGED_IN,true)
         PrefUtils.setString(
             QTheMusicApplication.getContext(),
+            CommonKeys.KEY_USER_NAME,
+            authModel?.name
+        )
+        PrefUtils.setString(
+            QTheMusicApplication.getContext(),
+            CommonKeys.KEY_USER_EMAIL,
+            authModel?.email
+        )
+        PrefUtils.setString(
+            QTheMusicApplication.getContext(),
             CommonKeys.KEY_USER_AVATAR,
             authModel?.avatar
         )
@@ -68,6 +75,18 @@ abstract class BaseViewModel : ViewModel() {
         )
         PrefUtils.setString(QTheMusicApplication.getContext(), CommonKeys.KEY_USER_PHONE, authModel?.phoneNumber)
         authModel?.dOB?.let { doB -> PrefUtils.setInt(QTheMusicApplication.getContext(), CommonKeys.KEY_USER_DOB, doB) }
+        PrefUtils.setString(
+            QTheMusicApplication.getContext(),
+            CommonKeys.KEY_USER_PHONE,
+            authModel?.phoneNumber
+        )
+        authModel?.dOB?.let { doB ->
+            PrefUtils.setLong(
+                QTheMusicApplication.getContext(),
+                CommonKeys.KEY_USER_DOB,
+                doB
+            )
+        }
         authModel?.subscription?.planId?.let { planId ->
             PrefUtils.setInt(
                 QTheMusicApplication.getContext(), CommonKeys.KEY_USER_PLAN_ID,
@@ -90,6 +109,26 @@ abstract class BaseViewModel : ViewModel() {
         PrefUtils.setString(QTheMusicApplication.getContext(), CommonKeys.KEY_USER_CITY, authModel?.address?.city)
         PrefUtils.setString(QTheMusicApplication.getContext(), CommonKeys.KEY_USER_STATE, authModel?.address?.state)
         PrefUtils.setString(QTheMusicApplication.getContext(), CommonKeys.KEY_USER_COUNTRY, authModel?.address?.country)
+        PrefUtils.setString(
+            QTheMusicApplication.getContext(),
+            CommonKeys.KEY_USER_GENDER,
+            authModel?.gender
+        )
+        PrefUtils.setString(
+            QTheMusicApplication.getContext(),
+            CommonKeys.KEY_USER_CITY,
+            authModel?.address?.city
+        )
+        PrefUtils.setString(
+            QTheMusicApplication.getContext(),
+            CommonKeys.KEY_USER_STATE,
+            authModel?.address?.state
+        )
+        PrefUtils.setString(
+            QTheMusicApplication.getContext(),
+            CommonKeys.KEY_USER_COUNTRY,
+            authModel?.address?.country
+        )
         PrefUtils.setString(
             QTheMusicApplication.getContext(),
             CommonKeys.KEY_USER_PLAN_TITLE,
@@ -125,7 +164,7 @@ abstract class BaseViewModel : ViewModel() {
         var enableNotification: Boolean? = null
         var enableArtistUpdate: Boolean? = null
 
-        var userdob: Int? = null
+        var userdob: Long? = null
         var userZipcode: Int? = null
 
         var userPlanId: Int? = null
@@ -144,7 +183,7 @@ abstract class BaseViewModel : ViewModel() {
         userPhone = PrefUtils.getString(context, CommonKeys.KEY_USER_PHONE)
         enableNotification = PrefUtils.getBoolean(context, CommonKeys.KEY_USER_ENABLE_NOTIFICATION)
         enableArtistUpdate = PrefUtils.getBoolean(context, CommonKeys.KEY_ARTIST_UPDATE)
-        userdob = PrefUtils.getInt(context, CommonKeys.KEY_USER_DOB)
+        userdob = PrefUtils.getLong(context, CommonKeys.KEY_USER_DOB)
         userZipcode = PrefUtils.getInt(context, CommonKeys.KEY_USER_ZIP_CODE)
         userPlanId = PrefUtils.getInt(context, CommonKeys.KEY_USER_PLAN_ID)
         userPlanPrize = PrefUtils.getFloat(context, CommonKeys.KEY_USER_PLAN_PRIZE)
@@ -162,11 +201,10 @@ abstract class BaseViewModel : ViewModel() {
         return authModel
     }
 
+
     fun clearAppSession(activity: Activity) {
-        runBlocking {
-            DataStoreUtils.clearAllPreference()
-            mLocalDataManager.deleteAllLocalData()
-        }
+
+        PrefUtils.clearAllPrefData(QTheMusicApplication.getContext())
         ActivityUtils.startNewActivity(
             activity,
             SplashActivity::class.java,

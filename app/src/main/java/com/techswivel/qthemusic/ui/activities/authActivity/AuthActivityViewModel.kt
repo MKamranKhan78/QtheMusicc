@@ -33,5 +33,6 @@ class AuthActivityViewModel : BaseViewModel() {
         authRequestBilder = AuthRequestBuilder()
         authRequestModel = AuthRequestModel()
     }
+    var phoneNumber: String? = null
 
 }
