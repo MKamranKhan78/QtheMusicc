@@ -41,11 +41,11 @@
                 android:background="@null"
                 app:boxStrokeColor="@color/card_view_signin"
                 app:boxStrokeWidth="@dimen/_0dp"
-                app:hintEnabled="false"
                 app:boxStrokeWidthFocused="@dimen/_0dp"
                 app:endIconDrawable="@drawable/ic_mic"
                 app:endIconMode="clear_text"
-                app:endIconTint="@color/color_white">
+                app:endIconTint="@color/color_white"
+                app:hintEnabled="false">
 
                 <EditText
                     android:id="@+id/et_search_box"
@@ -54,16 +54,16 @@
                     android:layout_marginTop="@dimen/_4dp"
                     android:backgroundTint="@android:color/transparent"
                     android:fontFamily="@font/manrope_regular"
+                    android:hint="@string/search"
                     android:imeOptions="actionSearch"
                     android:inputType="text"
                     android:maxLines="1"
-                    android:textCursorDrawable="@drawable/custome_cursor_search_query_screen"
-                    android:hint="@string/search"
                     android:paddingTop="@dimen/_10dp"
                     android:paddingBottom="@dimen/_14dp"
                     android:textColor="@color/sign_up_btn"
                     android:textColorHighlight="@color/color_white"
                     android:textColorHint="@color/color_light_grey"
+                    android:textCursorDrawable="@drawable/custome_cursor_search_query_screen"
                     android:textSize="@dimen/_18sp" />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
@@ -96,6 +96,46 @@
             app:layout_constraintStart_toEndOf="@+id/btn_all_songs"
             app:layout_constraintTop_toTopOf="@+id/btn_all_songs" />
 
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/sl_searched_songs"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_0dp"
+            android:layout_below="@id/tv_total_songs"
+            android:padding="@dimen/_14dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/recycler_languages">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <include layout="@layout/shimmer_rec_view_searched" />
+
+                <include layout="@layout/shimmer_rec_view_searched" />
+
+                <include layout="@layout/shimmer_rec_view_searched" />
+
+                <include layout="@layout/shimmer_rec_view_searched" />
+
+                <include layout="@layout/shimmer_rec_view_searched" />
+
+                <include layout="@layout/shimmer_rec_view_searched" />
+
+                <include layout="@layout/shimmer_rec_view_searched" />
+
+                <include layout="@layout/shimmer_rec_view_searched" />
+
+                <include layout="@layout/shimmer_rec_view_searched" />
+
+                <include layout="@layout/shimmer_rec_view_searched" />
+
+                <include layout="@layout/shimmer_rec_view_searched" />
+
+            </LinearLayout>
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view_search"
             android:layout_width="match_parent"
@@ -109,8 +149,8 @@
             android:id="@+id/progress_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="invisible"
             android:indeterminateTint="@color/sign_up_btn"
+            android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

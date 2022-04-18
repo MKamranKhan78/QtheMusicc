@@ -12,4 +12,5 @@ class AlbumDetailsViewModel : BaseViewModel() {
     var albumStatus = ""
     var albumTitle = ""
     var numberOfSongs: Int? = 0
+    var albumId:Int?=0
 }

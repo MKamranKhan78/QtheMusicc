@@ -17,6 +17,9 @@ import com.techswivel.qthemusic.models.Song
 import com.techswivel.qthemusic.ui.activities.mainActivity.MaintActivityImp
 import com.techswivel.qthemusic.ui.base.RecyclerViewBaseFragment
 import com.techswivel.qthemusic.ui.fragments.searchQueryFragment.SearchQueryFragment
+import com.techswivel.qthemusic.utils.ActivityUtils
+import com.techswivel.qthemusic.utils.Log
+import com.techswivel.qthemusic.utils.Utilities
 
 class SearchScreenFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.CallBack {
     companion object {
@@ -34,7 +37,7 @@ class SearchScreenFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.Cal
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initViewMedel()
-        mViewModel.selectedTab=RecommendedSongsType.SONGS
+        mViewModel.selectedTab = RecommendedSongsType.SONGS
 
     }
 
@@ -51,7 +54,6 @@ class SearchScreenFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.Cal
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mRecentPlayAdapter = RecyclerViewAdapter(this, mViewModel.recentSongsDataList)
-        init()
         setListeners()
         setCurrentUpRecyclerview(mViewModel.selectedTab)
         setData()
@@ -72,11 +74,7 @@ class SearchScreenFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.Cal
     }
 
     override fun onNoDataFound() {
-        TODO("Not yet implemented")
-    }
-
-    private fun init() {
-
+       Log.d(TAG,"No Data Found")
     }
 
     private fun setListeners() {
@@ -113,7 +111,7 @@ class SearchScreenFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.Cal
             setData()
         }
         mBinding.searchView.setOnClickListener {
-            (mActivityListener as MaintActivityImp).replaceFragment(SearchQueryFragment())
+            ActivityUtils.launchFragment(requireContext(), SearchQueryFragment::class.java.name)
         }
     }
 

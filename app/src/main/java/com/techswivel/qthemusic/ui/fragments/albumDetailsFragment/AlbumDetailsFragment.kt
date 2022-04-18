@@ -6,20 +6,20 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.customData.adapter.RecyclerViewAdapter
-import com.techswivel.qthemusic.customData.enums.AdapterType
-import com.techswivel.qthemusic.customData.enums.AlbumStatus
-import com.techswivel.qthemusic.customData.enums.SongStatus
+import com.techswivel.qthemusic.customData.enums.*
 import com.techswivel.qthemusic.databinding.FragmentAlbumDetailsBinding
-import com.techswivel.qthemusic.models.Album
-import com.techswivel.qthemusic.models.Song
+import com.techswivel.qthemusic.models.*
+import com.techswivel.qthemusic.source.remote.networkViewModel.SongAndArtistsViewModel
 import com.techswivel.qthemusic.ui.activities.mainActivity.MaintActivityImp
 import com.techswivel.qthemusic.ui.base.RecyclerViewBaseFragment
 import com.techswivel.qthemusic.utils.CommonKeys
+import com.techswivel.qthemusic.utils.DialogUtils
 import com.techswivel.qthemusic.utils.Log
 
 
@@ -27,6 +27,7 @@ class AlbumDetailsFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.Cal
     private lateinit var mBinding: FragmentAlbumDetailsBinding
     private lateinit var mViewModel: AlbumDetailsViewModel
     private lateinit var mSongsAdapter: RecyclerViewAdapter
+    private lateinit var mSongsAndArtistsViewModel: SongAndArtistsViewModel
 
     companion object {
         private val TAG = "AlbumDetailsFragment"
@@ -49,8 +50,6 @@ class AlbumDetailsFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.Cal
         // Inflate the layout for this fragment
         mBinding = FragmentAlbumDetailsBinding.inflate(layoutInflater, container, false)
 
-
-
         return mBinding.root
     }
 
@@ -58,15 +57,9 @@ class AlbumDetailsFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.Cal
         super.onViewCreated(view, savedInstanceState)
         initialization()
         getDataFromBundle()
-        getSongs()
         setDataInViews()
-
-    }
-
-
-    override fun onDestroy() {
-        super.onDestroy()
-        (mActivityListener as MaintActivityImp).showBottomNavigation()
+        observerSongsData()
+        clickListeners()
     }
 
     override fun inflateLayoutFromId(position: Int, data: Any?): Int {
@@ -79,16 +72,32 @@ class AlbumDetailsFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.Cal
 
     private fun initViewModel() {
         mViewModel = ViewModelProvider(this).get(AlbumDetailsViewModel::class.java)
+        mSongsAndArtistsViewModel = ViewModelProvider(this).get(SongAndArtistsViewModel::class.java)
     }
 
     @SuppressLint("NotifyDataSetChanged")
     private fun initialization() {
 
-        (mActivityListener as MaintActivityImp).hideBottomNavigation()
         mSongsAdapter = RecyclerViewAdapter(this, mViewModel.albumSongsList)
         setUpRecyclerView(mBinding.recViewAlbumSongs, AdapterType.ALBUM_SONGS)
         mSongsAdapter.notifyDataSetChanged()
 
+    }
+
+    private fun clickListeners() {
+        mBinding.backBtnAlbum.setOnClickListener {
+            requireActivity().onBackPressed()
+        }
+    }
+
+    private fun createRequestAndCallApi() {
+        val songsBuilder = SongsBodyBuilder()
+        songsBuilder.type = SongType.ALBUM
+        songsBuilder.albumId = mViewModel.albumId
+        val songsBodyModel = SongsBodyBuilder.build(songsBuilder)
+        mSongsAndArtistsViewModel.getSongsDataFromServer(
+            songsBodyModel
+        )
     }
 
     private fun getDataFromBundle() {
@@ -99,7 +108,9 @@ class AlbumDetailsFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.Cal
         mViewModel.albumTitle = mViewModel.albumData[0].albumTitle.toString()
         mViewModel.numberOfSongs = mViewModel.albumData[0].numberOfSongs
         mViewModel.albumStatus = mViewModel.albumStatus
+        mViewModel.albumId = mViewModel.albumData[0].albumId
         Log.d(TAG, "data is ${mViewModel.albumStatus} ${mViewModel.albumCoverImageUrl}")
+        createRequestAndCallApi()
     }
 
     @SuppressLint("SetTextI18n")
@@ -107,6 +118,11 @@ class AlbumDetailsFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.Cal
         if (mViewModel.albumStatus == AlbumStatus.PREMIUM.name) {
             mBinding.tvPlayAllSongs.visibility = View.INVISIBLE
             mBinding.premiumLayoutMain.visibility = View.VISIBLE
+        }
+        if (mViewModel.albumStatus==AlbumStatus.PREMIUM.name){
+            mBinding.ivCron.visibility=View.VISIBLE
+        }else{
+            mBinding.ivCron.visibility=View.INVISIBLE
         }
         Glide.with(requireActivity()).load(mViewModel.albumCoverImageUrl)
             .override(25, 25)
@@ -118,70 +134,61 @@ class AlbumDetailsFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.Cal
             mViewModel.numberOfSongs.toString() + getString(R.string._songs)
         mBinding.tvTotalSongsTag.text =
             mViewModel.numberOfSongs.toString() + getString(R.string._songs)
-
     }
 
-    fun getSongs() {
-        val list = ArrayList<Song>()
-        val song1 = Song(
-            12,
-            "The Weeknd",
-            "Star Boy",
-            31,
-            3,
-            "https://i.ytimg.com/vi/XXYlFuWEuKI/maxresdefault.jpg",
-            true,
-            false,
-            "No Lyrics Available",
-            24,
-            "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3",
-            3213,
-            2,
-            SongStatus.PREMIUM,
-            "Save Your Tears",
-            null
-        )
-        val song2 = Song(
-            33,
-            "RCA Records",
-            "Sabrina and Farruko",
-            5,
-            10,
-            "https://cdn.smehost.net/rcarecordscom-usrcaprod/wp-content/uploads/2019/04/alanwalkeromwvic.jpg",
-            true,
-            false,
-            "No Lyrics Available",
-            19,
-            "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
-            4533,
-            3,
-            SongStatus.FREE,
-            "On My Way",
-            null
-        )
-        val song3 = Song(
-            1,
-            "Risk It All",
-            "Eminem",
-            3,
-            1,
-            "https://upload.wikimedia.org/wikipedia/commons/0/06/Eminem_performing_on_April_2013_%28cropped%29.jpg",
-            true,
-            false,
-            "No Lyrics Available",
-            4,
-            "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
-            3233,
-            1,
-            SongStatus.FREE,
-            "Lose Yourself",
-            "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
-        )
-        list.add(song1)
-        list.add(song2)
-        list.add(song3)
-        mViewModel.albumSongsList.clear()
-        mViewModel.albumSongsList.addAll(list)
+    @SuppressLint("NotifyDataSetChanged")
+    private fun observerSongsData() {
+        mSongsAndArtistsViewModel.songsResponse.observe(
+            viewLifecycleOwner,
+            Observer { songsDataResponse ->
+                when (songsDataResponse.status) {
+                    NetworkStatus.LOADING -> {
+                        startSongsDataShimmer()
+                    }
+                    NetworkStatus.SUCCESS -> {
+                        stopSongsDataShimmer()
+                        mViewModel.albumSongsList.clear()
+                        val response = songsDataResponse.t as ResponseModel
+                        val songsList = response.data.songsResponse?.songs
+
+                        if (!songsList.isNullOrEmpty()) {
+                            mViewModel.albumSongsList.addAll(songsList)
+                        }
+                        if (::mSongsAdapter.isInitialized)
+                            mSongsAdapter.notifyDataSetChanged()
+                    }
+                    NetworkStatus.ERROR -> {
+                        stopSongsDataShimmer()
+                        val error = songsDataResponse.error as ErrorResponse
+                        DialogUtils.errorAlert(
+                            requireContext(),
+                            getString(R.string.error_occurred),
+                            error.message
+                        )
+                    }
+                    NetworkStatus.EXPIRE -> {
+                        stopSongsDataShimmer()
+                        val error = songsDataResponse.error as ErrorResponse
+                        DialogUtils.errorAlert(
+                            requireContext(),
+                            getString(R.string.error_occurred),
+                            error.message
+                        )
+                    }
+                    NetworkStatus.COMPLETED -> {
+
+                    }
+                }
+            })
     }
 
+    private fun startSongsDataShimmer() {
+        mBinding.slTrendingSongs.visibility = View.VISIBLE
+        mBinding.slTrendingSongs.startShimmer()
+    }
+
+    private fun stopSongsDataShimmer() {
+        mBinding.slTrendingSongs.visibility = View.GONE
+        mBinding.slTrendingSongs.stopShimmer()
+    }
 }

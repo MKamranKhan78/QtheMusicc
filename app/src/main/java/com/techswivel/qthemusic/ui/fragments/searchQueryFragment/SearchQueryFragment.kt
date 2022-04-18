@@ -20,7 +20,6 @@ import com.techswivel.qthemusic.customData.enums.AdapterType
 import com.techswivel.qthemusic.databinding.FragmentSearchQueryBinding
 import com.techswivel.qthemusic.models.*
 import com.techswivel.qthemusic.source.remote.networkViewModel.SongAndArtistsViewModel
-import com.techswivel.qthemusic.ui.activities.mainActivity.MaintActivityImp
 import com.techswivel.qthemusic.ui.base.RecyclerViewBaseFragment
 import com.techswivel.qthemusic.utils.*
 
@@ -35,7 +34,7 @@ class SearchQueryFragment : RecyclerViewBaseFragment() {
     private lateinit var mViewModel: SearchQueryViewModel
     private lateinit var mSearchAdapter: RecyclerViewAdapter
     private lateinit var mLanguagesAdapter: RecyclerViewAdapter
-    private var lastView: View? = null
+    private var lastSelectedView: View? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,12 +58,10 @@ class SearchQueryFragment : RecyclerViewBaseFragment() {
         mBinding.btnAllSongs.setBackgroundResource(R.drawable.shape_bg_your_interest_selected)
         setListeners()
         setObserverForViewModel()
-        (mActivityListener as MaintActivityImp).hideBottomNavigation()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        (mActivityListener as MaintActivityImp).showBottomNavigation()
         Utilities.hideSoftKeyBoard(requireContext(), mBinding.etSearchBox)
     }
 
@@ -101,8 +98,8 @@ class SearchQueryFragment : RecyclerViewBaseFragment() {
 
                         override fun onViewClicked(view: View, data: Any?) {
                             val mLanguages = data as Language
-                            lastView?.setBackgroundResource(R.drawable.shape_bg_your_interest_recview)
-                            lastView = view
+                            lastSelectedView?.setBackgroundResource(R.drawable.shape_bg_your_interest_recview)
+                            lastSelectedView = view
                             view.setBackgroundResource(R.drawable.shape_bg_your_interest_selected)
                             mBinding.btnAllSongs.setBackgroundResource(R.drawable.shape_bg_your_interest_recview)
                             mViewModel.languageTittle = mLanguages.languageTitle
@@ -152,7 +149,6 @@ class SearchQueryFragment : RecyclerViewBaseFragment() {
 
             override fun afterTextChanged(s: Editable) {
                 if (s.toString().isEmpty()) {
-                    Log.d(TAG, "EditText Is Empty")
                     mBinding.recyclerLanguages.visibility = View.INVISIBLE
                     mBinding.recyclerViewSearch.visibility = View.INVISIBLE
                     mBinding.btnAllSongs.visibility = View.INVISIBLE
@@ -175,7 +171,7 @@ class SearchQueryFragment : RecyclerViewBaseFragment() {
 
 
         mBinding.btnAllSongs.setOnClickListener {
-            lastView?.let { mLastView ->
+            lastSelectedView?.let { mLastView ->
                 updateSelectedTabBackground(
                     mBinding.btnAllSongs,
                     mLastView
@@ -183,7 +179,6 @@ class SearchQueryFragment : RecyclerViewBaseFragment() {
                 if (mViewModel.queryToSearch.isNotEmpty()) {
                     createRequestOrCallApi(mViewModel.queryToSearch, null)
                 }
-
             }
         }
     }
@@ -205,10 +200,10 @@ class SearchQueryFragment : RecyclerViewBaseFragment() {
             when (it.status) {
                 NetworkStatus.LOADING -> {
                     Log.d(TAG, "LOADING Called")
-                    showProgress()
+                    startSearchedDataShimmer()
                 }
                 NetworkStatus.SUCCESS -> {
-                    hideProgress()
+                    stopSearchedDataShimmer()
                     mViewModel.searchedSongsDataList.clear()
                     mViewModel.searchedLanguagesDataList.clear()
                     mBinding.recyclerLanguages.visibility = View.VISIBLE
@@ -216,7 +211,6 @@ class SearchQueryFragment : RecyclerViewBaseFragment() {
                     val data = it.t as ResponseModel
                     val mySongs = data.data.songs
                     val myLanguages = data.data.Languages
-                    Log.d(TAG, "Success Called $myLanguages")
                     if (myLanguages != null) {
                         mBinding.btnAllSongs.visibility = View.VISIBLE
                         mViewModel.searchedLanguagesDataList.addAll(myLanguages)
@@ -228,7 +222,7 @@ class SearchQueryFragment : RecyclerViewBaseFragment() {
                     }
                 }
                 NetworkStatus.EXPIRE -> {
-                    hideProgress()
+                    stopSearchedDataShimmer()
                     val error = it.error as ErrorResponse
                     DialogUtils.errorAlert(
                         requireContext(),
@@ -237,7 +231,7 @@ class SearchQueryFragment : RecyclerViewBaseFragment() {
                     )
                 }
                 NetworkStatus.ERROR -> {
-                    hideProgress()
+                    stopSearchedDataShimmer()
                     val error = it.error as ErrorResponse
                     DialogUtils.errorAlert(
                         requireContext(),
@@ -249,11 +243,13 @@ class SearchQueryFragment : RecyclerViewBaseFragment() {
         })
     }
 
-    private fun showProgress() {
-        mBinding.progressId.visibility = View.VISIBLE
+    private fun startSearchedDataShimmer() {
+        mBinding.slSearchedSongs.visibility = View.VISIBLE
+        mBinding.slSearchedSongs.startShimmer()
     }
 
-    private fun hideProgress() {
-        mBinding.progressId.visibility = View.INVISIBLE
+    private fun stopSearchedDataShimmer() {
+        mBinding.slSearchedSongs.visibility = View.GONE
+        mBinding.slSearchedSongs.stopShimmer()
     }
 }

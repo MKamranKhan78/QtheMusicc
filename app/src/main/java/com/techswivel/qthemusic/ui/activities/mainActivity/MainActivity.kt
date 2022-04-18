@@ -17,7 +17,7 @@ import com.techswivel.qthemusic.ui.fragments.searchScreen.SearchScreenFragment
 import com.techswivel.qthemusic.utils.ActivityUtils
 import com.techswivel.qthemusic.ui.fragments.underDevelopmentMessageFragment.profile_landing_screen.ProfileLandingFragment
 
-class MainActivity : BaseActivity(), MaintActivityImp {
+class MainActivity : BaseActivity() {
 
     private lateinit var mBinding: ActivityMainBinding
     private lateinit var viewModel: MainActivityViewModel
@@ -111,17 +111,5 @@ class MainActivity : BaseActivity(), MaintActivityImp {
                 replaceFragment(mBinding.mainContainer.id, fragmentToBeReplaced)
             }
         }
-    }
-
-    override fun replaceFragment(fragment: Fragment) {
-        openFragment(fragment)
-    }
-
-    override fun showBottomNavigation() {
-        mBinding.bottomNavigation.visibility = View.VISIBLE
-    }
-
-    override fun hideBottomNavigation() {
-        mBinding.bottomNavigation.visibility = View.GONE
     }
 }

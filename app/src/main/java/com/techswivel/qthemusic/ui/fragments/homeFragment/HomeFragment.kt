@@ -136,25 +136,14 @@ class HomeFragment : RecyclerViewBaseFragment() {
                                 }
                                 R.id.cv_main_image -> {
                                     val mAlbum = data as Album
-                                    Log.d(TAG, "cv_main_image called")
                                     val bundle = Bundle()
                                     bundle.putSerializable(CommonKeys.KEY_ALBUM_DETAILS, mAlbum)
-                                    val albumDetailsFragment = AlbumDetailsFragment()
-                                    albumDetailsFragment.arguments = bundle
-                                    (mActivityListener as MaintActivityImp).replaceFragment(
-                                        albumDetailsFragment
+                                    Log.d(TAG, "cv_main_image called")
+                                    ActivityUtils.launchFragment(
+                                        requireContext(),
+                                        AlbumDetailsFragment::class.java.name,
+                                        bundle
                                     )
-
-//                                    for (i in  viewModel.songsList.indices){
-//                                        if (viewModel.songsList[i].albumId==mAlbum.albumId){
-//                                            Log.d(TAG,"i is $i")
-//                                            Log.d(TAG,"album Id is ${mAlbum.albumId} songAlbumId is ${viewModel.songsList[i].albumId} ")
-//                                            Log.d(TAG,"dat is here ${viewModel.songsListToSend}")
-//                                        }else{
-//                                            Log.d(TAG,"no data found")
-//                                        }
-//                                    }
-
                                 }
                             }
                         }
