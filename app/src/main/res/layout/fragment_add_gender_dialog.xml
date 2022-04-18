@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/_5dp"
+    android:background="@color/color_white"
+    app:cardCornerRadius="@dimen/_10dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/color_black"
+        android:padding="@dimen/_15dp">
+
+        <ImageView
+            android:id="@+id/imageviewCancelDialog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_clear_24"
+            android:textColor="@color/color_black"
+            android:layout_alignParentEnd="true" />
+
+        <TextView
+            android:id="@+id/textMainTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/imageviewCancelDialog"
+            android:fontFamily="@font/manrope_bold"
+            android:text="@string/change_gender"
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/_18sp" />
+
+        <LinearLayout
+            android:id="@+id/firstLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textMainTitle"
+            android:layout_marginTop="@dimen/_30dp"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <RadioButton
+                android:id="@+id/maleRB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/_5dp"
+                android:layout_weight="1"
+                android:background="@drawable/border_white"
+                android:buttonTint="@color/radio_button_color"
+                android:checked="true"
+                android:text="@string/male"
+                android:textColor="@color/color_white" />
+
+
+            <RadioButton
+                android:id="@+id/femaleRB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_5dp"
+                android:layout_weight="1"
+                android:background="@drawable/border_white"
+                android:buttonTint="@color/radio_button_color"
+                android:checked="false"
+                android:text="@string/female"
+                android:textColor="@color/color_white" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/secondLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/firstLayout"
+            android:layout_marginTop="@dimen/_10dp"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <RadioButton
+                android:id="@+id/nonBinaryRB"
+                android:layout_width="85dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/_5dp"
+                android:layout_weight="1"
+                android:background="@drawable/border_white"
+                android:buttonTint="@color/radio_button_color"
+                android:checked="false"
+                android:text="@string/non_binary"
+                android:textColor="@color/color_white" />
+
+            <RadioButton
+                android:id="@+id/noAnswerRB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_5dp"
+                android:layout_weight="1"
+                android:background="@drawable/border_white"
+                android:buttonTint="@color/radio_button_color"
+                android:checked="false"
+                android:text="@string/no_answer"
+                android:textColor="@color/color_white" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/updateButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/secondLayout"
+            android:layout_marginTop="@dimen/_30dp"
+            android:layout_marginBottom="@dimen/_15dp"
+            android:background="@drawable/logout_button_drawable">
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="@dimen/_10dp"
+                android:text="@string/update"
+                android:textColor="@color/color_white" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:indeterminate="true"
+        android:indeterminateTint="@color/logout_button_color"
+        android:progressTint="@color/logout_button_color"
+        android:visibility="gone" />
+
+</androidx.cardview.widget.CardView>

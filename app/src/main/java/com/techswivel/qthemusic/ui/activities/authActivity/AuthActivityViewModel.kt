@@ -4,5 +4,7 @@ import com.techswivel.qthemusic.ui.base.BaseViewModel
 
 class AuthActivityViewModel : BaseViewModel() {
 
+    var phoneNumber: String? = null
+    var fragmentFlow: String? = ""
 
 }

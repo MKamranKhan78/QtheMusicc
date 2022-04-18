@@ -2,8 +2,8 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimary">@color/color_white</item>
+        <item name="colorPrimaryDark">@color/color_black</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
         <item name="android:statusBarColor" tools:ignore="NewApi">@color/app_bar_clr
@@ -20,10 +20,6 @@
     </style>
 
 
-    <style name="ThemeOverlay.AppTheme.TextInputEditText.Outlined" parent="">
-        <item name="colorControlActivated">@color/sign_up_btn</item>
-    </style>
-
     <style name="InputEditTextHindAppearance" parent="TextAppearance.Design.Hint">
         <item name="android:textSize">12sp</item>
         <item name="fontFamily">@font/manrope_regular</item>
@@ -37,5 +33,74 @@
         <item name="android:textColor">@color/color_white</item>
         <item name="textAllCaps">false</item>
     </style>
+
+    <style name="Widget.AppTheme.TextInputLayoutList" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="hintTextAppearance">@style/TextAppearance.AppTheme.TextInputLayout.HintTextAlt
+        </item>
+        <item name="boxStrokeColor">@color/color_white</item>
+        <item name="boxCornerRadiusBottomEnd">5dp</item>
+        <item name="boxCornerRadiusBottomStart">5dp</item>
+        <item name="boxCornerRadiusTopEnd">5dp</item>
+        <item name="boxCornerRadiusTopStart">5dp</item>
+        <item name="android:layout_margin">5dp</item>
+    </style>
+
+    <style name="TextAppearance.AppTheme.TextInputLayout.HintTextAlt" parent="TextAppearance.MaterialComponents.Subtitle2">
+        <item name="android:textColor">@color/color_white</item>
+    </style>
+
+    <style name="ThemeOverlay.AppTheme.TextInputEditText.Outlined" parent="">
+        <item name="colorControlActivated">@color/logout_button_color</item>
+    </style>
+
+    <style name="LoginTextInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+        <item name="boxStrokeColor">@color/text_input_box_stroke</item>
+    </style>
+
+    <style name="radionbutton" parent="Base.Widget.AppCompat.CompoundButton.RadioButton">
+        <item name="android:button">@drawable/radiobutton_drawable</item>
+    </style>
+
+    <style name="MyDatePickerStyle" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">@color/color_black_landing_background</item>
+        <!--selected Item color-->
+        <item name="colorControlActivated">@color/logout_button_color</item>
+        <!-- Highlight item color-->
+        <item name="colorControlHighlight">#d50000</item>
+        <!-- Ok Cancel Color-->
+        <item name="android:textColor">#000901</item>
+        <!-- Week TextColor-->
+        <item name="android:textColorSecondary">@color/color_black_landing_background</item>
+        <!-- Calender Number color arrow color (< >) -->
+        <item name="android:textColorPrimary">@color/color_black_landing_background</item>
+        <!--day , month-->
+        <item name="android:textColorPrimaryInverse">@color/color_white</item>
+        <!-- year-->
+        <item name="android:textColorSecondaryInverse">@color/color_white</item>
+
+    </style>
+
+    <style name="MyDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:background">@color/color_black</item>
+    </style>
+
+    <style name="FullScreenDialogStyle" parent="Theme.AppCompat.Dialog">
+        <item name="android:windowNoTitle">true</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+
+        <!--        &lt;!&ndash; Set this to true if you want Full Screen without status bar &ndash;&gt;-->
+        <item name="android:windowFullscreen">false</item>
+
+        <item name="android:windowIsFloating">false</item>
+
+        <!--        &lt;!&ndash; This is important! Don't forget to set window background &ndash;&gt;-->
+        <item name="android:windowBackground">@color/backgroundPrimary</item>
+
+        <!--        &lt;!&ndash; Additionally if you want animations when dialog opening &ndash;&gt;-->
+        <!--        &lt;!&ndash;<item name="android:windowEnterAnimation">@anim/slide_up</item>&ndash;&gt;-->
+        <!--        &lt;!&ndash;<item name="android:windowExitAnimation">@anim/slide_down</item>&ndash;&gt;-->
+    </style>
+
 
 </resources>

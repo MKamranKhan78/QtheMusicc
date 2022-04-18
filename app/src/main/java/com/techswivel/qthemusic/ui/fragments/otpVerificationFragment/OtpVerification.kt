@@ -13,17 +13,25 @@ import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.constant.Constants
 import com.techswivel.qthemusic.customData.enums.OtpType
 import com.techswivel.qthemusic.databinding.FragmentOtpVerificationBinding
-
 import com.techswivel.qthemusic.models.AuthRequestBuilder
 import com.techswivel.qthemusic.ui.activities.authActivity.AuthActivityImp
+import com.techswivel.qthemusic.ui.activities.profileSettingScreen.ProfileSettingActivityImpl
 import com.techswivel.qthemusic.ui.base.BaseFragment
 import com.techswivel.qthemusic.utils.CommonKeys
 import com.techswivel.qthemusic.utils.Utilities
-import java.io.Serializable
+
 class OtpVerification : BaseFragment() {
+
+    companion object {
+        fun newInstance() = OtpVerification()
+        fun newInstance(mBundle: Bundle?) = OtpVerification().apply {
+            arguments = mBundle
+        }
+    }
+
+
     private lateinit var viewBinding: FragmentOtpVerificationBinding
     private lateinit var verifyOtpViewModel: OtpVerificationViewModel
-    var fragmentFlow: Serializable? = ""
     private lateinit var countDownTimer: CountDownTimer
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,24 +63,38 @@ class OtpVerification : BaseFragment() {
     }
 
     private fun initialization() {
-        fragmentFlow = arguments?.getSerializable(CommonKeys.APP_FLOW)
+        verifyOtpViewModel.phoneNumber = arguments?.getString(CommonKeys.KEY_PHONE_NUMBER)
+        verifyOtpViewModel.fragmentFlow = arguments?.getSerializable(CommonKeys.OTP_TYPE)
         verifyOtpViewModel.email = arguments?.getString(CommonKeys.USER_EMAIL).toString()
-        viewBinding.tvEmailWhereSndOtp.text = verifyOtpViewModel.email
+
+        if (verifyOtpViewModel.phoneNumber != null) {
+            viewBinding.tvEmailWhereSndOtp.text = verifyOtpViewModel.phoneNumber
+            viewBinding.ivBackBtnOtpId.visibility = View.INVISIBLE
+        } else {
+            viewBinding.tvEmailWhereSndOtp.text = verifyOtpViewModel.email
+        }
     }
 
     private fun clickListeners() {
         viewBinding.btnConfirmCode.setOnClickListener {
 
-            verifyOtpViewModel.otpCode =
-                verifyOtpViewModel.etOtpOne + verifyOtpViewModel.etOtpTwo + verifyOtpViewModel.etOtpThree + verifyOtpViewModel.etOtpFour + verifyOtpViewModel.etOtpFive
-            if (verifyOtpViewModel.otpCode.length < 5 || verifyOtpViewModel.otpCode != "11111") {
-                Utilities.showToast(requireContext(), getString(R.string.enter_valid_otp))
+            if (verifyOtpViewModel.fragmentFlow == OtpType.PHONE_NUMBER) {
+                val authModelBilder = AuthRequestBuilder()
+                authModelBilder.phoneNumber = verifyOtpViewModel.phoneNumber
+                val otpModel = AuthRequestBuilder.builder(authModelBilder)
+                (mActivityListener as ProfileSettingActivityImpl).verifyOtpRequest(otpModel)
             } else {
-                countDownTimer.cancel()
-                createAndSendVerifyOtpRequest(
-                    verifyOtpViewModel.otpCode.toInt(),
-                    verifyOtpViewModel.email
-                )
+                verifyOtpViewModel.otpCode =
+                    verifyOtpViewModel.etOtpOne + verifyOtpViewModel.etOtpTwo + verifyOtpViewModel.etOtpThree + verifyOtpViewModel.etOtpFour + verifyOtpViewModel.etOtpFive
+                if (verifyOtpViewModel.otpCode.length < 5 || verifyOtpViewModel.otpCode != "11111") {
+                    Utilities.showToast(requireContext(), getString(R.string.enter_valid_otp))
+                } else {
+                    countDownTimer.cancel()
+                    createAndSendVerifyOtpRequest(
+                        verifyOtpViewModel.otpCode.toInt(),
+                        verifyOtpViewModel.email
+                    )
+                }
             }
         }
         viewBinding.tvResendBtn.setOnClickListener {
@@ -80,7 +102,10 @@ class OtpVerification : BaseFragment() {
             authModelBilder.otpType = OtpType.EMAIL.name
             authModelBilder.email = verifyOtpViewModel.email
             val otpModel = AuthRequestBuilder.builder(authModelBilder)
-            (mActivityListener as AuthActivityImp).forgotPasswordRequest(otpModel,fragmentFlow)
+            (mActivityListener as AuthActivityImp).forgotPasswordRequest(
+                otpModel,
+                verifyOtpViewModel.fragmentFlow
+            )
             viewBinding.tvResendBtn.visibility = View.INVISIBLE
             viewBinding.tvOtpResendTimerTag.visibility = View.VISIBLE
             viewBinding.tvOtpResentTimer.visibility = View.VISIBLE

@@ -51,18 +51,27 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
     private lateinit var callbackManager: CallbackManager
     private lateinit var loginManager: LoginManager
     private lateinit var authModelBilder: AuthRequestBuilder
+    private lateinit var mAuthActivityViewModel: AuthActivityViewModel
+
     var fragmentFlow: Serializable? = ""
     var userEmail: String? = ""
     var userOtp: Int? = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         authBinding = ActivityAuthBinding.inflate(layoutInflater)
-        authNetworkViewModel = ViewModelProvider(this).get(AuthNetworkViewModel::class.java)
-        setAutNetworkViewModelObservers()
         authModelBilder = AuthRequestBuilder()
+        initViewModel()
         replaceFragmentWithoutAddingToBackStack(R.id.auth_container, SignInFragment())
+        setAutNetworkViewModelObservers()
         setContentView(authBinding.root)
     }
+
+    private fun initViewModel() {
+        authNetworkViewModel = ViewModelProvider(this).get(AuthNetworkViewModel::class.java)
+        mAuthActivityViewModel = ViewModelProvider(this).get(AuthActivityViewModel::class.java)
+
+    }
+
 
     override fun onCreateView(name: String, context: Context, attrs: AttributeSet): View? {
 
@@ -340,6 +349,7 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
                         bundle.putSerializable(CommonKeys.APP_FLOW, fragmentFlow)
                         bundle.putString(CommonKeys.USER_OTP, userOtp.toString())
                         bundle.putString(CommonKeys.USER_EMAIL, userEmail)
+
                         val setPassword = SetPassword()
                         setPassword.arguments = bundle
                         PrefUtils.setBoolean(this, CommonKeys.START_TIMER, false)
