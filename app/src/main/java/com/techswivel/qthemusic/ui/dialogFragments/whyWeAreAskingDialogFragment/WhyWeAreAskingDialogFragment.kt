@@ -1,12 +1,10 @@
 package com.techswivel.qthemusic.ui.dialogFragments.whyWeAreAskingDialogFragment
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.RequiresApi
 import com.techswivel.qthemusic.databinding.FragmentWhyWeAreAskingDialogBinding
 import com.techswivel.qthemusic.ui.base.BaseDialogFragment
 

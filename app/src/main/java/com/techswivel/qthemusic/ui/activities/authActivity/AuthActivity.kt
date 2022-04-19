@@ -119,7 +119,7 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
         mAuthActivityViewModel.authRequestBilder = authRequestBuilder
         mAuthActivityViewModel.myEmail = authRequestBuilder.email.toString()
         Log.d(TAG, "data is here ${authRequestBuilder.name}")
-        Log.d(TAG, "data is here email ${authRequestBuilder.email}")
+        Log.d(TAG, "forgotPasswordRequest otp ${authRequestBuilder.otpType}")
         mAuthActivityViewModel.otpType = authRequestBuilder.otpType
         val authModel =
             AuthRequestBuilder.builder(mAuthActivityViewModel.authRequestBilder)
@@ -400,7 +400,7 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
                         CommonKeys.AUTH_BUILDER_MODEL,
                         mAuthActivityViewModel.authRequestBilder
                     )
-                    Log.d(TAG,"data in otpObserver email ${mAuthActivityViewModel.authRequestBilder.email} ")
+                    Log.d(TAG,"data in otpObserver email ${mAuthActivityViewModel.authRequestBilder.otpType} ")
                     val otpVerification = OtpVerification()
                     otpVerification.arguments = bundle
                     if (mAuthActivityViewModel.otpType == OtpType.EMAIL.name) {
@@ -456,7 +456,7 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
                             CommonKeys.AUTH_BUILDER_MODEL,
                             mAuthActivityViewModel.authRequestBilder
                         )
-                        Log.d(TAG,"data in otpverification emai ${mAuthActivityViewModel.authRequestBilder.email}")
+                        Log.d(TAG,"data in otpverification emai ${mAuthActivityViewModel.authRequestBilder.otpType}")
                         val setPassword = SetPassword()
                         setPassword.arguments = bundle
                         PrefUtils.setBoolean(this, CommonKeys.START_TIMER, false)
@@ -493,13 +493,16 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
                     hideProgressBar()
                     PrefUtils.removeValue(this, CommonKeys.SIGNIN_BTN_ANIMATION)
                     val data = it.t as ResponseModel
-                    if (mAuthActivityViewModel.authRequestModel.otpType == OtpType.FORGET_PASSWORD.name) {
+                    if (mAuthActivityViewModel.authRequestBilder.otpType == OtpType.FORGET_PASSWORD.name) {
                         replaceCurrentFragment(SignInFragment())
                         popUpAllFragmentIncludeThis(ForgotPassword::class.java.name)
+                        Log.d(TAG,"otp is if ${mAuthActivityViewModel.authRequestModel.otpType}")
 
                     } else {
                         val signUpFragment = SignUpFragment()
                         val bundle = Bundle()
+                        Log.d(TAG,"otp is else ${mAuthActivityViewModel.authRequestModel.otpType}")
+
                         mAuthActivityViewModel.authRequestBilder.profile =
                             mAuthActivityViewModel.userPhotoUrl
                         mAuthActivityViewModel.authRequestBilder.name=mAuthActivityViewModel.userName

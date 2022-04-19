@@ -110,6 +110,7 @@
     <string name="country">Country</string>
     <string name="zip_code">Zipcode</string>
     <string name="male">Male</string>
+    <string name="select_gender">Select Gender</string>
     <string name="female">Female</string>
     <string name="non_binary">Non-binary</string>
     <string name="nonbinary">Non binary</string>
@@ -174,14 +175,7 @@
     <string name="user_coutry">Country</string>
     <string name="user_zip_code">Zipcode</string>
     <string name="lets_go">Let\'s Go</string>
-    <string name="date_of_birth">Date of Birth</string>
     <string name="why_we_asking_msg">We ask for your address to improve your experience within our App and to know where to ship your items purchased within the App. Please read our Terms of Use for more detail.</string>
-    <string name="male">Male</string>
-    <string name="female">Female</string>
-    <string name="non_binary">Non-binary</string>
-    <string name="no_answer">No answer</string>
-    <string name="select_gender">Select Gender</string>
-    <string name="update">Update</string>
     <string name="your_interest_msg">Select 2 to 5 topics according to your interests.</string>
     <string name="email_is_required">Email is  Required</string>
     <string name="password_is_required">Password is  Required</string>

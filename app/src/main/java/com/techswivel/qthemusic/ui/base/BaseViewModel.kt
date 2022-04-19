@@ -74,7 +74,7 @@ abstract class BaseViewModel : ViewModel() {
             authModel?.notification?.isArtistUpdateEnabled ?: true
         )
         PrefUtils.setString(QTheMusicApplication.getContext(), CommonKeys.KEY_USER_PHONE, authModel?.phoneNumber)
-        authModel?.dOB?.let { doB -> PrefUtils.setInt(QTheMusicApplication.getContext(), CommonKeys.KEY_USER_DOB, doB) }
+        authModel?.dOB?.let { doB -> PrefUtils.setLong(QTheMusicApplication.getContext(), CommonKeys.KEY_USER_DOB, doB) }
         PrefUtils.setString(
             QTheMusicApplication.getContext(),
             CommonKeys.KEY_USER_PHONE,

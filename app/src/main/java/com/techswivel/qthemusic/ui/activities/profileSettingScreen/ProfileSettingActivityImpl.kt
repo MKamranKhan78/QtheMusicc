@@ -7,8 +7,6 @@ import com.techswivel.qthemusic.models.AuthModel
 import com.techswivel.qthemusic.models.AuthRequestModel
 
 interface ProfileSettingActivityImpl : BaseInterface {
-
-interface ProfileSettingActivityImpl {
     fun openProfileSettingFragmentWithPnone(phoneNumber: String?)
     fun openProfileSettingFragmentWithName(authModel: AuthModel?)
     fun openProfileSettingFragmentWithAddress(authModel: AuthModel?)
