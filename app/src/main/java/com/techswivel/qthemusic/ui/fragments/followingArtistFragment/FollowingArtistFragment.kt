@@ -48,7 +48,6 @@ class FollowingArtistFragment : RecyclerViewBaseFragment(), BaseInterface,
         setUpAdapter()
         getFavoriteSongsFromServer()
         setObserver()
-
     }
 
     override fun onPrepareAdapter(adapterType: AdapterType?): RecyclerView.Adapter<*> {
