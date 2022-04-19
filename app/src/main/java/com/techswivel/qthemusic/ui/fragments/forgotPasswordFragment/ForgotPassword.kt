@@ -1,10 +1,10 @@
 package com.techswivel.qthemusic.ui.fragments.forgotPasswordFragment
 
 import android.os.Bundle
+import android.transition.TransitionInflater
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
 import androidx.lifecycle.ViewModelProvider
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.customData.enums.OtpType
@@ -12,16 +12,28 @@ import com.techswivel.qthemusic.databinding.FragmentForgotPasswordBinding
 import com.techswivel.qthemusic.models.AuthRequestBuilder
 import com.techswivel.qthemusic.ui.activities.authActivity.AuthActivityImp
 import com.techswivel.qthemusic.ui.base.BaseFragment
+import com.techswivel.qthemusic.ui.fragments.otpVerificationFragment.OtpVerification
 import com.techswivel.qthemusic.utils.CommonKeys
-import java.io.Serializable
+import com.techswivel.qthemusic.utils.Log
 
 
-class ForgotPassword : BaseFragment() {
-    var fragmentFlow: Serializable? = ""
-    private lateinit var forgotViewModel: ForgotPasswordViewModel
-    private lateinit var forgotbingding: FragmentForgotPasswordBinding
+class ForgotPassword : BaseFragment(), ForgotPasswordImp {
+    companion object {
+        private val TAG = "ForgotPassword"
+    }
+
+    private lateinit var mViewModel: ForgotPasswordViewModel
+    private lateinit var mBinding: FragmentForgotPasswordBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        initViewModels()
+        mViewModel.fragmentFlow = arguments?.getSerializable(CommonKeys.OTP_TYPE) as OtpType
+        sharedElementEnterTransition = TransitionInflater.from(requireContext())
+            .inflateTransition(R.transition.animation_sign_in_btn)
+        if (mViewModel.fragmentFlow == OtpType.EMAIL) {
+            sharedElementReturnTransition = TransitionInflater.from(requireContext())
+                .inflateTransition(R.transition.slide_from_left_bottom)
+        }
 
     }
 
@@ -30,65 +42,83 @@ class ForgotPassword : BaseFragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        forgotbingding = FragmentForgotPasswordBinding.inflate(layoutInflater, container, false)
+        mBinding = FragmentForgotPasswordBinding.inflate(layoutInflater, container, false)
 
-        return forgotbingding.root
+        return mBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initViewModels()
+
         initialization()
         onClickListener()
-
-        forgotbingding.myObj = forgotViewModel
+        Log.d(TAG,"ots is ${mViewModel.fragmentFlow.name}")
+        mBinding.myObj = mViewModel
     }
 
     private fun initialization() {
-        fragmentFlow = arguments?.getSerializable(CommonKeys.APP_FLOW)
-        if (fragmentFlow == OtpType.FORGET_PASSWORD) {
-            forgotbingding.tvPolicyTag.visibility = View.INVISIBLE
-            forgotbingding.socialPortion.visibility = View.INVISIBLE
+        if (mViewModel.fragmentFlow == OtpType.FORGET_PASSWORD) {
+            mBinding.tvPolicyTag.visibility = View.INVISIBLE
+            mBinding.socialPortion.visibility = View.INVISIBLE
+        } else {
+            mBinding.tvTagForgotId.text = getString(R.string.sign_up)
+            mBinding.tvForgotMsgId.text = getString(R.string.sigup_mstg)
         }
-        val animationDownToUp =
-            AnimationUtils.loadAnimation(requireContext(), R.anim.bottom_to_top_anim)
-        forgotbingding.btnSendCodeForgot.animation = animationDownToUp
-
-        forgotbingding.ivBackForgotId.setOnClickListener {
-
+        mBinding.ivBackForgotId.setOnClickListener {
             requireActivity().onBackPressed()
+        }
+
+        mBinding.socialIconsPortion.ivGoogleId.setOnClickListener {
+            (mActivityListener as AuthActivityImp).signInWithGoogle()
+        }
+        mBinding.socialIconsPortion.ivFbId.setOnClickListener {
+            (mActivityListener as AuthActivityImp).signInWithFacebook()
         }
     }
 
     private fun onClickListener() {
-        forgotbingding.btnSendCodeForgot.setOnClickListener {
+        mBinding.btnSendCodeForgot.setOnClickListener {
             if (
-                forgotbingding.etForgotEmailId.text.toString().isNullOrEmpty() ||
-                forgotViewModel.isEmailTextValid.get() != true
+                mBinding.etForgotEmailId.text.toString().isNullOrEmpty() ||
+                mViewModel.isEmailTextValid.get() != true
             ) {
-                forgotbingding.etForgotEmailId.error = getString(R.string.this_required)
+                mBinding.etForgotEmailId.error = getString(R.string.email_is_required)
 
-            } else if (forgotViewModel.isEmailTextValid.get() == true) {
+            } else if (mViewModel.isEmailTextValid.get() == true) {
                 createAndSendOtpRequest()
             }
         }
     }
 
     private fun createAndSendOtpRequest() {
-        val authModelBilder = AuthRequestBuilder()
-        authModelBilder.otpType = OtpType.EMAIL.name
-        authModelBilder.email = forgotbingding.etForgotEmailId.text.toString()
-        val otpModel = AuthRequestBuilder.builder(authModelBilder)
-        (mActivityListener as AuthActivityImp).forgotPasswordRequest(otpModel,fragmentFlow)
-        setObserverForViewModels()
-    }
 
-    private fun setObserverForViewModels() {
+        val authModelBilder = AuthRequestBuilder()
+        authModelBilder.otpType = mViewModel.fragmentFlow.name
+        authModelBilder.email = mBinding.etForgotEmailId.text.toString()
+
+        Log.d(TAG, "otpModel ${authModelBilder.otpType} ${authModelBilder.email}")
+        (mActivityListener as AuthActivityImp).forgotPasswordRequest(
+            authModelBilder,
+            mBinding.tvPolicyTag,
+            "my_otp_transection"
+        )
+
     }
 
     private fun initViewModels() {
-        forgotViewModel =
+        mViewModel =
             ViewModelProvider(requireActivity()).get(ForgotPasswordViewModel::class.java)
     }
 
+    override fun accountNotExistsSendOtp(email: String?) {
+        mBinding.etForgotEmailId.setText(email)
+    }
+
+    override fun showProgressBar() {
+
+    }
+
+    override fun hideProgressBar() {
+
+    }
 }

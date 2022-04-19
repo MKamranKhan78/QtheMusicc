@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.os.CountDownTimer
 import android.text.Editable
 import android.text.TextWatcher
+import android.transition.TransitionInflater
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,87 +15,123 @@ import com.techswivel.qthemusic.constant.Constants
 import com.techswivel.qthemusic.customData.enums.OtpType
 import com.techswivel.qthemusic.databinding.FragmentOtpVerificationBinding
 
+
 import com.techswivel.qthemusic.models.AuthRequestBuilder
+import com.techswivel.qthemusic.models.AuthRequestModel
 import com.techswivel.qthemusic.ui.activities.authActivity.AuthActivityImp
+import com.techswivel.qthemusic.ui.activities.profileSettingScreen.ProfileSettingActivityImpl
 import com.techswivel.qthemusic.ui.base.BaseFragment
 import com.techswivel.qthemusic.utils.CommonKeys
+import com.techswivel.qthemusic.utils.Log
 import com.techswivel.qthemusic.utils.Utilities
-import java.io.Serializable
+
 class OtpVerification : BaseFragment() {
-    private lateinit var viewBinding: FragmentOtpVerificationBinding
-    private lateinit var verifyOtpViewModel: OtpVerificationViewModel
-    var fragmentFlow: Serializable? = ""
-    private lateinit var countDownTimer: CountDownTimer
+
+    companion object {
+        private val TAG = "OtpVerification"
+        fun newInstance() = OtpVerification()
+        fun newInstance(mBundle: Bundle?) = OtpVerification().apply {
+            arguments = mBundle
+        }
+    }
+
+    private lateinit var mBinding: FragmentOtpVerificationBinding
+    private lateinit var mViewModel: OtpVerificationViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        initViewModels()
+        mViewModel.mAuthRequestBuilder =
+            arguments?.getSerializable(CommonKeys.AUTH_BUILDER_MODEL) as AuthRequestBuilder
+        mViewModel.email = mViewModel.mAuthRequestBuilder.email.toString()
+        Log.d(TAG, mViewModel.email)
+        mViewModel.fragmentFlow = mViewModel.mAuthRequestBuilder.otpType.toString()
+        if (mViewModel.fragmentFlow == OtpType.EMAIL.name) {
+            sharedElementEnterTransition = TransitionInflater.from(requireContext())
+                .inflateTransition(R.transition.slide_from_left_bottom)
+        }
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        viewBinding = FragmentOtpVerificationBinding.inflate(layoutInflater, container, false)
-        return viewBinding.root
+    ): View {
+        mBinding = FragmentOtpVerificationBinding.inflate(layoutInflater, container, false)
+        return mBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initViewModels()
+
         initialization()
         clickListeners()
         getUserOtp()
         resendOtpTimer()
-        countDownTimer.start()
+        Log.d(TAG, "ots is ${mViewModel.mAuthRequestBuilder.otpType}")
+        mViewModel.countDownTimer.start()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        countDownTimer.cancel()
+        mViewModel.countDownTimer.cancel()
     }
 
     private fun initialization() {
-        fragmentFlow = arguments?.getSerializable(CommonKeys.APP_FLOW)
-        verifyOtpViewModel.email = arguments?.getString(CommonKeys.USER_EMAIL).toString()
-        viewBinding.tvEmailWhereSndOtp.text = verifyOtpViewModel.email
+        mViewModel.phoneNumber = arguments?.getString(CommonKeys.KEY_PHONE_NUMBER)
+        mViewModel.fragmentFlow = arguments?.getSerializable(CommonKeys.OTP_TYPE)
+        mViewModel.email = arguments?.getString(CommonKeys.USER_EMAIL).toString()
+
+        if (!mViewModel.phoneNumber.isNullOrEmpty()) {
+            mBinding.tvEmailWhereSndOtp.text = mViewModel.phoneNumber
+            mBinding.ivBackBtnOtpId.visibility = View.INVISIBLE
+        } else {
+            mBinding.tvEmailWhereSndOtp.text = mViewModel.mAuthRequestBuilder.email
+        }
     }
 
     private fun clickListeners() {
-        viewBinding.btnConfirmCode.setOnClickListener {
+        mBinding.btnConfirmCode.setOnClickListener {
 
-            verifyOtpViewModel.otpCode =
-                verifyOtpViewModel.etOtpOne + verifyOtpViewModel.etOtpTwo + verifyOtpViewModel.etOtpThree + verifyOtpViewModel.etOtpFour + verifyOtpViewModel.etOtpFive
-            if (verifyOtpViewModel.otpCode.length < 5 || verifyOtpViewModel.otpCode != "11111") {
-                Utilities.showToast(requireContext(), getString(R.string.enter_valid_otp))
+            if (mViewModel.fragmentFlow == OtpType.PHONE_NUMBER) {
+                val authModelBilder = AuthRequestBuilder()
+                authModelBilder.phoneNumber = mViewModel.phoneNumber
+                val otpModel = AuthRequestBuilder.builder(authModelBilder)
+                (mActivityListener as ProfileSettingActivityImpl).verifyOtpRequest(otpModel)
             } else {
-                countDownTimer.cancel()
-                createAndSendVerifyOtpRequest(
-                    verifyOtpViewModel.otpCode.toInt(),
-                    verifyOtpViewModel.email
-                )
+                mViewModel.otpCode =
+                    mViewModel.etOtpOne + mViewModel.etOtpTwo + mViewModel.etOtpThree + mViewModel.etOtpFour + mViewModel.etOtpFive
+                if (mViewModel.otpCode.length < 5) {
+                    Utilities.showToast(requireContext(), getString(R.string.enter_valid_otp))
+                } else {
+                    createAndSendVerifyOtpRequest(
+                        mViewModel.otpCode.toInt(),
+                        mViewModel.email
+                    )
+                }
             }
         }
-        viewBinding.tvResendBtn.setOnClickListener {
+        mBinding.tvResendBtn.setOnClickListener {
             val authModelBilder = AuthRequestBuilder()
-            authModelBilder.otpType = OtpType.EMAIL.name
-            authModelBilder.email = verifyOtpViewModel.email
-            val otpModel = AuthRequestBuilder.builder(authModelBilder)
-            (mActivityListener as AuthActivityImp).forgotPasswordRequest(otpModel,fragmentFlow)
-            viewBinding.tvResendBtn.visibility = View.INVISIBLE
-            viewBinding.tvOtpResendTimerTag.visibility = View.VISIBLE
-            viewBinding.tvOtpResentTimer.visibility = View.VISIBLE
-            countDownTimer.start()
+            authModelBilder.otpType = mViewModel.fragmentFlow.toString()
+            authModelBilder.email = mViewModel.email
+            (mActivityListener as AuthActivityImp).forgotPasswordRequest(
+                authModelBilder,
+                null,
+                null
+            )
+            mBinding.tvResendBtn.visibility = View.INVISIBLE
+            mBinding.tvOtpResendTimerTag.visibility = View.VISIBLE
+            mBinding.tvOtpResentTimer.visibility = View.VISIBLE
+            mViewModel.countDownTimer.start()
 
         }
-        viewBinding.ivBackBtnOtpId.setOnClickListener {
+        mBinding.ivBackBtnOtpId.setOnClickListener {
             requireActivity().onBackPressed()
         }
     }
 
     private fun createAndSendVerifyOtpRequest(otp: Int?, email: String) {
         val authModelBilder = AuthRequestBuilder()
-        authModelBilder.otpType = OtpType.EMAIL.name
+        authModelBilder.otpType = OtpType.FORGET_PASSWORD.name
         authModelBilder.email = email
         authModelBilder.otp = otp
         val otpVerifyModel = AuthRequestBuilder.builder(authModelBilder)
@@ -106,7 +143,7 @@ class OtpVerification : BaseFragment() {
     private fun getUserOtp() {
         val sb = StringBuilder()
         val number = ""
-        viewBinding.otp1Id.addTextChangedListener(object : TextWatcher {
+        mBinding.otp1Id.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 if (sb.length == 1) {
                     sb.deleteCharAt(0)
@@ -114,24 +151,24 @@ class OtpVerification : BaseFragment() {
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                if (sb.length == 0 && viewBinding.otp1Id.text.length == 1) {
+                if (sb.length == 0 && mBinding.otp1Id.text.length == 1) {
                     sb.append(p0)
-                    verifyOtpViewModel.etOtpOne = p0.toString()
-                    viewBinding.otp1Id.clearFocus()
-                    viewBinding.otp2Id.requestFocus()
-                    viewBinding.otp2Id.setCursorVisible(true)
+                    mViewModel.etOtpOne = p0.toString()
+                    mBinding.otp1Id.clearFocus()
+                    mBinding.otp2Id.requestFocus()
+                    mBinding.otp2Id.setCursorVisible(true)
                 }
             }
 
             override fun afterTextChanged(p0: Editable?) {
                 if (sb.length == 0) {
-                    viewBinding.otp1Id.requestFocus()
+                    mBinding.otp1Id.requestFocus()
                 }
             }
 
         })
 
-        viewBinding.otp2Id.addTextChangedListener(object : TextWatcher {
+        mBinding.otp2Id.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 if (sb.length == 1) {
                     sb.deleteCharAt(0)
@@ -139,27 +176,27 @@ class OtpVerification : BaseFragment() {
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                if (sb.length == 0 && viewBinding.otp2Id.text.length == 1) {
-                    verifyOtpViewModel.etOtpTwo = p0.toString()
+                if (sb.length == 0 && mBinding.otp2Id.text.length == 1) {
+                    mViewModel.etOtpTwo = p0.toString()
                     sb.append(p0)
                     number + p0
-                    viewBinding.otp2Id.clearFocus()
-                    viewBinding.otp3Id.requestFocus()
-                    viewBinding.otp3Id.setCursorVisible(true)
+                    mBinding.otp2Id.clearFocus()
+                    mBinding.otp3Id.requestFocus()
+                    mBinding.otp3Id.setCursorVisible(true)
                 }
             }
 
             override fun afterTextChanged(p0: Editable?) {
-                if (viewBinding.otp2Id.text.length == 0) {
-                    viewBinding.otp2Id.clearFocus()
-                    viewBinding.otp1Id.requestFocus()
-                    viewBinding.otp1Id.setCursorVisible(true)
+                if (mBinding.otp2Id.text.length == 0) {
+                    mBinding.otp2Id.clearFocus()
+                    mBinding.otp1Id.requestFocus()
+                    mBinding.otp1Id.setCursorVisible(true)
 
                 }
             }
         })
 
-        viewBinding.otp3Id.addTextChangedListener(object : TextWatcher {
+        mBinding.otp3Id.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 if (sb.length == 1) {
                     sb.deleteCharAt(0);
@@ -167,26 +204,26 @@ class OtpVerification : BaseFragment() {
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                if (sb.length == 0 && viewBinding.otp3Id.text.length == 1) {
-                    verifyOtpViewModel.etOtpThree = p0.toString()
-                    viewBinding.otp3Id.clearFocus()
-                    viewBinding.otp4Id.requestFocus()
-                    viewBinding.otp4Id.setCursorVisible(true)
+                if (sb.length == 0 && mBinding.otp3Id.text.length == 1) {
+                    mViewModel.etOtpThree = p0.toString()
+                    mBinding.otp3Id.clearFocus()
+                    mBinding.otp4Id.requestFocus()
+                    mBinding.otp4Id.setCursorVisible(true)
 
                     sb.append(p0)
                 }
             }
 
             override fun afterTextChanged(p0: Editable?) {
-                if (viewBinding.otp3Id.text.length == 0) {
-                    viewBinding.otp3Id.clearFocus()
-                    viewBinding.otp2Id.requestFocus()
-                    viewBinding.otp2Id.setCursorVisible(true)
+                if (mBinding.otp3Id.text.length == 0) {
+                    mBinding.otp3Id.clearFocus()
+                    mBinding.otp2Id.requestFocus()
+                    mBinding.otp2Id.setCursorVisible(true)
 
                 }
             }
         })
-        viewBinding.otp4Id.addTextChangedListener(object : TextWatcher {
+        mBinding.otp4Id.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 if (sb.length == 1) {
                     sb.deleteCharAt(0);
@@ -194,24 +231,24 @@ class OtpVerification : BaseFragment() {
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                if (sb.length == 0 && viewBinding.otp4Id.text.length == 1) {
-                    verifyOtpViewModel.etOtpFour = p0.toString()
-                    viewBinding.otp4Id.clearFocus()
-                    viewBinding.otp5Id.requestFocus()
-                    viewBinding.otp5Id.setCursorVisible(true)
+                if (sb.length == 0 && mBinding.otp4Id.text.length == 1) {
+                    mViewModel.etOtpFour = p0.toString()
+                    mBinding.otp4Id.clearFocus()
+                    mBinding.otp5Id.requestFocus()
+                    mBinding.otp5Id.setCursorVisible(true)
                 }
             }
 
             override fun afterTextChanged(p0: Editable?) {
-                if (viewBinding.otp4Id.text.length == 0) {
-                    viewBinding.otp4Id.clearFocus()
-                    viewBinding.otp3Id.requestFocus()
-                    viewBinding.otp3Id.setCursorVisible(true)
+                if (mBinding.otp4Id.text.length == 0) {
+                    mBinding.otp4Id.clearFocus()
+                    mBinding.otp3Id.requestFocus()
+                    mBinding.otp3Id.setCursorVisible(true)
                 }
             }
         })
 
-        viewBinding.otp5Id.addTextChangedListener(object : TextWatcher {
+        mBinding.otp5Id.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 if (sb.length == 1) {
                     sb.deleteCharAt(0);
@@ -219,38 +256,42 @@ class OtpVerification : BaseFragment() {
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                if (sb.length == 0 && viewBinding.otp4Id.text.length == 1) {
-                    verifyOtpViewModel.etOtpFive = p0.toString()
+                if (sb.length == 0 && mBinding.otp4Id.text.length == 1) {
+                    mViewModel.etOtpFive = p0.toString()
 
                 }
             }
 
             override fun afterTextChanged(p0: Editable?) {
-                if (viewBinding.otp5Id.text.length == 0) {
-                    viewBinding.otp5Id.clearFocus()
-                    viewBinding.otp4Id.requestFocus()
-                    viewBinding.otp4Id.setCursorVisible(true)
+                if (mBinding.otp5Id.text.length == 0) {
+                    mBinding.otp5Id.clearFocus()
+                    mBinding.otp4Id.requestFocus()
+                    mBinding.otp4Id.setCursorVisible(true)
                 }
             }
         })
     }
 
     private fun resendOtpTimer() {
-        countDownTimer = object : CountDownTimer(Constants.OTP_RESEND_TIME_IN_MILLI_SECONDS, Constants.OTP_COUNT_DOWN_INTERVAL_IN_MILLI_SECONDS) {
+        mViewModel.countDownTimer = object : CountDownTimer(
+            Constants.OTP_RESEND_TIME_IN_MILLI_SECONDS,
+            Constants.OTP_COUNT_DOWN_INTERVAL_IN_MILLI_SECONDS
+        ) {
             @SuppressLint("SetTextI18n")
             override fun onTick(millisUntilFinished: Long) {
-                viewBinding.tvOtpResentTimer.setText(getString(R.string.resend_time) + millisUntilFinished / 1000)
+                mBinding.tvOtpResentTimer.setText(getString(R.string.resend_time) + millisUntilFinished / 1000)
             }
 
             override fun onFinish() {
-                viewBinding.tvOtpResendTimerTag.visibility = View.INVISIBLE
-                viewBinding.tvOtpResentTimer.visibility = View.INVISIBLE
-                viewBinding.tvResendBtn.visibility = View.VISIBLE
+                mBinding.tvOtpResendTimerTag.visibility = View.INVISIBLE
+                mBinding.tvOtpResentTimer.visibility = View.INVISIBLE
+                mBinding.tvResendBtn.visibility = View.VISIBLE
             }
         }
     }
 
     private fun initViewModels() {
-        verifyOtpViewModel = ViewModelProvider(this).get(OtpVerificationViewModel::class.java)
+        mViewModel = ViewModelProvider(this).get(OtpVerificationViewModel::class.java)
+
     }
 }

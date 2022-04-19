@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type="android.view.View" />
+        <variable
+            name="obj"
+            type="com.techswivel.qthemusic.models.Category" />
+
+        <variable
+            name="click"
+            type="com.techswivel.qthemusic.customData.interfaces.AdapterOnClick" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_main_rec_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_4dp"
+       >
+
+        <TextView
+            android:onClick="@{(view)-> click.onViewClick(view,obj)}"
+            android:id="@+id/tv_category_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/manrope_regular"
+            android:gravity="center_horizontal"
+            android:paddingStart="@dimen/_12dp"
+            android:paddingTop="@dimen/_8dp"
+            android:paddingEnd="@dimen/_12dp"
+            android:background="@drawable/shape_bg_your_interest_recview"
+            android:paddingBottom="@dimen/_8dp"
+            android:text="@{obj.categoryTitle}"
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/_14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -1,7 +1,9 @@
 package com.techswivel.qthemusic.ui.activities.mainActivity
 
-import androidx.fragment.app.Fragment
+import com.techswivel.qthemusic.customData.interfaces.BaseInterface
+import com.techswivel.qthemusic.models.Category
 
-interface MaintActivityImp {
+interface MaintActivityImp:BaseInterface {
+
 
 }

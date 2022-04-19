@@ -12,7 +12,7 @@ class DummyDataManager {
             return Response.success(
                 ResponseMain(
                     ResponseModel(
-                        true,
+                        false,
                         "",
                         getDataList(),
                         null
@@ -33,7 +33,7 @@ class DummyDataManager {
                 121212,
                 "03218061143",
                 "Male",
-                false,
+                true,
                 address,
                 subscription,
                 notification
@@ -591,13 +591,64 @@ class DummyDataManager {
                 Category(
                     2,
                     "https://cdn.lifehack.org/wp-content/uploads/2015/09/rock-music-wallpapers.jpg",
-                    "ROCK"
+                    "Punjabi"
                 ),
                 Category(
-                    1,
+                    3,
                     "https://cdn5.vectorstock.com/i/1000x1000/77/09/colorful-detailed-pop-music-can-vector-19847709.jpg",
-                    "POP"
+                    "Classical"
                 ),
+                Category(
+                    4,
+                    "https://images.pexels.com/photos/811838/pexels-photo-811838.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+                    "Rock"
+                ),
+                Category(
+                    5,
+                    "https://images.pexels.com/photos/461755/pexels-photo-461755.jpeg?cs=srgb&dl=pexels-pixabay-461755.jpg&fm=jpg&w=640&h=426",
+                    "Country"
+                ),
+                Category(
+                    6,
+                    "https://images.pexels.com/photos/1381938/pexels-photo-1381938.jpeg?cs=srgb&dl=pexels-shockphoto-by-szoka-sebastian-1381938.jpg&fm=jpg&w=640&h=426",
+                    "Metal"
+                ),
+                Category(
+                    7,
+                    "https://images.pexels.com/photos/1708528/pexels-photo-1708528.jpeg?cs=srgb&dl=pexels-luis-quintero-1708528.jpg&fm=jpg&w=640&h=960",
+                    "Latin"
+                ),
+                Category(
+                    8,
+                    "https://images.pexels.com/photos/359995/pexels-photo-359995.jpeg?cs=srgb&dl=pexels-chevanon-photography-359995.jpg&fm=jpg&w=640&h=407",
+                    "JAZZ"
+                ),
+                Category(
+                    9,
+                    "https://images.pexels.com/photos/5872477/pexels-photo-5872477.jpeg?cs=srgb&dl=pexels-mehmet-turgut-kirkgoz-5872477.jpg&fm=jpg&w=640&h=480",
+                    "Folk music"
+                ),
+                Category(
+                    10,
+                    "https://images.pexels.com/photos/761963/pexels-photo-761963.jpeg?cs=srgb&dl=pexels-andrea-piacquadio-761963.jpg&fm=jpg&w=640&h=427",
+                    "Electronic"
+                ),
+                Category(
+                    11,
+                    "https://images.pexels.com/photos/4031039/pexels-photo-4031039.jpeg?cs=srgb&dl=pexels-brett-sayles-4031039.jpg&fm=jpg&w=640&h=426",
+                    "Reggae"
+                ),
+                Category(
+                    12,
+                    "https://images.pexels.com/photos/4904563/pexels-photo-4904563.jpeg?cs=srgb&dl=pexels-cottonbro-4904563.jpg&fm=jpg&w=640&h=427",
+                    "Alternative"
+                ),
+                Category(
+                    13,
+                    "https://images.pexels.com/photos/777001/pexels-photo-777001.jpeg?cs=srgb&dl=pexels-xxss-is-back-777001.jpg&fm=jpg&w=640&h=427",
+                    "Electronica"
+                )
+
             )
         }
 
@@ -614,25 +665,27 @@ class DummyDataManager {
                 true
             )
 
-            val subscription = Subscription(
-                1,
-                "Standard Plan",
-                10.56f,
-                "Month"
-            )
-            val authModel = AuthModel(
-                "Usman Khan",
-                "kamran@gmail.com",
-                "https://ca.slack-edge.com/TH6CHMP7Z-U01RL9JUJG1-0a9af450bd4f-512",
-                "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9",
-                76475859,
-                "03034949594",
-                "MALE",
-                false,
-                address,
-                subscription,
-                notification
-            )
+             val subscription = Subscription(
+                 1,
+                 "Standard Plan",
+                 10.00f,
+                 "Month"
+             )
+             val authModel = AuthModel(
+                 "Kamran Khan",
+                 "kamran@gmail.com",
+                 "https://ca.slack-edge.com/TH6CHMP7Z-U01RL9JUJG1-0a9af450bd4f-512",
+                 "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9",
+                 347387499859//0
+                 ,
+                 null//"03034949594"
+                 ,
+                 "Female",
+                 false,
+                 address,
+                 subscription,
+                 notification
+             )
             return authModel
         }
 
