@@ -27,6 +27,7 @@ import com.techswivel.qthemusic.ui.dialogFragments.deletionViewBottomSheetDialog
 import com.techswivel.qthemusic.ui.fragments.playlist_fragment.PlaylistFragmentImpl
 import com.techswivel.qthemusic.utils.CommonKeys
 import com.techswivel.qthemusic.utils.DialogUtils
+import java.util.*
 
 
 class SongsFragment : RecyclerViewBaseFragment(), BaseInterface,
@@ -125,6 +126,18 @@ class SongsFragment : RecyclerViewBaseFragment(), BaseInterface,
         mSongListAdapter.notifyItemRemoved(index)
     }
 
+    override fun getPlaylist(playlist: List<PlaylistModel>?) {
+
+    }
+
+    override fun getPlaylistAfterDeletingItem(mPlaylist: ArrayList<Any>) {
+
+    }
+
+    override fun getPlaylistAfterAddingItem(mPlaylist: ArrayList<Any>) {
+
+    }
+
 
     @SuppressLint("NotifyDataSetChanged")
     private fun setObserver() {
@@ -205,7 +218,8 @@ class SongsFragment : RecyclerViewBaseFragment(), BaseInterface,
     }
 
     private fun getBundleData() {
-        viewModel.playlistModel = arguments?.getSerializable(CommonKeys.KEY_DATA) as PlaylistModel
+        viewModel.playlistModel =
+            arguments?.getParcelable<PlaylistModel>(CommonKeys.KEY_DATA) as PlaylistModel
     }
 
     private fun openBottomSheetDialog(bundle: Bundle) {

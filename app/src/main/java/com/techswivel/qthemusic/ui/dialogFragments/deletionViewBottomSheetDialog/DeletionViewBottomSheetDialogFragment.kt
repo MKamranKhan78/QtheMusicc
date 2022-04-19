@@ -171,7 +171,8 @@ class DeletionViewBottomSheetDialogFragment : BottomSheetDialogFragment(), BaseI
             viewModel.deletingViewType =
                 arguments?.getSerializable(CommonKeys.KEY_DELETE_VIEW_TYPE) as DeleteViewType
             if (viewModel.deletingViewType == DeleteViewType.PLAY_LIST) {
-                viewModel.playlistModel = arguments?.getSerializable(KEY_DATA) as PlaylistModel
+                viewModel.playlistModel =
+                    arguments?.getParcelable<PlaylistModel>(KEY_DATA) as PlaylistModel
                 viewModel.playlistId = viewModel.playlistModel?.playListId
                 mBinding.deletePlaylistTextview.text = getString(R.string.delete_playlist)
             } else {

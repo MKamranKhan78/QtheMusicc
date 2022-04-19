@@ -15,6 +15,7 @@ import com.techswivel.qthemusic.ui.fragments.playlist_fragment.PlaylistFragment
 import com.techswivel.qthemusic.ui.fragments.playlist_fragment.PlaylistFragmentImpl
 import com.techswivel.qthemusic.ui.fragments.songsFragment.SongsFragment
 import com.techswivel.qthemusic.utils.CommonKeys
+import java.util.*
 
 class PlaylistActivity : BaseActivity(), PlaylistActivityImpl, PlaylistFragmentImpl {
 
@@ -59,7 +60,8 @@ class PlaylistActivity : BaseActivity(), PlaylistActivityImpl, PlaylistFragmentI
     }
 
     override fun openSongsFragment(bundle: Bundle) {
-        val playlistModel = bundle.getSerializable(CommonKeys.KEY_DATA) as PlaylistModel
+        val playlistModel =
+            bundle.getParcelable<PlaylistModel>(CommonKeys.KEY_DATA) as PlaylistModel
         mBinding.activityToolbar.toolbarTitle.text = playlistModel.playListTitle
         mBinding.activityToolbar.addPlaylistId.visibility = View.GONE
         popUpAllFragmentIncludeThis(SongsFragment::class.java.name)
@@ -82,6 +84,18 @@ class PlaylistActivity : BaseActivity(), PlaylistActivityImpl, PlaylistFragmentI
 
     }
 
+    override fun getPlaylist(playlist: List<PlaylistModel>?) {
+        viewModel.playlist = playlist
+    }
+
+    override fun getPlaylistAfterDeletingItem(mPlaylist: ArrayList<Any>) {
+        viewModel.playlist = mPlaylist as List<PlaylistModel>?
+    }
+
+    override fun getPlaylistAfterAddingItem(mPlaylist: ArrayList<Any>) {
+        viewModel.playlist = mPlaylist as List<PlaylistModel>?
+    }
+
 
     private fun initViewModel() {
         viewModel = ViewModelProvider(this).get(PlaylistActivityViewModel::class.java)
@@ -96,9 +110,16 @@ class PlaylistActivity : BaseActivity(), PlaylistActivityImpl, PlaylistFragmentI
 
     private fun clickListener() {
         mBinding.activityToolbar.addPlaylistId.setOnClickListener {
+            val bundle = Bundle().apply {
+                putParcelableArrayList(
+                    CommonKeys.KEY_PLAY_LIST,
+                    viewModel.playlist as ArrayList<out PlaylistModel>
+                )
+            }
+
             val fragmentTransaction =
                 this.supportFragmentManager.beginTransaction()
-            val dialogFragment = CreatePlaylistDialogFragment.newInstance(this)
+            val dialogFragment = CreatePlaylistDialogFragment.newInstance(this, bundle)
             dialogFragment.show(fragmentTransaction, BaseFragment.TAG)
         }
     }

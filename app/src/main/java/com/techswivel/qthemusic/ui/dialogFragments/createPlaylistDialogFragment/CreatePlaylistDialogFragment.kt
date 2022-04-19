@@ -12,20 +12,23 @@ import com.techswivel.qthemusic.application.QTheMusicApplication
 import com.techswivel.qthemusic.customData.enums.NetworkStatus
 import com.techswivel.qthemusic.customData.interfaces.BaseInterface
 import com.techswivel.qthemusic.databinding.FragmentCreatePlaylistDialogBinding
+import com.techswivel.qthemusic.models.PlaylistModel
 import com.techswivel.qthemusic.models.PlaylistModelBuilder
 import com.techswivel.qthemusic.models.ResponseModel
 import com.techswivel.qthemusic.source.remote.networkViewModel.ProfileNetworkViewModel
 import com.techswivel.qthemusic.ui.base.BaseDialogFragment
 import com.techswivel.qthemusic.ui.fragments.playlist_fragment.PlaylistFragmentImpl
+import com.techswivel.qthemusic.utils.CommonKeys
 import com.techswivel.qthemusic.utils.DialogUtils
 
 
 class CreatePlaylistDialogFragment : BaseDialogFragment(), BaseInterface {
 
     companion object {
-        fun newInstance(playlistFragmentImpl: PlaylistFragmentImpl) =
+        fun newInstance(playlistFragmentImpl: PlaylistFragmentImpl, bundle: Bundle) =
             CreatePlaylistDialogFragment().apply {
                 setCallBack(playlistFragmentImpl)
+                arguments = bundle
             }
     }
 
@@ -53,8 +56,14 @@ class CreatePlaylistDialogFragment : BaseDialogFragment(), BaseInterface {
         super.onViewCreated(view, savedInstanceState)
         initViewModel()
         clickListeners()
+        getBundleData()
         setObserver()
 
+    }
+
+    private fun getBundleData() {
+        viewModel.playList =
+            arguments?.getParcelableArrayList<PlaylistModel>(CommonKeys.KEY_PLAY_LIST) as MutableList<PlaylistModel>
     }
 
 
@@ -131,9 +140,12 @@ class CreatePlaylistDialogFragment : BaseDialogFragment(), BaseInterface {
                 playlistModelBuilder.playListTitle = viewModel.playlistName
                 val playListModel = PlaylistModelBuilder.build(playlistModelBuilder)
                 profileNetworViewModel.savePlaylist(playListModel)
+
+
             }
         }
     }
+
 
     private fun initViewModel() {
         viewModel =

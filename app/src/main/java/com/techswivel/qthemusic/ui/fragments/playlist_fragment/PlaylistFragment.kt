@@ -5,11 +5,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.techswivel.qthemusic.R
-import com.techswivel.qthemusic.application.QTheMusicApplication
 import com.techswivel.qthemusic.customData.adapter.RecyclerViewAdapter
 import com.techswivel.qthemusic.customData.enums.AdapterType
 import com.techswivel.qthemusic.customData.enums.DeleteViewType
@@ -25,7 +23,7 @@ import com.techswivel.qthemusic.ui.base.RecyclerViewBaseFragment
 import com.techswivel.qthemusic.ui.dialogFragments.deletionViewBottomSheetDialog.DeletionViewBottomSheetDialogFragment
 import com.techswivel.qthemusic.utils.CommonKeys
 import com.techswivel.qthemusic.utils.DialogUtils
-import com.techswivel.qthemusic.utils.Log
+import java.util.*
 
 
 class PlaylistFragment : RecyclerViewBaseFragment(), BaseInterface,
@@ -87,7 +85,7 @@ class PlaylistFragment : RecyclerViewBaseFragment(), BaseInterface,
         val playlistModel = data as PlaylistModel
         val bundle = Bundle()
         playlistModel.let { playListModel ->
-            bundle.putSerializable(CommonKeys.KEY_DATA, playListModel)
+            bundle.putParcelable(CommonKeys.KEY_DATA, playListModel)
         }
         (mActivityListener as PlaylistActivityImpl).openSongsFragment(bundle)
     }
@@ -99,54 +97,25 @@ class PlaylistFragment : RecyclerViewBaseFragment(), BaseInterface,
 
         bundle.putString(CommonKeys.KEY_DATA, DeleteViewType.PLAY_LIST.toString())
         playlistModel.let { playListModel ->
-            bundle.putSerializable(CommonKeys.KEY_DATA, playListModel)
+            bundle.putParcelable(CommonKeys.KEY_DATA, playListModel)
         }
         bundle.putSerializable(CommonKeys.KEY_DELETE_VIEW_TYPE, DeleteViewType.PLAY_LIST)
         openBottomSheetDialog(bundle)
     }
 
-    // here we will be add change.
-/*
     @SuppressLint("NotifyDataSetChanged")
     override fun openPlayListFragment(playlistModel: PlaylistModel) {
         mBinding.tvNoDataFound.visibility = View.GONE
         viewModel.mPlaylist.add(playlistModel)
+        (mActivityListener as PlaylistFragmentImpl).getPlaylistAfterAddingItem(viewModel.mPlaylist)
         mPlaylistAdapter.notifyItemInserted(viewModel.mPlaylist.size)
     }
-*/
-    @SuppressLint("NotifyDataSetChanged")
-    override fun openPlayListFragment(playlistModel: PlaylistModel) {
-        for (i in 0 until viewModel.mPlaylist.size) {
-            Log.v("djfhdjhfdhjfhd", viewModel.mPlaylist.get(i).toString())
-        }
 
-        val isExist = isExist(playlistModel)
-        if (isExist == true) {
-            Toast.makeText(
-                QTheMusicApplication.getContext(),
-                "Playlist already exist",
-                Toast.LENGTH_SHORT
-            ).show()
-        } else {
-            mBinding.tvNoDataFound.visibility = View.GONE
-            viewModel.mPlaylist.add(playlistModel)
-            mPlaylistAdapter.notifyItemInserted(viewModel.mPlaylist.size)
-        }
-    }
-
-
-    fun isExist(playlistModel: PlaylistModel): Boolean {
-        for (i in 0 until viewModel.mPlaylist.size) {
-            if (viewModel.mPlaylist.get(i).equals(playlistModel)) {
-                return true
-            }
-        }
-        return false
-    }
 
     override fun openPlayListFragmentWithPlaylistModel(playlistModel: PlaylistModel?) {
         val index = viewModel.mPlaylist.indexOf(playlistModel as PlaylistModel)
         viewModel.mPlaylist.remove(playlistModel)
+        (mActivityListener as PlaylistFragmentImpl).getPlaylistAfterDeletingItem(viewModel.mPlaylist)
         if (viewModel.mPlaylist.size == 0) {
             mBinding.tvNoDataFound.visibility = View.VISIBLE
         } else {
@@ -156,6 +125,18 @@ class PlaylistFragment : RecyclerViewBaseFragment(), BaseInterface,
     }
 
     override fun openSongFragmentWithSongModel(song: Song?) {
+
+    }
+
+    override fun getPlaylist(playlist: List<PlaylistModel>?) {
+
+    }
+
+    override fun getPlaylistAfterDeletingItem(mPlaylist: ArrayList<Any>) {
+
+    }
+
+    override fun getPlaylistAfterAddingItem(mPlaylist: ArrayList<Any>) {
 
     }
 
@@ -171,6 +152,7 @@ class PlaylistFragment : RecyclerViewBaseFragment(), BaseInterface,
                     viewModel.mPlaylist.clear()
                     val response = playlistDataResponse.t as ResponseModel
                     val playlist = response.data.playlistModel
+                    (mActivityListener as PlaylistFragmentImpl).getPlaylist(playlist)
 
                     if (!playlist.isNullOrEmpty()) {
                         viewModel.mPlaylist.addAll(playlist)

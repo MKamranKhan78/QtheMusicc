@@ -22,6 +22,7 @@ class CommonKeys {
         const val KEY_DATA_MODEL = "_key_data_model_"
         const val KEY_SONG_TYPE = "_key_song_type_"
         const val KEY_SONGS_LIST = "_key_songs_list_"
+        const val KEY_PLAY_LIST = "_key_play_list_"
         const val KEY_USER_NAME = "_key_user_name"
         const val KEY_USER_EMAIL = "_key_user_email"
         const val KEY_USER_AVATAR = "_key_user_avatar"

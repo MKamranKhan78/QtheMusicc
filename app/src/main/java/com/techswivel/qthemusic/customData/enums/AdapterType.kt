@@ -6,5 +6,6 @@ enum class AdapterType {
     TRENDING_SONGS,
     PLAYLIST,
     SONGS,
-    FOLLOWING_ARTIST
+    FOLLOWING_ARTIST,
+    ALBUM
 }
