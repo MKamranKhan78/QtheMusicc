@@ -91,17 +91,30 @@ class YourInterestFragment : RecyclerViewBaseFragment(),
     override fun onViewClicked(view: View, data: Any?) {
         super.onViewClicked(view, data)
         val mCategory = data as Category
-        if (checkForCategoryIfAlreadyExistes(mCategory.categoryTitle)) {
-            mViewModel.selectedCategoryList.remove(mCategory.categoryTitle)
-            view.setBackgroundResource(R.drawable.shape_bg_your_interest_recview)
-            getSelectedCategories(mViewModel.selectedCategoryList)
+        if (mViewModel.categoriesListForApiRequest.size < 5) {
+            if (checkForCategoryIfAlreadyExistes(mCategory.categoryTitle)) {
+                mViewModel.selectedCategoryList.remove(mCategory.categoryTitle)
+                view.setBackgroundResource(R.drawable.shape_bg_your_interest_recview)
+                getSelectedCategories(mViewModel.selectedCategoryList)
 
+            } else {
+                mViewModel.selectedCategoryList.add(mCategory.categoryTitle)
+                view.setBackgroundResource(R.drawable.shape_bg_your_interest_selected)
+
+                getSelectedCategories(mViewModel.selectedCategoryList)
+            }
         } else {
-            mViewModel.selectedCategoryList.add(mCategory.categoryTitle)
-            view.setBackgroundResource(R.drawable.shape_bg_your_interest_selected)
 
-            getSelectedCategories(mViewModel.selectedCategoryList)
+            if (checkForCategoryIfAlreadyExistes(mCategory.categoryTitle)) {
+                mViewModel.selectedCategoryList.remove(mCategory.categoryTitle)
+                view.setBackgroundResource(R.drawable.shape_bg_your_interest_recview)
+                getSelectedCategories(mViewModel.selectedCategoryList)
+
+            } else {
+                Utilities.showToast(requireContext(), "no valid attemp")
+            }
         }
+
 
     }
 
@@ -112,7 +125,7 @@ class YourInterestFragment : RecyclerViewBaseFragment(),
             } else if (mViewModel.categoriesListForApiRequest.size > 5) {
                 Utilities.showToast(requireContext(), getString(R.string.maximum_alert))
             } else {
-                        (mActivityListener as AuthActivityImp).saveInterests(mViewModel.categoriesListForApiRequest)
+                (mActivityListener as AuthActivityImp).saveInterests(mViewModel.categoriesListForApiRequest)
             }
 
         }

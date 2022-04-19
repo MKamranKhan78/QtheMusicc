@@ -12,7 +12,6 @@ import com.techswivel.qthemusic.databinding.FragmentForgotPasswordBinding
 import com.techswivel.qthemusic.models.AuthRequestBuilder
 import com.techswivel.qthemusic.ui.activities.authActivity.AuthActivityImp
 import com.techswivel.qthemusic.ui.base.BaseFragment
-import com.techswivel.qthemusic.ui.fragments.otpVerificationFragment.OtpVerification
 import com.techswivel.qthemusic.utils.CommonKeys
 import com.techswivel.qthemusic.utils.Log
 
@@ -100,7 +99,8 @@ class ForgotPassword : BaseFragment(), ForgotPasswordImp {
         (mActivityListener as AuthActivityImp).forgotPasswordRequest(
             authModelBilder,
             mBinding.tvPolicyTag,
-            "my_otp_transection"
+            "my_otp_transection",
+            false
         )
 
     }

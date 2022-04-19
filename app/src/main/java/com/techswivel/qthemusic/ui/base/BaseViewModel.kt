@@ -47,8 +47,6 @@ abstract class BaseViewModel : ViewModel() {
 
         PrefUtils.setString(QTheMusicApplication.getContext(), CommonKeys.KEY_USER_NAME, authModel?.name)
         PrefUtils.setString(QTheMusicApplication.getContext(), CommonKeys.KEY_USER_EMAIL, authModel?.email)
-        PrefUtils.setBoolean(QTheMusicApplication.getContext(),CommonKeys.KEY_IS_INTEREST_SET,false)
-        PrefUtils.setBoolean(QTheMusicApplication.getContext(),CommonKeys.KEY_IS_LOGGED_IN,true)
         PrefUtils.setString(
             QTheMusicApplication.getContext(),
             CommonKeys.KEY_USER_NAME,

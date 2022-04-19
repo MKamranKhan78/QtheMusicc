@@ -9,6 +9,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.techswivel.dfaktfahrerapp.ui.fragments.underDevelopmentMessageFragment.UnderDevelopmentMessageFragment
 import com.techswivel.qthemusic.R
+import com.techswivel.qthemusic.application.QTheMusicApplication
 import com.techswivel.qthemusic.customData.enums.NetworkStatus
 import com.techswivel.qthemusic.databinding.ActivityMainBinding
 import com.techswivel.qthemusic.models.Category
@@ -25,7 +26,7 @@ import com.techswivel.qthemusic.ui.fragments.yourInterestFragment.YourInterestFr
 import com.techswivel.qthemusic.utils.*
 
 class MainActivity : BaseActivity() {
-
+    val TAG = "MainActivity"
     private lateinit var mBinding: ActivityMainBinding
     private lateinit var viewModel: MainActivityViewModel
     private var mFragment: Fragment? = null
@@ -40,12 +41,15 @@ class MainActivity : BaseActivity() {
         openHomeFragment()
         setBottomNavigationSelector()
         getDummyDataAndSaveInPrefrences()
-
+        val datad = PrefUtils.getBoolean(
+            QTheMusicApplication.getContext(),
+            CommonKeys.KEY_IS_INTEREST_SET
+        )
+        Log.d(TAG, "is Intersete set ${datad}")
     }
 
     private fun getDummyDataAndSaveInPrefrences() {
         val auth = viewModel.getDummyData()
-        PrefUtils.clearAllPrefData(this)
         viewModel.setDataInSharedPrefrence(auth)
     }
 

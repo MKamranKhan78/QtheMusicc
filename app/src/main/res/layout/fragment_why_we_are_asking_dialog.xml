@@ -19,13 +19,13 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <ImageView
+                android:id="@+id/btn_close_"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:src="@drawable/ic_close"
-                android:layout_marginTop="@dimen/_16dp"
-                android:layout_marginEnd="@dimen/_16dp"
-                />
+                android:layout_marginTop="@dimen/_20dp"
+                android:layout_marginEnd="@dimen/_20dp" />
 
             <TextView
                 android:id="@+id/textView3"
@@ -44,9 +44,9 @@
                 android:id="@+id/btn_next_license_dialog"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_16dp"
+                android:layout_marginStart="@dimen/_30dp"
                 android:layout_marginTop="@dimen/_12dp"
-                android:layout_marginEnd="@dimen/_16dp"
+                android:layout_marginEnd="@dimen/_30dp"
                 android:layout_marginBottom="@dimen/_16dp"
                 android:fontFamily="@font/manrope_regular"
                 android:gravity="center"

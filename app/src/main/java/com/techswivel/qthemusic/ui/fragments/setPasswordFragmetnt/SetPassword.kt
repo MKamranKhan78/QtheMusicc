@@ -59,31 +59,32 @@ class SetPassword : BaseFragment() {
 
     private fun onClickListener() {
         mBinding.btnDone.setOnClickListener {
-            if (
-                mBinding.etSetPasswordId.text.isNullOrEmpty() ||
-                mViewModel.isPasswordTextValid.get() != true
-            ) {
-                mBinding.etSetPasswordId.error = getString(R.string.password_is_required)
-            } else if (
-                mBinding.etSetPasswordConfirmId.text.isNullOrEmpty() ||
-                mViewModel.isRepeatPasswordTextValid.get() != true
-            ) {
-                mBinding.etSetPasswordConfirmId.error =
-                    getString(R.string.password_is_required)
-            } else {
-
-                if (mBinding.etSetPasswordId.text.toString() !=
-                    mBinding.etSetPasswordConfirmId.text.toString()
-                ) {
-                    mBinding.etSetPasswordConfirmId.error =
-                        getString(R.string.password_never_match_error)
-                    mBinding.etSetPasswordId.error =
-                        getString(R.string.password_never_match_error)
-                } else {
-                    createAndSendSetPasswordRequest()
-                }
-
-            }
+            createAndSendSetPasswordRequest()
+//            if (
+//                mBinding.etSetPasswordId.text.isNullOrEmpty() ||
+//                mViewModel.isPasswordTextValid.get() != true
+//            ) {
+//                mBinding.etSetPasswordId.error = getString(R.string.password_is_required)
+//            } else if (
+//                mBinding.etSetPasswordConfirmId.text.isNullOrEmpty() ||
+//                mViewModel.isRepeatPasswordTextValid.get() != true
+//            ) {
+//                mBinding.etSetPasswordConfirmId.error =
+//                    getString(R.string.password_is_required)
+//            } else {
+//
+//                if (mBinding.etSetPasswordId.text.toString() !=
+//                    mBinding.etSetPasswordConfirmId.text.toString()
+//                ) {
+//                    mBinding.etSetPasswordConfirmId.error =
+//                        getString(R.string.password_never_match_error)
+//                    mBinding.etSetPasswordId.error =
+//                        getString(R.string.password_never_match_error)
+//                } else {
+//                    createAndSendSetPasswordRequest()
+//                }
+//
+//            }
         }
 
         mBinding.ivBackBtnSetPasId.setOnClickListener {

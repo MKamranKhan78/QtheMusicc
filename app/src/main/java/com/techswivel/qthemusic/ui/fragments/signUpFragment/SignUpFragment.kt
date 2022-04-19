@@ -15,6 +15,7 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
+import com.google.firebase.messaging.FirebaseMessaging
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.application.QTheMusicApplication
 import com.techswivel.qthemusic.databinding.FragmentSignUpBinding
@@ -24,8 +25,6 @@ import com.techswivel.qthemusic.ui.base.BaseFragment
 import com.techswivel.qthemusic.ui.dialogFragments.chooserDialogFragment.ChooserDialogFragment
 import com.techswivel.qthemusic.ui.dialogFragments.genderDialogFragment.GenderSelectionDialogFragment
 import com.techswivel.qthemusic.ui.dialogFragments.whyWeAreAskingDialogFragment.WhyWeAreAskingDialogFragment
-import com.google.firebase.messaging.FirebaseMessaging
-import com.techswivel.qthemusic.models.AuthRequestModel
 import com.techswivel.qthemusic.utils.*
 import java.io.IOException
 import java.util.*
@@ -89,10 +88,10 @@ class SignUpFragment : BaseFragment(), SignUpFragmentImp {
     private fun initialization() {
         mViewModel.mBuilder =
             arguments?.getSerializable(CommonKeys.AUTH_BUILDER_MODEL) as AuthRequestBuilder
-        mViewModel.name=mViewModel.mBuilder.name.toString()
+        mViewModel.name = mViewModel.mBuilder.name.toString()
         mBinding.etUserName.setText(mViewModel.name)
-        val myPhoto=mViewModel.mBuilder.profile
-        if (myPhoto?.isNotEmpty() == true){
+        val myPhoto = mViewModel.mBuilder.profile
+        if (myPhoto?.isNotEmpty() == true) {
             Glide.with(requireContext()).load(mViewModel.mBuilder.profile)
                 .into(mBinding.ivUserProfilePic)
         }
@@ -132,14 +131,48 @@ class SignUpFragment : BaseFragment(), SignUpFragmentImp {
         (mActivityListener as AuthActivityImp).userSignUp(authModel)
     }
 
+    fun getData(): Boolean {
+        if (mBinding.etUserCity.text.toString().isEmpty()) {
+            return false
+        } else if (mBinding.etUserState.text.toString().isEmpty()) {
+            return false
+        } else if (mBinding.etUserCountry.text.toString().isEmpty()) {
+            return false
+        } else if (mBinding.etZipCode.text.toString().isEmpty()) {
+            return false
+        } else {
+            return true
+        }
+    }
+
+    fun getDataTo(): Boolean {
+        if (mBinding.etUserCity.text.toString().isNotEmpty()) {
+            return true
+        } else if (mBinding.etUserState.text.toString().isNotEmpty()) {
+            return true
+        } else if (mBinding.etUserCountry.text.toString().isNotEmpty()) {
+            return true
+        } else if (mBinding.etZipCode.text.toString().isNotEmpty()) {
+            return true
+        } else {
+            return false
+        }
+    }
+
     @SuppressLint("SetTextI18n")
     private fun clickListeners() {
         mBinding.tvLetGoProfileBtn.setOnClickListener {
 
-            if (mBinding.etUserDob.text.toString().isNotEmpty()) {
-                getFcmToken()
-            } else {
+            if (mBinding.etUserName.text.toString().isEmpty()) {
+                mBinding.etUserName.error = "Name is required"
+            } else if (mBinding.etUserDob.text.toString().isEmpty()) {
                 mBinding.etUserDob.error = getString(R.string.dob_req)
+            } else if (mBinding.etUserAddress.text.toString().isNotEmpty() && !getData()) {
+                mBinding.etUserAddress.error = "fill all filedl"
+            } else if (getDataTo() && mBinding.etUserAddress.text.toString().isEmpty()) {
+                mBinding.etUserAddress.error = "address neeeded"
+            } else {
+                Utilities.showToast(requireContext(), "done")
             }
         }
 
@@ -222,16 +255,16 @@ class SignUpFragment : BaseFragment(), SignUpFragmentImp {
                     mViewModel.uri = mImageUri?.get(0)
                     val contentURI = mViewModel.uri
                     try {
-                        Log.d(TAG,"try caleed")
+                        Log.d(TAG, "try caleed")
                         if (Build.VERSION.SDK_INT < 28) {
-                            Log.d(TAG,"build 28 caldde")
+                            Log.d(TAG, "build 28 caldde")
                             val bitmap = MediaStore.Images.Media.getBitmap(
                                 requireActivity().contentResolver,
                                 contentURI
                             )
                             mBinding.ivUserProfilePic.setImageBitmap(bitmap)
                         } else {
-                            Log.d(TAG,"bulid greater than 28 called")
+                            Log.d(TAG, "bulid greater than 28 called")
                             val source =
                                 contentURI?.let { uri ->
                                     ImageDecoder.createSource(
@@ -240,7 +273,7 @@ class SignUpFragment : BaseFragment(), SignUpFragmentImp {
                                     )
                                 }
                             val bitmap = source?.let { ImageDecoder.decodeBitmap(it) }
-                            Log.d(TAG,"bulid greater than 28 called bitmap is ${bitmap}")
+                            Log.d(TAG, "bulid greater than 28 called bitmap is ${bitmap}")
                             mBinding.ivUserProfilePic.setImageBitmap(bitmap)
                         }
                         mViewModel.uri = contentURI

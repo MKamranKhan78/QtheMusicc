@@ -45,10 +45,6 @@ class OtpVerification : BaseFragment() {
         mViewModel.email = mViewModel.mAuthRequestBuilder.email.toString()
         Log.d(TAG, mViewModel.email)
         mViewModel.fragmentFlow = mViewModel.mAuthRequestBuilder.otpType.toString()
-        if (mViewModel.fragmentFlow == OtpType.EMAIL.name) {
-            sharedElementEnterTransition = TransitionInflater.from(requireContext())
-                .inflateTransition(R.transition.slide_from_left_bottom)
-        }
     }
 
     override fun onCreateView(
@@ -116,7 +112,8 @@ class OtpVerification : BaseFragment() {
             (mActivityListener as AuthActivityImp).forgotPasswordRequest(
                 authModelBilder,
                 null,
-                null
+                null,
+                true
             )
             mBinding.tvResendBtn.visibility = View.INVISIBLE
             mBinding.tvOtpResendTimerTag.visibility = View.VISIBLE
