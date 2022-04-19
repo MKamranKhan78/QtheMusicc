@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/color_black"
+        app:cardCornerRadius="@dimen/_16dp"
+        tools:context=".ui.dialogFragments.genderDialogFragment.GenderSelectionDialogFragment">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/color_black"
+            android:padding="@dimen/_15dp">
+
+            <ImageView
+                android:id="@+id/imageviewCancelDialog"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:src="@drawable/ic_close"
+                android:layout_margin="@dimen/_8dp"
+                android:textColor="@color/color_black" />
+
+            <TextView
+                android:id="@+id/textMainTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/imageviewCancelDialog"
+                android:fontFamily="@font/manrope_bold"
+                android:text="@string/select_gender"
+                android:layout_marginStart="@dimen/_12dp"
+                android:textColor="@color/color_white"
+                android:textSize="@dimen/_18sp" />
+
+            <LinearLayout
+                android:id="@+id/firstLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/textMainTitle"
+                android:layout_marginTop="@dimen/_30dp"
+                android:layout_marginStart="@dimen/_12dp"
+                android:layout_marginEnd="@dimen/_12dp"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+
+                <RadioButton
+                    android:id="@+id/maleRB"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/_5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/border_white"
+                    android:button="@drawable/radio_button_inset"
+                    android:buttonTint="@color/radio_button_color"
+                    android:checked="true"
+                    android:fontFamily="@font/manrope_regular"
+                    android:paddingTop="@dimen/_18dp"
+                    android:paddingBottom="@dimen/_18dp"
+                    android:text="@string/male"
+                    android:textColor="@color/color_white" />
+
+                <RadioButton
+                    android:id="@+id/femaleRB"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/border_white"
+                    android:buttonTint="@color/radio_button_color"
+                    android:checked="false"
+                    android:text="@string/female"
+                    android:fontFamily="@font/manrope_regular"
+                    android:paddingTop="@dimen/_18dp"
+                    android:paddingBottom="@dimen/_18dp"
+                    android:button="@drawable/radio_button_inset"
+                    android:textColor="@color/color_white" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/secondLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/firstLayout"
+                android:layout_marginTop="@dimen/_10dp"
+                android:layout_marginStart="@dimen/_12dp"
+                android:layout_marginEnd="@dimen/_12dp"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <RadioButton
+                    android:id="@+id/nonBinaryRB"
+                    android:layout_width="85dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/_5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/border_white"
+                    android:buttonTint="@color/radio_button_color"
+                    android:checked="false"
+                    android:fontFamily="@font/manrope_regular"
+                    android:text="@string/non_binary"
+                    android:paddingTop="@dimen/_18dp"
+                    android:paddingBottom="@dimen/_18dp"
+                    android:button="@drawable/radio_button_inset"
+                    android:textColor="@color/color_white" />
+
+                <RadioButton
+                    android:id="@+id/noAnswerRB"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/border_white"
+                    android:buttonTint="@color/radio_button_color"
+                    android:checked="false"
+                    android:fontFamily="@font/manrope_regular"
+                    android:text="@string/no_answer"
+                    android:paddingTop="@dimen/_18dp"
+                    android:paddingBottom="@dimen/_18dp"
+                    android:button="@drawable/radio_button_inset"
+                    android:textColor="@color/color_white" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/updateButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/secondLayout"
+                android:layout_marginTop="@dimen/_30dp"
+                android:layout_marginBottom="@dimen/_15dp"
+                android:paddingTop="@dimen/_8dp"
+                android:paddingBottom="@dimen/_8dp"
+                android:layout_marginStart="@dimen/_20dp"
+                android:layout_marginEnd="@dimen/_20dp"
+                android:background="@drawable/logout_button_drawable">
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="@dimen/_10dp"
+                    android:fontFamily="@font/manrope_semibold"
+                    android:textSize="@dimen/_14sp"
+                    android:text="@string/update"
+                    android:textColor="@color/color_white" />
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminate="true"
+            android:indeterminateTint="@color/logout_button_color"
+            android:progressTint="@color/logout_button_color"
+            android:visibility="gone" />
+    </androidx.cardview.widget.CardView>
+</layout>

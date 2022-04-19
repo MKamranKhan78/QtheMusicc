@@ -5,8 +5,28 @@ import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
 class AuthRequestModel(
+    @SerializedName("name")
+    var name: String?,
     @SerializedName("email")
     var email: String?,
+    @SerializedName("dOb")
+    var dob: Int?,
+    @SerializedName("gender")
+    var gender: String?,
+    @SerializedName("completeAddress")
+    var completeAddress: String?,
+    @SerializedName("city")
+    var city: String?,
+    @SerializedName("state")
+    var state: String?,
+    @SerializedName("country")
+    var country: String?,
+    @SerializedName("zipcode")
+    var zipcode: Int?,
+    @SerializedName("profile")
+    var profile: String?,
+    @SerializedName("socialId")
+    var socialId: String?,
     @SerializedName("password")
     var password: String?,
     @SerializedName("loginType")
@@ -36,6 +56,18 @@ class AuthRequestModel(
             null,
             null,
             null,
-            null)
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+
+            )
 
 }

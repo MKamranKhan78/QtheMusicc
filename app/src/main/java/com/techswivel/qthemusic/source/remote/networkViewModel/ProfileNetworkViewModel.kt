@@ -5,17 +5,19 @@ import com.techswivel.qthemusic.Data.RemoteRepository.ServerRepository.CustomObs
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.application.QTheMusicApplication
 import com.techswivel.qthemusic.dataManager.RemoteDataManager
-import com.techswivel.qthemusic.models.ApiResponse
-import com.techswivel.qthemusic.models.ErrorResponse
-import com.techswivel.qthemusic.models.PlaylistModel
-import com.techswivel.qthemusic.models.ResponseMain
+import com.techswivel.qthemusic.models.*
 import com.techswivel.qthemusic.source.remote.rxjava.CustomError
 import com.techswivel.qthemusic.source.remote.rxjava.ErrorUtils
+import com.techswivel.qthemusic.models.ApiResponse
+import com.techswivel.qthemusic.models.Category
+import com.techswivel.qthemusic.models.ErrorResponse
+import com.techswivel.qthemusic.models.ResponseMain
 import com.techswivel.qthemusic.ui.base.BaseViewModel
 import retrofit2.Response
 
 class ProfileNetworkViewModel :BaseViewModel() {
 
+    var saveInterestResponse: MutableLiveData<ApiResponse> = MutableLiveData()
     var playlistResponse: MutableLiveData<ApiResponse> = MutableLiveData()
     var savePlaylistResponse: MutableLiveData<ApiResponse> = MutableLiveData()
     var deletePlaylistResponse: MutableLiveData<ApiResponse> = MutableLiveData()
@@ -181,6 +183,35 @@ class ProfileNetworkViewModel :BaseViewModel() {
                 deletePlaylistResponse.value = ApiResponse.complete()
             }
         })
+    }
+
+    fun saveUserInterest(category: List<Category?>) {
+        mRemoteDataManager.saveInterest(category).doOnSubscribe {
+            saveInterestResponse.value= ApiResponse.loading()
+        }.subscribe(object : CustomObserver<Response<ResponseMain>>(){
+            override fun onSuccess(t: Response<ResponseMain>) {
+                if (t.isSuccessful){
+                    saveInterestResponse.value= ApiResponse.success(t.body()?.response)
+                }
+            }
+
+            override fun onError(e: Throwable, isInternetError: Boolean, error: CustomError?) {
+                saveInterestResponse.value = ApiResponse.error(
+                    error?.code?.let { code ->
+                        ErrorResponse(
+                            false,
+                            error.message,
+                            code
+                        )
+                    }
+                )
+            }
+
+            override fun onRequestComplete() {
+
+            }
+        })
+
     }
 
 }

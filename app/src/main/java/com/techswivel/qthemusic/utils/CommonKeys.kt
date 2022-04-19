@@ -28,9 +28,14 @@ class CommonKeys {
         const val KEY_USER_AVATAR = "_key_user_avatar"
         const val KEY_USER_ENABLE_NOTIFICATION = "_key_user_enable_notification"
         const val KEY_ARTIST_UPDATE = "_key_user_artist_update"
+        const val KEY_PHONE_NUMBER = "_key_phone_number_bundle"
+        const val KEY_ENUM = "_key_Enum"
         const val KEY_SUBSRIPTION = "_key_subsription"
+        const val DEFAULT_FILE_PICK_LIMIT = 1
         const val KEY_USER_PHONE = "_key_user_phone"
         const val KEY_USER_DOB = "_key_user_dob"
+
+        const val OTP_TYPE = "app_flow"
         const val KEY_USER_GENDER = "_key_user_gender"
         const val KEY_USER_CITY = "_key_user_city"
         const val KEY_USER_STATE = "_key_user_state"
@@ -41,5 +46,17 @@ class CommonKeys {
         const val KEY_USER_ADRESS = "_key_user_address"
         const val KEY_USER_PLAN_PRIZE = "_key_user_plan_prize"
         const val KEY_USER_PLAN_DURATION = "_key_user_plan_duration"
+        const val KEY_IS_INTEREST_SET="key_is_interest_set"
+        const val KEY_FCM_TOKEN="key_fcm_token"
+        const val KEY_IS_ACCOUNT_CREATED="key_is_account_created"
+        const val KEY_USER_PHOTO="key_user_photo"
+        const val USER_PASSWORD="user_password"
+        const val SOCIAL_ID="social_id"
+        const val KEY_USER_JWT="key_user_jwt"
+        const val   AUTH_BUILDER_MODEL="auth_builder_model"
+        const val KEY_TERM_AND_CONDITION_PRIVACY = "_key_term_and_condition_privacy_policy"
+        const val IMAGE_DIRECTORY = "/demonuts"
+
+
     }
 }

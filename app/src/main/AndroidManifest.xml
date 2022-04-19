@@ -33,12 +33,14 @@
             android:exported="false" />
         <activity
             android:name=".ui.activities.playerActivity.PlayerActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".ui.activities.authActivity.AuthActivity"
             android:exported="false" />
         <activity
             android:name=".ui.activities.profileSettingScreen.ProfileSettingActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".ui.activities.splashActivity.SplashActivity"

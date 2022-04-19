@@ -2,13 +2,17 @@ package com.techswivel.qthemusic.source.remote.firebase
 
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.techswivel.qthemusic.application.QTheMusicApplication
+import com.techswivel.qthemusic.source.local.preference.PrefUtils
+import com.techswivel.qthemusic.utils.CommonKeys
 import com.techswivel.qthemusic.utils.Log
 
 
 class FirebaseNotificationService : FirebaseMessagingService() {
-
+val TAG="FirebaseNotificationService"
 
     override fun onMessageReceived(p0: RemoteMessage) {
+        Log.d(TAG,"service called")
         super.onMessageReceived(p0)
         Log.d("FirebaseMessage", "Data Payload: " + p0.data.toString())
         p0.notification?.let {
@@ -127,7 +131,7 @@ class FirebaseNotificationService : FirebaseMessagingService() {
 
     override fun onNewToken(p0: String) {
         super.onNewToken(p0)
-
+        Log.d(TAG,"token is $p0")
     }
 
     private fun getSubString(

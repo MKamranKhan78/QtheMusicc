@@ -10,6 +10,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.utils.Utilities
+import java.text.DateFormat
+import java.util.*
 import com.techswivel.qthemusic.utils.Utilities.roundOffDecimal
 
 object BindingAdapter {
@@ -49,6 +51,26 @@ object BindingAdapter {
     fun setPlan(textView: TextView, subscription: Subscription?) {
         textView.text =
             "$" + roundOffDecimal(subscription?.planPrice).toString() + " / " + subscription?.planDuration
+    }
+
+    @JvmStatic
+    @BindingAdapter("setDate")
+    fun setDate(textView: TextView?, dateInMillis: Long) {
+        if (dateInMillis.toInt() != 0) {
+            val dateObj = dateInMillis.let { dateInMillis ->
+                Date(dateInMillis)
+            }
+            textView?.text = DateFormat.getDateInstance(DateFormat.LONG).format(dateObj)
+        } else {
+            textView?.text = textView?.context?.getString(R.string.not_added)
+        }
+
+    }
+
+    @JvmStatic
+    @BindingAdapter("setDateOfBirth")
+    fun setDateOfBirth(textView: TextView, text: String?) {
+        textView.text = text
     }
 
 

@@ -11,6 +11,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import com.google.android.material.snackbar.Snackbar
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.services.NetworkChangeReceiver
@@ -20,7 +21,6 @@ abstract class BaseActivity : AppCompatActivity() {
 
     private val fragmentManager = supportFragmentManager
     private lateinit var connectionLiveData: NetworkChangeReceiver
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         connectionLiveData = NetworkChangeReceiver(this)
@@ -70,7 +70,13 @@ abstract class BaseActivity : AppCompatActivity() {
             .addToBackStack(fragment::class.java.name)
             .commit()
     }
-
+    protected open fun replaceFragmentWithAnimation(containerViewId: Int, fragment: Fragment,view: View,string: String) {
+        val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
+        fragmentTransaction.addSharedElement(view,string)
+        fragmentTransaction.replace(R.id.auth_container, fragment)
+        fragmentTransaction.addToBackStack(BaseFragment.TAG)
+        fragmentTransaction.commit()
+    }
     protected open fun replaceFragmentWithoutAddingToBackStack(
         containerViewId: Int,
         fragment: Fragment
@@ -78,6 +84,7 @@ abstract class BaseActivity : AppCompatActivity() {
         fragmentManager.beginTransaction().replace(containerViewId, fragment)
             .commit()
     }
+
 
     protected open fun popUpAllFragmentIncludeThis(pClassName: String?) {
         fragmentManager.popBackStack(pClassName, FragmentManager.POP_BACK_STACK_INCLUSIVE)

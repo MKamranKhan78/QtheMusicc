@@ -34,21 +34,21 @@ class QTheMusicApplication : Application(), LifecycleObserver {
             BuildConfig.FLAVOR.equals(Constants.DEVELOPMENT) -> {
                 mGso =
                     GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)  //google sigin options
-                        .requestServerAuthCode(getString(R.string.google_client_id_development))
+                        .requestServerAuthCode(getGoogleClientIdDevelopment())
                         .requestEmail()
                         .build()
             }
             BuildConfig.FLAVOR.equals(Constants.ACCEPTANCE) -> {
                 mGso =
                     GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)  //google sigin options
-                        .requestServerAuthCode(getString(R.string.google_client_id_acceptance))
+                        .requestServerAuthCode(getGoogleClientIdAcceptance())
                         .requestEmail()
                         .build()
             }
             else -> {
                 mGso =
                     GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)  //google sigin options
-                        .requestServerAuthCode(getString(R.string.google_client_id_production))
+                        .requestServerAuthCode(getGoogleClientIdProduction())
                         .requestEmail()
                         .build()
             }
@@ -71,6 +71,9 @@ class QTheMusicApplication : Application(), LifecycleObserver {
     }
 
     private external fun getGoogleClientIdStaging(): String
+    private external fun getGoogleClientIdDevelopment(): String
+    private external fun getGoogleClientIdAcceptance(): String
+    private external fun getGoogleClientIdProduction(): String
 
     companion object {
 

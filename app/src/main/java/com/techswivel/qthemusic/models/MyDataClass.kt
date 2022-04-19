@@ -23,6 +23,8 @@ class MyDataClass(
     @Expose
     @SerializedName("artist")
     val artistList: List<Artist>?
+
+
 ) {
     constructor() : this(
         null,
@@ -33,5 +35,6 @@ class MyDataClass(
         null,
         null,
         null
+
     )
 }
