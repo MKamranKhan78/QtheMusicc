@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
+import com.techswivel.dfaktfahrerapp.ui.fragments.underDevelopmentMessageFragment.UnderDevelopmentMessageFragment
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.customData.adapter.RecyclerViewAdapter
 import com.techswivel.qthemusic.customData.enums.AdapterType
@@ -25,6 +26,7 @@ import com.techswivel.qthemusic.ui.activities.playlistActivity.PlaylistActivityI
 import com.techswivel.qthemusic.ui.base.RecyclerViewBaseFragment
 import com.techswivel.qthemusic.ui.dialogFragments.deletionViewBottomSheetDialog.DeletionViewBottomSheetDialogFragment
 import com.techswivel.qthemusic.ui.fragments.playlist_fragment.PlaylistFragmentImpl
+import com.techswivel.qthemusic.utils.ActivityUtils
 import com.techswivel.qthemusic.utils.CommonKeys
 import com.techswivel.qthemusic.utils.DialogUtils
 import java.util.*
@@ -90,6 +92,10 @@ class SongsFragment : RecyclerViewBaseFragment(), BaseInterface,
         super.onItemClick(data, position)
         val song = data as Song
         (mActivityListener as PlaylistActivityImpl).openSongDetailsActivity(song)
+        ActivityUtils.launchFragment(
+            requireContext(),
+            UnderDevelopmentMessageFragment::class.java.name
+        )
 
     }
 

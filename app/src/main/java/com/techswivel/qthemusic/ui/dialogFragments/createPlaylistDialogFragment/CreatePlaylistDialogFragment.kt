@@ -61,11 +61,6 @@ class CreatePlaylistDialogFragment : BaseDialogFragment(), BaseInterface {
 
     }
 
-    private fun getBundleData() {
-        viewModel.playList =
-            arguments?.getParcelableArrayList<PlaylistModel>(CommonKeys.KEY_PLAY_LIST) as MutableList<PlaylistModel>
-    }
-
 
     override fun showProgressBar() {
         mBinding.progressBar.visibility = View.VISIBLE
@@ -134,16 +129,39 @@ class CreatePlaylistDialogFragment : BaseDialogFragment(), BaseInterface {
         mBinding.createPlaylistButton.setOnClickListener {
             viewModel.isAllFieldsChecked = checkAllFields()
             if (viewModel.isAllFieldsChecked) {
+
                 viewModel.playlistName = mBinding.etPlaylistNameId.text.toString()
                 viewModel.playlistModel?.playListTitle = mBinding.etPlaylistNameId.text.toString()
-                val playlistModelBuilder = PlaylistModelBuilder()
-                playlistModelBuilder.playListTitle = viewModel.playlistName
-                val playListModel = PlaylistModelBuilder.build(playlistModelBuilder)
-                profileNetworViewModel.savePlaylist(playListModel)
 
-
+                val found = isPlaylistExist(viewModel.playList)
+                if (found == true) {
+                    Toast.makeText(
+                        QTheMusicApplication.getContext(),
+                        getString(R.string.playlist_exist),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    val playlistModelBuilder = PlaylistModelBuilder()
+                    playlistModelBuilder.playListTitle = viewModel.playlistName
+                    val playListModel = PlaylistModelBuilder.build(playlistModelBuilder)
+                    profileNetworViewModel.savePlaylist(playListModel)
+                }
             }
         }
+    }
+
+    private fun isPlaylistExist(playList: MutableList<PlaylistModel>): Boolean? {
+        var found: Boolean? = null
+        val searchListLength: Int = playList.size
+        for (i in 0 until searchListLength) {
+            if (playList.get(i).playListTitle?.contains(viewModel.playlistName.toString()) == true) {
+                found = true
+                break
+            } else {
+                found = false
+            }
+        }
+        return found
     }
 
 
@@ -167,4 +185,11 @@ class CreatePlaylistDialogFragment : BaseDialogFragment(), BaseInterface {
     private fun setCallBack(playlistFragmentImpl: PlaylistFragmentImpl) {
         mPlaylistFragmentImpl = playlistFragmentImpl
     }
+
+    private fun getBundleData() {
+        viewModel.playList =
+            arguments?.getParcelableArrayList<PlaylistModel>(CommonKeys.KEY_PLAY_LIST) as MutableList<PlaylistModel>
+    }
+
+
 }

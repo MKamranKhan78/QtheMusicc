@@ -13,13 +13,4 @@ data class PlaylistModel(
     var playListTitle: String?,
     @SerializedName("totalSongs")
     var totalSongs: Int?
-) : Parcelable/*,Comparable<PlaylistModel> {
-    override fun compareTo(playListModel: PlaylistModel): Int {
-        var value = 1
-        if (playListTitle == playListModel.playListTitle ){
-            value = 0
-        }
-        return value
-    }
-}
-*/
+) : Parcelable

@@ -36,6 +36,7 @@
                 android:layout_height="@dimen/_45dp"
                 android:layout_gravity="center_horizontal"
                 android:scaleType="centerCrop"
+                android:src="@drawable/no_image_palce_holder"
                 app:shapeAppearanceOverlay="@style/circleImageView"
                 tools:ignore="VectorDrawableCompat" />
 

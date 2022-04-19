@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
+import com.techswivel.dfaktfahrerapp.ui.fragments.underDevelopmentMessageFragment.UnderDevelopmentMessageFragment
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.application.QTheMusicApplication
 import com.techswivel.qthemusic.customData.adapter.RecyclerViewAdapter
@@ -19,6 +20,7 @@ import com.techswivel.qthemusic.models.Artist
 import com.techswivel.qthemusic.models.ResponseModel
 import com.techswivel.qthemusic.source.remote.networkViewModel.SongAndArtistsViewModel
 import com.techswivel.qthemusic.ui.base.RecyclerViewBaseFragment
+import com.techswivel.qthemusic.utils.ActivityUtils
 import com.techswivel.qthemusic.utils.DialogUtils
 
 
@@ -80,6 +82,10 @@ class FollowingArtistFragment : RecyclerViewBaseFragment(), BaseInterface,
     override fun onItemClick(data: Any?, position: Int) {
         super.onItemClick(data, position)
         viewModel.artist = data as Artist
+        ActivityUtils.launchFragment(
+            requireContext(),
+            UnderDevelopmentMessageFragment::class.java.name
+        )
     }
 
     @SuppressLint("NotifyDataSetChanged")
