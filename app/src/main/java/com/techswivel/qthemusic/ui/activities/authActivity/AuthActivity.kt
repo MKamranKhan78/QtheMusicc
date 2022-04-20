@@ -31,7 +31,6 @@ import com.techswivel.qthemusic.source.remote.networkViewModel.AuthNetworkViewMo
 import com.techswivel.qthemusic.source.remote.networkViewModel.ProfileNetworkViewModel
 import com.techswivel.qthemusic.ui.activities.mainActivity.MainActivity
 import com.techswivel.qthemusic.ui.base.BaseActivity
-import com.techswivel.qthemusic.ui.fragments.forgotPasswordFragment.ForgotPassword
 import com.techswivel.qthemusic.ui.fragments.forgotPasswordFragment.ForgotPasswordImp
 import com.techswivel.qthemusic.ui.fragments.otpVerificationFragment.OtpVerification
 import com.techswivel.qthemusic.ui.fragments.setPasswordFragmetnt.SetPassword
@@ -41,7 +40,6 @@ import com.techswivel.qthemusic.ui.fragments.yourInterestFragment.YourInterestFr
 import com.techswivel.qthemusic.utils.CommonKeys
 import com.techswivel.qthemusic.utils.DialogUtils
 import com.techswivel.qthemusic.utils.Log
-import com.techswivel.qthemusic.utils.Utilities
 import java.util.*
 
 
@@ -57,6 +55,7 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
         super.onCreate(savedInstanceState)
         mAuthBinding = ActivityAuthBinding.inflate(layoutInflater)
         initViewModel()
+
         mAuthActivityViewModel.isLogin = PrefUtils.getBoolean(this, CommonKeys.KEY_IS_LOGGED_IN)
         mAuthActivityViewModel.isInterestSelected =
             PrefUtils.getBoolean(this, CommonKeys.KEY_IS_INTEREST_SET)
@@ -69,6 +68,7 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
             replaceFragmentWithoutAddingToBackStack(R.id.auth_container, yourIntersetFragment)
         } else {
             replaceFragmentWithoutAddingToBackStack(R.id.auth_container, SignInFragment())
+            mCurrentFragment = SignInFragment()
         }
 
         setContentView(mAuthBinding.root)
@@ -305,30 +305,25 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
             when (it.status) {
                 NetworkStatus.LOADING -> {
                     showProgressBar()
+                    Log.d(TAG, "loading")
                 }
                 NetworkStatus.SUCCESS -> {
                     hideProgressBar()
+                    Log.d(TAG, "success ")
                     val mResponseModel = it.t as ResponseModel
                     if (mResponseModel.status) {
+                        Log.d(TAG, "success if")
                         val userData = mResponseModel.data.authModel
                         mAuthActivityViewModel.setDataInSharedPrefrence(mResponseModel.data.authModel)
-                        val isInterestSet =
-                            PrefUtils.getBoolean(this, CommonKeys.KEY_IS_INTEREST_SET)
+                        val intent = Intent(this@AuthActivity, MainActivity::class.java)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                        startActivity(intent)
+                        finish()
 
-                        if (isInterestSet) {
-                            val intent = Intent(this@AuthActivity, MainActivity::class.java)
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                            startActivity(intent)
-                            finish()
-                        } else {
-                            replaceCurrentFragment(YourInterestFragment())
-                        }
                     } else {
-                        Log.d(TAG, "status false")
                         (mCurrentFragment as ForgotPasswordImp).accountNotExistsSendOtp(
                             mAuthActivityViewModel.myEmail
                         )
-                        Utilities.showToast(this, "account not exists")
                     }
                 }
                 NetworkStatus.ERROR -> {
@@ -511,7 +506,7 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
                     val data = it.t as ResponseModel
                     if (mAuthActivityViewModel.authRequestBilder.otpType == OtpType.FORGET_PASSWORD.name) {
                         replaceCurrentFragment(SignInFragment())
-                        popUpAllFragmentIncludeThis(ForgotPassword::class.java.name)
+                        popUpAllFragmentIncludeThis(null)
                         Log.d(TAG, "otp is if ${mAuthActivityViewModel.authRequestModel.otpType}")
 
                     } else {

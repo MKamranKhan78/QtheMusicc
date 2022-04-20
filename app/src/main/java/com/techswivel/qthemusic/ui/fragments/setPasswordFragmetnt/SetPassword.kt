@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.databinding.FragmentSetPasswordBinding
 import com.techswivel.qthemusic.models.AuthRequestBuilder
-import com.techswivel.qthemusic.models.AuthRequestModel
 import com.techswivel.qthemusic.ui.activities.authActivity.AuthActivityImp
 import com.techswivel.qthemusic.ui.base.BaseFragment
 import com.techswivel.qthemusic.utils.CommonKeys
@@ -59,32 +58,31 @@ class SetPassword : BaseFragment() {
 
     private fun onClickListener() {
         mBinding.btnDone.setOnClickListener {
-            createAndSendSetPasswordRequest()
-//            if (
-//                mBinding.etSetPasswordId.text.isNullOrEmpty() ||
-//                mViewModel.isPasswordTextValid.get() != true
-//            ) {
-//                mBinding.etSetPasswordId.error = getString(R.string.password_is_required)
-//            } else if (
-//                mBinding.etSetPasswordConfirmId.text.isNullOrEmpty() ||
-//                mViewModel.isRepeatPasswordTextValid.get() != true
-//            ) {
-//                mBinding.etSetPasswordConfirmId.error =
-//                    getString(R.string.password_is_required)
-//            } else {
-//
-//                if (mBinding.etSetPasswordId.text.toString() !=
-//                    mBinding.etSetPasswordConfirmId.text.toString()
-//                ) {
-//                    mBinding.etSetPasswordConfirmId.error =
-//                        getString(R.string.password_never_match_error)
-//                    mBinding.etSetPasswordId.error =
-//                        getString(R.string.password_never_match_error)
-//                } else {
-//                    createAndSendSetPasswordRequest()
-//                }
-//
-//            }
+            if (
+                mBinding.etSetPasswordId.text.isNullOrEmpty() ||
+                mViewModel.isPasswordTextValid.get() != true
+            ) {
+                mBinding.etSetPasswordId.error = getString(R.string.password_is_required)
+            } else if (
+                mBinding.etSetPasswordConfirmId.text.isNullOrEmpty() ||
+                mViewModel.isRepeatPasswordTextValid.get() != true
+            ) {
+                mBinding.etSetPasswordConfirmId.error =
+                    getString(R.string.password_is_required)
+            } else {
+
+                if (mBinding.etSetPasswordId.text.toString() !=
+                    mBinding.etSetPasswordConfirmId.text.toString()
+                ) {
+                    mBinding.etSetPasswordConfirmId.error =
+                        getString(R.string.password_never_match_error)
+                    mBinding.etSetPasswordId.error =
+                        getString(R.string.password_never_match_error)
+                } else {
+                    createAndSendSetPasswordRequest()
+                }
+
+            }
         }
 
         mBinding.ivBackBtnSetPasId.setOnClickListener {

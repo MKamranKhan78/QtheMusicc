@@ -11,6 +11,7 @@ import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.DatePicker
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModelProvider
@@ -25,12 +26,15 @@ import com.techswivel.qthemusic.ui.base.BaseFragment
 import com.techswivel.qthemusic.ui.dialogFragments.chooserDialogFragment.ChooserDialogFragment
 import com.techswivel.qthemusic.ui.dialogFragments.genderDialogFragment.GenderSelectionDialogFragment
 import com.techswivel.qthemusic.ui.dialogFragments.whyWeAreAskingDialogFragment.WhyWeAreAskingDialogFragment
-import com.techswivel.qthemusic.utils.*
+import com.techswivel.qthemusic.utils.CommonKeys
+import com.techswivel.qthemusic.utils.Log
+import com.techswivel.qthemusic.utils.Utilities
+import com.techswivel.qthemusic.utils.toDeviceIdentifier
 import java.io.IOException
 import java.util.*
 
 
-class SignUpFragment : BaseFragment(), SignUpFragmentImp {
+class SignUpFragment : BaseFragment(), SignUpFragmentImp, DatePickerDialog.OnDateSetListener {
     companion object {
         private const val TAG = "SignUpFragment"
     }
@@ -85,6 +89,16 @@ class SignUpFragment : BaseFragment(), SignUpFragmentImp {
 
     }
 
+    @SuppressLint("SetTextI18n")
+    override fun onDateSet(p0: DatePicker?, p1: Int, p2: Int, p3: Int) {
+        mViewModel.date = Date(p1, p2, p3)
+        mBinding.etUserDob.setText("$p3 ${Utilities.getMonths(p2.plus(1))} $p1")
+    }
+
+    override fun getGender(gender: String?) {
+        mBinding.etUserGender.setText(gender)
+    }
+
     private fun initialization() {
         mViewModel.mBuilder =
             arguments?.getSerializable(CommonKeys.AUTH_BUILDER_MODEL) as AuthRequestBuilder
@@ -131,64 +145,48 @@ class SignUpFragment : BaseFragment(), SignUpFragmentImp {
         (mActivityListener as AuthActivityImp).userSignUp(authModel)
     }
 
-    fun getData(): Boolean {
-        if (mBinding.etUserCity.text.toString().isEmpty()) {
-            return false
-        } else if (mBinding.etUserState.text.toString().isEmpty()) {
-            return false
-        } else if (mBinding.etUserCountry.text.toString().isEmpty()) {
-            return false
-        } else if (mBinding.etZipCode.text.toString().isEmpty()) {
-            return false
-        } else {
-            return true
-        }
-    }
-
-    fun getDataTo(): Boolean {
-        if (mBinding.etUserCity.text.toString().isNotEmpty()) {
-            return true
-        } else if (mBinding.etUserState.text.toString().isNotEmpty()) {
-            return true
-        } else if (mBinding.etUserCountry.text.toString().isNotEmpty()) {
-            return true
-        } else if (mBinding.etZipCode.text.toString().isNotEmpty()) {
-            return true
-        } else {
-            return false
-        }
-    }
 
     @SuppressLint("SetTextI18n")
     private fun clickListeners() {
         mBinding.tvLetGoProfileBtn.setOnClickListener {
 
             if (mBinding.etUserName.text.toString().isEmpty()) {
-                mBinding.etUserName.error = "Name is required"
+
+                mBinding.etUserName.error = getString(R.string.name_required)
             } else if (mBinding.etUserDob.text.toString().isEmpty()) {
                 mBinding.etUserDob.error = getString(R.string.dob_req)
-            } else if (mBinding.etUserAddress.text.toString().isNotEmpty() && !getData()) {
-                mBinding.etUserAddress.error = "fill all filedl"
-            } else if (getDataTo() && mBinding.etUserAddress.text.toString().isEmpty()) {
-                mBinding.etUserAddress.error = "address neeeded"
+            } else if (mBinding.etUserAddress.text.toString()
+                    .isNotEmpty() && !checkIfAddressNotEmpty()
+            ) {
+                mBinding.etUserCity.error = getString(R.string.city_required)
+                mBinding.etUserState.error = getString(R.string.state_required)
+                mBinding.etUserCountry.error = getString(R.string.country_required)
+                mBinding.etZipCode.error = getString(R.string.zipcode_required)
+
+            } else if (checkIfAddressRelatedFieldNotEmpty() && mBinding.etUserAddress.text.toString()
+                    .isEmpty()
+            ) {
+                mBinding.etUserAddress.error = getString(R.string.address_required)
             } else {
-                Utilities.showToast(requireContext(), "done")
+                getFcmToken()
             }
         }
 
 
         mBinding.dobView.setOnClickListener {
+            mViewModel.calendar = Calendar.getInstance()
+            mViewModel.year = mViewModel.calendar.get(Calendar.YEAR)
+            mViewModel.month = mViewModel.calendar.get(Calendar.MONTH)
+            mViewModel.day = mViewModel.calendar.get(Calendar.DAY_OF_MONTH)
             val datePicker = DatePickerDialog(
-                requireContext(), R.style.MyDatePickerStyle,
-                { view, year, month, dayOfMonth ->
-                    // change date into millis
-                    mViewModel.date = Date(year, month, dayOfMonth)
-                    mBinding.etUserDob.setText("$dayOfMonth ${Utilities.getMonths(month.plus(1))} $year")
-                },
+                requireContext(),
+                R.style.MyDatePickerStyle,
+                this,
                 mViewModel.year,
                 mViewModel.month,
                 mViewModel.day
             )
+            datePicker.datePicker.maxDate = mViewModel.calendar.timeInMillis
             openDatePicker(datePicker)
         }
         mBinding.tvWhyWeAreAskingTag.setOnClickListener {
@@ -203,6 +201,7 @@ class SignUpFragment : BaseFragment(), SignUpFragmentImp {
             showPictureDialog()
         }
     }
+
 
     private fun getFcmToken() {
         FirebaseMessaging.getInstance().token.addOnSuccessListener {
@@ -231,6 +230,7 @@ class SignUpFragment : BaseFragment(), SignUpFragmentImp {
 
     private fun openDatePicker(datePicker: DatePickerDialog) {
         datePicker.show()
+
         // its not changing color by xml style so this is used to change ok and cancel button color.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             datePicker.getButton(DatePickerDialog.BUTTON_POSITIVE)
@@ -240,13 +240,8 @@ class SignUpFragment : BaseFragment(), SignUpFragmentImp {
             datePicker.getButton(DatePickerDialog.BUTTON_NEGATIVE)
                 .setTextColor(QTheMusicApplication.getContext().getColor(R.color.color_black))
         }
-        // for disabling the past date
-        datePicker.getDatePicker().setMinDate(System.currentTimeMillis() - 1000)
     }
 
-    override fun getGender(gender: String?) {
-        mBinding.etUserGender.setText(gender)
-    }
 
     private fun showPictureDialog() {
         mViewModel.mChooserFragment = ChooserDialogFragment.newInstance(CommonKeys.TYPE_PHOTO,
@@ -294,4 +289,25 @@ class SignUpFragment : BaseFragment(), SignUpFragmentImp {
             ChooserDialogFragment::class.java.toString()
         )
     }
+
+    private fun checkIfAddressNotEmpty(): Boolean {
+        if (mBinding.etUserCity.text.toString().isEmpty()) {
+            return false
+        } else if (mBinding.etUserState.text.toString().isEmpty()) {
+            return false
+        } else if (mBinding.etUserCountry.text.toString().isEmpty()) {
+            return false
+        } else return !mBinding.etZipCode.text.toString().isEmpty()
+    }
+
+    private fun checkIfAddressRelatedFieldNotEmpty(): Boolean {
+        if (mBinding.etUserCity.text.toString().isNotEmpty()) {
+            return true
+        } else if (mBinding.etUserState.text.toString().isNotEmpty()) {
+            return true
+        } else if (mBinding.etUserCountry.text.toString().isNotEmpty()) {
+            return true
+        } else return mBinding.etZipCode.text.toString().isNotEmpty()
+    }
+
 }

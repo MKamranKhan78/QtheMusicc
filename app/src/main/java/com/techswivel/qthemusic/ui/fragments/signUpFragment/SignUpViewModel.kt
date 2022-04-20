@@ -17,7 +17,8 @@ class SignUpViewModel : BaseViewModel() {
     var year: Int = 0
     var month: Int = 0
     var day: Int = 0
-    lateinit var date: Date
+    var date = Date()
+    lateinit var calendar: Calendar
     var zipCode: Int? = 0
     lateinit var mBuilder: AuthRequestBuilder
     lateinit var mChooserFragment: ChooserDialogFragment

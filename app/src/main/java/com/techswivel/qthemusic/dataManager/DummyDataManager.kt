@@ -12,7 +12,7 @@ class DummyDataManager {
             return Response.success(
                 ResponseMain(
                     ResponseModel(
-                        false,
+                        true,
                         "",
                         getDataList(),
                         null
