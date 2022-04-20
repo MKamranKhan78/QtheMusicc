@@ -50,6 +50,10 @@ class PurchasedSongFragment : RecyclerViewBaseFragment(), BaseInterface,
         setObserver()
     }
 
+    override fun onPrepareAdapter(): RecyclerView.Adapter<*> {
+        return purchasedSongAdapter
+    }
+
     override fun onPrepareAdapter(adapterType: AdapterType?): RecyclerView.Adapter<*> {
         return purchasedSongAdapter
     }
@@ -82,10 +86,12 @@ class PurchasedSongFragment : RecyclerViewBaseFragment(), BaseInterface,
         songAndArtistViewModel.songlistResponse.observe(viewLifecycleOwner) { purchaseSongResponse ->
             when (purchaseSongResponse.status) {
                 NetworkStatus.LOADING -> {
-                    showProgressBar()
+                    mBinding.shimmerLayout.visibility = View.VISIBLE
+                    mBinding.shimmerLayout.startShimmer()
                 }
                 NetworkStatus.SUCCESS -> {
-                    hideProgressBar()
+                    mBinding.shimmerLayout.visibility = View.GONE
+                    mBinding.shimmerLayout.stopShimmer()
                     viewModel.mPurchaseSongsList.clear()
                     val response = purchaseSongResponse.t as ResponseModel
                     val playlist = response.data.songList
@@ -96,10 +102,14 @@ class PurchasedSongFragment : RecyclerViewBaseFragment(), BaseInterface,
                         mBinding.tvNoDataFound.visibility = View.VISIBLE
                     }
                     if (::purchasedSongAdapter.isInitialized)
-                        purchasedSongAdapter.notifyDataSetChanged()
+                        purchasedSongAdapter.notifyItemRangeInserted(
+                            0,
+                            viewModel.mPurchaseSongsList.size - 1
+                        )
                 }
                 NetworkStatus.ERROR -> {
-                    hideProgressBar()
+                    mBinding.shimmerLayout.visibility = View.GONE
+                    mBinding.shimmerLayout.stopShimmer()
                     purchaseSongResponse.error?.message?.let { it1 ->
                         DialogUtils.errorAlert(
                             requireContext(),
@@ -109,7 +119,8 @@ class PurchasedSongFragment : RecyclerViewBaseFragment(), BaseInterface,
                     }
                 }
                 NetworkStatus.EXPIRE -> {
-                    hideProgressBar()
+                    mBinding.shimmerLayout.visibility = View.GONE
+                    mBinding.shimmerLayout.stopShimmer()
                     DialogUtils.sessionExpireAlert(requireContext(),
                         object : DialogUtils.CallBack {
                             override fun onPositiveCallBack() {
@@ -121,7 +132,8 @@ class PurchasedSongFragment : RecyclerViewBaseFragment(), BaseInterface,
                         })
                 }
                 NetworkStatus.COMPLETED -> {
-                    hideProgressBar()
+                    mBinding.shimmerLayout.visibility = View.GONE
+                    mBinding.shimmerLayout.stopShimmer()
                 }
             }
         }
@@ -130,8 +142,7 @@ class PurchasedSongFragment : RecyclerViewBaseFragment(), BaseInterface,
     private fun setUpAdapter() {
         purchasedSongAdapter = RecyclerViewAdapter(this, viewModel.mPurchaseSongsList)
         setUpRecyclerView(
-            mBinding.recyclerviewPurchasedSongs,
-            AdapterType.SONGS
+            mBinding.recyclerviewPurchasedSongs
         )
     }
 

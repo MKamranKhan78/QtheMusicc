@@ -50,6 +50,10 @@ class FollowingArtistFragment : RecyclerViewBaseFragment(), BaseInterface,
         setObserver()
     }
 
+    override fun onPrepareAdapter(): RecyclerView.Adapter<*> {
+        return followingArtistAdapter
+    }
+
     override fun onPrepareAdapter(adapterType: AdapterType?): RecyclerView.Adapter<*> {
         return followingArtistAdapter
     }
@@ -142,10 +146,12 @@ class FollowingArtistFragment : RecyclerViewBaseFragment(), BaseInterface,
         songAndArtistViewModel.followingArtistResponse.observe(viewLifecycleOwner) { followingArtistResponse ->
             when (followingArtistResponse.status) {
                 NetworkStatus.LOADING -> {
-                    showProgressBar()
+                    mBinding.shimmerLayout.visibility = View.VISIBLE
+                    mBinding.shimmerLayout.startShimmer()
                 }
                 NetworkStatus.SUCCESS -> {
-                    hideProgressBar()
+                    mBinding.shimmerLayout.stopShimmer()
+                    mBinding.shimmerLayout.visibility = View.GONE
                     viewModel.followingArtistList.clear()
                     val response = followingArtistResponse.t as ResponseModel
                     val artistList = response.data.artistList
@@ -156,10 +162,14 @@ class FollowingArtistFragment : RecyclerViewBaseFragment(), BaseInterface,
                         mBinding.tvNoDataFound.visibility = View.VISIBLE
                     }
                     if (::followingArtistAdapter.isInitialized)
-                        followingArtistAdapter.notifyDataSetChanged()
+                        followingArtistAdapter.notifyItemRangeInserted(
+                            0,
+                            viewModel.followingArtistList.size - 1
+                        )
                 }
                 NetworkStatus.ERROR -> {
-                    hideProgressBar()
+                    mBinding.shimmerLayout.stopShimmer()
+                    mBinding.shimmerLayout.visibility = View.GONE
                     followingArtistResponse.error?.message?.let { it1 ->
                         DialogUtils.errorAlert(
                             requireContext(),
@@ -169,7 +179,8 @@ class FollowingArtistFragment : RecyclerViewBaseFragment(), BaseInterface,
                     }
                 }
                 NetworkStatus.EXPIRE -> {
-                    hideProgressBar()
+                    mBinding.shimmerLayout.stopShimmer()
+                    mBinding.shimmerLayout.visibility = View.GONE
                     DialogUtils.sessionExpireAlert(requireContext(),
                         object : DialogUtils.CallBack {
                             override fun onPositiveCallBack() {
@@ -181,7 +192,8 @@ class FollowingArtistFragment : RecyclerViewBaseFragment(), BaseInterface,
                         })
                 }
                 NetworkStatus.COMPLETED -> {
-                    hideProgressBar()
+                    mBinding.shimmerLayout.stopShimmer()
+                    mBinding.shimmerLayout.visibility = View.GONE
                 }
             }
         }
@@ -194,8 +206,7 @@ class FollowingArtistFragment : RecyclerViewBaseFragment(), BaseInterface,
     private fun setUpAdapter() {
         followingArtistAdapter = RecyclerViewAdapter(this, viewModel.followingArtistList)
         setUpRecyclerView(
-            mBinding.recyclerviewFollowingArtist,
-            AdapterType.FOLLOWING_ARTIST
+            mBinding.recyclerviewFollowingArtist
         )
     }
 

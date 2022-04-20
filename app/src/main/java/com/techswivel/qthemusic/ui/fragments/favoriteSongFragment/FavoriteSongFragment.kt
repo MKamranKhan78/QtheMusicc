@@ -59,6 +59,10 @@ class FavoriteSongFragment : RecyclerViewBaseFragment(), BaseInterface,
 
     }
 
+    override fun onPrepareAdapter(): RecyclerView.Adapter<*> {
+        return mFavoriteSongListAdapter
+    }
+
     override fun onPrepareAdapter(adapterType: AdapterType?): RecyclerView.Adapter<*> {
         return mFavoriteSongListAdapter
     }
@@ -92,10 +96,12 @@ class FavoriteSongFragment : RecyclerViewBaseFragment(), BaseInterface,
         songAndArtistViewModel.songlistResponse.observe(viewLifecycleOwner) { playlistDataResponse ->
             when (playlistDataResponse.status) {
                 NetworkStatus.LOADING -> {
-                    showProgressBar()
+                    mBinding.shimmerLayout.visibility = View.VISIBLE
+                    mBinding.shimmerLayout.startShimmer()
                 }
                 NetworkStatus.SUCCESS -> {
-                    hideProgressBar()
+                    mBinding.shimmerLayout.stopShimmer()
+                    mBinding.shimmerLayout.visibility = View.GONE
                     viewModel.mFavoriteSongsList.clear()
                     val response = playlistDataResponse.t as ResponseModel
                     val playlist = response.data.songList
@@ -106,10 +112,14 @@ class FavoriteSongFragment : RecyclerViewBaseFragment(), BaseInterface,
                         mBinding.tvNoDataFound.visibility = View.VISIBLE
                     }
                     if (::mFavoriteSongListAdapter.isInitialized)
-                        mFavoriteSongListAdapter.notifyDataSetChanged()
+                        mFavoriteSongListAdapter.notifyItemRangeInserted(
+                            0,
+                            viewModel.mFavoriteSongsList.size - 1
+                        )
                 }
                 NetworkStatus.ERROR -> {
-                    hideProgressBar()
+                    mBinding.shimmerLayout.stopShimmer()
+                    mBinding.shimmerLayout.visibility = View.GONE
                     playlistDataResponse.error?.message?.let { it1 ->
                         DialogUtils.errorAlert(
                             requireContext(),
@@ -119,7 +129,8 @@ class FavoriteSongFragment : RecyclerViewBaseFragment(), BaseInterface,
                     }
                 }
                 NetworkStatus.EXPIRE -> {
-                    hideProgressBar()
+                    mBinding.shimmerLayout.stopShimmer()
+                    mBinding.shimmerLayout.visibility = View.GONE
                     DialogUtils.sessionExpireAlert(requireContext(),
                         object : DialogUtils.CallBack {
                             override fun onPositiveCallBack() {
@@ -131,7 +142,8 @@ class FavoriteSongFragment : RecyclerViewBaseFragment(), BaseInterface,
                         })
                 }
                 NetworkStatus.COMPLETED -> {
-                    hideProgressBar()
+                    mBinding.shimmerLayout.stopShimmer()
+                    mBinding.shimmerLayout.visibility = View.GONE
                 }
             }
         }
@@ -155,8 +167,7 @@ class FavoriteSongFragment : RecyclerViewBaseFragment(), BaseInterface,
     private fun setUpAdapter() {
         mFavoriteSongListAdapter = RecyclerViewAdapter(this, viewModel.mFavoriteSongsList)
         setUpRecyclerView(
-            mBinding.recyclerviewFavoriteSongs,
-            AdapterType.SONGS
+            mBinding.recyclerviewFavoriteSongs
         )
     }
 

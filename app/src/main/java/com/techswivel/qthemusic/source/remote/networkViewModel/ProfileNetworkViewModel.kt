@@ -4,14 +4,9 @@ import androidx.lifecycle.MutableLiveData
 import com.techswivel.qthemusic.Data.RemoteRepository.ServerRepository.CustomObserver
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.application.QTheMusicApplication
-import com.techswivel.qthemusic.dataManager.RemoteDataManager
 import com.techswivel.qthemusic.models.*
 import com.techswivel.qthemusic.source.remote.rxjava.CustomError
 import com.techswivel.qthemusic.source.remote.rxjava.ErrorUtils
-import com.techswivel.qthemusic.models.ApiResponse
-import com.techswivel.qthemusic.models.Category
-import com.techswivel.qthemusic.models.ErrorResponse
-import com.techswivel.qthemusic.models.ResponseMain
 import com.techswivel.qthemusic.ui.base.BaseViewModel
 import retrofit2.Response
 
@@ -24,7 +19,7 @@ class ProfileNetworkViewModel :BaseViewModel() {
 
 
     fun getPlayListFromServer() {
-        RemoteDataManager.getPlayListFromServer().doOnSubscribe {
+        mRemoteDataManager.getPlayListFromServer().doOnSubscribe {
             playlistResponse.value = ApiResponse.loading()
         }?.subscribe(object : CustomObserver<Response<ResponseMain>>() {
             override fun onSuccess(t: Response<ResponseMain>) {
@@ -79,7 +74,7 @@ class ProfileNetworkViewModel :BaseViewModel() {
 
 
     fun savePlaylist(playlistModel: PlaylistModel) {
-        RemoteDataManager.savePlaylist(playlistModel).doOnSubscribe {
+        mRemoteDataManager.savePlaylist(playlistModel).doOnSubscribe {
             savePlaylistResponse.value = ApiResponse.loading()
         }?.subscribe(object : CustomObserver<Response<ResponseMain>>() {
             override fun onSuccess(t: Response<ResponseMain>) {
@@ -132,8 +127,8 @@ class ProfileNetworkViewModel :BaseViewModel() {
     }
 
 
-    fun deletePlaylist(playlistID: Int) {
-        RemoteDataManager.deletePlaylist(playlistID).doOnSubscribe {
+    fun deletePlaylist(playlistModel: PlaylistModel) {
+        mRemoteDataManager.deletePlaylist(playlistModel).doOnSubscribe {
             deletePlaylistResponse.value = ApiResponse.loading()
         }?.subscribe(object : CustomObserver<Response<ResponseMain>>() {
             override fun onSuccess(t: Response<ResponseMain>) {

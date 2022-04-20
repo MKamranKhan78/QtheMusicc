@@ -10,9 +10,9 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.utils.Utilities
+import com.techswivel.qthemusic.utils.Utilities.roundOffDecimal
 import java.text.DateFormat
 import java.util.*
-import com.techswivel.qthemusic.utils.Utilities.roundOffDecimal
 
 object BindingAdapter {
 
@@ -25,11 +25,11 @@ object BindingAdapter {
     @SuppressLint("SetTextI18n")
     @JvmStatic
     @BindingAdapter("setNomberOfSong")
-    fun setNomberOfSong(textView: TextView, no_of_songs: Int?) {
-        if (no_of_songs == null) {
+    fun setNomberOfSong(textView: TextView, noOfSongs: Int?) {
+        if (noOfSongs == null) {
             textView.text = "0 songs"
         } else {
-            textView.text = "$no_of_songs songs"
+            textView.text = "$noOfSongs songs"
         }
     }
 

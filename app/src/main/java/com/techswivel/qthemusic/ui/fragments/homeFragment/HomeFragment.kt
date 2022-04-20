@@ -72,6 +72,10 @@ class HomeFragment : RecyclerViewBaseFragment() {
         getSongs()
     }
 
+    override fun onPrepareAdapter(): RecyclerView.Adapter<*> {
+        return mRecommendedForYouAdapter
+    }
+
     override fun onPrepareAdapter(adapterType: AdapterType?): RecyclerView.Adapter<*> {
         return when (adapterType) {
             AdapterType.RECOMMENDED_FOR_YOU -> {

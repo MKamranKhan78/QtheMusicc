@@ -52,6 +52,10 @@ class PurchaseAlbumFragment : RecyclerViewBaseFragment(), BaseInterface,
 
     }
 
+    override fun onPrepareAdapter(): RecyclerView.Adapter<*> {
+        return adapter
+    }
+
     override fun onPrepareAdapter(adapterType: AdapterType?): RecyclerView.Adapter<*> {
         return adapter
     }
@@ -84,10 +88,12 @@ class PurchaseAlbumFragment : RecyclerViewBaseFragment(), BaseInterface,
         networkViewModel.recommendedSongsResponse.observe(viewLifecycleOwner) { purchsedAlbumResponse ->
             when (purchsedAlbumResponse.status) {
                 NetworkStatus.LOADING -> {
-                    showProgressBar()
+                    mBinding.shimmerLayout.visibility = View.VISIBLE
+                    mBinding.shimmerLayout.startShimmer()
                 }
                 NetworkStatus.SUCCESS -> {
-                    hideProgressBar()
+                    mBinding.shimmerLayout.visibility = View.GONE
+                    mBinding.shimmerLayout.stopShimmer()
                     viewModel.purchasedAlbumDataList.clear()
                     val response = purchsedAlbumResponse.t as ResponseModel
                     val playlist = response.data.recommendedSongsResponse?.albums
@@ -98,10 +104,14 @@ class PurchaseAlbumFragment : RecyclerViewBaseFragment(), BaseInterface,
                         mBinding.tvNoDataFound.visibility = View.VISIBLE
                     }
                     if (::adapter.isInitialized)
-                        adapter.notifyDataSetChanged()
+                        adapter.notifyItemRangeInserted(
+                            0,
+                            viewModel.purchasedAlbumDataList.size - 1
+                        )
                 }
                 NetworkStatus.ERROR -> {
-                    hideProgressBar()
+                    mBinding.shimmerLayout.visibility = View.GONE
+                    mBinding.shimmerLayout.stopShimmer()
                     purchsedAlbumResponse.error?.message?.let { it1 ->
                         DialogUtils.errorAlert(
                             requireContext(),
@@ -111,7 +121,8 @@ class PurchaseAlbumFragment : RecyclerViewBaseFragment(), BaseInterface,
                     }
                 }
                 NetworkStatus.EXPIRE -> {
-                    hideProgressBar()
+                    mBinding.shimmerLayout.visibility = View.GONE
+                    mBinding.shimmerLayout.stopShimmer()
                     DialogUtils.sessionExpireAlert(requireContext(),
                         object : DialogUtils.CallBack {
                             override fun onPositiveCallBack() {
@@ -123,7 +134,8 @@ class PurchaseAlbumFragment : RecyclerViewBaseFragment(), BaseInterface,
                         })
                 }
                 NetworkStatus.COMPLETED -> {
-                    hideProgressBar()
+                    mBinding.shimmerLayout.visibility = View.GONE
+                    mBinding.shimmerLayout.stopShimmer()
                 }
             }
         }
@@ -145,8 +157,7 @@ class PurchaseAlbumFragment : RecyclerViewBaseFragment(), BaseInterface,
             mBinding.mainPurchaseAlbumRecycler,
             Constants.NO_OF_COLUMNS_2,
             resources.getDimensionPixelSize(R.dimen.recycler_vertical_spacing),
-            resources.getDimensionPixelSize(R.dimen.recycler_horizental_spacing_2),
-            AdapterType.ALBUM
+            resources.getDimensionPixelSize(R.dimen.recycler_horizental_spacing_2)
         )
     }
 

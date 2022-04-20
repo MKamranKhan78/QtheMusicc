@@ -76,6 +76,10 @@ class PlaylistFragment : RecyclerViewBaseFragment(), BaseInterface,
         mBinding.progressBar.visibility = View.GONE
     }
 
+    override fun onPrepareAdapter(): RecyclerView.Adapter<*> {
+        return mPlaylistAdapter
+    }
+
     override fun onPrepareAdapter(adapterType: AdapterType?): RecyclerView.Adapter<*> {
         return mPlaylistAdapter
     }
@@ -161,7 +165,7 @@ class PlaylistFragment : RecyclerViewBaseFragment(), BaseInterface,
                     }
 
                     if (::mPlaylistAdapter.isInitialized)
-                        mPlaylistAdapter.notifyDataSetChanged()
+                        mPlaylistAdapter.notifyItemRangeInserted(0, viewModel.mPlaylist.size - 1)
                 }
                 NetworkStatus.ERROR -> {
                     hideProgressBar()
@@ -195,8 +199,7 @@ class PlaylistFragment : RecyclerViewBaseFragment(), BaseInterface,
     private fun setUpAdapter() {
         mPlaylistAdapter = RecyclerViewAdapter(this, viewModel.mPlaylist)
         setUpRecyclerView(
-            mBinding.recyclerviewPlaylist,
-            AdapterType.PLAYLIST
+            mBinding.recyclerviewPlaylist
         )
     }
 

@@ -4,9 +4,8 @@ import androidx.lifecycle.MutableLiveData
 import com.techswivel.qthemusic.Data.RemoteRepository.ServerRepository.CustomObserver
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.application.QTheMusicApplication
+import com.techswivel.qthemusic.customData.enums.ActionType
 import com.techswivel.qthemusic.customData.enums.CategoryType
-import com.techswivel.qthemusic.customData.enums.PlaylistUpdationType
-import com.techswivel.qthemusic.dataManager.RemoteDataManager
 import com.techswivel.qthemusic.models.*
 import com.techswivel.qthemusic.source.remote.rxjava.CustomError
 import com.techswivel.qthemusic.source.remote.rxjava.ErrorUtils
@@ -43,7 +42,7 @@ class SongAndArtistsViewModel : BaseViewModel() {
         }
 
     fun getRecommendedSongsDataFromServer(recommendedSongsBodyModel: RecommendedSongsBodyModel) {
-        RemoteDataManager.getRecommendedSongsData(recommendedSongsBodyModel).doOnSubscribe {
+        mRemoteDataManager.getRecommendedSongsData(recommendedSongsBodyModel).doOnSubscribe {
             mRecommendedSongsResponse.value = ApiResponse.loading()
         }?.subscribe(object : CustomObserver<Response<ResponseMain>>() {
             override fun onSuccess(t: Response<ResponseMain>) {
@@ -96,7 +95,7 @@ class SongAndArtistsViewModel : BaseViewModel() {
     }
 
     fun getCategoriesDataFromServer(categoryType: CategoryType) {
-        RemoteDataManager.getCategoriesData(categoryType).doOnSubscribe {
+        mRemoteDataManager.getCategoriesData(categoryType).doOnSubscribe {
             mCategoriesResponse.value = ApiResponse.loading()
         }?.subscribe(object : CustomObserver<Response<ResponseMain>>() {
             override fun onSuccess(t: Response<ResponseMain>) {
@@ -149,7 +148,7 @@ class SongAndArtistsViewModel : BaseViewModel() {
     }
 
     fun getSongsDataFromServer(songsBodyModel: SongsBodyModel) {
-        RemoteDataManager.getSongsData(songsBodyModel).doOnSubscribe {
+        mRemoteDataManager.getSongsData(songsBodyModel).doOnSubscribe {
             mSongsResponse.value = ApiResponse.loading()
         }?.subscribe(object : CustomObserver<Response<ResponseMain>>() {
             override fun onSuccess(t: Response<ResponseMain>) {
@@ -202,7 +201,7 @@ class SongAndArtistsViewModel : BaseViewModel() {
     }
 
     fun getFollowingArtist() {
-        RemoteDataManager.getFollowingArtist().doOnSubscribe {
+        mRemoteDataManager.getFollowingArtist().doOnSubscribe {
             followingArtistResponse.value = ApiResponse.loading()
         }?.subscribe(object : CustomObserver<Response<ResponseMain>>() {
             override fun onSuccess(t: Response<ResponseMain>) {
@@ -256,7 +255,7 @@ class SongAndArtistsViewModel : BaseViewModel() {
 
 
     fun unfollowArtist(artistId: Int, follow: Boolean) {
-        RemoteDataManager.unfollowArtist(artistId, follow).doOnSubscribe {
+        mRemoteDataManager.unfollowArtist(artistId, follow).doOnSubscribe {
             artistFollowResponse.value = ApiResponse.loading()
         }?.subscribe(object : CustomObserver<Response<ResponseMain>>() {
             override fun onSuccess(t: Response<ResponseMain>) {
@@ -309,7 +308,7 @@ class SongAndArtistsViewModel : BaseViewModel() {
     }
 
     fun getSongs(songsBodyModel: SongsBodyModel) {
-        RemoteDataManager.getSongsFromServer(songsBodyModel).doOnSubscribe {
+        mRemoteDataManager.getSongsFromServer(songsBodyModel).doOnSubscribe {
             songlistResponse.value = ApiResponse.loading()
         }?.subscribe(object : CustomObserver<Response<ResponseMain>>() {
             override fun onSuccess(t: Response<ResponseMain>) {
@@ -361,8 +360,8 @@ class SongAndArtistsViewModel : BaseViewModel() {
         })
     }
 
-    fun updatePlayList(songId: Int, remove: PlaylistUpdationType, playlistId: Int?) {
-        RemoteDataManager.updatePlayList(songId, remove, playlistId).doOnSubscribe {
+    fun updatePlayList(song: Song, remove: ActionType) {
+        mRemoteDataManager.updatePlayList(song, remove).doOnSubscribe {
             deleteSongRespomse.value = ApiResponse.loading()
         }?.subscribe(object : CustomObserver<Response<ResponseMain>>() {
             override fun onSuccess(t: Response<ResponseMain>) {

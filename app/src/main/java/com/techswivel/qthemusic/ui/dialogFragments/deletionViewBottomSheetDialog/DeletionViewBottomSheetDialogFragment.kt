@@ -9,13 +9,15 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.application.QTheMusicApplication
+import com.techswivel.qthemusic.customData.enums.ActionType
 import com.techswivel.qthemusic.customData.enums.DeleteViewType
 import com.techswivel.qthemusic.customData.enums.NetworkStatus
-import com.techswivel.qthemusic.customData.enums.PlaylistUpdationType
 import com.techswivel.qthemusic.customData.interfaces.BaseInterface
 import com.techswivel.qthemusic.databinding.FragmentDeletionViewBottomSheetDialogBinding
 import com.techswivel.qthemusic.models.PlaylistModel
+import com.techswivel.qthemusic.models.PlaylistModelBuilder
 import com.techswivel.qthemusic.models.Song
+import com.techswivel.qthemusic.models.SongBuilder
 import com.techswivel.qthemusic.source.remote.networkViewModel.ProfileNetworkViewModel
 import com.techswivel.qthemusic.source.remote.networkViewModel.SongAndArtistsViewModel
 import com.techswivel.qthemusic.ui.fragments.playlist_fragment.PlaylistFragmentImpl
@@ -187,19 +189,22 @@ class DeletionViewBottomSheetDialogFragment : BottomSheetDialogFragment(), BaseI
     private fun clickListeners() {
         mBinding.deletePlaylistTextview.setOnClickListener {
             if (viewModel.deletingViewType == DeleteViewType.PLAY_LIST) {
-                viewModel.playlistId?.let { playlistId ->
-                    profileNetworViewModel.deletePlaylist(
-                        playlistId
-                    )
-                }
+                val playlistModelBuilder = PlaylistModelBuilder()
+                playlistModelBuilder.playListId = viewModel.playlistId
+                val playlist = PlaylistModelBuilder.build(playlistModelBuilder)
+                profileNetworViewModel.deletePlaylist(
+                    playlist
+                )
             } else {
-                viewModel.songId?.let { songId ->
-                    mSongAndArtistsViewModel.updatePlayList(
-                        songId,
-                        PlaylistUpdationType.REMOVE,
-                        viewModel.playlistId
-                    )
-                }
+                viewModel.song?.songId = viewModel.songId
+                viewModel.song?.playListId = viewModel.playlistId
+                val songBuilder = SongBuilder()
+                songBuilder.playListId = viewModel.playlistId
+                songBuilder.songId = viewModel.songId
+                val song = SongBuilder.build(songBuilder)
+
+
+                mSongAndArtistsViewModel.updatePlayList(song, ActionType.REMOVE)
             }
         }
         mBinding.imageviewCancelDialog.setOnClickListener {

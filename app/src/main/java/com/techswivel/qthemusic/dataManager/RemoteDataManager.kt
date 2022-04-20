@@ -4,8 +4,8 @@ import com.techswivel.qthemusic.BuildConfig
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.application.QTheMusicApplication
 import com.techswivel.qthemusic.constant.Constants
+import com.techswivel.qthemusic.customData.enums.ActionType
 import com.techswivel.qthemusic.customData.enums.CategoryType
-import com.techswivel.qthemusic.customData.enums.PlaylistUpdationType
 import com.techswivel.qthemusic.dataManager.DummyDataManager.Companion.getDummyAuthDetails
 import com.techswivel.qthemusic.dataManager.DummyDataManager.Companion.getResponseDummyData
 import com.techswivel.qthemusic.models.*
@@ -20,7 +20,20 @@ object RemoteDataManager : BaseDataManager(), RemoteDataManagerImp {
 
     private lateinit var data: GoogleAuthModel
 
+    /** -------------- API methods ---------------------- */
+
+
+    /** -------------- Song And Artist method ---------------------- */
+
     override fun getRecommendedSongsData(recommendedSongsBodyModel: RecommendedSongsBodyModel): Observable<Response<ResponseMain>> {
+        return Observable.create { observer ->
+            // observer.onError(Throwable("This is dummy thorwable if you want to test failed case."))
+            observer.onNext(getResponseDummyData())
+            observer.onComplete()
+        }
+    }
+
+    override fun getSongsData(songsBodyModel: SongsBodyModel): Observable<Response<ResponseMain>> {
         return Observable.create { observer ->
             // observer.onError(Throwable("This is dummy thorwable if you want to test failed case."))
             observer.onNext(getResponseDummyData())
@@ -36,13 +49,6 @@ object RemoteDataManager : BaseDataManager(), RemoteDataManagerImp {
         }
     }
 
-    override fun getPlayListFromServer(): Observable<Response<ResponseMain>> {
-        return Observable.create { observer ->
-            // observer.onError(Throwable("This is dummy thorwable if you want to test failed case."))
-            observer.onNext(getResponseDummyData())
-            observer.onComplete()
-        }
-    }
 
     override fun getSongsFromServer(songsBodyModel: SongsBodyModel): Observable<Response<ResponseMain>> {
         return Observable.create { observer ->
@@ -71,11 +77,43 @@ object RemoteDataManager : BaseDataManager(), RemoteDataManagerImp {
         }
     }
 
+
+    /** -------------- Profile method ---------------------- */
+
+    /**
+     * This method will get profile data , updating playlist
+     */
+
+
+    override fun saveInterest(category: List<Category?>): Observable<Response<ResponseMain>> {
+        return Observable.create { observer ->
+            // observer.onError(Throwable("This is dummy thorwable if you want to test failed case."))
+            observer.onNext(getResponseDummyData())
+            observer.onComplete()
+        }
+    }
+
+
+    override fun profileUpdate(authModel: AuthModel?): Observable<Response<ResponseMain>> {
+        return Observable.create { observer ->
+            // observer.onError(Throwable("This is dummy thorwable if you want to test failed case."))
+            observer.onNext(getResponseDummyData())
+            observer.onComplete()
+        }
+    }
+
     override fun updatePlayList(
-        songId: Int,
-        remove: PlaylistUpdationType,
-        playlistId: Int?
+        song: Song,
+        remove: ActionType,
     ): Observable<Response<ResponseMain>> {
+        return Observable.create { observer ->
+            // observer.onError(Throwable("This is dummy thorwable if you want to test failed case."))
+            observer.onNext(getResponseDummyData())
+            observer.onComplete()
+        }
+    }
+
+    override fun getPlayListFromServer(): Observable<Response<ResponseMain>> {
         return Observable.create { observer ->
             // observer.onError(Throwable("This is dummy thorwable if you want to test failed case."))
             observer.onNext(getResponseDummyData())
@@ -91,7 +129,7 @@ object RemoteDataManager : BaseDataManager(), RemoteDataManagerImp {
         }
     }
 
-    override fun deletePlaylist(playlistId: Int): Observable<Response<ResponseMain>> {
+    override fun deletePlaylist(playlistModel: PlaylistModel): Observable<Response<ResponseMain>> {
         return Observable.create { observer ->
             // observer.onError(Throwable("This is dummy thorwable if you want to test failed case."))
             observer.onNext(getResponseDummyData())
@@ -99,13 +137,9 @@ object RemoteDataManager : BaseDataManager(), RemoteDataManagerImp {
         }
     }
 
-    override fun getSongsData(songsBodyModel: SongsBodyModel): Observable<Response<ResponseMain>> {
-        return Observable.create { observer ->
-            // observer.onError(Throwable("This is dummy thorwable if you want to test failed case."))
-            observer.onNext(getResponseDummyData())
-            observer.onComplete()
-        }
-    }
+
+    /** -------------- Google Api method ---------------------- */
+
 
     override fun getGoogleAccessToken(serverAuthCode: String): Observable<Response<GoogleResponseModel>> {
 
@@ -163,6 +197,10 @@ object RemoteDataManager : BaseDataManager(), RemoteDataManagerImp {
             .observeOn(AndroidSchedulers.mainThread())
     }
 
+
+    /** -------------- Authorization method ---------------------- */
+
+
     override fun userLogin(authRequestBuilder: AuthRequestModel): Observable<Response<ResponseMain>> {
         return Observable.create { observer ->
             observer.onNext(getResponseDummyData())
@@ -201,14 +239,6 @@ object RemoteDataManager : BaseDataManager(), RemoteDataManagerImp {
 
     }
 
-    override fun saveInterest(category: List<Category?>): Observable<Response<ResponseMain>> {
-     return Observable.create { observer ->
-         // observer.onError(Throwable("This is dummy thorwable if you want to test failed case."))
-         observer.onNext(getResponseDummyData())
-         observer.onComplete()
-     }
-    }
-
     override fun logoutUser(deviceIdentifier: String): Observable<Response<ResponseMain>> {
         return Observable.create { observer ->
             // observer.onError(Throwable("This is dummy thorwable if you want to test failed case."))
@@ -217,15 +247,9 @@ object RemoteDataManager : BaseDataManager(), RemoteDataManagerImp {
         }
     }
 
-    override fun profileUpdate(authModel: AuthModel?): Observable<Response<ResponseMain>> {
-        return Observable.create { observer ->
-            // observer.onError(Throwable("This is dummy thorwable if you want to test failed case."))
-            observer.onNext(getResponseDummyData())
-            observer.onComplete()
-        }
-    }
 
     override fun getAuthDetails(): AuthModel {
         return getDummyAuthDetails()
     }
+
 }

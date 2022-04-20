@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/color_black_landing_background">
+
+        <RelativeLayout
+            android:id="@+id/rl_trending_song"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_15dp"
+            tools:ignore="UselessParent">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/artistImageview"
+                android:layout_width="@dimen/_45dp"
+                android:layout_height="@dimen/_45dp"
+                android:layout_gravity="center_horizontal"
+                android:background="@color/shimmerColor"
+                android:scaleType="centerCrop"
+                app:shapeAppearanceOverlay="@style/circleImageView"
+                tools:ignore="VectorDrawableCompat" />
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/_10dp"
+                android:layout_marginEnd="@dimen/_20dp"
+                android:layout_toEndOf="@id/artistImageview"
+                android:background="@color/shimmerColor"
+                android:ellipsize="end"
+                android:fontFamily="@font/manrope_regular"
+                android:maxLines="1"
+                android:minLines="1"
+                android:textColor="@color/color_white_text_profile"
+                android:textSize="@dimen/_14sp" />
+
+
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.05dp"
+            android:layout_below="@id/rl_trending_song"
+            android:background="@color/color_light_white" />
+    </RelativeLayout>
+
+</layout>
