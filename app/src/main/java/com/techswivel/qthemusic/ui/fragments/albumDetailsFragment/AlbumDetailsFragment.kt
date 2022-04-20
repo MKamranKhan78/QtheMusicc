@@ -2,7 +2,6 @@ package com.techswivel.qthemusic.ui.fragments.albumDetailsFragment
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,11 +11,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.customData.adapter.RecyclerViewAdapter
-import com.techswivel.qthemusic.customData.enums.*
+import com.techswivel.qthemusic.customData.enums.AdapterType
+import com.techswivel.qthemusic.customData.enums.AlbumStatus
+import com.techswivel.qthemusic.customData.enums.NetworkStatus
+import com.techswivel.qthemusic.customData.enums.SongType
 import com.techswivel.qthemusic.databinding.FragmentAlbumDetailsBinding
-import com.techswivel.qthemusic.models.*
+import com.techswivel.qthemusic.models.ErrorResponse
+import com.techswivel.qthemusic.models.ResponseModel
+import com.techswivel.qthemusic.models.SongsBodyBuilder
+import com.techswivel.qthemusic.models.database.Album
 import com.techswivel.qthemusic.source.remote.networkViewModel.SongAndArtistsViewModel
-import com.techswivel.qthemusic.ui.activities.mainActivity.MaintActivityImp
 import com.techswivel.qthemusic.ui.base.RecyclerViewBaseFragment
 import com.techswivel.qthemusic.utils.CommonKeys
 import com.techswivel.qthemusic.utils.DialogUtils

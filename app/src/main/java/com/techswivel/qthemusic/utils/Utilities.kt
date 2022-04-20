@@ -3,15 +3,14 @@ package com.techswivel.qthemusic.utils
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Rect
-import android.content.Context
 import android.text.InputFilter
-import android.view.View
-import com.techswivel.qthemusic.utils.Log.e
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import com.techswivel.qthemusic.utils.Log.e
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*

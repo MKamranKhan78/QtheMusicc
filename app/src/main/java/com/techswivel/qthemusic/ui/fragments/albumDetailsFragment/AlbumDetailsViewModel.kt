@@ -1,7 +1,6 @@
 package com.techswivel.qthemusic.ui.fragments.albumDetailsFragment
 
-import com.techswivel.qthemusic.customData.enums.AlbumStatus
-import com.techswivel.qthemusic.models.Album
+import com.techswivel.qthemusic.models.database.Album
 import com.techswivel.qthemusic.ui.base.BaseViewModel
 
 class AlbumDetailsViewModel : BaseViewModel() {

@@ -2,6 +2,7 @@ package com.techswivel.qthemusic.models
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import com.techswivel.qthemusic.models.database.Song
 
 class MyDataClass(
     @Expose

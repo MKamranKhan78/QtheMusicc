@@ -2,7 +2,7 @@ package com.techswivel.qthemusic.ui.fragments.homeFragment
 
 import com.techswivel.qthemusic.customData.enums.RecommendedSongsType
 import com.techswivel.qthemusic.models.RecommendedSongsBodyModel
-import com.techswivel.qthemusic.models.Song
+import com.techswivel.qthemusic.models.database.Song
 import com.techswivel.qthemusic.ui.base.BaseViewModel
 
 class HomeViewModel : BaseViewModel() {

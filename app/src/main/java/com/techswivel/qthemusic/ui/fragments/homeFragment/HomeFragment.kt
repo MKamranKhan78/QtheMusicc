@@ -12,15 +12,20 @@ import com.techswivel.dfaktfahrerapp.ui.fragments.underDevelopmentMessageFragmen
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.customData.adapter.RecyclerViewAdapter
 import com.techswivel.qthemusic.customData.enums.*
-import com.techswivel.qthemusic.customData.enums.AdapterType
 import com.techswivel.qthemusic.databinding.FragmentHomeBinding
-import com.techswivel.qthemusic.models.*
+import com.techswivel.qthemusic.models.RecommendedSongsBodyBuilder
+import com.techswivel.qthemusic.models.ResponseModel
+import com.techswivel.qthemusic.models.SongsBodyBuilder
+import com.techswivel.qthemusic.models.database.Album
+import com.techswivel.qthemusic.models.database.Song
 import com.techswivel.qthemusic.source.remote.networkViewModel.SongAndArtistsViewModel
-import com.techswivel.qthemusic.ui.activities.mainActivity.MaintActivityImp
 import com.techswivel.qthemusic.ui.activities.playerActivity.PlayerActivity
 import com.techswivel.qthemusic.ui.base.RecyclerViewBaseFragment
 import com.techswivel.qthemusic.ui.fragments.albumDetailsFragment.AlbumDetailsFragment
-import com.techswivel.qthemusic.utils.*
+import com.techswivel.qthemusic.utils.ActivityUtils
+import com.techswivel.qthemusic.utils.CommonKeys
+import com.techswivel.qthemusic.utils.DialogUtils
+import com.techswivel.qthemusic.utils.Log
 
 class HomeFragment : RecyclerViewBaseFragment() {
 
