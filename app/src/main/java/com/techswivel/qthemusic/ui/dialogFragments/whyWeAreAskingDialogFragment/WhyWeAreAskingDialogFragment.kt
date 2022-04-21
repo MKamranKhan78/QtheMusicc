@@ -1,4 +1,5 @@
 package com.techswivel.qthemusic.ui.dialogFragments.whyWeAreAskingDialogFragment
+
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -8,7 +9,7 @@ import android.view.ViewGroup
 import com.techswivel.qthemusic.databinding.FragmentWhyWeAreAskingDialogBinding
 import com.techswivel.qthemusic.ui.base.BaseDialogFragment
 
-class WhyWeAreAskingDialogFragment : BaseDialogFragment(){
+class WhyWeAreAskingDialogFragment : BaseDialogFragment() {
     private lateinit var mWhyAskingDialogBinding: FragmentWhyWeAreAskingDialogBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,10 +29,21 @@ class WhyWeAreAskingDialogFragment : BaseDialogFragment(){
 
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        clickListeners()
+    }
+
     override fun onStart() {
         super.onStart()
         if (dialog != null && dialog?.getWindow() != null) {
             dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        }
+    }
+
+    private fun clickListeners() {
+        mWhyAskingDialogBinding.btnClose.setOnClickListener {
+            dismiss()
         }
     }
 }

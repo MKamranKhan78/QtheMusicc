@@ -9,7 +9,10 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.facebook.*
+import com.facebook.CallbackManager
+import com.facebook.FacebookCallback
+import com.facebook.FacebookException
+import com.facebook.GraphRequest
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -28,7 +31,6 @@ import com.techswivel.qthemusic.source.remote.networkViewModel.AuthNetworkViewMo
 import com.techswivel.qthemusic.source.remote.networkViewModel.ProfileNetworkViewModel
 import com.techswivel.qthemusic.ui.activities.mainActivity.MainActivity
 import com.techswivel.qthemusic.ui.base.BaseActivity
-import com.techswivel.qthemusic.ui.fragments.forgotPasswordFragment.ForgotPassword
 import com.techswivel.qthemusic.ui.fragments.forgotPasswordFragment.ForgotPasswordImp
 import com.techswivel.qthemusic.ui.fragments.otpVerificationFragment.OtpVerification
 import com.techswivel.qthemusic.ui.fragments.setPasswordFragmetnt.SetPassword
@@ -38,7 +40,6 @@ import com.techswivel.qthemusic.ui.fragments.yourInterestFragment.YourInterestFr
 import com.techswivel.qthemusic.utils.CommonKeys
 import com.techswivel.qthemusic.utils.DialogUtils
 import com.techswivel.qthemusic.utils.Log
-import com.techswivel.qthemusic.utils.Utilities
 import java.util.*
 
 
@@ -54,13 +55,20 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
         super.onCreate(savedInstanceState)
         mAuthBinding = ActivityAuthBinding.inflate(layoutInflater)
         initViewModel()
-        mAuthActivityViewModel.isLogin=PrefUtils.getBoolean(this,CommonKeys.KEY_IS_LOGGED_IN)
-        mAuthActivityViewModel.isInterestSelected=PrefUtils.getBoolean(this,CommonKeys.KEY_IS_INTEREST_SET)
-        if (mAuthActivityViewModel.isLogin &&!mAuthActivityViewModel.isInterestSelected){
-            val yourIntersetFragment=YourInterestFragment()
+
+        mAuthActivityViewModel.isLogin = PrefUtils.getBoolean(this, CommonKeys.KEY_IS_LOGGED_IN)
+        mAuthActivityViewModel.isInterestSelected =
+            PrefUtils.getBoolean(this, CommonKeys.KEY_IS_INTEREST_SET)
+        Log.d(
+            TAG,
+            " login ${mAuthActivityViewModel.isLogin} interset ${mAuthActivityViewModel.isInterestSelected}"
+        )
+        if (mAuthActivityViewModel.isLogin && !mAuthActivityViewModel.isInterestSelected) {
+            val yourIntersetFragment = YourInterestFragment()
             replaceFragmentWithoutAddingToBackStack(R.id.auth_container, yourIntersetFragment)
-        }else{
+        } else {
             replaceFragmentWithoutAddingToBackStack(R.id.auth_container, SignInFragment())
+            mCurrentFragment = SignInFragment()
         }
 
         setContentView(mAuthBinding.root)
@@ -111,19 +119,21 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
     }
 
     override fun forgotPasswordRequest(
-        authRequestBuilder: AuthRequestBuilder, sharedViews: View?, transitionName: String?
+        authRequestBuilder: AuthRequestBuilder,
+        sharedViews: View?,
+        transitionName: String?,
+        isResetRequest: Boolean
     ) {
-
+        mAuthActivityViewModel.isResetRequest = isResetRequest
         mAuthActivityViewModel.sharedView = sharedViews
         mAuthActivityViewModel.myTransitionName = transitionName
         mAuthActivityViewModel.authRequestBilder = authRequestBuilder
         mAuthActivityViewModel.myEmail = authRequestBuilder.email.toString()
-        Log.d(TAG, "data is here ${authRequestBuilder.name}")
-        Log.d(TAG, "forgotPasswordRequest otp ${authRequestBuilder.otpType}")
+        Log.d(TAG, "is reset request ${mAuthActivityViewModel.isResetRequest}")
         mAuthActivityViewModel.otpType = authRequestBuilder.otpType
         val authModel =
             AuthRequestBuilder.builder(mAuthActivityViewModel.authRequestBilder)
-       mAuthNetworkViewModel.sendOtpRequest(authModel)
+        mAuthNetworkViewModel.sendOtpRequest(authModel)
     }
 
     override fun showProgressBar() {
@@ -158,7 +168,7 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
         authRequestBuilder: AuthRequestBuilder
     ) {
         mAuthActivityViewModel.authRequestBilder.password = authRequestBuilder.password
-        Log.d(TAG," set passerrd ${mAuthActivityViewModel.authRequestBilder.password}")
+        Log.d(TAG, " set passerrd ${mAuthActivityViewModel.authRequestBilder.password}")
         val authModel =
             AuthRequestBuilder.builder(authRequestBuilder)
         mAuthNetworkViewModel.requestToSetPassword(authModel)
@@ -221,7 +231,7 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
                 mAuthActivityViewModel.authRequestBilder.name = account.displayName
                 mAuthActivityViewModel.authRequestBilder.profile = account.photoUrl.toString()
 
-                Log.d(TAG, "profile is ${ mAuthActivityViewModel.userName }")
+                Log.d(TAG, "profile is ${mAuthActivityViewModel.userName}")
             } else {
                 Log.d(TAG, "ServerAuthCode Not Found")
             }
@@ -295,30 +305,25 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
             when (it.status) {
                 NetworkStatus.LOADING -> {
                     showProgressBar()
+                    Log.d(TAG, "loading")
                 }
                 NetworkStatus.SUCCESS -> {
                     hideProgressBar()
+                    Log.d(TAG, "success ")
                     val mResponseModel = it.t as ResponseModel
                     if (mResponseModel.status) {
+                        Log.d(TAG, "success if")
                         val userData = mResponseModel.data.authModel
                         mAuthActivityViewModel.setDataInSharedPrefrence(mResponseModel.data.authModel)
-                        val isInterestSet =
-                            PrefUtils.getBoolean(this, CommonKeys.KEY_IS_INTEREST_SET)
+                        val intent = Intent(this@AuthActivity, MainActivity::class.java)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                        startActivity(intent)
+                        finish()
 
-                        if (isInterestSet) {
-                            val intent = Intent(this@AuthActivity, MainActivity::class.java)
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                            startActivity(intent)
-                            finish()
-                        } else {
-                            replaceCurrentFragment(YourInterestFragment())
-                        }
                     } else {
-                        Log.d(TAG, "status false")
                         (mCurrentFragment as ForgotPasswordImp).accountNotExistsSendOtp(
                             mAuthActivityViewModel.myEmail
                         )
-                        Utilities.showToast(this, "account not exists")
                     }
                 }
                 NetworkStatus.ERROR -> {
@@ -400,24 +405,27 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
                         CommonKeys.AUTH_BUILDER_MODEL,
                         mAuthActivityViewModel.authRequestBilder
                     )
-                    Log.d(TAG,"data in otpObserver email ${mAuthActivityViewModel.authRequestBilder.otpType} ")
                     val otpVerification = OtpVerification()
                     otpVerification.arguments = bundle
-                    if (mAuthActivityViewModel.otpType == OtpType.EMAIL.name) {
-                        Log.d(TAG, "eamil flow called ")
-                        mAuthActivityViewModel.sharedView?.let { sharedView ->
-                            mAuthActivityViewModel.myTransitionName?.let { transition ->
-                                replaceFragmentWithAnimation(
-                                    R.id.auth_container,
-                                    otpVerification,
-                                    sharedView,
-                                    transition
-                                )
+                    Log.d(TAG, "is request is ${mAuthActivityViewModel.isResetRequest}")
+                    if (!mAuthActivityViewModel.isResetRequest) {
+
+                        if (mAuthActivityViewModel.otpType == OtpType.EMAIL.name) {
+                            Log.d(TAG, "eamil flow called ")
+                            mAuthActivityViewModel.sharedView?.let { sharedView ->
+                                mAuthActivityViewModel.myTransitionName?.let { transition ->
+                                    replaceFragmentWithAnimation(
+                                        R.id.auth_container,
+                                        otpVerification,
+                                        sharedView,
+                                        transition
+                                    )
+                                }
                             }
+                        } else {
+                            Log.d(TAG, "else called ")
+                            replaceCurrentFragment(otpVerification)
                         }
-                    } else {
-                        Log.d(TAG, "else called ")
-                        replaceCurrentFragment(otpVerification)
                     }
                 }
                 NetworkStatus.EXPIRE -> {
@@ -456,7 +464,10 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
                             CommonKeys.AUTH_BUILDER_MODEL,
                             mAuthActivityViewModel.authRequestBilder
                         )
-                        Log.d(TAG,"data in otpverification emai ${mAuthActivityViewModel.authRequestBilder.otpType}")
+                        Log.d(
+                            TAG,
+                            "data in otpverification emai ${mAuthActivityViewModel.authRequestBilder.otpType}"
+                        )
                         val setPassword = SetPassword()
                         setPassword.arguments = bundle
                         PrefUtils.setBoolean(this, CommonKeys.START_TIMER, false)
@@ -495,17 +506,18 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
                     val data = it.t as ResponseModel
                     if (mAuthActivityViewModel.authRequestBilder.otpType == OtpType.FORGET_PASSWORD.name) {
                         replaceCurrentFragment(SignInFragment())
-                        popUpAllFragmentIncludeThis(ForgotPassword::class.java.name)
-                        Log.d(TAG,"otp is if ${mAuthActivityViewModel.authRequestModel.otpType}")
+                        popUpAllFragmentIncludeThis(null)
+                        Log.d(TAG, "otp is if ${mAuthActivityViewModel.authRequestModel.otpType}")
 
                     } else {
                         val signUpFragment = SignUpFragment()
                         val bundle = Bundle()
-                        Log.d(TAG,"otp is else ${mAuthActivityViewModel.authRequestModel.otpType}")
+                        Log.d(TAG, "otp is else ${mAuthActivityViewModel.authRequestModel.otpType}")
 
                         mAuthActivityViewModel.authRequestBilder.profile =
                             mAuthActivityViewModel.userPhotoUrl
-                        mAuthActivityViewModel.authRequestBilder.name=mAuthActivityViewModel.userName
+                        mAuthActivityViewModel.authRequestBilder.name =
+                            mAuthActivityViewModel.userName
                         bundle.putSerializable(
                             CommonKeys.AUTH_BUILDER_MODEL,
                             mAuthActivityViewModel.authRequestBilder
@@ -574,9 +586,13 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
                 }
                 NetworkStatus.SUCCESS -> {
                     hideProgressBar()
-                    val data = it.t as ResponseModel
-                    PrefUtils.setBoolean(this, CommonKeys.KEY_IS_INTEREST_SET, true)
-                    PrefUtils.setBoolean(this, CommonKeys.KEY_IS_LOGGED_IN, true)
+                    val responseModel = it.t as ResponseModel
+                    val userData = responseModel.data
+                    PrefUtils.setBoolean(
+                        QTheMusicApplication.getContext(),
+                        CommonKeys.KEY_IS_INTEREST_SET,
+                        true
+                    )
                     val intent = Intent(this, MainActivity::class.java)
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                     startActivity(intent)

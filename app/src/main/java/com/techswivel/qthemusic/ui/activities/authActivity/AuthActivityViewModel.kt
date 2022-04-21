@@ -4,12 +4,12 @@ import android.os.Bundle
 import android.view.View
 import com.facebook.CallbackManager
 import com.facebook.login.LoginManager
-import com.techswivel.qthemusic.models.AuthModel
 import com.techswivel.qthemusic.models.AuthRequestBuilder
 import com.techswivel.qthemusic.models.AuthRequestModel
 import com.techswivel.qthemusic.ui.base.BaseViewModel
 
 class AuthActivityViewModel : BaseViewModel() {
+    var isResetRequest: Boolean = false
     var otpType: String? = ""
     var userName: String? = ""
     var myEmail: String? = ""
