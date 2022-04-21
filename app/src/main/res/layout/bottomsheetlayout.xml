@@ -3,13 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:background="@android:color/transparent"
-        app:cardCornerRadius="@dimen/_20dp"
-        app:cardElevation="@dimen/_10dp">
+        android:orientation="vertical">
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
@@ -26,7 +23,7 @@
                 android:paddingBottom="@dimen/_20dp">
 
                 <ImageView
-                    android:id="@+id/imageviewCancelDialog"
+                    android:id="@+id/imageviewCancelDialogBottomSheet"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
@@ -54,7 +51,7 @@
                     android:background="@color/color_light_grey" />
 
                 <TextView
-                    android:id="@+id/deletePlaylistTextview"
+                    android:id="@+id/deletePlaylistTextviewBottomSheet"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/line"
@@ -80,5 +77,5 @@
                 android:visibility="gone"
                 tools:ignore="UnusedAttribute" />
         </androidx.cardview.widget.CardView>
-    </RelativeLayout>
+    </LinearLayout>
 </layout>

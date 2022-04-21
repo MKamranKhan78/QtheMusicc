@@ -104,10 +104,7 @@ class PurchaseAlbumFragment : RecyclerViewBaseFragment(), BaseInterface,
                         mBinding.tvNoDataFound.visibility = View.VISIBLE
                     }
                     if (::adapter.isInitialized)
-                        adapter.notifyItemRangeInserted(
-                            0,
-                            viewModel.purchasedAlbumDataList.size - 1
-                        )
+                        adapter.notifyDataSetChanged()
                 }
                 NetworkStatus.ERROR -> {
                     mBinding.shimmerLayout.visibility = View.GONE

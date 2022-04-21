@@ -5,26 +5,25 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.techswivel.dfaktfahrerapp.ui.fragments.underDevelopmentMessageFragment.UnderDevelopmentMessageFragment
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.customData.adapter.RecyclerViewAdapter
+import com.techswivel.qthemusic.customData.enums.ActionType
 import com.techswivel.qthemusic.customData.enums.AdapterType
-import com.techswivel.qthemusic.customData.enums.DeleteViewType
 import com.techswivel.qthemusic.customData.enums.NetworkStatus
 import com.techswivel.qthemusic.customData.enums.SongType
 import com.techswivel.qthemusic.customData.interfaces.BaseInterface
 import com.techswivel.qthemusic.databinding.FragmentSongsBinding
-import com.techswivel.qthemusic.models.PlaylistModel
-import com.techswivel.qthemusic.models.ResponseModel
-import com.techswivel.qthemusic.models.Song
-import com.techswivel.qthemusic.models.SongsBodyBuilder
+import com.techswivel.qthemusic.models.*
 import com.techswivel.qthemusic.source.remote.networkViewModel.ProfileNetworkViewModel
 import com.techswivel.qthemusic.source.remote.networkViewModel.SongAndArtistsViewModel
 import com.techswivel.qthemusic.ui.activities.playlistActivity.PlaylistActivityImpl
 import com.techswivel.qthemusic.ui.base.RecyclerViewBaseFragment
-import com.techswivel.qthemusic.ui.dialogFragments.deletionViewBottomSheetDialog.DeletionViewBottomSheetDialogFragment
 import com.techswivel.qthemusic.ui.fragments.playlist_fragment.PlaylistFragmentImpl
 import com.techswivel.qthemusic.utils.ActivityUtils
 import com.techswivel.qthemusic.utils.CommonKeys
@@ -48,7 +47,6 @@ class SongsFragment : RecyclerViewBaseFragment(), BaseInterface,
     private lateinit var profileNetworViewModel: ProfileNetworkViewModel
     private lateinit var songAndArtistViewModel: SongAndArtistsViewModel
     private lateinit var mSongListAdapter: RecyclerViewAdapter
-    private lateinit var deletionBottomSheetDialog: DeletionViewBottomSheetDialogFragment
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -106,34 +104,13 @@ class SongsFragment : RecyclerViewBaseFragment(), BaseInterface,
     override fun onViewClicked(view: View, data: Any?) {
         super.onViewClicked(view, data)
         val song = data as Song
-        val bundle = Bundle()
-
-        viewModel.playlistModel?.playListId?.let { playlistId ->
-            bundle.putInt(CommonKeys.KEY_PLAYLIST_ID, playlistId)
-        }
-        bundle.putString(CommonKeys.KEY_DATA, DeleteViewType.PLAY_LIST.toString())
-        song.let { song ->
-            bundle.putParcelable(CommonKeys.KEY_DATA, song)
-        }
-        bundle.putSerializable(CommonKeys.KEY_DELETE_VIEW_TYPE, DeleteViewType.SONG)
-        openBottomSheetDialog(bundle)
+        viewModel.mSong = song
+        openBottomSheet(song)
     }
+
+
 
     override fun openPlayListFragment(playlistModel: PlaylistModel) {
-    }
-
-    override fun openPlayListFragmentWithPlaylistModel(playlistModel: PlaylistModel?) {
-    }
-
-    override fun openSongFragmentWithSongModel(song: Song?) {
-        val index = viewModel.mSongsList.indexOf(song as Song)
-        viewModel.mSongsList.remove(song)
-        if (viewModel.mSongsList.size == 0) {
-            mBinding.tvNoDataFound.visibility = View.VISIBLE
-        } else {
-            mBinding.tvNoDataFound.visibility = View.GONE
-        }
-        mSongListAdapter.notifyItemRemoved(index)
     }
 
     override fun getPlaylist(playlist: List<PlaylistModel>?) {
@@ -151,6 +128,44 @@ class SongsFragment : RecyclerViewBaseFragment(), BaseInterface,
 
     @SuppressLint("NotifyDataSetChanged")
     private fun setObserver() {
+
+        songAndArtistViewModel.deleteSongRespomse.observe(viewLifecycleOwner) { songDeletingResponse ->
+            when (songDeletingResponse.status) {
+                NetworkStatus.LOADING -> {
+                    showProgressBar()
+                }
+                NetworkStatus.SUCCESS -> {
+                    hideProgressBar()
+                    removeItemFromList(viewModel.mSong)
+                }
+                NetworkStatus.ERROR -> {
+                    hideProgressBar()
+                    songDeletingResponse.error?.message?.let { it1 ->
+                        DialogUtils.errorAlert(
+                            requireContext(),
+                            songDeletingResponse.error.code.toString(),
+                            songDeletingResponse.error.message
+                        )
+                    }
+                }
+                NetworkStatus.EXPIRE -> {
+                    hideProgressBar()
+                    DialogUtils.sessionExpireAlert(requireContext(),
+                        object : DialogUtils.CallBack {
+                            override fun onPositiveCallBack() {
+                                viewModel.clearAppSession(requireActivity())
+                            }
+
+                            override fun onNegativeCallBack() {
+                            }
+                        })
+                }
+                NetworkStatus.COMPLETED -> {
+                    hideProgressBar()
+                }
+            }
+        }
+
         songAndArtistViewModel.songlistResponse.observe(viewLifecycleOwner) { playlistDataResponse ->
             when (playlistDataResponse.status) {
                 NetworkStatus.LOADING -> {
@@ -205,6 +220,17 @@ class SongsFragment : RecyclerViewBaseFragment(), BaseInterface,
         }
     }
 
+    private fun removeItemFromList(mSong: Song?) {
+        val index = viewModel.mSongsList.indexOf(mSong as Song)
+        viewModel.mSongsList.remove(mSong)
+        if (viewModel.mSongsList.size == 0) {
+            mBinding.tvNoDataFound.visibility = View.VISIBLE
+        } else {
+            mBinding.tvNoDataFound.visibility = View.GONE
+        }
+        mSongListAdapter.notifyItemRemoved(index)
+    }
+
     private fun initViewModel() {
         viewModel =
             ViewModelProvider(this).get(SongsFragmentViewModel::class.java)
@@ -236,13 +262,34 @@ class SongsFragment : RecyclerViewBaseFragment(), BaseInterface,
             arguments?.getParcelable<PlaylistModel>(CommonKeys.KEY_DATA) as PlaylistModel
     }
 
-    private fun openBottomSheetDialog(bundle: Bundle) {
-        deletionBottomSheetDialog = DeletionViewBottomSheetDialogFragment.newInstance(bundle, this)
-        deletionBottomSheetDialog.show(
-            requireActivity().supportFragmentManager,
-            deletionBottomSheetDialog.tag
+    private fun openBottomSheet(song: Song) {
+        val dialog = BottomSheetDialog(
+            requireContext(),
+            R.style.BottomSheetDialog
         )
+        val view = layoutInflater.inflate(R.layout.bottomsheetlayout, null)
+        val textDelete = view.findViewById<TextView>(R.id.deletePlaylistTextviewBottomSheet)
+        textDelete.text = getString(R.string.remove_from_playlist)
+        val closeDialogImageview =
+            view.findViewById<ImageView>(R.id.imageviewCancelDialogBottomSheet)
+        closeDialogImageview.setOnClickListener {
+            dialog.dismiss()
+        }
+        textDelete.setOnClickListener {
+            viewModel.mSong?.songId = song.songId
+            viewModel.mSong?.playListId = viewModel.playlistModel?.playListId
+            val songBuilder = SongBuilder()
+            songBuilder.playListId = viewModel.playlistModel?.playListId
+            songBuilder.songId = song.songId
+            val song = SongBuilder.build(songBuilder)
+            songAndArtistViewModel.updatePlayList(song, ActionType.REMOVE)
+
+            dialog.dismiss()
+        }
+
+        dialog.setCancelable(false)
+        dialog.setContentView(view)
+        dialog.show()
+
     }
-
-
 }

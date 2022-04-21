@@ -5,22 +5,23 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.customData.adapter.RecyclerViewAdapter
 import com.techswivel.qthemusic.customData.enums.AdapterType
-import com.techswivel.qthemusic.customData.enums.DeleteViewType
 import com.techswivel.qthemusic.customData.enums.NetworkStatus
 import com.techswivel.qthemusic.customData.interfaces.BaseInterface
 import com.techswivel.qthemusic.databinding.FragmentPlaylistBinding
 import com.techswivel.qthemusic.models.PlaylistModel
+import com.techswivel.qthemusic.models.PlaylistModelBuilder
 import com.techswivel.qthemusic.models.ResponseModel
-import com.techswivel.qthemusic.models.Song
 import com.techswivel.qthemusic.source.remote.networkViewModel.ProfileNetworkViewModel
 import com.techswivel.qthemusic.ui.activities.playlistActivity.PlaylistActivityImpl
 import com.techswivel.qthemusic.ui.base.RecyclerViewBaseFragment
-import com.techswivel.qthemusic.ui.dialogFragments.deletionViewBottomSheetDialog.DeletionViewBottomSheetDialogFragment
 import com.techswivel.qthemusic.utils.CommonKeys
 import com.techswivel.qthemusic.utils.DialogUtils
 import java.util.*
@@ -42,7 +43,6 @@ class PlaylistFragment : RecyclerViewBaseFragment(), BaseInterface,
     private lateinit var viewModel: PlaylistFragmentViewModel
     private lateinit var mPlaylistAdapter: RecyclerViewAdapter
     private lateinit var profileNetworViewModel: ProfileNetworkViewModel
-    private lateinit var deletionBottomSheetDialog: DeletionViewBottomSheetDialogFragment
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -97,15 +97,10 @@ class PlaylistFragment : RecyclerViewBaseFragment(), BaseInterface,
     override fun onViewClicked(view: View, data: Any?) {
         super.onViewClicked(view, data)
         val playlistModel = data as PlaylistModel
-        val bundle = Bundle()
-
-        bundle.putString(CommonKeys.KEY_DATA, DeleteViewType.PLAY_LIST.toString())
-        playlistModel.let { playListModel ->
-            bundle.putParcelable(CommonKeys.KEY_DATA, playListModel)
-        }
-        bundle.putSerializable(CommonKeys.KEY_DELETE_VIEW_TYPE, DeleteViewType.PLAY_LIST)
-        openBottomSheetDialog(bundle)
+        viewModel.playlistObj = playlistModel
+        openBottomSheet(playlistModel)
     }
+
 
     @SuppressLint("NotifyDataSetChanged")
     override fun openPlayListFragment(playlistModel: PlaylistModel) {
@@ -116,21 +111,7 @@ class PlaylistFragment : RecyclerViewBaseFragment(), BaseInterface,
     }
 
 
-    override fun openPlayListFragmentWithPlaylistModel(playlistModel: PlaylistModel?) {
-        val index = viewModel.mPlaylist.indexOf(playlistModel as PlaylistModel)
-        viewModel.mPlaylist.remove(playlistModel)
-        (mActivityListener as PlaylistFragmentImpl).getPlaylistAfterDeletingItem(viewModel.mPlaylist)
-        if (viewModel.mPlaylist.size == 0) {
-            mBinding.tvNoDataFound.visibility = View.VISIBLE
-        } else {
-            mBinding.tvNoDataFound.visibility = View.GONE
-        }
-        mPlaylistAdapter.notifyItemRemoved(index)
-    }
 
-    override fun openSongFragmentWithSongModel(song: Song?) {
-
-    }
 
     override fun getPlaylist(playlist: List<PlaylistModel>?) {
 
@@ -146,6 +127,46 @@ class PlaylistFragment : RecyclerViewBaseFragment(), BaseInterface,
 
     @SuppressLint("NotifyDataSetChanged")
     private fun setObserver() {
+
+        profileNetworViewModel.deletePlaylistResponse.observe(viewLifecycleOwner) { playlistDataResponse ->
+            when (playlistDataResponse.status) {
+                NetworkStatus.LOADING -> {
+                    showProgressBar()
+                }
+                NetworkStatus.SUCCESS -> {
+                    hideProgressBar()
+                    removeItemFromList(viewModel.playlistObj)
+
+                }
+                NetworkStatus.ERROR -> {
+                    hideProgressBar()
+                    playlistDataResponse.error?.message?.let { it1 ->
+                        DialogUtils.errorAlert(
+                            requireContext(),
+                            playlistDataResponse.error.code.toString(),
+                            playlistDataResponse.error.message
+                        )
+                    }
+                }
+                NetworkStatus.EXPIRE -> {
+                    hideProgressBar()
+                    DialogUtils.sessionExpireAlert(requireContext(),
+                        object : DialogUtils.CallBack {
+                            override fun onPositiveCallBack() {
+                                viewModel.clearAppSession(requireActivity())
+                            }
+
+                            override fun onNegativeCallBack() {
+                            }
+                        })
+                }
+                NetworkStatus.COMPLETED -> {
+                    hideProgressBar()
+                }
+            }
+        }
+
+
         profileNetworViewModel.playlistResponse.observe(viewLifecycleOwner) { playlistDataResponse ->
             when (playlistDataResponse.status) {
                 NetworkStatus.LOADING -> {
@@ -165,7 +186,7 @@ class PlaylistFragment : RecyclerViewBaseFragment(), BaseInterface,
                     }
 
                     if (::mPlaylistAdapter.isInitialized)
-                        mPlaylistAdapter.notifyItemRangeInserted(0, viewModel.mPlaylist.size - 1)
+                        mPlaylistAdapter.notifyDataSetChanged()
                 }
                 NetworkStatus.ERROR -> {
                     hideProgressBar()
@@ -196,6 +217,18 @@ class PlaylistFragment : RecyclerViewBaseFragment(), BaseInterface,
         }
     }
 
+    private fun removeItemFromList(playlistObj: PlaylistModel?) {
+        val index = viewModel.mPlaylist.indexOf(playlistObj as PlaylistModel)
+        viewModel.mPlaylist.remove(playlistObj)
+        (mActivityListener as PlaylistFragmentImpl).getPlaylistAfterDeletingItem(viewModel.mPlaylist)
+        if (viewModel.mPlaylist.size == 0) {
+            mBinding.tvNoDataFound.visibility = View.VISIBLE
+        } else {
+            mBinding.tvNoDataFound.visibility = View.GONE
+        }
+        mPlaylistAdapter.notifyItemRemoved(index)
+    }
+
     private fun setUpAdapter() {
         mPlaylistAdapter = RecyclerViewAdapter(this, viewModel.mPlaylist)
         setUpRecyclerView(
@@ -210,12 +243,33 @@ class PlaylistFragment : RecyclerViewBaseFragment(), BaseInterface,
             ViewModelProvider(this).get(ProfileNetworkViewModel::class.java)
     }
 
-    private fun openBottomSheetDialog(bundle: Bundle) {
-        deletionBottomSheetDialog = DeletionViewBottomSheetDialogFragment.newInstance(bundle, this)
-        deletionBottomSheetDialog.show(
-            requireActivity().supportFragmentManager,
-            deletionBottomSheetDialog.tag
+    private fun openBottomSheet(playlistModel: PlaylistModel) {
+        val dialog = BottomSheetDialog(
+            requireContext(),
+            R.style.BottomSheetDialog
         )
+        val view = layoutInflater.inflate(R.layout.bottomsheetlayout, null)
+        val textDelete = view.findViewById<TextView>(R.id.deletePlaylistTextviewBottomSheet)
+        textDelete.text = getString(R.string.delete_playlist)
+        val closeDialogImageview =
+            view.findViewById<ImageView>(R.id.imageviewCancelDialogBottomSheet)
+        closeDialogImageview.setOnClickListener {
+            dialog.dismiss()
+        }
+        textDelete.setOnClickListener {
+            viewModel.playListID = playlistModel.playListId
+            val playlistModelBuilder = PlaylistModelBuilder()
+            playlistModelBuilder.playListId = playlistModel.playListId
+            val playlist = PlaylistModelBuilder.build(playlistModelBuilder)
+            profileNetworViewModel.deletePlaylist(
+                playlist
+            )
+            dialog.dismiss()
+        }
+
+        dialog.setCancelable(false)
+        dialog.setContentView(view)
+        dialog.show()
     }
 
 }

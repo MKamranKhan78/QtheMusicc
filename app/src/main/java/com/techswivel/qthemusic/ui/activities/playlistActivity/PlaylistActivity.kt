@@ -77,13 +77,6 @@ class PlaylistActivity : BaseActivity(), PlaylistActivityImpl, PlaylistFragmentI
         (viewModel.instance as PlaylistFragmentImpl).openPlayListFragment(playlistModel)
     }
 
-    override fun openPlayListFragmentWithPlaylistModel(playlistModel: PlaylistModel?) {
-    }
-
-    override fun openSongFragmentWithSongModel(song: Song?) {
-
-    }
-
     override fun getPlaylist(playlist: List<PlaylistModel>?) {
         viewModel.playlist = playlist
     }
