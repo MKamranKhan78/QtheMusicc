@@ -9,7 +9,10 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.facebook.*
+import com.facebook.CallbackManager
+import com.facebook.FacebookCallback
+import com.facebook.FacebookException
+import com.facebook.GraphRequest
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -54,6 +57,7 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
         super.onCreate(savedInstanceState)
         mAuthBinding = ActivityAuthBinding.inflate(layoutInflater)
         initViewModel()
+
         mAuthActivityViewModel.isLogin=PrefUtils.getBoolean(this,CommonKeys.KEY_IS_LOGGED_IN)
         mAuthActivityViewModel.isInterestSelected=PrefUtils.getBoolean(this,CommonKeys.KEY_IS_INTEREST_SET)
         if (mAuthActivityViewModel.isLogin &&!mAuthActivityViewModel.isInterestSelected){
@@ -61,6 +65,7 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
             replaceFragmentWithoutAddingToBackStack(R.id.auth_container, yourIntersetFragment)
         }else{
             replaceFragmentWithoutAddingToBackStack(R.id.auth_container, SignInFragment())
+
         }
 
         setContentView(mAuthBinding.root)

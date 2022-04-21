@@ -107,5 +107,45 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
+        <Button
+            android:id="@+id/add_artist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="artist"
+            android:textColor="@color/color_black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/add_song"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="song"
+            android:textColor="@color/color_black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/add_db"
+            app:layout_constraintStart_toEndOf="@id/add_artist" />
+
+        <Button
+            android:id="@+id/delete_sng"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="delete"
+            android:textColor="@color/color_black"
+            app:layout_constraintBottom_toTopOf="@id/add_db"
+            app:layout_constraintStart_toStartOf="parent"
+
+            />
+
+        <Button
+            android:id="@+id/delete_sng"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="delete"
+            android:textColor="@color/color_black"
+            app:layout_constraintBottom_toTopOf="@id/add_db"
+            app:layout_constraintStart_toStartOf="parent"
+
+            />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

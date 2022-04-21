@@ -12,20 +12,18 @@ import java.io.Serializable
 @Entity(tableName = "Album")
 data class Album(
     @Expose
-    @SerializedName("uid")
-    @PrimaryKey(autoGenerate = true)
-    var uid: Int?,
-    @Expose
     @SerializedName("albumCoverImageUrl")
     @ColumnInfo(name = "albumCoverImageUrl")
     var albumCoverImageUrl: String?,
     @Expose
     @SerializedName("albumId")
+    @PrimaryKey
     @ColumnInfo(name = "albumId")
     var albumId: Int?,
-    @Expose
+
     @SerializedName("albumStatus")
     @ColumnInfo(name = "albumStatus")
+    @Expose
     var albumStatus: AlbumStatus?,
     @Expose
     @SerializedName("albumTitle")

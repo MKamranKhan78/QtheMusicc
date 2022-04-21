@@ -10,13 +10,8 @@ import android.view.WindowManager
 import androidx.lifecycle.ViewModelProvider
 import com.techswivel.qthemusic.constant.Constants
 import com.techswivel.qthemusic.databinding.ActivitySplashBinding
-import com.techswivel.qthemusic.source.local.preference.PrefUtils
-
-import com.techswivel.qthemusic.ui.activities.authActivity.AuthActivity
 import com.techswivel.qthemusic.ui.activities.mainActivity.MainActivity
 import com.techswivel.qthemusic.ui.base.BaseActivity
-import com.techswivel.qthemusic.utils.CommonKeys
-import com.techswivel.qthemusic.utils.Log
 import com.techswivel.qthemusic.utils.PermissionUtils
 
 class SplashActivity : BaseActivity() {
@@ -28,7 +23,7 @@ class SplashActivity : BaseActivity() {
         if (mViewModel.isUserLogin && mViewModel.isInterestSet){
             mActivityIntent=Intent(this,MainActivity::class.java)
         }else{
-            mActivityIntent = Intent(this, AuthActivity::class.java)
+            mActivityIntent = Intent(this, MainActivity::class.java)
         }
         if (!isFinishing) {
             startActivity(mActivityIntent)

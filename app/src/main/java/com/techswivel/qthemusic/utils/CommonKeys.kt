@@ -52,7 +52,7 @@ class CommonKeys {
         const val   AUTH_BUILDER_MODEL="auth_builder_model"
         const val KEY_TERM_AND_CONDITION_PRIVACY = "_key_term_and_condition_privacy_policy"
         const val IMAGE_DIRECTORY = "/demonuts"
-
+        const val ID_FOR_DB = "id_for_db"
 
         const val KEY_ALBUM_DETAILS="key_album_details"
     }
