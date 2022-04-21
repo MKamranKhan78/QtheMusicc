@@ -1,10 +1,436 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_for_forgot_password"
     tools:context=".ui.fragments.signUpFragment.SignUpFragment">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <FrameLayout
+            android:id="@+id/profile_img_section"
+            android:layout_width="@dimen/_110dp"
+            android:layout_height="@dimen/_110dp"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/_50dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/iv_user_profile_pic"
+                android:layout_width="@dimen/_100dp"
+                android:layout_height="@dimen/_100dp"
+                android:layout_gravity="center|center_horizontal"
+                android:background="@drawable/shape_bg_add_profile_main_img_view"
+                android:scaleType="centerCrop"
+                app:shapeAppearanceOverlay="@style/circleImageView" />
+
+            <ImageView
+                android:id="@+id/iv_user_change_profile"
+                android:layout_width="@dimen/_22dp"
+                android:layout_height="@dimen/_22dp"
+                android:layout_gravity="bottom|right"
+                android:layout_marginTop="@dimen/_30dp"
+                android:layout_marginEnd="@dimen/_10dp"
+                android:layout_marginBottom="@dimen/_12dp"
+                android:background="@drawable/shape_iv_plus_add_profile"
+                android:padding="@dimen/_5dp"
+                android:src="@drawable/ic_plus_icon_add_profile" />
+        </FrameLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/et_user_name_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_24dp"
+            android:layout_marginTop="@dimen/_40dp"
+            android:layout_marginEnd="@dimen/_24dp"
+            android:hint="@string/user_name"
+            android:textColorHint="@color/color_white"
+            app:boxBackgroundMode="outline"
+            app:boxCornerRadiusBottomEnd="@dimen/_10dp"
+            app:boxCornerRadiusBottomStart="@dimen/_10dp"
+            app:boxCornerRadiusTopEnd="@dimen/_10dp"
+            app:boxCornerRadiusTopStart="@dimen/_10dp"
+            app:boxStrokeColor="@color/sign_up_btn"
+            app:boxStrokeWidth="@dimen/_1dp"
+            app:boxStrokeWidthFocused="@dimen/_1dp"
+            app:hintEnabled="true"
+            app:hintTextAppearance="@style/InputEditTextHindAppearance"
+            app:hintTextColor="@color/color_white"
+            app:layout_constraintTop_toBottomOf="@+id/profile_img_section">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_user_name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/_4dp"
+                android:fontFamily="@font/manrope_regular"
+                android:maxLines="1"
+                android:paddingTop="@dimen/_20dp"
+                android:paddingBottom="@dimen/_16dp"
+                android:textColor="@color/color_white"
+                android:textColorHighlight="@color/color_white"
+                android:textColorHint="@color/color_white"
+                android:textSize="@dimen/_14sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/et_user_dob_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_24dp"
+            android:layout_marginTop="@dimen/_20dp"
+            android:layout_marginEnd="@dimen/_24dp"
+            android:hint="@string/date_of_birth"
+            android:textColorHint="@color/color_white"
+            app:boxBackgroundMode="outline"
+            app:boxCornerRadiusBottomEnd="@dimen/_10dp"
+            app:boxCornerRadiusBottomStart="@dimen/_10dp"
+            app:boxCornerRadiusTopEnd="@dimen/_10dp"
+            app:boxCornerRadiusTopStart="@dimen/_10dp"
+            app:boxStrokeColor="@color/color_white"
+            app:boxStrokeWidth="@dimen/_1dp"
+            app:boxStrokeWidthFocused="@dimen/_1dp"
+            app:hintEnabled="true"
+            app:hintTextAppearance="@style/InputEditTextHindAppearance"
+            app:hintTextColor="@color/color_white"
+            app:layout_constraintTop_toBottomOf="@+id/et_user_name_layout">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_user_dob"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/_4dp"
+                android:editable="false"
+                android:fontFamily="@font/manrope_regular"
+                android:maxLines="1"
+                android:paddingTop="@dimen/_20dp"
+                android:paddingBottom="@dimen/_16dp"
+                android:paddingEnd="@dimen/_40dp"
+                android:textColor="@color/color_white"
+                android:textColorHighlight="@color/color_white"
+                android:textColorHint="@color/color_white"
+                android:textSize="@dimen/_14sp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+        <ImageView
+            android:id="@+id/calander"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            app:layout_constraintEnd_toEndOf="@id/et_user_dob_layout"
+            app:layout_constraintTop_toTopOf="@+id/et_user_dob_layout"
+            app:layout_constraintBottom_toBottomOf="@id/et_user_dob_layout"
+            android:src="@drawable/ic_icon_feather_calendar"
+            android:layout_marginEnd="@dimen/_16dp"
+            android:padding="@dimen/_4dp"
+            />
+        <View
+            android:id="@+id/dob_view"
+            android:layout_width="@dimen/_0dp"
+            android:layout_height="@dimen/_0dp"
+            app:layout_constraintStart_toStartOf="@+id/et_user_dob_layout"
+            app:layout_constraintEnd_toEndOf="@+id/et_user_dob_layout"
+            app:layout_constraintTop_toTopOf="@id/et_user_dob_layout"
+            app:layout_constraintBottom_toBottomOf="@id/et_user_dob_layout"
+            />
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/et_user_gender_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_24dp"
+            android:layout_marginTop="@dimen/_20dp"
+            android:layout_marginEnd="@dimen/_24dp"
+            android:hint="@string/user_gender"
+            android:textColorHint="@color/color_white"
+            app:boxBackgroundMode="outline"
+            app:boxCornerRadiusBottomEnd="@dimen/_10dp"
+            app:boxCornerRadiusBottomStart="@dimen/_10dp"
+            app:boxCornerRadiusTopEnd="@dimen/_10dp"
+            app:boxCornerRadiusTopStart="@dimen/_10dp"
+            app:boxStrokeColor="@color/color_white"
+            app:boxStrokeWidth="@dimen/_1dp"
+            app:boxStrokeWidthFocused="@dimen/_1dp"
+            app:hintEnabled="true"
+            app:hintTextAppearance="@style/InputEditTextHindAppearance"
+            app:hintTextColor="@color/color_white"
+            app:layout_constraintTop_toBottomOf="@+id/et_user_dob_layout">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_user_gender"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/_4dp"
+                android:fontFamily="@font/manrope_regular"
+                android:maxLines="1"
+                android:paddingTop="@dimen/_20dp"
+                android:drawablePadding="@dimen/_16dp"
+                android:editable="false"
+                android:drawableEnd="@drawable/ic_icon_ionic_ios_arrow_down"
+                android:paddingBottom="@dimen/_16dp"
+                android:textColor="@color/color_white"
+                android:textColorHighlight="@color/color_white"
+                android:textColorHint="@color/color_white"
+                android:textSize="@dimen/_14sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+        <View
+            android:id="@+id/gender_view"
+            android:layout_width="@dimen/_0dp"
+            android:layout_height="@dimen/_0dp"
+            app:layout_constraintStart_toStartOf="@+id/et_user_gender_layout"
+            app:layout_constraintEnd_toEndOf="@+id/et_user_gender_layout"
+            app:layout_constraintTop_toTopOf="@id/et_user_gender_layout"
+            app:layout_constraintBottom_toBottomOf="@id/et_user_gender_layout"
+            />
+
+        <TextView
+            android:id="@+id/tv_your_address_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_20dp"
+            android:fontFamily="@font/manrope_regular"
+            android:text="@string/your_address_tag"
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/_12sp"
+            app:layout_constraintStart_toStartOf="@id/et_user_gender_layout"
+            app:layout_constraintTop_toBottomOf="@id/et_user_gender_layout" />
+
+        <TextView
+            android:id="@+id/tv_why_we_are_asking_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/manrope_regular"
+            android:gravity="end"
+            android:text="@string/why_we_asking_tag"
+            android:textColor="@color/sign_up_btn"
+            android:textSize="@dimen/_12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_your_address_tag"
+            app:layout_constraintEnd_toEndOf="@+id/et_user_gender_layout"
+            app:layout_constraintTop_toTopOf="@+id/tv_your_address_tag" />
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/et_user_address_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_24dp"
+            android:layout_marginTop="@dimen/_20dp"
+            android:layout_marginEnd="@dimen/_24dp"
+            android:hint="@string/user_address"
+            android:textColorHint="@color/color_white"
+            app:boxBackgroundMode="outline"
+            app:boxCornerRadiusBottomEnd="@dimen/_10dp"
+            app:boxCornerRadiusBottomStart="@dimen/_10dp"
+            app:boxCornerRadiusTopEnd="@dimen/_10dp"
+            app:boxCornerRadiusTopStart="@dimen/_10dp"
+            app:boxStrokeColor="@color/sign_up_btn"
+            app:boxStrokeWidth="@dimen/_1dp"
+            app:boxStrokeWidthFocused="@dimen/_1dp"
+            app:hintEnabled="true"
+            app:hintTextAppearance="@style/InputEditTextHindAppearance"
+            app:hintTextColor="@color/color_white"
+            app:layout_constraintTop_toBottomOf="@+id/tv_your_address_tag">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_user_address"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/_4dp"
+                android:fontFamily="@font/manrope_regular"
+                android:maxLines="1"
+                android:paddingTop="@dimen/_20dp"
+                android:paddingBottom="@dimen/_16dp"
+                android:textColor="@color/color_white"
+                android:textColorHighlight="@color/color_white"
+                android:textColorHint="@color/color_white"
+                android:textSize="@dimen/_14sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/et_user_city_layout"
+            android:layout_width="@dimen/_0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_24dp"
+            android:layout_marginTop="@dimen/_20dp"
+            android:layout_marginEnd="@dimen/_8dp"
+            android:hint="@string/user_city"
+            android:textColorHint="@color/color_white"
+            app:boxBackgroundMode="outline"
+            app:boxCornerRadiusBottomEnd="@dimen/_10dp"
+            app:boxCornerRadiusBottomStart="@dimen/_10dp"
+            app:boxCornerRadiusTopEnd="@dimen/_10dp"
+            app:boxCornerRadiusTopStart="@dimen/_10dp"
+            app:boxStrokeColor="@color/sign_up_btn"
+            app:boxStrokeWidth="@dimen/_1dp"
+            app:boxStrokeWidthFocused="@dimen/_1dp"
+            app:hintEnabled="true"
+            app:hintTextAppearance="@style/InputEditTextHindAppearance"
+            app:hintTextColor="@color/color_white"
+            app:layout_constraintEnd_toStartOf="@+id/et_user_state_layout"
+            app:layout_constraintStart_toStartOf="parent"
+
+            app:layout_constraintTop_toBottomOf="@+id/et_user_address_layout">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_user_city"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/_4dp"
+                android:fontFamily="@font/manrope_regular"
+                android:maxLines="1"
+                android:paddingTop="@dimen/_20dp"
+                android:paddingBottom="@dimen/_16dp"
+                android:textColor="@color/color_white"
+                android:textColorHighlight="@color/color_white"
+                android:textColorHint="@color/color_white"
+                android:textSize="@dimen/_14sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/et_user_state_layout"
+            android:layout_width="@dimen/_0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_8dp"
+            android:layout_marginEnd="@dimen/_24dp"
+            android:hint="@string/user_state"
+            android:textColorHint="@color/color_white"
+            app:boxBackgroundMode="outline"
+            app:boxCornerRadiusBottomEnd="@dimen/_10dp"
+            app:boxCornerRadiusBottomStart="@dimen/_10dp"
+            app:boxCornerRadiusTopEnd="@dimen/_10dp"
+            app:boxCornerRadiusTopStart="@dimen/_10dp"
+            app:boxStrokeColor="@color/sign_up_btn"
+            app:boxStrokeWidth="@dimen/_1dp"
+            app:boxStrokeWidthFocused="@dimen/_1dp"
+            app:hintEnabled="true"
+            app:hintTextAppearance="@style/InputEditTextHindAppearance"
+            app:hintTextColor="@color/color_white"
+            app:layout_constraintBottom_toBottomOf="@id/et_user_city_layout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/et_user_city_layout"
+            app:layout_constraintTop_toTopOf="@+id/et_user_city_layout">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_user_state"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/_4dp"
+                android:fontFamily="@font/manrope_regular"
+                android:maxLines="1"
+                android:paddingTop="@dimen/_20dp"
+                android:paddingBottom="@dimen/_16dp"
+                android:textColor="@color/color_white"
+                android:textColorHighlight="@color/color_white"
+                android:textColorHint="@color/color_white"
+                android:textSize="@dimen/_14sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/et_user_country_layout"
+            android:layout_width="@dimen/_0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_24dp"
+            android:layout_marginTop="@dimen/_20dp"
+            android:layout_marginEnd="@dimen/_8dp"
+            android:hint="@string/user_coutry"
+            android:textColorHint="@color/color_white"
+            app:boxBackgroundMode="outline"
+            app:boxCornerRadiusBottomEnd="@dimen/_10dp"
+            app:boxCornerRadiusBottomStart="@dimen/_10dp"
+            app:boxCornerRadiusTopEnd="@dimen/_10dp"
+            app:boxCornerRadiusTopStart="@dimen/_10dp"
+            app:boxStrokeColor="@color/sign_up_btn"
+            app:boxStrokeWidth="@dimen/_1dp"
+            app:boxStrokeWidthFocused="@dimen/_1dp"
+            app:hintEnabled="true"
+            app:hintTextAppearance="@style/InputEditTextHindAppearance"
+            app:hintTextColor="@color/color_white"
+            app:layout_constraintEnd_toStartOf="@+id/et_user_state_layout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/et_user_city_layout">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_user_country"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/_4dp"
+                android:fontFamily="@font/manrope_regular"
+                android:maxLines="1"
+                android:paddingTop="@dimen/_20dp"
+                android:paddingBottom="@dimen/_16dp"
+                android:textColor="@color/color_white"
+                android:textColorHighlight="@color/color_white"
+                android:textColorHint="@color/color_white"
+                android:textSize="@dimen/_14sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/et_zip_code_layout"
+            android:layout_width="@dimen/_0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_8dp"
+            android:layout_marginEnd="@dimen/_24dp"
+            android:hint="@string/user_zip_code"
+            android:textColorHint="@color/color_white"
+            app:boxBackgroundMode="outline"
+            app:boxCornerRadiusBottomEnd="@dimen/_10dp"
+            app:boxCornerRadiusBottomStart="@dimen/_10dp"
+            app:boxCornerRadiusTopEnd="@dimen/_10dp"
+            app:boxCornerRadiusTopStart="@dimen/_10dp"
+            app:boxStrokeColor="@color/sign_up_btn"
+            app:boxStrokeWidth="@dimen/_1dp"
+            app:boxStrokeWidthFocused="@dimen/_1dp"
+            app:hintEnabled="true"
+            app:hintTextAppearance="@style/InputEditTextHindAppearance"
+            app:hintTextColor="@color/color_white"
+            app:layout_constraintBottom_toBottomOf="@id/et_user_country_layout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/et_user_country_layout"
+            app:layout_constraintTop_toTopOf="@+id/et_user_country_layout">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_zip_code"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/_4dp"
+                android:fontFamily="@font/manrope_regular"
+                android:maxLines="1"
+                android:paddingTop="@dimen/_20dp"
+                android:inputType="number"
+                android:paddingBottom="@dimen/_16dp"
+                android:textColor="@color/color_white"
+                android:textColorHighlight="@color/color_white"
+                android:textColorHint="@color/color_white"
+                android:textSize="@dimen/_14sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/tv_let_go_profile_btn"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_50dp"
+            android:layout_marginStart="@dimen/_24dp"
+            android:layout_marginTop="@dimen/_40dp"
+            android:layout_marginEnd="@dimen/_24dp"
+            android:layout_marginBottom="@dimen/_20dp"
+            android:background="@drawable/shape_sigin_btn"
+            android:fontFamily="@font/europa_bold"
+            android:gravity="center"
+            android:text="@string/lets_go"
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/_14sp"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/et_zip_code_layout" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

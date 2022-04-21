@@ -79,7 +79,7 @@ class AddPhoneNumberDialogFragment : BaseDialogFragment(), BaseInterface {
 
 
     private fun setObserver() {
-        mAuthNetworkViewModel.forgotPasswordResponse.observe(requireActivity()) { sendOtpResponse ->
+        mAuthNetworkViewModel.otpObserver.observe(requireActivity()) { sendOtpResponse ->
             when (sendOtpResponse.status) {
                 NetworkStatus.LOADING -> {
                     showProgressBar()

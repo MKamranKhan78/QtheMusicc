@@ -1,5 +1,6 @@
 package com.techswivel.qthemusic.ui.fragments.underDevelopmentMessageFragment.profile_setting_fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,7 +15,9 @@ import com.techswivel.qthemusic.databinding.FragmentProfileSettingBinding
 import com.techswivel.qthemusic.models.AuthModel
 import com.techswivel.qthemusic.models.AuthModelBuilder
 import com.techswivel.qthemusic.source.local.preference.DataStoreUtils
+import com.techswivel.qthemusic.source.local.preference.PrefUtils
 import com.techswivel.qthemusic.source.remote.networkViewModel.AuthNetworkViewModel
+import com.techswivel.qthemusic.ui.activities.authActivity.AuthActivity
 import com.techswivel.qthemusic.ui.activities.profileSettingScreen.ProfileSettingActivityImpl
 import com.techswivel.qthemusic.ui.base.BaseFragment
 import com.techswivel.qthemusic.ui.fragments.profileUpdatingFragment.ProfileUpdatingFragment
@@ -106,6 +109,12 @@ class ProfileSettingFragment : BaseFragment() {
                         getString(R.string.logout_successfully),
                         Toast.LENGTH_SHORT
                     ).show()
+                    PrefUtils.clearAllPrefData(requireContext())
+                    PrefUtils.setBoolean(requireContext(),CommonKeys.KEY_IS_INTEREST_SET,true)
+                    val intent = Intent(requireContext(), AuthActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+                    startActivity(intent)
+                   requireActivity().finish()
                     viewModel.clearAppSession(requireActivity())
                 }
                 NetworkStatus.ERROR -> {

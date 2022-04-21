@@ -110,6 +110,7 @@
     <string name="country">Country</string>
     <string name="zip_code">Zipcode</string>
     <string name="male">Male</string>
+    <string name="select_gender">Select Gender</string>
     <string name="female">Female</string>
     <string name="non_binary">Non-binary</string>
     <string name="nonbinary">Non binary</string>
@@ -138,10 +139,10 @@
     <string name="confirm_password">Confirm Password</string>
     <string name="done">Done</string>
     <string name="invalid_email">Enter valid email</string>
-    <string name="invalid_password">Enter valid password</string>
+    <string name="invalid_password">Enter valid password (at least have 8 character, 1 capital or small letter, 1 special character or 1 number)</string>
     <string name="error_occurred">Error Occurred</string>
     <string name="get_email_fb">email</string>
-    <string name="enter_valid_otp">Enter Valid Otp</string>
+    <string name="enter_valid_otp">OTP must have 5 digits</string>
     <string name="resend">Resend</string>
     <string name="this_required">This field is required</string>
     <string name="error_access_token">Access Token Not Found</string>
@@ -164,4 +165,26 @@
     <string name="enter_no">Please enter phone number</string>
     <string name="profile_updated">Profile successfully updated.</string>
     <string name="profile_settings">Profile Settings</string>
+    <string name="user_name">Name</string>
+    <string name="user_gender">Gender</string>
+    <string name="your_address_tag">Your Address</string>
+    <string name="why_we_asking_tag">Why we are asking?</string>
+    <string name="user_address">Address</string>
+    <string name="user_city">City</string>
+    <string name="user_state">State</string>
+    <string name="user_coutry">Country</string>
+    <string name="user_zip_code">Zipcode</string>
+    <string name="lets_go">Let\'s Go</string>
+    <string name="why_we_asking_msg">We ask for your address to improve your experience within our App and to know where to ship your items purchased within the App. Please read our Terms of Use for more detail.</string>
+    <string name="your_interest_msg">Select 2 to 5 topics according to your interests.</string>
+    <string name="email_is_required">Email is  Required</string>
+    <string name="password_is_required">Password is  Required</string>
+    <string name="terms_tag_msg">By clicking sign up, you agree to the User Agreement, Privacy Policy, and Cookie Policy.</string>
+    <string name="sigup_mstg">Sign Up to get started.</string>
+    <string name="dob_req">Date Of Birth Required</string>
+    <string name="minimum_alert">Select at least 2 topics</string>
+    <string name="maximum_alert">You can select maximum 5 topics</string>
+    <string name="name_required">Name is required</string>
+
+
 </resources>

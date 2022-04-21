@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout android:layout_width="@dimen/_110dp"
+    android:layout_height="@dimen/_110dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/imageviewProfileUpdatingScreen"
+    android:layout_centerHorizontal="true"
+    android:layout_gravity="center_horizontal"
+    android:layout_marginTop="@dimen/_10dp"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ImageView
+        android:id="@+id/profilePic"
+        android:layout_width="@dimen/_110dp"
+        android:layout_height="@dimen/_110dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_main_add_profile_user"
+        android:padding="@dimen/_30dp"
+        android:background="@drawable/shape_bg_add_profile_main_img_view"
+        android:layout_gravity="center|center_horizontal" />
+
+    <ImageView
+        android:id="@+id/changePhotoImageviewId"
+        android:layout_width="@dimen/_22dp"
+        android:layout_height="@dimen/_22dp"
+        android:layout_gravity="bottom|right"
+        android:layout_marginTop="@dimen/_30dp"
+        android:layout_marginEnd="@dimen/_5dp"
+        android:layout_marginBottom="@dimen/_5dp"
+        android:padding="@dimen/_5dp"
+        android:background="@drawable/shape_iv_plus_add_profile"
+        android:src="@drawable/ic_plus_icon_add_profile" />
+</FrameLayout>

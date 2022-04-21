@@ -6,35 +6,38 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.techswivel.dfaktfahrerapp.ui.fragments.underDevelopmentMessageFragment.UnderDevelopmentMessageFragment
 import com.techswivel.qthemusic.R
+import com.techswivel.qthemusic.application.QTheMusicApplication
 import com.techswivel.qthemusic.databinding.ActivityMainBinding
 import com.techswivel.qthemusic.source.local.preference.PrefUtils
+import com.techswivel.qthemusic.source.remote.networkViewModel.ProfileNetworkViewModel
 import com.techswivel.qthemusic.ui.base.BaseActivity
 import com.techswivel.qthemusic.ui.fragments.homeFragment.HomeFragment
-import com.techswivel.qthemusic.utils.ActivityUtils
 import com.techswivel.qthemusic.ui.fragments.underDevelopmentMessageFragment.profile_landing_screen.ProfileLandingFragment
+import com.techswivel.qthemusic.utils.CommonKeys
+import com.techswivel.qthemusic.utils.Log
 
 class MainActivity : BaseActivity() {
-
+    val TAG = "MainActivity"
     private lateinit var mBinding: ActivityMainBinding
     private lateinit var viewModel: MainActivityViewModel
     private var mFragment: Fragment? = null
+    private lateinit var mProfileNetworkViewModel: ProfileNetworkViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
-        openHomeFragment()
         initView()
+
+        openHomeFragment()
         setBottomNavigationSelector()
-        getDummyDataAndSaveInPrefrences()
-
+        val datad = PrefUtils.getBoolean(
+            QTheMusicApplication.getContext(),
+            CommonKeys.KEY_IS_INTEREST_SET
+        )
+        Log.d(TAG, "is Intersete set ${datad}")
     }
 
-    private fun getDummyDataAndSaveInPrefrences() {
-        val auth = viewModel.getDummyData()
-        PrefUtils.clearAllPrefData(this)
-        viewModel.setDataInSharedPrefrence(auth)
-    }
 
     override fun onBackPressed() {
         when {
@@ -62,7 +65,6 @@ class MainActivity : BaseActivity() {
                 }
                 R.id.bottom_nav_profile -> {
                     openLandingProfileFragment()
-
                 }
             }
             return@setOnItemSelectedListener true
@@ -76,6 +78,7 @@ class MainActivity : BaseActivity() {
 
     private fun initView() {
         viewModel = ViewModelProvider(this).get(MainActivityViewModel::class.java)
+        mProfileNetworkViewModel = ViewModelProvider(this).get(ProfileNetworkViewModel::class.java)
     }
 
 
@@ -97,4 +100,5 @@ class MainActivity : BaseActivity() {
             }
         }
     }
+
 }

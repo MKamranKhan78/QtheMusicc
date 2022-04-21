@@ -11,11 +11,14 @@ class MyDataClass(
     @SerializedName("category")
     var category: List<Category>?,
     var songsResponse: SongsResponse?
+
+
 ) {
     constructor() : this(
         null,
         null,
         null,
         null
+
     )
 }

@@ -13,7 +13,6 @@ abstract class BaseAdapter : RecyclerView.Adapter<BaseViewHolder>(), AdapterOnCl
     private var isOnClickEnable: Boolean = true
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
-
         val binding = DataBindingUtil.inflate<ViewDataBinding>(
             LayoutInflater.from(parent.context),
             viewType,

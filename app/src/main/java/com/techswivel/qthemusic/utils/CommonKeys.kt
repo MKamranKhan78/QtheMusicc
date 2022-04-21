@@ -12,7 +12,6 @@ class CommonKeys {
         const val KEY_IS_LOGGED_IN = "_key_is_logged_in"
         const val TYPE_VIDEO = 1
         const val TYPE_PHOTO = 2
-        const val APP_FLOW="app_flow"
         const val START_TIMER="Start_Timer"
         const val USER_EMAIL="user_email"
         const val USER_OTP = "user_otp"
@@ -43,6 +42,14 @@ class CommonKeys {
         const val KEY_USER_ADRESS = "_key_user_address"
         const val KEY_USER_PLAN_PRIZE = "_key_user_plan_prize"
         const val KEY_USER_PLAN_DURATION = "_key_user_plan_duration"
+        const val KEY_IS_INTEREST_SET="key_is_interest_set"
+        const val KEY_FCM_TOKEN="key_fcm_token"
+        const val KEY_IS_ACCOUNT_CREATED="key_is_account_created"
+        const val KEY_USER_PHOTO="key_user_photo"
+        const val USER_PASSWORD="user_password"
+        const val SOCIAL_ID="social_id"
+        const val KEY_USER_JWT="key_user_jwt"
+        const val   AUTH_BUILDER_MODEL="auth_builder_model"
         const val KEY_TERM_AND_CONDITION_PRIVACY = "_key_term_and_condition_privacy_policy"
         const val IMAGE_DIRECTORY = "/demonuts"
 
