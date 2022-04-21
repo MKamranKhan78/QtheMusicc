@@ -45,12 +45,24 @@ abstract class BaseViewModel : ViewModel() {
 
     fun setDataInSharedPrefrence(authModel: AuthModel?) {
 
-        PrefUtils.setString(QTheMusicApplication.getContext(), CommonKeys.KEY_USER_NAME, authModel?.name)
-        PrefUtils.setString(QTheMusicApplication.getContext(), CommonKeys.KEY_USER_EMAIL, authModel?.email)
         PrefUtils.setString(
             QTheMusicApplication.getContext(),
             CommonKeys.KEY_USER_NAME,
             authModel?.name
+        )
+        PrefUtils.setString(
+            QTheMusicApplication.getContext(),
+            CommonKeys.KEY_USER_EMAIL,
+            authModel?.email
+        )
+        PrefUtils.setString(
+            QTheMusicApplication.getContext(),
+            CommonKeys.KEY_USER_NAME,
+            authModel?.name
+        )
+        PrefUtils.setBoolean(
+            QTheMusicApplication.getContext(),
+            CommonKeys.KEY_IS_LOGGED_IN, true
         )
         PrefUtils.setString(
             QTheMusicApplication.getContext(),
@@ -71,8 +83,18 @@ abstract class BaseViewModel : ViewModel() {
             CommonKeys.KEY_ARTIST_UPDATE,
             authModel?.notification?.isArtistUpdateEnabled ?: true
         )
-        PrefUtils.setString(QTheMusicApplication.getContext(), CommonKeys.KEY_USER_PHONE, authModel?.phoneNumber)
-        authModel?.dOB?.let { doB -> PrefUtils.setLong(QTheMusicApplication.getContext(), CommonKeys.KEY_USER_DOB, doB) }
+        PrefUtils.setString(
+            QTheMusicApplication.getContext(),
+            CommonKeys.KEY_USER_PHONE,
+            authModel?.phoneNumber
+        )
+        authModel?.dOB?.let { doB ->
+            PrefUtils.setLong(
+                QTheMusicApplication.getContext(),
+                CommonKeys.KEY_USER_DOB,
+                doB
+            )
+        }
         PrefUtils.setString(
             QTheMusicApplication.getContext(),
             CommonKeys.KEY_USER_PHONE,
@@ -103,10 +125,26 @@ abstract class BaseViewModel : ViewModel() {
                 zipCode
             )
         }
-        PrefUtils.setString(QTheMusicApplication.getContext(), CommonKeys.KEY_USER_GENDER, authModel?.gender)
-        PrefUtils.setString(QTheMusicApplication.getContext(), CommonKeys.KEY_USER_CITY, authModel?.address?.city)
-        PrefUtils.setString(QTheMusicApplication.getContext(), CommonKeys.KEY_USER_STATE, authModel?.address?.state)
-        PrefUtils.setString(QTheMusicApplication.getContext(), CommonKeys.KEY_USER_COUNTRY, authModel?.address?.country)
+        PrefUtils.setString(
+            QTheMusicApplication.getContext(),
+            CommonKeys.KEY_USER_GENDER,
+            authModel?.gender
+        )
+        PrefUtils.setString(
+            QTheMusicApplication.getContext(),
+            CommonKeys.KEY_USER_CITY,
+            authModel?.address?.city
+        )
+        PrefUtils.setString(
+            QTheMusicApplication.getContext(),
+            CommonKeys.KEY_USER_STATE,
+            authModel?.address?.state
+        )
+        PrefUtils.setString(
+            QTheMusicApplication.getContext(),
+            CommonKeys.KEY_USER_COUNTRY,
+            authModel?.address?.country
+        )
         PrefUtils.setString(
             QTheMusicApplication.getContext(),
             CommonKeys.KEY_USER_GENDER,

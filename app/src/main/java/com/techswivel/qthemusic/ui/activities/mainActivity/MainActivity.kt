@@ -1,29 +1,20 @@
 package com.techswivel.qthemusic.ui.activities.mainActivity
 
 import android.app.Activity
-import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.techswivel.dfaktfahrerapp.ui.fragments.underDevelopmentMessageFragment.UnderDevelopmentMessageFragment
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.application.QTheMusicApplication
-import com.techswivel.qthemusic.customData.enums.NetworkStatus
 import com.techswivel.qthemusic.databinding.ActivityMainBinding
-import com.techswivel.qthemusic.models.Category
-import com.techswivel.qthemusic.models.ErrorResponse
-import com.techswivel.qthemusic.models.ResponseModel
 import com.techswivel.qthemusic.source.local.preference.PrefUtils
 import com.techswivel.qthemusic.source.remote.networkViewModel.ProfileNetworkViewModel
-import com.techswivel.qthemusic.ui.activities.authActivity.AuthActivity
-
 import com.techswivel.qthemusic.ui.base.BaseActivity
 import com.techswivel.qthemusic.ui.fragments.homeFragment.HomeFragment
 import com.techswivel.qthemusic.ui.fragments.underDevelopmentMessageFragment.profile_landing_screen.ProfileLandingFragment
-import com.techswivel.qthemusic.ui.fragments.yourInterestFragment.YourInterestFragment
-import com.techswivel.qthemusic.utils.*
+import com.techswivel.qthemusic.utils.CommonKeys
+import com.techswivel.qthemusic.utils.Log
 
 class MainActivity : BaseActivity() {
     val TAG = "MainActivity"
@@ -40,7 +31,6 @@ class MainActivity : BaseActivity() {
 
         openHomeFragment()
         setBottomNavigationSelector()
-        getDummyDataAndSaveInPrefrences()
         val datad = PrefUtils.getBoolean(
             QTheMusicApplication.getContext(),
             CommonKeys.KEY_IS_INTEREST_SET
@@ -48,10 +38,6 @@ class MainActivity : BaseActivity() {
         Log.d(TAG, "is Intersete set ${datad}")
     }
 
-    private fun getDummyDataAndSaveInPrefrences() {
-        val auth = viewModel.getDummyData()
-        viewModel.setDataInSharedPrefrence(auth)
-    }
 
     override fun onBackPressed() {
         when {

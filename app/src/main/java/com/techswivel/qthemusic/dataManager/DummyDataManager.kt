@@ -33,7 +33,7 @@ class DummyDataManager {
                 121212,
                 "03218061143",
                 "Male",
-                true,
+                false,
                 address,
                 subscription,
                 notification

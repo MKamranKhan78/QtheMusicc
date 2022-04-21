@@ -555,11 +555,6 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
                     hideProgressBar()
                     val responseModel = it.t as ResponseModel
                     val userData = responseModel.data
-                    PrefUtils.setBoolean(
-                        QTheMusicApplication.getContext(),
-                        CommonKeys.KEY_IS_LOGGED_IN,
-                        true
-                    )
                     mAuthActivityViewModel.setDataInSharedPrefrence(userData.authModel)
                     replaceCurrentFragment(YourInterestFragment())
                 }
@@ -591,22 +586,13 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
                 }
                 NetworkStatus.SUCCESS -> {
                     hideProgressBar()
-                    val data = it.t as ResponseModel
+                    val responseModel = it.t as ResponseModel
+                    val userData = responseModel.data
                     PrefUtils.setBoolean(
                         QTheMusicApplication.getContext(),
                         CommonKeys.KEY_IS_INTEREST_SET,
                         true
                     )
-                    PrefUtils.setBoolean(
-                        QTheMusicApplication.getContext(),
-                        CommonKeys.KEY_IS_LOGGED_IN,
-                        true
-                    )
-                    val datad = PrefUtils.getBoolean(
-                        QTheMusicApplication.getContext(),
-                        CommonKeys.KEY_IS_INTEREST_SET
-                    )
-                    Log.d(TAG, "isInterset Set ${datad}")
                     val intent = Intent(this, MainActivity::class.java)
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                     startActivity(intent)
