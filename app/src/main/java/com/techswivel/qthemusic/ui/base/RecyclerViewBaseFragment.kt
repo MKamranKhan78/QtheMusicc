@@ -122,9 +122,8 @@ abstract class RecyclerViewBaseFragment : BaseFragment() {
 //        recyclerView.layoutManager=layoutManager
 //        recyclerView.adapter=adapter
 //    }
-    protected open fun setUpFlexBoxRecViewForYourInterest(pRecyclerView: RecyclerView) {
 
-    protected open fun setUpFlexBoxRecViewForYourInterest(pRecyclerView: RecyclerView, adapterType: AdapterType?) {
+    protected open fun setUpFlexBoxRecViewForYourInterest(pRecyclerView: RecyclerView) {
         val layoutManager = FlexboxLayoutManager(requireContext())
         layoutManager.justifyContent = JustifyContent.CENTER
         layoutManager.alignItems = AlignItems.CENTER
