@@ -11,6 +11,7 @@ import com.techswivel.qthemusic.databinding.FragmentProfileLandingBinding
 import com.techswivel.qthemusic.ui.activities.profileSettingScreen.ProfileSettingActivity
 import com.techswivel.qthemusic.ui.activities.serverSettingActivity.ServerSettingActivity
 import com.techswivel.qthemusic.ui.base.BaseFragment
+import com.techswivel.qthemusic.ui.fragments.listeningHistoryFragment.ListeningHistoryFragment
 import com.techswivel.qthemusic.utils.ActivityUtils
 
 class ProfileLandingFragment : BaseFragment() {
@@ -92,7 +93,7 @@ class ProfileLandingFragment : BaseFragment() {
         mBinding.listeningHistoryTextview.setOnClickListener {
             ActivityUtils.launchFragment(
                 requireContext(),
-                UnderDevelopmentMessageFragment::class.java.name
+                ListeningHistoryFragment::class.java.name
             )
         }
         mBinding.downloadedTextview.setOnClickListener {
