@@ -1,11 +1,11 @@
 package com.techswivel.qthemusic.ui.fragments.otpVerificationFragment
 
+
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.text.Editable
 import android.text.TextWatcher
-import android.transition.TransitionInflater
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,10 +14,7 @@ import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.constant.Constants
 import com.techswivel.qthemusic.customData.enums.OtpType
 import com.techswivel.qthemusic.databinding.FragmentOtpVerificationBinding
-
-
 import com.techswivel.qthemusic.models.AuthRequestBuilder
-import com.techswivel.qthemusic.models.AuthRequestModel
 import com.techswivel.qthemusic.ui.activities.authActivity.AuthActivityImp
 import com.techswivel.qthemusic.ui.activities.profileSettingScreen.ProfileSettingActivityImpl
 import com.techswivel.qthemusic.ui.base.BaseFragment
@@ -62,7 +59,6 @@ class OtpVerification : BaseFragment() {
         clickListeners()
         getUserOtp()
         resendOtpTimer()
-        Log.d(TAG, "ots is ${mViewModel.mAuthRequestBuilder.otpType}")
         mViewModel.countDownTimer.start()
     }
 
@@ -95,6 +91,8 @@ class OtpVerification : BaseFragment() {
             } else {
                 mViewModel.otpCode =
                     mViewModel.etOtpOne + mViewModel.etOtpTwo + mViewModel.etOtpThree + mViewModel.etOtpFour + mViewModel.etOtpFive
+
+
                 if (mViewModel.otpCode.length < 5) {
                     Utilities.showToast(requireContext(), getString(R.string.enter_valid_otp))
                 } else {
@@ -107,8 +105,12 @@ class OtpVerification : BaseFragment() {
         }
         mBinding.tvResendBtn.setOnClickListener {
             val authModelBilder = AuthRequestBuilder()
-            authModelBilder.otpType = mViewModel.fragmentFlow.toString()
-            authModelBilder.email = mViewModel.email
+            authModelBilder.otpType = mViewModel.mAuthRequestBuilder.otpType
+            authModelBilder.email = mViewModel.mAuthRequestBuilder.email
+            Log.d(
+                TAG,
+                "email in builder ${authModelBilder.email} otp type ${authModelBilder.otpType}"
+            )
             (mActivityListener as AuthActivityImp).forgotPasswordRequest(
                 authModelBilder,
                 null,

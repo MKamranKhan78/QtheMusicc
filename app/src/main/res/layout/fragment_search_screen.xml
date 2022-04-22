@@ -99,10 +99,10 @@
             app:layout_constraintBottom_toBottomOf="parent" />
 
         <Button
-            android:id="@+id/add_db"
+            android:id="@+id/add_album"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="ADD"
+            android:text="Album"
             android:textColor="@color/color_black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
@@ -123,7 +123,7 @@
             android:text="song"
             android:textColor="@color/color_black"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/add_db"
+            app:layout_constraintEnd_toStartOf="@id/add_album"
             app:layout_constraintStart_toEndOf="@id/add_artist" />
 
         <Button
@@ -132,18 +132,7 @@
             android:layout_height="wrap_content"
             android:text="delete"
             android:textColor="@color/color_black"
-            app:layout_constraintBottom_toTopOf="@id/add_db"
-            app:layout_constraintStart_toStartOf="parent"
-
-            />
-
-        <Button
-            android:id="@+id/delete_sng"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="delete"
-            android:textColor="@color/color_black"
-            app:layout_constraintBottom_toTopOf="@id/add_db"
+            app:layout_constraintBottom_toTopOf="@id/add_album"
             app:layout_constraintStart_toStartOf="parent"
 
             />

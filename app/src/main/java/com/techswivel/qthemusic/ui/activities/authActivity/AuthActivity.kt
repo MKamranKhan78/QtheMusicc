@@ -31,7 +31,6 @@ import com.techswivel.qthemusic.source.remote.networkViewModel.AuthNetworkViewMo
 import com.techswivel.qthemusic.source.remote.networkViewModel.ProfileNetworkViewModel
 import com.techswivel.qthemusic.ui.activities.mainActivity.MainActivity
 import com.techswivel.qthemusic.ui.base.BaseActivity
-import com.techswivel.qthemusic.ui.fragments.forgotPasswordFragment.ForgotPassword
 import com.techswivel.qthemusic.ui.fragments.forgotPasswordFragment.ForgotPasswordImp
 import com.techswivel.qthemusic.ui.fragments.otpVerificationFragment.OtpVerification
 import com.techswivel.qthemusic.ui.fragments.setPasswordFragmetnt.SetPassword
@@ -41,7 +40,6 @@ import com.techswivel.qthemusic.ui.fragments.yourInterestFragment.YourInterestFr
 import com.techswivel.qthemusic.utils.CommonKeys
 import com.techswivel.qthemusic.utils.DialogUtils
 import com.techswivel.qthemusic.utils.Log
-import com.techswivel.qthemusic.utils.Utilities
 import java.util.*
 
 
@@ -127,11 +125,13 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
         isResetRequest: Boolean
     ) {
         mAuthActivityViewModel.isResetRequest = isResetRequest
+
         mAuthActivityViewModel.sharedView = sharedViews
         mAuthActivityViewModel.myTransitionName = transitionName
         mAuthActivityViewModel.authRequestBilder = authRequestBuilder
-        mAuthActivityViewModel.myEmail = authRequestBuilder.email.toString()
         Log.d(TAG, "is reset request ${mAuthActivityViewModel.isResetRequest}")
+        Log.d(TAG, "forgot password ${authRequestBuilder.email} ${authRequestBuilder.otpType}")
+        mAuthActivityViewModel.myEmail = authRequestBuilder.email.toString()
         mAuthActivityViewModel.otpType = authRequestBuilder.otpType
         val authModel =
             AuthRequestBuilder.builder(mAuthActivityViewModel.authRequestBilder)
@@ -163,7 +163,7 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
         mAuthNetworkViewModel.verifyOtpResponse(authRequestBuilder)
         mAuthActivityViewModel.userEmail = authRequestBuilder.email
         mAuthActivityViewModel.authRequestBilder.otp = authRequestBuilder.otp
-        Log.d(TAG, "otp is ${mAuthActivityViewModel.authRequestModel.otp}")
+        Log.d(TAG, "otp is ${mAuthActivityViewModel.authRequestBilder.otp}")
     }
 
     override fun setPasswordRequest(
@@ -408,8 +408,9 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
                         mAuthActivityViewModel.authRequestBilder
                     )
                     val otpVerification = OtpVerification()
+
                     otpVerification.arguments = bundle
-                    Log.d(TAG, "is request is ${mAuthActivityViewModel.isResetRequest}")
+                    Log.d(TAG, "is  resend request ${mAuthActivityViewModel.isResetRequest}")
                     if (!mAuthActivityViewModel.isResetRequest) {
 
                         if (mAuthActivityViewModel.otpType == OtpType.EMAIL.name) {
@@ -428,6 +429,11 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
                             Log.d(TAG, "else called ")
                             replaceCurrentFragment(otpVerification)
                         }
+                    } else {
+                        Log.d(
+                            TAG,
+                            "is resend else  otp type ${mAuthActivityViewModel.authRequestBilder.otpType} otp  ${mAuthActivityViewModel.authRequestBilder.otp}"
+                        )
                     }
                 }
                 NetworkStatus.EXPIRE -> {

@@ -92,9 +92,13 @@ data class Song(
     var songVideoUrl: String?,
     @ColumnInfo(name = "localPath")
     @SerializedName("localPath")
-    var localPath: String?
+    var localPath: String?,
+    @ColumnInfo(name = "timeStamp")
+    @SerializedName("timeStamp")
+    var timeStamp: Long?
 ) : Parcelable {
     constructor() : this(
+        null,
         null,
         null,
         null,
@@ -138,7 +142,8 @@ data class Song(
         songId: Int?,
         songStatus: SongStatus?,
         songTitle: String?,
-        songVideoUrl: String?
+        songVideoUrl: String?,
+        timestamp: Long?
     ) : this(
         albumId,
         albumName,
@@ -159,7 +164,8 @@ data class Song(
         songStatus,
         songTitle,
         songVideoUrl,
-        null
+        null,
+        timestamp
     ) {
 
     }
@@ -182,7 +188,8 @@ data class Song(
         songId: Int?,
         songStatus: SongStatus?,
         songTitle: String?,
-        songVideoUrl: String?
+        songVideoUrl: String?,
+        timestamp: Long?
     ) : this(
         albumId,
         albumName,
@@ -203,7 +210,8 @@ data class Song(
         songStatus,
         songTitle,
         songVideoUrl,
-        null
+        null,
+        timestamp
     ) {
 
     }

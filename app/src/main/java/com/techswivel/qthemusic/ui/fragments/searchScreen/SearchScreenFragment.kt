@@ -26,6 +26,7 @@ import com.techswivel.qthemusic.utils.ActivityUtils
 import com.techswivel.qthemusic.utils.CommonKeys
 import com.techswivel.qthemusic.utils.Log
 import kotlinx.coroutines.runBlocking
+import java.util.*
 
 class SearchScreenFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.CallBack {
     companion object {
@@ -89,18 +90,252 @@ class SearchScreenFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.Cal
     }
 
     private fun setListeners() {
-        mBinding.addDb.setOnClickListener {
-            addDataToDB()
+        mBinding.addAlbum.setOnClickListener {
+            mViewModel.count++
+            val date = Date()
+
+            if (mViewModel.count == 1) {
+                val album = Album(
+                    "https://upload.wikimedia.org/wikipedia/commons/0/06/Eminem_performing_on_April_2013_%28cropped%29.jpg",
+                    1, AlbumStatus.FREE, "The Weeknd", 23,
+                    date.time
+                )
+                addAlbumTODb(album)
+            } else if (mViewModel.count == 2) {
+                val album2 = Album(
+
+                    "https://www.rocktotal.com/wp-content/uploads/2021/07/bon-jovi-its-my-life.png",
+                    2, AlbumStatus.PREMIUM, "Pain", 9,
+                    date.time
+                )
+                addAlbumTODb(album2)
+            } else if (mViewModel.count == 3) {
+                val album3 = Album(
+                    "https://cdn.smehost.net/rcarecordscom-usrcaprod/wp-content/uploads/2019/04/alanwalkeromwvic.jpg",
+                    3, AlbumStatus.PREMIUM, "Risk It All", 15,
+                    date.time
+                )
+                addAlbumTODb(album3)
+            } else if (mViewModel.count == 4) {
+                val album4 = Album(
+                    "https://files.betamax.raywenderlich.com/attachments/collections/265/493f4504-b5ca-4c28-94f1-1e2810b68d04.png",
+                    4, AlbumStatus.PREMIUM, "Risk It All", 15,
+                    date.time
+                )
+                addAlbumTODb(album4)
+            } else if (mViewModel.count == 5) {
+                val album5 = Album(
+                    "https://upload.wikimedia.org/wikipedia/en/f/f6/Sky_-_Love_Song_single_cover.jpg",
+                    5, AlbumStatus.PREMIUM, "Risk It All", 15,
+                    date.time
+                )
+                addAlbumTODb(album5)
+            } else if (mViewModel.count == 6) {
+                val album6 = Album(
+                    "https://preview.redd.it/k2yjnh26dxg41.jpg?auto=webp&s=edd56d7179b05739640630441205d04ff7fcf690",
+                    6, AlbumStatus.PREMIUM, "Risk It All", 15,
+                    date.time
+                )
+                addAlbumTODb(album6)
+            } else if (mViewModel.count == 7) {
+                val album7 = Album(
+                    "https://upload.wikimedia.org/wikipedia/en/thumb/5/56/Kanyewest_touchthesky.jpg/220px-Kanyewest_touchthesky.jpg",
+                    7, AlbumStatus.PREMIUM, "Risk It All", 15,
+                    date.time
+                )
+                addAlbumTODb(album7)
+            }
+
         }
         mBinding.addArtist.setOnClickListener {
-            insertArtist()
+            mViewModel.count++
+            val date = Date()
+            runBlocking {
+                if (mViewModel.count == 1) {
+                    val song = Song(
+                        1,
+                        "Risk It All",
+                        "Eminem",
+                        3,
+                        1,
+                        "https://upload.wikimedia.org/wikipedia/commons/0/06/Eminem_performing_on_April_2013_%28cropped%29.jpg",
+                        true,
+                        false,
+                        "No Lyrics Available",
+                        1,
+                        "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+                        "",
+                        "",
+                        3233,
+                        11.11f,
+                        1,
+                        SongStatus.FREE,
+                        "The Sky",
+                        "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+                        null,
+                        date.time
+
+                    )
+                    db.mSongsDao().insertSong(song)
+                } else if (mViewModel.count == 2) {
+                    val songs2 = Song(
+                        2,
+                        "The Weeknd",
+                        "Star Boy",
+                        31,
+                        3,
+                        "https://www.rocktotal.com/wp-content/uploads/2021/07/bon-jovi-its-my-life.png",
+                        true,
+                        false,
+                        "No Lyrics Available",
+                        2,
+                        "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3",
+                        "",
+                        "",
+                        3213,
+                        11.11f,
+                        2,
+                        SongStatus.PREMIUM,
+                        "Save Life",
+                        null,
+                        date.time
+                    )
+                    db.mSongsDao().insertSong(songs2)
+                } else if (mViewModel.count == 3) {
+                    val song3 = Song(
+                        3,
+                        "RCA Records",
+                        "Sabrina and Farruko",
+                        5,
+                        10,
+                        "https://cdn.smehost.net/rcarecordscom-usrcaprod/wp-content/uploads/2019/04/alanwalkeromwvic.jpg",
+                        true,
+                        false,
+                        "No Lyrics Available",
+                        3,
+                        "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
+                        "",
+                        "",
+                        4533,
+                        11.11f,
+                        3,
+                        SongStatus.FREE,
+                        "My Desire",
+                        null,
+                        null,
+                        date.time
+                    )
+                    db.mSongsDao().insertSong(song3)
+                } else if (mViewModel.count == 4) {
+                    val song4 = Song(
+                        4,
+                        "RCA Records",
+                        "Sabrina and Farruko",
+                        5,
+                        10,
+                        "https://files.betamax.raywenderlich.com/attachments/collections/265/493f4504-b5ca-4c28-94f1-1e2810b68d04.png",
+                        true,
+                        false,
+                        "No Lyrics Available",
+                        3,
+                        "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
+                        "",
+                        "",
+                        4533,
+                        11.11f,
+                        4,
+                        SongStatus.FREE,
+                        "Oh Good",
+                        null,
+                        null,
+                        date.time
+                    )
+                    db.mSongsDao().insertSong(song4)
+                } else if (mViewModel.count == 5) {
+                    val song5 = Song(
+                        5,
+                        "RCA Records",
+                        "Sabrina and Farruko",
+                        5,
+                        10,
+                        "https://upload.wikimedia.org/wikipedia/en/f/f6/Sky_-_Love_Song_single_cover.jpg",
+                        true,
+                        false,
+                        "No Lyrics Available",
+                        3,
+                        "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
+                        "",
+                        "",
+                        4533,
+                        11.11f,
+                        5,
+                        SongStatus.FREE,
+                        "Hight",
+                        null,
+                        null,
+                        date.time
+                    )
+                    db.mSongsDao().insertSong(song5)
+                } else if (mViewModel.count == 6) {
+                    val song6 = Song(
+                        5,
+                        "RCA Records",
+                        "Sabrina and Farruko",
+                        5,
+                        10,
+                        "https://preview.redd.it/k2yjnh26dxg41.jpg?auto=webp&s=edd56d7179b05739640630441205d04ff7fcf690",
+                        true,
+                        false,
+                        "No Lyrics Available",
+                        3,
+                        "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
+                        "",
+                        "",
+                        4533,
+                        11.11f,
+                        6,
+                        SongStatus.FREE,
+                        "Song 6",
+                        null,
+                        null,
+                        date.time
+                    )
+                    db.mSongsDao().insertSong(song6)
+                } else if (mViewModel.count == 7) {
+                    val song7 = Song(
+                        5,
+                        "RCA Records",
+                        "Sabrina and Farruko",
+                        5,
+                        10,
+                        "https://upload.wikimedia.org/wikipedia/en/thumb/5/56/Kanyewest_touchthesky.jpg/220px-Kanyewest_touchthesky.jpg",
+                        true,
+                        false,
+                        "No Lyrics Available",
+                        3,
+                        "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
+                        "",
+                        "",
+                        4533,
+                        11.11f,
+                        7,
+                        SongStatus.FREE,
+                        "Song 7",
+                        null,
+                        null,
+                        date.time
+                    )
+                    db.mSongsDao().insertSong(song7)
+                }
+            }
         }
         mBinding.addSong.setOnClickListener {
             insertSongsDetails()
         }
         mBinding.deleteSng.setOnClickListener {
             runBlocking {
-                db.mSongsDao().deleteData()
+
+                db.mAlbumDao().deleteAlbum()
             }
 
         }
@@ -114,7 +349,6 @@ class SearchScreenFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.Cal
                 mBinding.btnAlbums,
                 mBinding.btnArtists
             )
-
         }
 
         mBinding.btnAlbums.setOnClickListener {
@@ -127,7 +361,6 @@ class SearchScreenFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.Cal
                 mBinding.btnSongs,
                 mBinding.btnArtists
             )
-
         }
 
         mBinding.btnArtists.setOnClickListener {
@@ -175,29 +408,11 @@ class SearchScreenFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.Cal
         }
     }
 
-    private fun addDataToDB() {
-        mId = PrefUtils.getInt(requireContext(), CommonKeys.ID_FOR_DB)
-        val id = mId.plus(1)
-        Log.d(TAG, "mId is $mId")
-        PrefUtils.setInt(requireContext(), CommonKeys.ID_FOR_DB, id)
+    private fun addAlbumTODb(album: Album) {
+
         runBlocking {
             try {
-                val album = Album(
-                    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTY7qad5A1vGKq1cZx1KgRf4QGWOM77cGEGIg&usqp=CAU",
-                    1, AlbumStatus.FREE, "The Weeknd", 23
-                )
-                val album2 = Album(
-
-                    "data:image/jpeg;base64,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",
-                    2, AlbumStatus.PREMIUM, "Pain", 9
-                )
-                val album3 = Album(
-                    "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/920e8f71-8207-4689-8385-00c19f544ead/d876zee-4d05192e-4d55-46ab-b485-07f82716d7c7.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzkyMGU4ZjcxLTgyMDctNDY4OS04Mzg1LTAwYzE5ZjU0NGVhZFwvZDg3NnplZS00ZDA1MTkyZS00ZDU1LTQ2YWItYjQ4NS0wN2Y4MjcxNmQ3YzcucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.YJhztH_b1Y_wnE46MHhQ4YMmRO4qWB9-7atqOyIUePM",
-                    3, AlbumStatus.PREMIUM, "Risk It All", 15
-                )
                 db.mAlbumDao().insertAlbum(album)
-                db.mAlbumDao().insertAlbum(album2)
-                db.mAlbumDao().insertAlbum(album3)
             } catch (e: Exception) {
                 Log.d(TAG, "not inserted ${e.message}")
             }
@@ -268,101 +483,15 @@ class SearchScreenFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.Cal
     }
 
     private fun insertSongsDetails() {
-        val song = Song(
-            1,
-            "Risk It All",
-            "Eminem",
-            3,
-            1,
-            "https://upload.wikimedia.org/wikipedia/commons/0/06/Eminem_performing_on_April_2013_%28cropped%29.jpg",
-            true,
-            false,
-            "No Lyrics Available",
-            1,
-            "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
-            "",
-            "",
-            3233,
-            11.11f,
-            id,
-            SongStatus.FREE,
-            "The Sky",
-            "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-            null
-        )
-        val songs2 = Song(
-            2,
-            "The Weeknd",
-            "Star Boy",
-            31,
-            3,
-            "https://i.ytimg.com/vi/XXYlFuWEuKI/maxresdefault.jpg",
-            true,
-            false,
-            "No Lyrics Available",
-            2,
-            "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3",
-            "",
-            "",
-            3213,
-            11.11f,
-            2,
-            SongStatus.PREMIUM,
-            "Save Your Tears",
-            null,
-            null
-        )
-        val song3 = Song(
-            3,
-            "RCA Records",
-            "Sabrina and Farruko",
-            5,
-            10,
-            "https://cdn.smehost.net/rcarecordscom-usrcaprod/wp-content/uploads/2019/04/alanwalkeromwvic.jpg",
-            true,
-            false,
-            "No Lyrics Available",
-            3,
-            "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
-            "",
-            "",
-            4533,
-            11.11f,
-            3,
-            SongStatus.FREE,
-            "On My Way",
-            null,
-            null
-        )
-        val song4 = Song(
-            4,
-            "RCA Records",
-            "Sabrina and Farruko",
-            5,
-            10,
-            "https://cdn.smehost.net/rcarecordscom-usrcaprod/wp-content/uploads/2019/04/alanwalkeromwvic.jpg",
-            true,
-            false,
-            "No Lyrics Available",
-            3,
-            "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
-            "",
-            "",
-            4533,
-            11.11f,
-            4,
-            SongStatus.FREE,
-            "On My Way",
-            null,
-            null
-        )
+
+        val date = Date()
         val song5 = Song(
             5,
             "RCA Records",
             "Sabrina and Farruko",
             5,
             10,
-            "https://cdn.smehost.net/rcarecordscom-usrcaprod/wp-content/uploads/2019/04/alanwalkeromwvic.jpg",
+            "https://upload.wikimedia.org/wikipedia/en/f/f6/Sky_-_Love_Song_single_cover.jpg",
             true,
             false,
             "No Lyrics Available",
@@ -374,64 +503,15 @@ class SearchScreenFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.Cal
             11.11f,
             5,
             SongStatus.FREE,
-            "On My Way",
+            "Hight",
             null,
-            null
-        )
-        val song6 = Song(
-            6,
-            "RCA Records",
-            "Sabrina and Farruko",
-            5,
-            10,
-            "https://cdn.smehost.net/rcarecordscom-usrcaprod/wp-content/uploads/2019/04/alanwalkeromwvic.jpg",
-            true,
-            false,
-            "No Lyrics Available",
-            3,
-            "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
-            "",
-            "",
-            4533,
-            11.11f,
-            6,
-            SongStatus.FREE,
-            "On My Way",
             null,
-            null
+            date.time
         )
-        val song7 = Song(
-            7,
-            "RCA Records",
-            "Sabrina and Farruko",
-            5,
-            10,
-            "https://cdn.smehost.net/rcarecordscom-usrcaprod/wp-content/uploads/2019/04/alanwalkeromwvic.jpg",
-            true,
-            false,
-            "No Lyrics Available",
-            3,
-            "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
-            "",
-            "",
-            4533,
-            11.11f,
-            7,
-            SongStatus.FREE,
-            "On My Way",
-            null,
-            null
-        )
+
         try {
             runBlocking {
-                db.mSongsDao().insertSong(song)
-                db.mSongsDao().insertSong(songs2)
-                db.mSongsDao().insertSong(song3)
-                db.mSongsDao().insertSong(song4)
                 db.mSongsDao().insertSong(song5)
-                db.mSongsDao().insertSong(song6)
-                db.mSongsDao().insertSong(song7)
-
             }
         } catch (e: Exception) {
             Log.d(TAG, "not inserted ${e.message}")

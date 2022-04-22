@@ -15,13 +15,18 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.customData.adapter.RecyclerViewAdapter
-import com.techswivel.qthemusic.customData.enums.*
 import com.techswivel.qthemusic.customData.enums.AdapterType
+import com.techswivel.qthemusic.customData.enums.NetworkStatus
 import com.techswivel.qthemusic.databinding.FragmentSearchQueryBinding
-import com.techswivel.qthemusic.models.*
+import com.techswivel.qthemusic.models.ErrorResponse
+import com.techswivel.qthemusic.models.Language
+import com.techswivel.qthemusic.models.QueryRequestModel
+import com.techswivel.qthemusic.models.ResponseModel
 import com.techswivel.qthemusic.source.remote.networkViewModel.SongAndArtistsViewModel
 import com.techswivel.qthemusic.ui.base.RecyclerViewBaseFragment
-import com.techswivel.qthemusic.utils.*
+import com.techswivel.qthemusic.utils.DialogUtils
+import com.techswivel.qthemusic.utils.Log
+import com.techswivel.qthemusic.utils.Utilities
 
 
 class SearchQueryFragment : RecyclerViewBaseFragment() {
@@ -245,11 +250,15 @@ class SearchQueryFragment : RecyclerViewBaseFragment() {
 
     private fun startSearchedDataShimmer() {
         mBinding.slSearchedSongs.visibility = View.VISIBLE
+        mBinding.slLanguages.visibility = View.VISIBLE
         mBinding.slSearchedSongs.startShimmer()
+        mBinding.slLanguages.startShimmer()
     }
 
     private fun stopSearchedDataShimmer() {
         mBinding.slSearchedSongs.visibility = View.GONE
+        mBinding.slLanguages.visibility = View.GONE
         mBinding.slSearchedSongs.stopShimmer()
+        mBinding.slLanguages.stopShimmer()
     }
 }

@@ -86,6 +86,34 @@
             app:layout_constraintStart_toStartOf="@id/search_layout"
             app:layout_constraintTop_toBottomOf="@id/search_layout" />
 
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/sl_languages_"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_0dp"
+            android:padding="@dimen/_14dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_all_songs"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/btn_all_songs">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <include layout="@layout/languages_shimmer" />
+
+                <include layout="@layout/languages_shimmer" />
+
+                <include layout="@layout/languages_shimmer" />
+
+                <include layout="@layout/languages_shimmer" />
+
+                <include layout="@layout/languages_shimmer" />
+
+            </LinearLayout>
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_languages"
             android:layout_width="wrap_content"

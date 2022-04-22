@@ -9,13 +9,14 @@ import com.techswivel.qthemusic.constant.Constants.APP_DATABASE_NAME
 import com.techswivel.qthemusic.models.database.Album
 import com.techswivel.qthemusic.models.database.Artist
 import com.techswivel.qthemusic.models.database.Song
+import com.techswivel.qthemusic.source.local.converters.DateConverter
 import com.techswivel.qthemusic.source.local.databaseDao.AlbumDao
 import com.techswivel.qthemusic.source.local.databaseDao.ArtistDao
 import com.techswivel.qthemusic.source.local.databaseDao.SongsDao
 
 @Database(
     entities = [Song::class, Album::class, Artist::class],
-    version = 3,
+    version = 4,
     exportSchema = false,
 //    autoMigrations = [
 //        AutoMigration(
@@ -23,7 +24,7 @@ import com.techswivel.qthemusic.source.local.databaseDao.SongsDao
 //        )
 //    ]
 )
-@TypeConverters()
+@TypeConverters(DateConverter::class)
 
 abstract class AppRoomDatabase : RoomDatabase() {
 

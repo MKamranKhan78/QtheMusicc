@@ -12,6 +12,7 @@ import com.techswivel.qthemusic.constant.Constants
 import com.techswivel.qthemusic.databinding.ActivitySplashBinding
 import com.techswivel.qthemusic.ui.activities.mainActivity.MainActivity
 import com.techswivel.qthemusic.ui.base.BaseActivity
+import com.techswivel.qthemusic.utils.Log
 import com.techswivel.qthemusic.utils.PermissionUtils
 
 class SplashActivity : BaseActivity() {
@@ -25,7 +26,7 @@ class SplashActivity : BaseActivity() {
             Log.d(TAG, "interest set ${mViewModel.isInterestSet}")
             mActivityIntent = Intent(this, MainActivity::class.java)
         } else {
-            mActivityIntent = Intent(this, AuthActivity::class.java)
+            mActivityIntent = Intent(this, MainActivity::class.java)
             Log.d(TAG, "interest not set ${mViewModel.isInterestSet}")
         }
         if (!isFinishing) {

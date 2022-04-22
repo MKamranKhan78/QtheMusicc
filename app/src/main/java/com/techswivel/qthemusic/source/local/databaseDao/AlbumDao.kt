@@ -9,9 +9,13 @@ import com.techswivel.qthemusic.models.database.Album
 
 @Dao
 abstract class AlbumDao {
-    @Query("Select * from album")
-    abstract fun getAlbumList(): LiveData<List<Album>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract suspend fun insertAlbum(album: Album)
+
+    @Query("SELECT * FROM album ORDER BY timeStamp DESC")
+    abstract fun getAlbumList(): LiveData<List<Album>>
+
+    @Query("DELETE FROM Album WHERE ROWID IN (SELECT ROWID FROM Album ORDER BY ROWID DESC LIMIT -1 OFFSET 5)")
+    abstract suspend fun deleteAlbum()
 }

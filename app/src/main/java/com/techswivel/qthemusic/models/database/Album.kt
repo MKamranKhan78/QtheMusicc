@@ -32,7 +32,10 @@ data class Album(
     @Expose
     @SerializedName("numberOfSongs")
     @ColumnInfo(name = "numberOfSongs")
-    var numberOfSongs: Int?
+    var numberOfSongs: Int?,
+    @SerializedName("timeStamp")
+    @ColumnInfo(name = "timeStamp")
+    var timeStamp: Long?
 ) : Serializable {
 
 }
