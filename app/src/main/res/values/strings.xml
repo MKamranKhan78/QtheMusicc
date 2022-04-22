@@ -184,6 +184,7 @@
     <string name="dob_req">Date Of Birth Required</string>
     <string name="minimum_alert">Select at least 2 topics</string>
     <string name="maximum_alert">You can select maximum 5 topics</string>
+    <string name="name_required">Name is required</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->

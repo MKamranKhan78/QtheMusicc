@@ -69,7 +69,7 @@ class GenderSelectionDialogFragment : BaseDialogFragment(), BaseInterface {
         }
 
         mBinding.updateButton.setOnClickListener {
-            mSignUpFragmentImp.getGender(genderSelectionViewModel.gender?.name)
+            mSignUpFragmentImp.getGender(genderSelectionViewModel.gender?.value)
             dismiss()
         }
 

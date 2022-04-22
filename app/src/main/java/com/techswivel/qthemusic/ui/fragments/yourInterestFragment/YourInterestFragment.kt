@@ -2,7 +2,6 @@ package com.techswivel.qthemusic.ui.fragments.yourInterestFragment
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,13 +16,9 @@ import com.techswivel.qthemusic.customData.interfaces.BaseInterface
 import com.techswivel.qthemusic.databinding.FragmentYourInterestBinding
 import com.techswivel.qthemusic.models.Category
 import com.techswivel.qthemusic.models.ResponseModel
-import com.techswivel.qthemusic.source.local.preference.PrefUtils
 import com.techswivel.qthemusic.source.remote.networkViewModel.SongAndArtistsViewModel
-import com.techswivel.qthemusic.ui.activities.authActivity.AuthActivity
 import com.techswivel.qthemusic.ui.activities.authActivity.AuthActivityImp
-import com.techswivel.qthemusic.ui.activities.mainActivity.MaintActivityImp
 import com.techswivel.qthemusic.ui.base.RecyclerViewBaseFragment
-import com.techswivel.qthemusic.utils.CommonKeys
 import com.techswivel.qthemusic.utils.DialogUtils
 import com.techswivel.qthemusic.utils.Log
 import com.techswivel.qthemusic.utils.Utilities
@@ -91,17 +86,30 @@ class YourInterestFragment : RecyclerViewBaseFragment(),
     override fun onViewClicked(view: View, data: Any?) {
         super.onViewClicked(view, data)
         val mCategory = data as Category
-        if (checkForCategoryIfAlreadyExistes(mCategory.categoryTitle)) {
-            mViewModel.selectedCategoryList.remove(mCategory.categoryTitle)
-            view.setBackgroundResource(R.drawable.shape_bg_your_interest_recview)
-            getSelectedCategories(mViewModel.selectedCategoryList)
+        if (mViewModel.categoriesListForApiRequest.size < 5) {
+            if (checkForCategoryIfAlreadyExistes(mCategory.categoryTitle)) {
+                mViewModel.selectedCategoryList.remove(mCategory.categoryTitle)
+                view.setBackgroundResource(R.drawable.shape_bg_your_interest_recview)
+                getSelectedCategories(mViewModel.selectedCategoryList)
 
+            } else {
+                mViewModel.selectedCategoryList.add(mCategory.categoryTitle)
+                view.setBackgroundResource(R.drawable.shape_bg_your_interest_selected)
+
+                getSelectedCategories(mViewModel.selectedCategoryList)
+            }
         } else {
-            mViewModel.selectedCategoryList.add(mCategory.categoryTitle)
-            view.setBackgroundResource(R.drawable.shape_bg_your_interest_selected)
 
-            getSelectedCategories(mViewModel.selectedCategoryList)
+            if (checkForCategoryIfAlreadyExistes(mCategory.categoryTitle)) {
+                mViewModel.selectedCategoryList.remove(mCategory.categoryTitle)
+                view.setBackgroundResource(R.drawable.shape_bg_your_interest_recview)
+                getSelectedCategories(mViewModel.selectedCategoryList)
+
+            } else {
+                Utilities.showToast(requireContext(), getString(R.string.maximum_alert))
+            }
         }
+
 
     }
 
@@ -112,7 +120,7 @@ class YourInterestFragment : RecyclerViewBaseFragment(),
             } else if (mViewModel.categoriesListForApiRequest.size > 5) {
                 Utilities.showToast(requireContext(), getString(R.string.maximum_alert))
             } else {
-                        (mActivityListener as AuthActivityImp).saveInterests(mViewModel.categoriesListForApiRequest)
+                (mActivityListener as AuthActivityImp).saveInterests(mViewModel.categoriesListForApiRequest)
             }
 
         }

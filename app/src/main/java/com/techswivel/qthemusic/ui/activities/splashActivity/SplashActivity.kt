@@ -16,14 +16,17 @@ import com.techswivel.qthemusic.utils.PermissionUtils
 
 class SplashActivity : BaseActivity() {
     private var mHandler: Handler? = null
+    val TAG = "SplashActivity"
     private lateinit var mActivityIntent: Intent
     private lateinit var mViewModel: SplashViewModel
     private lateinit var mBinding: ActivitySplashBinding
     private val mRunnable: Runnable = Runnable {
-        if (mViewModel.isUserLogin && mViewModel.isInterestSet){
-            mActivityIntent=Intent(this,MainActivity::class.java)
-        }else{
+        if (mViewModel.isInterestSet) {
+            Log.d(TAG, "interest set ${mViewModel.isInterestSet}")
             mActivityIntent = Intent(this, MainActivity::class.java)
+        } else {
+            mActivityIntent = Intent(this, AuthActivity::class.java)
+            Log.d(TAG, "interest not set ${mViewModel.isInterestSet}")
         }
         if (!isFinishing) {
             startActivity(mActivityIntent)
@@ -55,6 +58,6 @@ class SplashActivity : BaseActivity() {
         }
         mHandler = Handler(Looper.getMainLooper())
         mHandler?.postDelayed(mRunnable, Constants.SPLASHDELAY.toLong())
-       mViewModel.setServerName(mBinding.textServerName)
+        mViewModel.setServerName(mBinding.textServerName)
     }
 }
