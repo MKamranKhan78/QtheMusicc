@@ -5,9 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.techswivel.qthemusic.R
+import com.techswivel.qthemusic.application.QTheMusicApplication
+import com.techswivel.qthemusic.constant.Constants
 import com.techswivel.qthemusic.customData.adapter.RecyclerViewAdapter
 import com.techswivel.qthemusic.customData.enums.AdapterType
 import com.techswivel.qthemusic.customData.enums.NetworkStatus
@@ -43,14 +46,57 @@ class ListeningHistoryFragment : RecyclerViewBaseFragment(), BaseInterface,
         initViewModel()
         setUpToolBar()
         viewModel.selectedTab = RecommendedSongsType.SONGS
-        setUpRecyclerView(
-            mBinding.recyclerviewListeningHistory,
-            AdapterType.TRENDING_SONGS
-        )
+        mBinding.recyclerviewGrigLayout.visibility = View.GONE
+        mBinding.recyclerviewListeningHistory.visibility = View.VISIBLE
+        setUpAdapter()
         clickListeners()
         getRecommendedSongs()
         setObserver()
     }
+
+    private fun setUpAdapter() {
+        if (viewModel.selectedTab == RecommendedSongsType.SONGS) {
+            Toast.makeText(
+                QTheMusicApplication.getContext(),
+                viewModel.mSongsDataList.toString(),
+                Toast.LENGTH_LONG
+            ).show()
+            mSongListAdapter = RecyclerViewAdapter(this, viewModel.mSongsDataList)
+            setUpRecyclerView(
+                mBinding.recyclerviewListeningHistory,
+                AdapterType.SONGS
+            )
+        } else if (viewModel.selectedTab == RecommendedSongsType.ALBUM) {
+            Toast.makeText(
+                QTheMusicApplication.getContext(),
+                viewModel.mSongsDataList.toString(),
+                Toast.LENGTH_LONG
+            ).show()
+            mSongListAdapter = RecyclerViewAdapter(this, viewModel.mAlbumsDataList)
+            setUpGridRecyclerView(
+                mBinding.recyclerviewGrigLayout,
+                Constants.NO_OF_COLUMNS_2,
+                resources.getDimensionPixelSize(R.dimen.recycler_vertical_spacing),
+                resources.getDimensionPixelSize(R.dimen.recycler_horizental_spacing_2),
+                AdapterType.ALBUMS
+            )
+        } else {
+            Toast.makeText(
+                QTheMusicApplication.getContext(),
+                viewModel.mSongsDataList.toString(),
+                Toast.LENGTH_LONG
+            ).show()
+            mSongListAdapter = RecyclerViewAdapter(this, viewModel.mArtistsDataList)
+            setUpGridRecyclerView(
+                mBinding.recyclerviewGrigLayout,
+                Constants.NO_OF_COLUMNS_2,
+                resources.getDimensionPixelSize(R.dimen.recycler_vertical_spacing),
+                resources.getDimensionPixelSize(R.dimen.recycler_horizental_spacing_2),
+                AdapterType.ARTISTS
+            )
+        }
+    }
+
 
     override fun onPrepareAdapter(adapterType: AdapterType?): RecyclerView.Adapter<*> {
         return mSongListAdapter
@@ -93,6 +139,21 @@ class ListeningHistoryFragment : RecyclerViewBaseFragment(), BaseInterface,
                     val songsList = response.data.recommendedSongsResponse?.songs
                     val albumsList = response.data.recommendedSongsResponse?.albums
                     val artistsList = response.data.recommendedSongsResponse?.artist
+                    Toast.makeText(
+                        QTheMusicApplication.getContext(),
+                        songsList.toString(),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    Toast.makeText(
+                        QTheMusicApplication.getContext(),
+                        albumsList.toString(),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    Toast.makeText(
+                        QTheMusicApplication.getContext(),
+                        artistsList.toString(),
+                        Toast.LENGTH_SHORT
+                    ).show()
 
                     if (!songsList.isNullOrEmpty() && viewModel.selectedTab == RecommendedSongsType.SONGS) {
                         viewModel.mSongsDataList.addAll(songsList)
@@ -134,6 +195,8 @@ class ListeningHistoryFragment : RecyclerViewBaseFragment(), BaseInterface,
 
     private fun clickListeners() {
         mBinding.btnSongs.setOnClickListener {
+            mBinding.recyclerviewListeningHistory.visibility = View.VISIBLE
+            mBinding.recyclerviewGrigLayout.visibility = View.GONE
             mBinding.recyclerviewListeningHistory.smoothScrollToPosition(0)
             viewModel.selectedTab = RecommendedSongsType.SONGS
             updateSelectedTabBackground(mBinding.btnSongs, mBinding.btnAlbums, mBinding.btnArtists)
@@ -141,6 +204,9 @@ class ListeningHistoryFragment : RecyclerViewBaseFragment(), BaseInterface,
         }
 
         mBinding.btnAlbums.setOnClickListener {
+            mBinding.recyclerviewListeningHistory.visibility = View.VISIBLE
+            mBinding.recyclerviewListeningHistory.visibility = View.GONE
+
             mBinding.recyclerviewListeningHistory.smoothScrollToPosition(0)
             viewModel.selectedTab = RecommendedSongsType.ALBUM
             updateSelectedTabBackground(mBinding.btnAlbums, mBinding.btnSongs, mBinding.btnArtists)
@@ -148,6 +214,8 @@ class ListeningHistoryFragment : RecyclerViewBaseFragment(), BaseInterface,
         }
 
         mBinding.btnArtists.setOnClickListener {
+            mBinding.recyclerviewListeningHistory.visibility = View.VISIBLE
+            mBinding.recyclerviewListeningHistory.visibility = View.GONE
             mBinding.recyclerviewListeningHistory.smoothScrollToPosition(0)
             viewModel.selectedTab = RecommendedSongsType.ARTIST
             updateSelectedTabBackground(mBinding.btnArtists, mBinding.btnAlbums, mBinding.btnSongs)

@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/color_black"
     tools:context=".ui.fragments.listeningHistoryFragment.ListeningHistoryFragment">
 
@@ -48,23 +47,32 @@
         android:background="@drawable/unselected_tab_background"
         android:text="@string/str_artists" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerviewListeningHistory"
+    <FrameLayout
+        android:id="@+id/mainContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/btn_artists" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerviewGrigLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/btn_artists"
-        android:layout_marginTop="@dimen/_15dp"
-        android:paddingHorizontal="@dimen/_10dp"
-        android:scrollbarSize="@dimen/_2dp"
-        android:scrollbars="vertical"
-        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-        app:spanCount="2" />
+    <!--
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerviewListeningHistory"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/btn_artists" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerviewGrigLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/btn_artists"
+            android:layout_marginTop="@dimen/_15dp"
+            android:paddingHorizontal="@dimen/_10dp"
+            android:scrollbarSize="@dimen/_2dp"
+            android:scrollbars="vertical"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:spanCount="2"
+            />
+    -->
 
     <!--    tools:listitem="@layout/item_purchased_album"-->
 

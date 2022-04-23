@@ -8,10 +8,10 @@ import androidx.lifecycle.ViewModelProvider
 import com.techswivel.dfaktfahrerapp.ui.fragments.underDevelopmentMessageFragment.UnderDevelopmentMessageFragment
 import com.techswivel.qthemusic.application.QTheMusicApplication
 import com.techswivel.qthemusic.databinding.FragmentProfileLandingBinding
+import com.techswivel.qthemusic.ui.activities.listeningHistoryActivity.ListeningHistoryActivity
 import com.techswivel.qthemusic.ui.activities.profileSettingScreen.ProfileSettingActivity
 import com.techswivel.qthemusic.ui.activities.serverSettingActivity.ServerSettingActivity
 import com.techswivel.qthemusic.ui.base.BaseFragment
-import com.techswivel.qthemusic.ui.fragments.listeningHistoryFragment.ListeningHistoryFragment
 import com.techswivel.qthemusic.utils.ActivityUtils
 
 class ProfileLandingFragment : BaseFragment() {
@@ -91,10 +91,7 @@ class ProfileLandingFragment : BaseFragment() {
             )
         }
         mBinding.listeningHistoryTextview.setOnClickListener {
-            ActivityUtils.launchFragment(
-                requireContext(),
-                ListeningHistoryFragment::class.java.name
-            )
+            openListeningHistoryActivity()
         }
         mBinding.downloadedTextview.setOnClickListener {
             ActivityUtils.launchFragment(
@@ -120,6 +117,13 @@ class ProfileLandingFragment : BaseFragment() {
                 UnderDevelopmentMessageFragment::class.java.name
             )
         }
+    }
+
+    private fun openListeningHistoryActivity() {
+        ActivityUtils.startNewActivity(
+            requireActivity(),
+            ListeningHistoryActivity::class.java
+        )
     }
 
     private fun openProfileSettingActivity() {

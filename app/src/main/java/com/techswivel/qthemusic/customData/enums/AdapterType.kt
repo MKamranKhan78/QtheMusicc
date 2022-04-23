@@ -4,5 +4,8 @@ enum class AdapterType {
     RECOMMENDED_FOR_YOU,
     WHATS_YOUR_MOOD,
     TRENDING_SONGS,
-    YOUR_INTERESTS
+    YOUR_INTERESTS,
+    SONGS,
+    ALBUMS,
+    ARTISTS
 }
