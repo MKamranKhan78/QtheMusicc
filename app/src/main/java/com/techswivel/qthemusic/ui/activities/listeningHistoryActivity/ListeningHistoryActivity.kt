@@ -13,13 +13,14 @@ import com.techswivel.qthemusic.models.RecommendedSongsBodyBuilder
 import com.techswivel.qthemusic.models.ResponseModel
 import com.techswivel.qthemusic.source.remote.networkViewModel.SongAndArtistsViewModel
 import com.techswivel.qthemusic.ui.base.BaseActivity
+import com.techswivel.qthemusic.ui.fragments.fragmentSongListeningHistory.ListeningHistorySongFragment
+import com.techswivel.qthemusic.ui.fragments.listeningHistoryAlbumFragment.ListeningHistoryAlbumFragment
 import com.techswivel.qthemusic.utils.DialogUtils
 
 class ListeningHistoryActivity : BaseActivity() {
 
     private lateinit var viewModel: ListeningHistoryActivityViewModel
-
-    //private var mFragment: Fragment? = null
+    private var mFragment: Fragment? = null
     private lateinit var mBinding: ActivityListeningHistoryBinding
     private lateinit var mSongAndArtistsViewModel: SongAndArtistsViewModel
 
@@ -27,12 +28,14 @@ class ListeningHistoryActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         mBinding = ActivityListeningHistoryBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
-
         initViewModel()
         viewModel.selectedTab = RecommendedSongsType.SONGS
         setToolBar()
         clickListeners()
         openSongFragment()
+        getRecommendedSongs()
+        getRecommendedAlbums()
+        getRecommendedArtists()
         setObserver()
 
     }
@@ -48,14 +51,20 @@ class ListeningHistoryActivity : BaseActivity() {
                     viewModel.mSongsDataList.clear()
                     val response = recommendedSongsDataResponse.t as ResponseModel
                     val songsList = response.data.recommendedSongsResponse?.songs
+                    viewModel.songs = songsList
                     val albumsList = response.data.recommendedSongsResponse?.albums
+                    viewModel.albums = albumsList
                     val artistsList = response.data.recommendedSongsResponse?.artist
+                    viewModel.artists = artistsList
                     if (!songsList.isNullOrEmpty()) {
                         viewModel.mSongsDataList.addAll(songsList)
+
                     } else if (!albumsList.isNullOrEmpty()) {
                         viewModel.mAlbumsDataList.addAll(albumsList)
+
                     } else if (!artistsList.isNullOrEmpty()) {
                         viewModel.mArtistsDataList.addAll(artistsList)
+
                     }
                 }
                 NetworkStatus.ERROR -> {
@@ -85,19 +94,32 @@ class ListeningHistoryActivity : BaseActivity() {
         }
     }
 
+    override fun onBackPressed() {
+        if (getEntryCount() == 1) {
+            this.finish()
+        } else {
+            supportFragmentManager.popBackStackImmediate()
+        }
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        if (getEntryCount() == 1) {
+            this.finish()
+        } else {
+            supportFragmentManager.popBackStackImmediate()
+        }
+        return super.onSupportNavigateUp()
+    }
+
+
+    private fun openAlbumFragment() {
+        popUpAllFragmentIncludeThis(ListeningHistoryAlbumFragment::class.java.name)
+        openFragment(ListeningHistoryAlbumFragment.newInstance())
+    }
+
     private fun openSongFragment() {
-
-        /*ActivityUtils.launchFragment(
-            this,
-            ListeningHistorySongFragment::class.java.name
-        )*/
-/*        var bundle = Bundle()
-        bundle.putString(CommonKeys.KEY_PHONE_NUMBER, viewModel.phone)
-        viewModel.fragment = ProfileUpdatingFragment.newInstance()*/
-//        openFragment(ListeningHistorySongFragment.newInstance())
-
-        //popUpAllFragmentIncludeThis(ListeningHistorySongFragment::class.java.name)
-        //openFragment(ListeningHistorySongFragment.newInstance())
+        popUpAllFragmentIncludeThis(ListeningHistorySongFragment::class.java.name)
+        openFragment(ListeningHistorySongFragment.newInstance())
     }
 
     private fun setToolBar() {
@@ -108,12 +130,12 @@ class ListeningHistoryActivity : BaseActivity() {
     }
 
     private fun openFragment(fragment: Fragment) {
-        //::mFragment.set(fragment)
-        // mFragment.let { fragmentInstance ->
-        // fragmentInstance?.let { fragmentToBeReplaced ->
-        replaceFragment(mBinding.mainContainer.id, fragment)
-        //}
-        //}
+        ::mFragment.set(fragment)
+        mFragment.let { fragmentInstance ->
+            fragmentInstance?.let { fragmentToBeReplaced ->
+                replaceFragment(mBinding.mainContainer.id, fragmentToBeReplaced)
+            }
+        }
     }
 
     private fun initViewModel() {
@@ -127,6 +149,8 @@ class ListeningHistoryActivity : BaseActivity() {
             mBinding.recyclerviewGrigLayout.visibility = View.GONE
             mBinding.recyclerviewListeningHistory.smoothScrollToPosition(0)*/
             viewModel.selectedTab = RecommendedSongsType.SONGS
+            var list = viewModel.mSongsDataList
+            openSongFragment()
             updateSelectedTabBackground(mBinding.btnSongs, mBinding.btnAlbums, mBinding.btnArtists)
             getRecommendedSongs()
         }
@@ -136,6 +160,7 @@ class ListeningHistoryActivity : BaseActivity() {
             mBinding.recyclerviewListeningHistory.visibility = View.GONE
             mBinding.recyclerviewListeningHistory.smoothScrollToPosition(0)*/
             viewModel.selectedTab = RecommendedSongsType.ALBUM
+            openAlbumFragment()
             updateSelectedTabBackground(mBinding.btnAlbums, mBinding.btnSongs, mBinding.btnArtists)
             getRecommendedAlbums()
         }
@@ -145,6 +170,8 @@ class ListeningHistoryActivity : BaseActivity() {
             mBinding.recyclerviewListeningHistory.visibility = View.GONE
             mBinding.recyclerviewListeningHistory.smoothScrollToPosition(0)*/
             viewModel.selectedTab = RecommendedSongsType.ARTIST
+            openAlbumFragment()
+
             updateSelectedTabBackground(mBinding.btnArtists, mBinding.btnAlbums, mBinding.btnSongs)
             getRecommendedArtists()
         }

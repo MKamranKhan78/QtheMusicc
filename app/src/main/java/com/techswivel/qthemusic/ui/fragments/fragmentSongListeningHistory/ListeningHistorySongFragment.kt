@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.techswivel.qthemusic.R
+import com.techswivel.qthemusic.databinding.FragmentListeningHistorySongBinding
 
 class ListeningHistorySongFragment : Fragment() {
 
@@ -16,12 +16,20 @@ class ListeningHistorySongFragment : Fragment() {
         }
     }
 
+    private lateinit var mBinding: FragmentListeningHistorySongBinding
+
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_listening_history_song, container, false)
+    ): View {
+        mBinding = FragmentListeningHistorySongBinding.inflate(inflater, container, false)
+        return mBinding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
     }
 
 }
