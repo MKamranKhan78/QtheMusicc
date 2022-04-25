@@ -2,9 +2,6 @@ package com.techswivel.qthemusic.ui.activities.mainActivity
 
 import android.app.Activity
 import android.os.Bundle
-import android.view.View
-import androidx.annotation.RequiresApi
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.techswivel.dfaktfahrerapp.ui.fragments.underDevelopmentMessageFragment.UnderDevelopmentMessageFragment
@@ -16,7 +13,6 @@ import com.techswivel.qthemusic.source.remote.networkViewModel.ProfileNetworkVie
 import com.techswivel.qthemusic.ui.base.BaseActivity
 import com.techswivel.qthemusic.ui.fragments.homeFragment.HomeFragment
 import com.techswivel.qthemusic.ui.fragments.searchScreen.SearchScreenFragment
-import com.techswivel.qthemusic.utils.ActivityUtils
 import com.techswivel.qthemusic.ui.fragments.underDevelopmentMessageFragment.profile_landing_screen.ProfileLandingFragment
 import com.techswivel.qthemusic.utils.CommonKeys
 import com.techswivel.qthemusic.utils.Log
@@ -33,7 +29,6 @@ class MainActivity : BaseActivity() {
         mBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
         initView()
-
         openHomeFragment()
         setBottomNavigationSelector()
         val datad = PrefUtils.getBoolean(

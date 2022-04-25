@@ -26,7 +26,6 @@ import com.techswivel.qthemusic.utils.CommonKeys
 import com.techswivel.qthemusic.utils.DialogUtils
 import com.techswivel.qthemusic.utils.Log
 
-
 class AlbumDetailsFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.CallBack {
     private lateinit var mBinding: FragmentAlbumDetailsBinding
     private lateinit var mViewModel: AlbumDetailsViewModel
@@ -54,6 +53,7 @@ class AlbumDetailsFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.Cal
         // Inflate the layout for this fragment
         mBinding = FragmentAlbumDetailsBinding.inflate(layoutInflater, container, false)
 
+        setUpActionBar(mBinding.toolbarM, "Toolbar", true)
         return mBinding.root
     }
 
@@ -123,13 +123,13 @@ class AlbumDetailsFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.Cal
             mBinding.tvPlayAllSongs.visibility = View.INVISIBLE
             mBinding.premiumLayoutMain.visibility = View.VISIBLE
         }
-        if (mViewModel.albumStatus==AlbumStatus.PREMIUM.name){
-            mBinding.ivCron.visibility=View.VISIBLE
-        }else{
-            mBinding.ivCron.visibility=View.INVISIBLE
+        if (mViewModel.albumStatus == AlbumStatus.PREMIUM.name) {
+            mBinding.ivCron.visibility = View.VISIBLE
+        } else {
+            mBinding.ivCron.visibility = View.INVISIBLE
         }
         Glide.with(requireActivity()).load(mViewModel.albumCoverImageUrl)
-            .override(25, 25)
+            .override(20, 20)
             .into(mBinding.ivBackgroundAlbumDetails)
         Glide.with(requireActivity()).load(mViewModel.albumCoverImageUrl)
             .into(mBinding.ivSmallAlbumDetails)
@@ -187,12 +187,12 @@ class AlbumDetailsFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.Cal
     }
 
     private fun startSongsDataShimmer() {
-        mBinding.slTrendingSongs.visibility = View.VISIBLE
-        mBinding.slTrendingSongs.startShimmer()
+//        mBinding.slTrendingSongs.visibility = View.VISIBLE
+//        mBinding.slTrendingSongs.startShimmer()
     }
 
     private fun stopSongsDataShimmer() {
-        mBinding.slTrendingSongs.visibility = View.GONE
-        mBinding.slTrendingSongs.stopShimmer()
+//        mBinding.slTrendingSongs.visibility = View.GONE
+//        mBinding.slTrendingSongs.stopShimmer()
     }
 }

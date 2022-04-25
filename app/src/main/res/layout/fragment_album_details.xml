@@ -7,195 +7,230 @@
 
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/color_black"
         tools:context=".ui.fragments.albumDetailsFragment.AlbumDetailsFragment">
 
-        <ImageView
-            android:id="@+id/iv_background_album_details"
+        <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_330dp"
-            android:scaleType="fitXY"
-            android:src="@drawable/index"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_height="wrap_content">
 
-
-        <View
-            android:id="@+id/scrim"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_0dp"
-            android:background="@drawable/scrim_for_blur_img"
-            app:layout_constraintBottom_toBottomOf="@id/iv_background_album_details"
-            app:layout_constraintEnd_toEndOf="@+id/iv_background_album_details"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="@id/iv_background_album_details"
-            app:layout_constraintTop_toTopOf="@id/iv_background_album_details"
-            app:layout_constraintVertical_bias="0.0" />
-
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/iv_small_album_details"
-            android:layout_width="@dimen/_120dp"
-            android:layout_height="@dimen/_120dp"
-            android:layout_marginBottom="@dimen/_70dp"
-            android:src="@drawable/index"
-            app:layout_constraintBottom_toBottomOf="@id/iv_background_album_details"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/iv_background_album_details"
-            app:shapeAppearanceOverlay="@style/circleImageViewRecentPlayView" />
-
-
-        <ImageView
-            android:id="@+id/back_btn_album"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="@+id/scrim"
-            app:layout_constraintTop_toTopOf="@+id/scrim"
-            android:src="@drawable/ic_arrow_left"
-            android:layout_margin="@dimen/_16dp"
-
-            />
-        <TextView
-            android:id="@+id/tv_album_name_id"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_10dp"
-            android:fontFamily="@font/manrope_bold"
-            android:text="Life On Mars"
-            android:textColor="@color/color_white"
-            android:textSize="@dimen/_20sp"
-            app:layout_constraintEnd_toEndOf="@id/iv_small_album_details"
-            app:layout_constraintStart_toStartOf="@id/iv_small_album_details"
-            app:layout_constraintTop_toBottomOf="@id/iv_small_album_details" />
-
-        <TextView
-            android:id="@+id/tv_total_songs_top_tag"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/_0dp"
-            android:layout_marginTop="@dimen/_4dp"
-            android:fontFamily="@font/manrope_regular"
-            android:text="20 Songs"
-            android:textColor="@color/color_white"
-            android:textSize="@dimen/_12sp"
-            app:layout_constraintEnd_toEndOf="@id/tv_album_name_id"
-            app:layout_constraintStart_toStartOf="@id/tv_album_name_id"
-            app:layout_constraintTop_toBottomOf="@id/tv_album_name_id" />
-
-        <TextView
-            android:id="@+id/tv_play_all_songs"
-            android:layout_width="@dimen/_120dp"
-            android:layout_height="@dimen/_40dp"
-            android:layout_marginTop="@dimen/_20dp"
-            android:layout_marginBottom="@dimen/_20dp"
-            android:background="@drawable/shape_bg_play_all"
-            android:fontFamily="@font/manrope_semibold"
-            android:gravity="center"
-            android:text="Play All"
-            android:textColor="@color/color_white"
-            android:textSize="@dimen/_14sp"
-            android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="@+id/iv_background_album_details"
-            app:layout_constraintEnd_toEndOf="@+id/iv_small_album_details"
-            app:layout_constraintStart_toStartOf="@+id/iv_small_album_details" />
-
-        <LinearLayout
-            android:id="@+id/premium_layout_main"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="invisible"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_play_all_songs"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/tv_play_all_songs">
-
-            <include
-                android:id="@+id/premium_layout"
-                layout="@layout/listen_with_premium" />
-
-        </LinearLayout>
-
-
-        <TextView
-            android:id="@+id/tv_songs_tag"
-            android:layout_width="@dimen/_0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_16dp"
-            android:layout_marginTop="30dp"
-            android:fontFamily="@font/manrope_bold"
-            android:text="Songs"
-            android:textColor="@color/color_white"
-            android:textSize="@dimen/_20sp"
-            app:layout_constraintEnd_toStartOf="@+id/tv_total_songs_tag"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/iv_background_album_details" />
-
-        <TextView
-            android:id="@+id/tv_total_songs_tag"
-            android:layout_width="@dimen/_0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/_16dp"
-            android:fontFamily="@font/manrope_regular"
-            android:gravity="end"
-            android:text="20 Songs"
-            android:textColor="@color/color_light_grey"
-            android:textSize="@dimen/_14sp"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_songs_tag"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/tv_songs_tag"
-            app:layout_constraintTop_toTopOf="@+id/tv_songs_tag" />
-
-        <com.facebook.shimmer.ShimmerFrameLayout
-            android:id="@+id/sl_trending_songs"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_0dp"
-            android:layout_below="@id/tv_total_songs"
-            android:padding="@dimen/_14dp"
-            android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@id/tv_total_songs_tag">
-
-            <LinearLayout
+            <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                app:contentScrim="@color/sign_up_btn"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-                <include layout="@layout/shimmer_item_trending_songs" />
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-                <include layout="@layout/shimmer_item_trending_songs" />
+                    <ImageView
+                        android:id="@+id/iv_background_album_details"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_330dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/index"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                <include layout="@layout/shimmer_item_trending_songs" />
+                    <View
+                        android:id="@+id/scrim"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_0dp"
+                        android:background="@drawable/scrim_for_blur_img"
+                        app:layout_constraintBottom_toBottomOf="@id/iv_background_album_details"
+                        app:layout_constraintEnd_toEndOf="@+id/iv_background_album_details"
+                        app:layout_constraintStart_toStartOf="@id/iv_background_album_details"
+                        app:layout_constraintTop_toTopOf="@id/iv_background_album_details" />
 
-                <include layout="@layout/shimmer_item_trending_songs" />
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/iv_small_album_details"
+                        android:layout_width="@dimen/_120dp"
+                        android:layout_height="@dimen/_120dp"
+                        android:layout_marginBottom="@dimen/_70dp"
+                        android:src="@drawable/index"
+                        app:layout_constraintBottom_toBottomOf="@id/iv_background_album_details"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/iv_background_album_details"
+                        app:shapeAppearanceOverlay="@style/circleImageViewRecentPlayView" />
 
-                <include layout="@layout/shimmer_item_trending_songs" />
+                    <ImageView
+                        android:id="@+id/iv_cron_"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_60dp"
+                        android:visibility="invisible"
+                        app:layout_constraintEnd_toEndOf="@+id/iv_small_album_details"
+                        app:layout_constraintStart_toEndOf="@+id/iv_small_album_details"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/ic_icon_crown_white" />
 
-                <include layout="@layout/shimmer_item_trending_songs" />
+                    <ImageView
+                        android:id="@+id/back_btn_album"
+                        android:layout_width="@dimen/_50dp"
+                        android:layout_height="@dimen/_50dp"
+                        android:layout_margin="@dimen/_16dp"
+                        android:padding="@dimen/_14dp"
+                        android:src="@drawable/ic_arrow_left"
+                        android:visibility="gone"
+                        app:layout_constraintStart_toStartOf="@+id/scrim"
+                        app:layout_constraintTop_toTopOf="@+id/scrim"
 
-            </LinearLayout>
-        </com.facebook.shimmer.ShimmerFrameLayout>
+                        />
+
+                    <TextView
+                        android:id="@+id/tv_album_name_id"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10dp"
+                        android:fontFamily="@font/manrope_bold"
+                        android:text="Life On Mars"
+                        android:textColor="@color/color_white"
+                        android:textSize="@dimen/_20sp"
+                        app:layout_constraintEnd_toEndOf="@id/iv_small_album_details"
+                        app:layout_constraintStart_toStartOf="@id/iv_small_album_details"
+                        app:layout_constraintTop_toBottomOf="@id/iv_small_album_details" />
+
+                    <TextView
+                        android:id="@+id/tv_total_songs_top_tag"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/_0dp"
+                        android:layout_marginTop="@dimen/_4dp"
+                        android:fontFamily="@font/manrope_regular"
+                        android:text="20 Songs"
+                        android:textColor="@color/color_white"
+                        android:textSize="@dimen/_12sp"
+                        app:layout_constraintEnd_toEndOf="@id/tv_album_name_id"
+                        app:layout_constraintStart_toStartOf="@id/tv_album_name_id"
+                        app:layout_constraintTop_toBottomOf="@id/tv_album_name_id" />
+
+                    <TextView
+                        android:id="@+id/tv_play_all_songs"
+                        android:layout_width="@dimen/_120dp"
+                        android:layout_height="@dimen/_40dp"
+                        android:layout_marginTop="@dimen/_20dp"
+                        android:layout_marginBottom="@dimen/_20dp"
+                        android:background="@drawable/shape_bg_play_all"
+                        android:fontFamily="@font/manrope_semibold"
+                        android:gravity="center"
+                        android:text="Play All"
+                        android:textColor="@color/color_white"
+                        android:textSize="@dimen/_14sp"
+                        android:visibility="visible"
+                        app:layout_constraintBottom_toBottomOf="@+id/iv_background_album_details"
+                        app:layout_constraintEnd_toEndOf="@+id/iv_small_album_details"
+                        app:layout_constraintStart_toStartOf="@+id/iv_small_album_details" />
+
+                    <LinearLayout
+                        android:id="@+id/premium_layout_main"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="invisible"
+                        app:layout_constraintBottom_toBottomOf="@+id/tv_play_all_songs"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/tv_play_all_songs">
+
+                        <include
+                            android:id="@+id/premium_layout"
+                            layout="@layout/listen_with_premium" />
+
+                    </LinearLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/toolbar_m"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize">
+
+                </androidx.appcompat.widget.Toolbar>
+            </com.google.android.material.appbar.CollapsingToolbarLayout>
+        </com.google.android.material.appbar.AppBarLayout>
 
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rec_view_album_songs"
+        <!--        recyclerview starts from below-->
+
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_0dp"
-            android:layout_marginTop="@dimen/_20dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_total_songs_tag"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-            />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/iv_cron_"
-            android:visibility="invisible"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_60dp"
-            app:layout_constraintEnd_toEndOf="@+id/iv_small_album_details"
-            app:layout_constraintStart_toEndOf="@+id/iv_small_album_details"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_icon_crown_white" />
+                <TextView
+                    android:id="@+id/tv_songs_tag"
+                    android:layout_width="@dimen/_0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_16dp"
+                    android:layout_marginTop="@dimen/_30dp"
+                    android:fontFamily="@font/manrope_bold"
+                    android:text="Songs"
+                    android:textColor="@color/color_white"
+                    android:textSize="@dimen/_20sp"
+                    app:layout_constraintEnd_toStartOf="@+id/tv_total_songs_tag"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/iv_background_album_details" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                <TextView
+                    android:id="@+id/tv_total_songs_tag"
+                    android:layout_width="@dimen/_0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/_16dp"
+                    android:fontFamily="@font/manrope_regular"
+                    android:gravity="end"
+                    android:text="20 Songs"
+                    android:textColor="@color/color_light_grey"
+                    android:textSize="@dimen/_14sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_songs_tag"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/tv_songs_tag"
+                    app:layout_constraintTop_toTopOf="@+id/tv_songs_tag" />
+
+                <com.facebook.shimmer.ShimmerFrameLayout
+                    android:id="@+id/sl_trending_songs"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_0dp"
+                    android:layout_below="@id/tv_total_songs"
+                    android:padding="@dimen/_14dp"
+                    android:visibility="gone"
+                    app:layout_constraintTop_toBottomOf="@id/tv_total_songs_tag">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <include layout="@layout/shimmer_item_trending_songs" />
+
+                        <include layout="@layout/shimmer_item_trending_songs" />
+
+                        <include layout="@layout/shimmer_item_trending_songs" />
+
+                        <include layout="@layout/shimmer_item_trending_songs" />
+
+                        <include layout="@layout/shimmer_item_trending_songs" />
+
+                        <include layout="@layout/shimmer_item_trending_songs" />
+
+                    </LinearLayout>
+                </com.facebook.shimmer.ShimmerFrameLayout>
+
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rec_view_album_songs"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/_20dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_total_songs_tag" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

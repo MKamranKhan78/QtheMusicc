@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.techswivel.qthemusic.models.database.Song
+import com.techswivel.qthemusic.models.relation.SongsArtistAndAlbum
 
 @Dao
 abstract class SongsDao {
@@ -19,4 +20,9 @@ abstract class SongsDao {
     @Query("DELETE FROM Song WHERE ROWID IN (SELECT ROWID FROM Song ORDER BY ROWID DESC LIMIT -1 OFFSET 5)")
     abstract suspend fun deleteData()
 
+    @Query("delete from song")
+    abstract suspend fun deleteAllData()
+
+    @Query("select * from song")
+    abstract fun relationFun(): LiveData<List<SongsArtistAndAlbum>>
 }

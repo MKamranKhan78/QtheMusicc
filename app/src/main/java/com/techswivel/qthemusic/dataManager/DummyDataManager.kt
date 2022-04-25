@@ -133,16 +133,19 @@ class DummyDataManager {
                     Artist(
 
                         "https://bowlyrics.com/wp-content/uploads/2018/07/ED-Sheeran-is-the-worlds-highest-earning-solo-musician-according-Forbes-731x411.jpg",
-                        1, "Ed Sheeran"
+                        1, "Ed Sheeran",
+                        null
                     ),
                     Artist(
 
                         "https://assets.bluethumb.com.au/media/image/fill/766/766/eyJpZCI6InVwbG9hZHMvbGlzdGluZy8zNDU2NTQvZGFuZS1pa2luLWZhbWUtYmx1ZXRodW1iLWE2YWYuanBnIiwic3RvcmFnZSI6InN0b3JlIiwibWV0YWRhdGEiOnsiZmlsZW5hbWUiOiJkYW5lLWlraW4tZmFtZS1ibHVldGh1bWItYTZhZi5qcGciLCJtaW1lX3R5cGUiOm51bGx9fQ?signature=798375b6cfc354d89abaa74cab9379008e641123895397a97daf0728604361c8",
-                        2, "Selena gomez"
+                        2, "Selena gomez",
+                        null
                     ),
                     Artist(
                         "https://www.rollingstone.com/wp-content/uploads/2020/01/eminem-review.jpg",
-                        3, "Eminem"
+                        3, "Eminem",
+                        null
                     )
                 ),
                 listOf(

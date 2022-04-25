@@ -18,4 +18,7 @@ abstract class AlbumDao {
 
     @Query("DELETE FROM Album WHERE ROWID IN (SELECT ROWID FROM Album ORDER BY ROWID DESC LIMIT -1 OFFSET 5)")
     abstract suspend fun deleteAlbum()
+
+    @Query("delete from album")
+    abstract suspend fun deleteAllAlbum()
 }

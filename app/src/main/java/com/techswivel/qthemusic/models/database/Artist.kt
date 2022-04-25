@@ -22,5 +22,6 @@ data class Artist(
     @Expose
     @SerializedName("artistName")
     @ColumnInfo(name = "artistName")
-    var artistName: String?
+    var artistName: String?,
+    var timestamp: Long?
 ) : Serializable

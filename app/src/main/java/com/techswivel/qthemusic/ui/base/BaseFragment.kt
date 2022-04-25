@@ -5,8 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.firebase.messaging.FirebaseMessaging
+import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.utils.Log
 
 
@@ -41,7 +40,7 @@ abstract class BaseFragment : Fragment() {
                 actionBar.title = title
                 actionBar.setDisplayShowTitleEnabled(true)
                 actionBar.setDisplayShowTitleEnabled(true)
-                //  actionBar.setHomeAsUpIndicator(R.drawable.ic_back_img)
+                actionBar.setHomeAsUpIndicator(R.drawable.ic_arrow_left)
             }
         } catch (e: NullPointerException) {
             Log.e(TAG, "setUpActionBar: Failed to setup Action bar", e)

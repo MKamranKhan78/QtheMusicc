@@ -23,8 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_10dp"
-        android:layout_marginBottom="@dimen/_10dp"
-        >
+        android:layout_marginBottom="@dimen/_10dp">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/shapeableImageView"
@@ -43,10 +42,10 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_24dp"
             android:layout_marginEnd="@dimen/_24dp"
-            android:text="@{obj.songTitle}"
             android:fontFamily="@font/manrope_regular"
-            android:textSize="@dimen/_14sp"
+            android:text="@{obj.songTitle}"
             android:textColor="@color/color_white"
+            android:textSize="@dimen/_14sp"
             app:layout_constraintBottom_toTopOf="@+id/tv_song_duration"
             app:layout_constraintEnd_toStartOf="@+id/imageView"
             app:layout_constraintStart_toEndOf="@+id/shapeableImageView"
@@ -57,10 +56,10 @@
             android:layout_width="@dimen/_0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:text="3:02"
             android:fontFamily="@font/manrope_regular"
-            android:textSize="@dimen/_14sp"
+            android:text="3:02"
             android:textColor="@color/color_white"
+            android:textSize="@dimen/_14sp"
             app:layout_constraintBottom_toBottomOf="@+id/shapeableImageView"
             app:layout_constraintEnd_toEndOf="@+id/tv_song_tittle_"
             app:layout_constraintStart_toStartOf="@+id/tv_song_tittle_"

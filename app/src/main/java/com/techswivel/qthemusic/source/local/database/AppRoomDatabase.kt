@@ -16,7 +16,7 @@ import com.techswivel.qthemusic.source.local.databaseDao.SongsDao
 
 @Database(
     entities = [Song::class, Album::class, Artist::class],
-    version = 4,
+    version = 5,
     exportSchema = false,
 //    autoMigrations = [
 //        AutoMigration(
