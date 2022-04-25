@@ -36,6 +36,14 @@ class ListeningHistoryActivity : BaseActivity() {
         clickListeners()
     }
 
+    override fun onBackPressed() {
+        finish()
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        finish()
+        return super.onSupportNavigateUp()
+    }
 
     private fun setObserver() {
         mSongAndArtistsViewModel.recommendedSongsResponse.observe(this) { recommendedSongsDataResponse ->
@@ -89,16 +97,6 @@ class ListeningHistoryActivity : BaseActivity() {
             }
         }
     }
-
-    override fun onBackPressed() {
-        finish()
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        finish()
-        return super.onSupportNavigateUp()
-    }
-
 
     private fun openAlbumFragment(type: RecommendedSongsType) {
         var bundle = Bundle()

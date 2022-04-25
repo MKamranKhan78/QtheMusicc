@@ -188,6 +188,12 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="no_data_found">No Data Found</string>
+    <string name="total_amount_spent">Total Amount Spent</string>
+    <string name="all_payment_type">All Payment Type</string>
+    <string name="options">Select option</string>
+    <string name="paypal">Paypal</string>
+    <string name="apple_pay">Apple Pay</string>
+    <string name="google_pay">Google Pay</string>
 
 
 </resources>

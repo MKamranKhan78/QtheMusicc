@@ -40,6 +40,7 @@
     <color name="logout_button_color">#BA011A</color>
     <color name="backgroundPrimary">#EDEEF0</color>
 
+    <color name="color_dark_gray">#2E2C34</color>
 
     <color name="shimmer_placeholder">#dddddd</color>
     <color name="bg_add_profile_main_iv_clc">#505050</color>

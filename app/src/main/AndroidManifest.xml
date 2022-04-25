@@ -29,6 +29,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
         <activity
+            android:name=".ui.activities.buyingHistoryActivity.BuyingHistoryActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.activities.listeningHistoryActivity.ListeningHistoryActivity"
             android:exported="false" />
         <activity

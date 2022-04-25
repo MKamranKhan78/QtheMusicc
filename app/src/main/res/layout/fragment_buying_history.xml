@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/black_gradiant_background">
+
+    <TextView
+        android:id="@+id/priceTextview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/_20dp"
+        android:fontFamily="@font/manrope_regular"
+        android:text="$1233.23"
+        android:textColor="@color/color_white"
+        android:textSize="@dimen/_24sp" />
+
+    <TextView
+        android:id="@+id/textDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/priceTextview"
+        android:layout_centerHorizontal="true"
+        android:fontFamily="@font/manrope_regular"
+        android:text="@string/total_amount_spent"
+        android:textColor="@color/color_white"
+        android:textSize="@dimen/_12sp" />
+
+    <TextView
+        android:id="@+id/all_payment_textview"
+        android:layout_width="350dp"
+        android:layout_height="@dimen/_40dp"
+        android:layout_below="@id/textDescription"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/_20dp"
+        android:background="@drawable/border_white"
+        android:gravity="center_vertical"
+        android:paddingStart="@dimen/_15dp"
+        android:paddingEnd="@dimen/_15dp"
+        android:text="@string/all_payment_type"
+        android:textColor="@color/color_white"
+        app:drawableEndCompat="@drawable/ic_icon_arrow_down" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerviewBuyingHistory"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/all_payment_textview"
+        android:layout_marginTop="@dimen/_10dp" />
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/tvNoDataFound"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="@string/no_data_found"
+        android:textColor="@color/logout_button_color"
+        android:visibility="gone" />
+
+
+</RelativeLayout>

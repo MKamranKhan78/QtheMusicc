@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.techswivel.dfaktfahrerapp.ui.fragments.underDevelopmentMessageFragment.UnderDevelopmentMessageFragment
 import com.techswivel.qthemusic.application.QTheMusicApplication
 import com.techswivel.qthemusic.databinding.FragmentProfileLandingBinding
+import com.techswivel.qthemusic.ui.activities.buyingHistoryActivity.BuyingHistoryActivity
 import com.techswivel.qthemusic.ui.activities.listeningHistoryActivity.ListeningHistoryActivity
 import com.techswivel.qthemusic.ui.activities.profileSettingScreen.ProfileSettingActivity
 import com.techswivel.qthemusic.ui.activities.serverSettingActivity.ServerSettingActivity
@@ -100,10 +101,7 @@ class ProfileLandingFragment : BaseFragment() {
             )
         }
         mBinding.buyingHistoryTextview.setOnClickListener {
-            ActivityUtils.launchFragment(
-                requireContext(),
-                UnderDevelopmentMessageFragment::class.java.name
-            )
+            openBuyingingHistoryActivity()
         }
         mBinding.yourIntrestTextview.setOnClickListener {
             ActivityUtils.launchFragment(
@@ -123,6 +121,13 @@ class ProfileLandingFragment : BaseFragment() {
         ActivityUtils.startNewActivity(
             requireActivity(),
             ListeningHistoryActivity::class.java
+        )
+    }
+
+    private fun openBuyingingHistoryActivity() {
+        ActivityUtils.startNewActivity(
+            requireActivity(),
+            BuyingHistoryActivity::class.java
         )
     }
 
