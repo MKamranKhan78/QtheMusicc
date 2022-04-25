@@ -23,6 +23,8 @@
     <color name="app_bar_clr">#F9000000</color>
     <color name="mtrl_textinput_default_box_stroke_color">#84818AA1</color>
     <color name="btn_text_clr">#FBFAFC</color>
+    <color name="transparent_color">#00000000</color>
+    <color name="shimmerColor">#C2C2C2</color>
 
     <color name="color_grey">#545454</color>
     <color name="color_light_grey">#99999F</color>

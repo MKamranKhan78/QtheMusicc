@@ -1,9 +1,12 @@
 package com.techswivel.qthemusic.models
 
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import com.techswivel.qthemusic.customData.enums.AlbumStatus
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class Album(
     @SerializedName("albumCoverImageUrl")
     var albumCoverImageUrl: String?,
@@ -15,4 +18,4 @@ data class Album(
     var albumTitle: String?,
     @SerializedName("numberOfSongs")
     var numberOfSongs: Int?
-)
+) : Parcelable

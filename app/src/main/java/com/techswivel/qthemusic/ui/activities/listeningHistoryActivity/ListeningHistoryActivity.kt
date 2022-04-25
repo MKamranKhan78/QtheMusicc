@@ -9,13 +9,13 @@ import com.techswivel.qthemusic.application.QTheMusicApplication
 import com.techswivel.qthemusic.customData.enums.NetworkStatus
 import com.techswivel.qthemusic.customData.enums.RecommendedSongsType
 import com.techswivel.qthemusic.databinding.ActivityListeningHistoryBinding
-import com.techswivel.qthemusic.models.RecommendedSongsBodyBuilder
-import com.techswivel.qthemusic.models.ResponseModel
+import com.techswivel.qthemusic.models.*
 import com.techswivel.qthemusic.source.remote.networkViewModel.SongAndArtistsViewModel
 import com.techswivel.qthemusic.ui.base.BaseActivity
-import com.techswivel.qthemusic.ui.fragments.fragmentSongListeningHistory.ListeningHistorySongFragment
 import com.techswivel.qthemusic.ui.fragments.listeningHistoryAlbumFragment.ListeningHistoryAlbumFragment
+import com.techswivel.qthemusic.utils.CommonKeys
 import com.techswivel.qthemusic.utils.DialogUtils
+import com.techswivel.qthemusic.utils.Log
 
 class ListeningHistoryActivity : BaseActivity() {
 
@@ -29,15 +29,11 @@ class ListeningHistoryActivity : BaseActivity() {
         mBinding = ActivityListeningHistoryBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
         initViewModel()
-        viewModel.selectedTab = RecommendedSongsType.SONGS
         setToolBar()
-        clickListeners()
-        openSongFragment()
+        viewModel.selectedTab = RecommendedSongsType.SONGS
         getRecommendedSongs()
-        getRecommendedAlbums()
-        getRecommendedArtists()
         setObserver()
-
+        clickListeners()
     }
 
 
@@ -45,26 +41,26 @@ class ListeningHistoryActivity : BaseActivity() {
         mSongAndArtistsViewModel.recommendedSongsResponse.observe(this) { recommendedSongsDataResponse ->
             when (recommendedSongsDataResponse.status) {
                 NetworkStatus.LOADING -> {
-//                    startRecommendedDataShimmer()
+                    Log.v("TAG", "Loading")
                 }
                 NetworkStatus.SUCCESS -> {
                     viewModel.mSongsDataList.clear()
                     val response = recommendedSongsDataResponse.t as ResponseModel
                     val songsList = response.data.recommendedSongsResponse?.songs
-                    viewModel.songs = songsList
                     val albumsList = response.data.recommendedSongsResponse?.albums
-                    viewModel.albums = albumsList
                     val artistsList = response.data.recommendedSongsResponse?.artist
-                    viewModel.artists = artistsList
-                    if (!songsList.isNullOrEmpty()) {
+                    if (!songsList.isNullOrEmpty() && viewModel.selectedTab == RecommendedSongsType.SONGS) {
+                        viewModel.mSongsDataList.clear()
                         viewModel.mSongsDataList.addAll(songsList)
-
-                    } else if (!albumsList.isNullOrEmpty()) {
+                        openAlbumFragment(RecommendedSongsType.SONGS)
+                    } else if (!albumsList.isNullOrEmpty() && viewModel.selectedTab == RecommendedSongsType.ALBUM) {
+                        viewModel.mAlbumsDataList.clear()
                         viewModel.mAlbumsDataList.addAll(albumsList)
-
-                    } else if (!artistsList.isNullOrEmpty()) {
+                        openAlbumFragment(RecommendedSongsType.ALBUM)
+                    } else if (!artistsList.isNullOrEmpty() && viewModel.selectedTab == RecommendedSongsType.ARTIST) {
+                        viewModel.mArtistsDataList.clear()
                         viewModel.mArtistsDataList.addAll(artistsList)
-
+                        openAlbumFragment(RecommendedSongsType.ARTIST)
                     }
                 }
                 NetworkStatus.ERROR -> {
@@ -88,38 +84,45 @@ class ListeningHistoryActivity : BaseActivity() {
                         })
                 }
                 NetworkStatus.COMPLETED -> {
-//                    stopRecommendedDataShimmer()
+                    Log.v("TAG", "Completed")
                 }
             }
         }
     }
 
     override fun onBackPressed() {
-        if (getEntryCount() == 1) {
-            this.finish()
-        } else {
-            supportFragmentManager.popBackStackImmediate()
-        }
+        finish()
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        if (getEntryCount() == 1) {
-            this.finish()
-        } else {
-            supportFragmentManager.popBackStackImmediate()
-        }
+        finish()
         return super.onSupportNavigateUp()
     }
 
 
-    private fun openAlbumFragment() {
+    private fun openAlbumFragment(type: RecommendedSongsType) {
+        var bundle = Bundle()
+        if (type == RecommendedSongsType.ALBUM) {
+            bundle.putParcelableArrayList(
+                CommonKeys.KEY_DATA,
+                viewModel.mAlbumsDataList as ArrayList<out Album>
+            )
+            bundle.putString(CommonKeys.KEY_ENUM, RecommendedSongsType.ALBUM.toString())
+        } else if (type == RecommendedSongsType.ARTIST) {
+            bundle.putParcelableArrayList(
+                CommonKeys.KEY_DATA,
+                viewModel.mArtistsDataList as ArrayList<out Artist>
+            )
+            bundle.putString(CommonKeys.KEY_ENUM, RecommendedSongsType.ARTIST.toString())
+        } else if (type == RecommendedSongsType.SONGS) {
+            bundle.putParcelableArrayList(
+                CommonKeys.KEY_DATA,
+                viewModel.mSongsDataList as ArrayList<out Song>
+            )
+            bundle.putString(CommonKeys.KEY_ENUM, RecommendedSongsType.SONGS.toString())
+        }
         popUpAllFragmentIncludeThis(ListeningHistoryAlbumFragment::class.java.name)
-        openFragment(ListeningHistoryAlbumFragment.newInstance())
-    }
-
-    private fun openSongFragment() {
-        popUpAllFragmentIncludeThis(ListeningHistorySongFragment::class.java.name)
-        openFragment(ListeningHistorySongFragment.newInstance())
+        openFragment(ListeningHistoryAlbumFragment.newInstance(bundle))
     }
 
     private fun setToolBar() {
@@ -145,33 +148,19 @@ class ListeningHistoryActivity : BaseActivity() {
 
     private fun clickListeners() {
         mBinding.btnSongs.setOnClickListener {
-/*            mBinding.recyclerviewListeningHistory.visibility = View.VISIBLE
-            mBinding.recyclerviewGrigLayout.visibility = View.GONE
-            mBinding.recyclerviewListeningHistory.smoothScrollToPosition(0)*/
             viewModel.selectedTab = RecommendedSongsType.SONGS
-            var list = viewModel.mSongsDataList
-            openSongFragment()
             updateSelectedTabBackground(mBinding.btnSongs, mBinding.btnAlbums, mBinding.btnArtists)
             getRecommendedSongs()
         }
 
         mBinding.btnAlbums.setOnClickListener {
-/*            mBinding.recyclerviewListeningHistory.visibility = View.VISIBLE
-            mBinding.recyclerviewListeningHistory.visibility = View.GONE
-            mBinding.recyclerviewListeningHistory.smoothScrollToPosition(0)*/
             viewModel.selectedTab = RecommendedSongsType.ALBUM
-            openAlbumFragment()
             updateSelectedTabBackground(mBinding.btnAlbums, mBinding.btnSongs, mBinding.btnArtists)
             getRecommendedAlbums()
         }
 
         mBinding.btnArtists.setOnClickListener {
-/*            mBinding.recyclerviewListeningHistory.visibility = View.VISIBLE
-            mBinding.recyclerviewListeningHistory.visibility = View.GONE
-            mBinding.recyclerviewListeningHistory.smoothScrollToPosition(0)*/
             viewModel.selectedTab = RecommendedSongsType.ARTIST
-            openAlbumFragment()
-
             updateSelectedTabBackground(mBinding.btnArtists, mBinding.btnAlbums, mBinding.btnSongs)
             getRecommendedArtists()
         }

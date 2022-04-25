@@ -4,6 +4,7 @@ package com.techswivel.qthemusic.constant
 object Constants {
 
     const val NO_OF_COLUMNS_2 = 2
+    const val NO_OF_COLUMNS_3 = 3
     const val APP_DATABASE_NAME = "QTheMusic"
     const val STAGING = "staging"
     const val PRODUCTION = "production"
