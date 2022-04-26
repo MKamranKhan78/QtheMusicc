@@ -1,6 +1,7 @@
 package com.techswivel.qthemusic.dataManager
 
 import com.techswivel.qthemusic.customData.enums.AlbumStatus
+import com.techswivel.qthemusic.customData.enums.ItemType
 import com.techswivel.qthemusic.customData.enums.SongStatus
 import com.techswivel.qthemusic.models.*
 import retrofit2.Response
@@ -42,7 +43,123 @@ class DummyDataManager {
                 authModel,
                 getRecommendedSongsDummyData(),
                 getCategoriesDummyData(),
-                getSongsDummyData()
+                getSongsDummyData(),
+                234,
+                getDummyBuyingHistory()
+            )
+        }
+
+        private fun getDummyBuyingHistory(): List<BuyingHistory>? {
+
+            val listOfSongs = ArrayList<Song>()
+            listOfSongs.add(
+                Song(
+                    123,
+                    "album1",
+                    "atif",
+                    12,
+                    13,
+                    "https://st2.depositphotos.com/3474805/7901/v/950/depositphotos_79018872-stock-illustration-volumetric-ventilator-fan.jpg",
+                    false,
+                    false,
+                    "lyrics",
+                    5,
+                    "https://st2.depositphotos.com/3474805/7901/v/950/depositphotos_79018872-stock-illustration-volumetric-ventilator-fan.jpg",
+                    23434,
+                    54,
+                    SongStatus.PURCHASED,
+                    "song name1",
+                    "https://st2.depositphotos.com/3474805/7901/v/950/depositphotos_79018872-stock-illustration-volumetric-ventilator-fan.jpg"
+                )
+            )
+
+            listOfSongs.add(
+                Song(
+                    12,
+                    "album2",
+                    "atif2",
+                    122,
+                    132,
+                    "https://st2.depositphotos.com/3474805/7901/v/950/depositphotos_79018872-stock-illustration-volumetric-ventilator-fan.jpg",
+                    false,
+                    false,
+                    "lyrics2",
+                    52,
+                    "https://st2.depositphotos.com/3474805/7901/v/950/depositphotos_79018872-stock-illustration-volumetric-ventilator-fan.jpg",
+                    234342,
+                    542,
+                    SongStatus.PURCHASED,
+                    "song name2",
+                    "https://st2.depositphotos.com/3474805/7901/v/950/depositphotos_79018872-stock-illustration-volumetric-ventilator-fan.jpg"
+                )
+            )
+
+            listOfSongs.add(
+                Song(
+                    13,
+                    "album3",
+                    "atif3",
+                    13,
+                    133,
+                    "https://st2.depositphotos.com/3474805/7901/v/950/depositphotos_79018872-stock-illustration-volumetric-ventilator-fan.jpg",
+                    false,
+                    false,
+                    "lyrics3",
+                    53,
+                    "https://st2.depositphotos.com/3474805/7901/v/950/depositphotos_79018872-stock-illustration-volumetric-ventilator-fan.jpg",
+                    234343,
+                    543,
+                    SongStatus.PURCHASED,
+                    "song name3",
+                    "https://st2.depositphotos.com/3474805/7901/v/950/depositphotos_79018872-stock-illustration-volumetric-ventilator-fan.jpg"
+                )
+            )
+
+            val albumModel = AlbumModel(
+                "https://bowlyrics.com/wp-content/uploads/2018/07/ED-Sheeran-is-the-worlds-highest-earning-solo-musician-according-Forbes-731x411.jpg",
+                34,
+                "album1",
+                12323,
+                listOfSongs,
+                843748,
+                32,
+                "PAYPAL"
+            )
+
+            return listOf(
+                BuyingHistory(
+                    ItemType.SONG.toString(),
+                    "Ed Sheeran",
+                    "https://bowlyrics.com/wp-content/uploads/2018/07/ED-Sheeran-is-the-worlds-highest-earning-solo-musician-according-Forbes-731x411.jpg",
+                    13847823,
+                    2344,
+                    23423443,
+                    "PAYPAL",
+                    35463,
+                    albumModel
+                ),
+                BuyingHistory(
+                    ItemType.ALBUM.toString(),
+                    "Ed Sheeran2",
+                    "https://bowlyrics.com/wp-content/uploads/2018/07/ED-Sheeran-is-the-worlds-highest-earning-solo-musician-according-Forbes-731x411.jpg",
+                    13847845,
+                    234,
+                    234343,
+                    "PAYPAL",
+                    35463,
+                    albumModel
+                ),
+                BuyingHistory(
+                    ItemType.SONG.toString(),
+                    "Ed Sheeran3",
+                    "https://bowlyrics.com/wp-content/uploads/2018/07/ED-Sheeran-is-the-worlds-highest-earning-solo-musician-according-Forbes-731x411.jpg",
+                    13847845,
+                    234,
+                    234343,
+                    "PAYPAL",
+                    35463,
+                    albumModel
+                )
             )
         }
 

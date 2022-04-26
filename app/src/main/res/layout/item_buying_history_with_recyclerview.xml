@@ -9,7 +9,11 @@
 
         <variable
             name="obj"
-            type="com.techswivel.qthemusic.models.BuyingHistory" />
+            type="com.techswivel.qthemusic.models.Song" />
+
+        <variable
+            name="click"
+            type="com.techswivel.qthemusic.customData.interfaces.AdapterOnClick" />
 
 
     </data>
@@ -39,7 +43,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"
-                    app:setImageViewImage="@{obj.songCoverImageUrl}"
+                    app:setImageViewImage="@{obj.coverImageUrl}"
                     tools:src="@drawable/no_image_palce_holder" />
 
             </androidx.cardview.widget.CardView>
@@ -50,7 +54,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="@dimen/_10dp"
-                android:layout_toStartOf="@id/priceTextview"
+                android:layout_toStartOf="@id/totalDollars"
                 android:layout_toEndOf="@id/cv_cover_image"
                 android:orientation="vertical">
 
@@ -59,10 +63,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/_20dp"
                     android:ellipsize="end"
-                    android:text="@{obj.songTitle}"
                     android:fontFamily="@font/manrope_regular"
                     android:maxLines="1"
                     android:minLines="1"
+                    android:text="Changes"
                     android:textColor="@color/color_white_text_profile"
                     android:textSize="@dimen/_14sp" />
                 <!--
@@ -72,8 +76,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    setSongDuration="@{obj.songDuration}"
                     android:fontFamily="@font/manrope_regular"
+                    android:text="5 songs"
                     android:textColor="@color/color_light_grey"
                     android:textSize="@dimen/_14sp" />
                 <!--                setSongDuration="@{obj.songDuration}"-->
@@ -82,7 +86,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/priceTextview"
+                android:id="@+id/totalDollars"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
@@ -117,11 +121,26 @@
             android:layout_below="@id/rl_trending_song"
             android:background="@color/light_gray_color" />
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/subItemRecyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_below="@+id/linegray"
+            tools:listitem="@layout/sub_item_buying_history" />
+
+        <View
+            android:id="@+id/line2"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_0.5dp"
+            android:layout_below="@id/subItemRecyclerview"
+            android:layout_marginTop="@dimen/_10dp"
+            android:background="@color/light_gray_color" />
+
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/linegray"
+            android:layout_below="@id/line2"
             android:layout_margin="@dimen/_10dp">
 
             <TextView
@@ -141,7 +160,7 @@
                 android:layout_marginStart="@dimen/_10dp"
                 android:layout_marginEnd="@dimen/_10dp"
                 android:fontFamily="@font/manrope_medium"
-                android:text="@{obj.typeOfTransection}"
+                android:text="Paypal"
                 android:textColor="@color/color_white_text_profile"
                 android:textSize="@dimen/_12sp" />
 

@@ -10,11 +10,17 @@ class MyDataClass(
     val recommendedSongsResponse: RecommendedSongsResponse?,
     @SerializedName("category")
     var category: List<Category>?,
-    var songsResponse: SongsResponse?
+    var songsResponse: SongsResponse?,
+    @SerializedName("totalAmount")
+    val totalAmount: Int?,
+    @SerializedName("buyingHistory")
+    val buyingHistory: List<BuyingHistory>?
 
 
 ) {
     constructor() : this(
+        null,
+        null,
         null,
         null,
         null,

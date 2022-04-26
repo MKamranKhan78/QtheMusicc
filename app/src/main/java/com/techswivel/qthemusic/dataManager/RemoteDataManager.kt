@@ -27,6 +27,17 @@ object RemoteDataManager : BaseDataManager(), RemoteDataManagerImp {
         }
     }
 
+    override fun getBuyingHistory(
+        typeOfTransaction: String,
+        cardId: Int
+    ): Observable<Response<ResponseMain>> {
+        return Observable.create { observer ->
+            // observer.onError(Throwable("This is dummy thorwable if you want to test failed case."))
+            observer.onNext(getResponseDummyData())
+            observer.onComplete()
+        }
+    }
+
     override fun getCategoriesData(categoryType: CategoryType): Observable<Response<ResponseMain>> {
         return Observable.create { observer ->
             // observer.onError(Throwable("This is dummy thorwable if you want to test failed case."))

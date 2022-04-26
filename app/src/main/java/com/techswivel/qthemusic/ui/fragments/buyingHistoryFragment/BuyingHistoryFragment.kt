@@ -12,14 +12,20 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.customData.adapter.RecyclerViewAdapter
 import com.techswivel.qthemusic.customData.enums.AdapterType
+import com.techswivel.qthemusic.customData.enums.NetworkStatus
 import com.techswivel.qthemusic.customData.interfaces.BaseInterface
 import com.techswivel.qthemusic.databinding.FragmentBuyingHistoryBinding
+import com.techswivel.qthemusic.models.ResponseModel
+import com.techswivel.qthemusic.source.remote.networkViewModel.ProfileNetworkViewModel
 import com.techswivel.qthemusic.ui.base.RecyclerViewBaseFragment
+import com.techswivel.qthemusic.utils.DialogUtils
 
 
+// api will call in activity
+// send data to fragment using call back
+// after clicking bottom sheet item call back send to activity and on its scuccess again open fragment.
 class BuyingHistoryFragment : RecyclerViewBaseFragment(), BaseInterface,
     RecyclerViewAdapter.CallBack {
-
 
     companion object {
         fun newInstance() = BuyingHistoryFragment()
@@ -30,6 +36,7 @@ class BuyingHistoryFragment : RecyclerViewBaseFragment(), BaseInterface,
 
     private lateinit var mBinding: FragmentBuyingHistoryBinding
     private lateinit var viewModel: BuyingHistoryViewModel
+    private lateinit var profileNetworkViewModel: ProfileNetworkViewModel
     private lateinit var adapterBuyingHistory: RecyclerViewAdapter
 
     override fun onCreateView(
@@ -45,16 +52,84 @@ class BuyingHistoryFragment : RecyclerViewBaseFragment(), BaseInterface,
         super.onViewCreated(view, savedInstanceState)
         initViewModel()
         clickListeners()
+        getBuyingHistoryDataFromServer()
+        setObserver()
+        setUpAdapter()
+    }
+
+    private fun setObserver() {
+        profileNetworkViewModel.buyingHistoryResponse.observe(viewLifecycleOwner) { recommendedSongsDataResponse ->
+            when (recommendedSongsDataResponse.status) {
+                NetworkStatus.LOADING -> {
+//                    startRecommendedDataShimmer()
+                }
+                NetworkStatus.SUCCESS -> {
+                    viewModel.buyingHistoryList.clear()
+                    val response = recommendedSongsDataResponse.t as ResponseModel
+                    val buyingHistoryList = response.data.buyingHistory
+
+                    if (!buyingHistoryList.isNullOrEmpty()) {
+                        viewModel.buyingHistoryList.addAll(buyingHistoryList)
+                    }
+                    if (::adapterBuyingHistory.isInitialized)
+                        adapterBuyingHistory.notifyDataSetChanged()
+                }
+                NetworkStatus.ERROR -> {
+                    recommendedSongsDataResponse.error?.message?.let { it1 ->
+                        DialogUtils.errorAlert(
+                            requireContext(),
+                            recommendedSongsDataResponse.error.code.toString(),
+                            recommendedSongsDataResponse.error.message
+                        )
+                    }
+                }
+                NetworkStatus.EXPIRE -> {
+                    DialogUtils.sessionExpireAlert(requireContext(),
+                        object : DialogUtils.CallBack {
+                            override fun onPositiveCallBack() {
+                                viewModel.clearAppSession(requireActivity())
+                            }
+
+                            override fun onNegativeCallBack() {
+                            }
+                        })
+                }
+                NetworkStatus.COMPLETED -> {
+//                    stopRecommendedDataShimmer()
+                }
+            }
+        }
+    }
+
+    private fun getBuyingHistoryDataFromServer() {
+
+        profileNetworkViewModel.getBuyingHistory("PAYPAL", 1234)
+
+    }
+
+    private fun setUpAdapter() {
+        adapterBuyingHistory = RecyclerViewAdapter(this, viewModel.buyingHistoryList)
+        setUpRecyclerView(
+            mBinding.recyclerviewBuyingHistory,
+            AdapterType.SONGS
+        )
     }
 
 
     override fun onPrepareAdapter(adapterType: AdapterType?): RecyclerView.Adapter<*> {
-        TODO("Not yet implemented")
+        return adapterBuyingHistory
     }
 
 
     override fun inflateLayoutFromId(position: Int, data: Any?): Int {
-        TODO("Not yet implemented")
+        /*if (itemType == Song){
+        return R.layout.item_buying_history
+        }
+         else{
+        return R.layout.item_buying_history_with_recyclerview
+         }
+         */
+        return R.layout.item_buying_history
     }
 
     override fun onNoDataFound() {
@@ -99,6 +174,9 @@ class BuyingHistoryFragment : RecyclerViewBaseFragment(), BaseInterface,
     private fun initViewModel() {
         viewModel =
             ViewModelProvider(this).get(BuyingHistoryViewModel::class.java)
+        profileNetworkViewModel =
+            ViewModelProvider(this).get(ProfileNetworkViewModel::class.java)
+
     }
 
 
