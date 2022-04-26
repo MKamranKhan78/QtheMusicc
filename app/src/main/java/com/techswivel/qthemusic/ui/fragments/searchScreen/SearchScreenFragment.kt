@@ -15,7 +15,6 @@ import com.techswivel.qthemusic.customData.enums.AdapterType
 import com.techswivel.qthemusic.customData.enums.RecommendedSongsType
 import com.techswivel.qthemusic.databinding.FragmentSearchScreenBinding
 import com.techswivel.qthemusic.models.database.Album
-import com.techswivel.qthemusic.source.local.database.AppRoomDatabase
 import com.techswivel.qthemusic.ui.base.RecyclerViewBaseFragment
 import com.techswivel.qthemusic.ui.fragments.albumDetailsFragment.AlbumDetailsFragment
 import com.techswivel.qthemusic.ui.fragments.searchQueryFragment.SearchQueryFragment
@@ -26,18 +25,11 @@ import kotlinx.coroutines.runBlocking
 
 
 class SearchScreenFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.CallBack {
-    companion object {
-        private val TAG = "SearchScreenFragment"
-    }
+
 
     private lateinit var mBinding: FragmentSearchScreenBinding
     private lateinit var mViewModel: SearchScreenViewModel
     private lateinit var mRecentPlayAdapter: RecyclerViewAdapter
-    private lateinit var mDatabase: AppRoomDatabase
-    override fun onPrepareAdapter(adapterType: AdapterType?): RecyclerView.Adapter<*> {
-
-        return mRecentPlayAdapter
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,7 +49,6 @@ class SearchScreenFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.Cal
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mDatabase = AppRoomDatabase.getDatabaseInstance(requireContext())
         mViewModel.recentPlayedSongsList.clear()
         mViewModel.selectedTab = RecommendedSongsType.SONGS
         getRecentPlayedSongsFromDatabase()
@@ -69,6 +60,11 @@ class SearchScreenFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.Cal
     override fun onDestroy() {
         super.onDestroy()
         mViewModel.recentPlayedSongsList.clear()
+    }
+
+    override fun onPrepareAdapter(adapterType: AdapterType?): RecyclerView.Adapter<*> {
+
+        return mRecentPlayAdapter
     }
 
     override fun inflateLayoutFromId(position: Int, data: Any?): Int {
@@ -91,7 +87,7 @@ class SearchScreenFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.Cal
             R.id.cv_main_image -> {
                 val mAlbum = data as Album
                 val bundle = Bundle()
-                bundle.putSerializable(CommonKeys.KEY_ALBUM_DETAILS, mAlbum)
+                bundle.putParcelable(CommonKeys.KEY_ALBUM_DETAILS, mAlbum)
                 ActivityUtils.launchFragment(
                     requireContext(),
                     AlbumDetailsFragment::class.java.name,
@@ -183,25 +179,26 @@ class SearchScreenFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.Cal
 
     @SuppressLint("NotifyDataSetChanged")
     private fun getRecentPlayedSongsFromDatabase() {
-        mDatabase.mSongsDao().getRecentPlayedSongs()
-            .observe(viewLifecycleOwner, Observer { dbSongsList ->
-                if (dbSongsList.isNotEmpty()) {
-                    mViewModel.recentPlayedSongsList.clear()
-                    mViewModel.recentPlayedSongsList.addAll(dbSongsList)
-                    mRecentPlayAdapter.notifyDataSetChanged()
-                    if (dbSongsList.size > 5) {
-                        deleteItemFromDatabaseIfListExceeds(mViewModel.selectedTab)
-                    }
-                } else {
-                    Log.d(TAG, "no songs data in database")
+        val data =
+            mViewModel.mLocalDataManager.getDatabaseInstance().mSongsDao().getRecentPlayedSongs()
+        data.observe(viewLifecycleOwner, Observer { dbSongsList ->
+            if (dbSongsList.isNotEmpty()) {
+                mViewModel.recentPlayedSongsList.clear()
+                mViewModel.recentPlayedSongsList.addAll(dbSongsList)
+                mRecentPlayAdapter.notifyDataSetChanged()
+                if (dbSongsList.size > 5) {
+                    deleteItemFromDatabaseIfListExceeds(mViewModel.selectedTab)
                 }
-            })
+            } else {
+                Log.d(TAG, "no songs data in database")
+            }
+        })
     }
 
     @SuppressLint("NotifyDataSetChanged")
     private fun getRecentPlayedAlbumFromDatabase() {
         runBlocking {
-            val data = mDatabase.mAlbumDao().getAlbumList()
+            val data = mViewModel.mLocalDataManager.getDatabaseInstance().mAlbumDao().getAlbumList()
             data.observe(viewLifecycleOwner, Observer { dbAlbumList ->
                 if (dbAlbumList.isNotEmpty()) {
                     mViewModel.recentPlayedSongsList.clear()
@@ -220,7 +217,8 @@ class SearchScreenFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.Cal
     @SuppressLint("NotifyDataSetChanged")
     private fun getRecentPlayedArtistFromDatabase() {
         runBlocking {
-            val data = mDatabase.mArtistDao().getArtistList()
+            val data =
+                mViewModel.mLocalDataManager.getDatabaseInstance().mArtistDao().getArtistList()
             data.observe(viewLifecycleOwner, Observer { dbArtistList ->
                 if (dbArtistList.isNotEmpty()) {
                     mViewModel.recentPlayedSongsList.clear()
@@ -239,12 +237,19 @@ class SearchScreenFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.Cal
     private fun deleteItemFromDatabaseIfListExceeds(selectedTab: RecommendedSongsType?) {
         runBlocking {
             if (selectedTab == RecommendedSongsType.SONGS) {
-                mDatabase.mSongsDao().deleteSongIfListExceedsFromFive()
+                mViewModel.mLocalDataManager.getDatabaseInstance().mSongsDao()
+                    .deleteSongIfListExceedsFromFive()
             } else if (selectedTab == RecommendedSongsType.ALBUM) {
-                mDatabase.mAlbumDao().deleteAlbumIfListExceedsFromFive()
+                mViewModel.mLocalDataManager.getDatabaseInstance().mAlbumDao()
+                    .deleteAlbumIfListExceedsFromFive()
             } else if (selectedTab == RecommendedSongsType.ARTIST) {
-                mDatabase.mArtistDao().deleteArtistIfListExceedsFromFive()
+                mViewModel.mLocalDataManager.getDatabaseInstance().mArtistDao()
+                    .deleteArtistIfListExceedsFromFive()
             }
         }
+    }
+
+    companion object {
+        private val TAG = "SearchScreenFragment"
     }
 }

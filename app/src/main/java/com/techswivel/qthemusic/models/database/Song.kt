@@ -93,6 +93,7 @@ data class Song(
     @ColumnInfo(name = "localPath")
     @SerializedName("localPath")
     var localPath: String?,
+    @Expose
     @ColumnInfo(name = "recentPlay")
     @SerializedName("recentPlay")
     var recentPlay: Long?

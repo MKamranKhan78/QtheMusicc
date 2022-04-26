@@ -17,6 +17,7 @@ import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.customData.adapter.RecyclerViewAdapter
 import com.techswivel.qthemusic.customData.enums.AdapterType
 import com.techswivel.qthemusic.customData.enums.NetworkStatus
+import com.techswivel.qthemusic.customData.interfaces.BaseInterface
 import com.techswivel.qthemusic.databinding.FragmentSearchQueryBinding
 import com.techswivel.qthemusic.models.ErrorResponse
 import com.techswivel.qthemusic.models.Language
@@ -29,7 +30,7 @@ import com.techswivel.qthemusic.utils.Log
 import com.techswivel.qthemusic.utils.Utilities
 
 
-class SearchQueryFragment : RecyclerViewBaseFragment() {
+class SearchQueryFragment : RecyclerViewBaseFragment(), BaseInterface {
     companion object {
         private val TAG = "SearchQueryFragment"
     }
@@ -123,6 +124,19 @@ class SearchQueryFragment : RecyclerViewBaseFragment() {
         }
     }
 
+    override fun showProgressBar() {
+        mBinding.slSearchedSongs.visibility = View.VISIBLE
+        mBinding.slLanguages.visibility = View.VISIBLE
+        mBinding.slSearchedSongs.startShimmer()
+        mBinding.slLanguages.startShimmer()
+    }
+
+    override fun hideProgressBar() {
+        mBinding.slSearchedSongs.visibility = View.GONE
+        mBinding.slLanguages.visibility = View.GONE
+        mBinding.slSearchedSongs.stopShimmer()
+        mBinding.slLanguages.stopShimmer()
+    }
 
     private fun initViewModel() {
         mViewModel = ViewModelProvider(this).get(SearchQueryViewModel::class.java)
@@ -205,10 +219,10 @@ class SearchQueryFragment : RecyclerViewBaseFragment() {
             when (it.status) {
                 NetworkStatus.LOADING -> {
                     Log.d(TAG, "LOADING Called")
-                    startSearchedDataShimmer()
+                    showProgressBar()
                 }
                 NetworkStatus.SUCCESS -> {
-                    stopSearchedDataShimmer()
+                    hideProgressBar()
                     mViewModel.searchedSongsDataList.clear()
                     mViewModel.searchedLanguagesDataList.clear()
                     mBinding.recyclerLanguages.visibility = View.VISIBLE
@@ -227,7 +241,7 @@ class SearchQueryFragment : RecyclerViewBaseFragment() {
                     }
                 }
                 NetworkStatus.EXPIRE -> {
-                    stopSearchedDataShimmer()
+                    hideProgressBar()
                     val error = it.error as ErrorResponse
                     DialogUtils.errorAlert(
                         requireContext(),
@@ -236,7 +250,7 @@ class SearchQueryFragment : RecyclerViewBaseFragment() {
                     )
                 }
                 NetworkStatus.ERROR -> {
-                    stopSearchedDataShimmer()
+                    hideProgressBar()
                     val error = it.error as ErrorResponse
                     DialogUtils.errorAlert(
                         requireContext(),
@@ -246,19 +260,5 @@ class SearchQueryFragment : RecyclerViewBaseFragment() {
                 }
             }
         })
-    }
-
-    private fun startSearchedDataShimmer() {
-        mBinding.slSearchedSongs.visibility = View.VISIBLE
-        mBinding.slLanguages.visibility = View.VISIBLE
-        mBinding.slSearchedSongs.startShimmer()
-        mBinding.slLanguages.startShimmer()
-    }
-
-    private fun stopSearchedDataShimmer() {
-        mBinding.slSearchedSongs.visibility = View.GONE
-        mBinding.slLanguages.visibility = View.GONE
-        mBinding.slSearchedSongs.stopShimmer()
-        mBinding.slLanguages.stopShimmer()
     }
 }

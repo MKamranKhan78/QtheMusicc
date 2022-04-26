@@ -54,6 +54,7 @@ class HomeFragment : RecyclerViewBaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
         networkViewModel = ViewModelProvider(this)[SongAndArtistsViewModel::class.java]
+        viewModel.recommendedSongsDataList.clear()
         viewModel.selectedTab = RecommendedSongsType.SONGS
         setUpHorizentalRecyclerView(
             binding.recyclerViewRecommendedMedia,
@@ -142,7 +143,7 @@ class HomeFragment : RecyclerViewBaseFragment() {
                                 R.id.cv_main_image -> {
                                     val mAlbum = data as Album
                                     val bundle = Bundle()
-                                    bundle.putSerializable(CommonKeys.KEY_ALBUM_DETAILS, mAlbum)
+                                    bundle.putParcelable(CommonKeys.KEY_ALBUM_DETAILS, mAlbum)
                                     Log.d(TAG, "cv_main_image called")
                                     ActivityUtils.launchFragment(
                                         requireContext(),

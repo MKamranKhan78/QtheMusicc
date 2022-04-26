@@ -5,6 +5,15 @@
 
     <data>
 
+        <import type="android.view.View" />
+
+        <variable
+            name="obj"
+            type="com.techswivel.qthemusic.ui.fragments.albumDetailsFragment.AlbumDetailsViewModel" />
+
+        <variable
+            name="albumStatus"
+            type="com.techswivel.qthemusic.customData.enums.AlbumStatus" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -19,6 +28,7 @@
             android:layout_height="@dimen/_330dp"
             android:scaleType="centerCrop"
             android:src="@drawable/index"
+            setImageWithBlur="@{obj.albumData.albumCoverImageUrl}"
             app:layout_constraintTop_toTopOf="parent" />
 
         <View
@@ -39,6 +49,7 @@
             android:layout_height="@dimen/_120dp"
             android:layout_marginBottom="@dimen/_70dp"
             android:src="@drawable/index"
+            setImageViewImage="@{obj.albumData.albumCoverImageUrl}"
             app:layout_constraintBottom_toBottomOf="@id/iv_background_album_details"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -50,7 +61,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_60dp"
-            android:visibility="invisible"
+            android:visibility="@{obj.albumData.albumStatus == albumStatus.PREMIUM ? View.VISIBLE : View.GONE}"
             app:layout_constraintEnd_toEndOf="@+id/iv_small_album_details"
             app:layout_constraintStart_toEndOf="@+id/iv_small_album_details"
             app:layout_constraintTop_toTopOf="parent"
@@ -74,7 +85,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_10dp"
             android:fontFamily="@font/manrope_bold"
-            android:text="Life On Mars"
+            android:text="@{obj.albumData.albumTitle}"
             android:textColor="@color/color_white"
             android:textSize="@dimen/_20sp"
             app:layout_constraintEnd_toEndOf="@id/iv_small_album_details"
@@ -103,10 +114,10 @@
             android:background="@drawable/shape_bg_play_all"
             android:fontFamily="@font/manrope_semibold"
             android:gravity="center"
-            android:text="Play All"
+            android:text="@string/play_all_songs"
             android:textColor="@color/color_white"
             android:textSize="@dimen/_14sp"
-            android:visibility="visible"
+            android:visibility="@{obj.albumData.albumStatus==albumStatus.FREE? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="@+id/iv_background_album_details"
             app:layout_constraintEnd_toEndOf="@+id/iv_small_album_details"
             app:layout_constraintStart_toStartOf="@+id/iv_small_album_details" />
@@ -115,7 +126,7 @@
             android:id="@+id/premium_layout_main"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="invisible"
+            android:visibility="@{obj.albumData.albumStatus==albumStatus.PREMIUM? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="@+id/tv_play_all_songs"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -149,7 +160,7 @@
             android:layout_marginEnd="@dimen/_16dp"
             android:fontFamily="@font/manrope_regular"
             android:gravity="end"
-            android:text="20 Songs"
+            android:text="@{obj.albumData.numberOfSongs.toString()+` Songs`}"
             android:textColor="@color/color_light_grey"
             android:textSize="@dimen/_14sp"
             app:layout_constraintBottom_toBottomOf="@+id/tv_songs_tag"

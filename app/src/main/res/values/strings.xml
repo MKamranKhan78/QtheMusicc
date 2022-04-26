@@ -195,5 +195,6 @@
     <string name="eng_songs">English</string>
     <string name="urdu_songs">Urdu</string>
     <string name="_songs">\ Songs\</string>
+    <string name="play_all_songs">Play All</string>
 
 </resources>

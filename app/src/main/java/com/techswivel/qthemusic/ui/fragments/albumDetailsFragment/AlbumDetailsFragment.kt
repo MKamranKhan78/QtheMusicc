@@ -8,13 +8,12 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.customData.adapter.RecyclerViewAdapter
 import com.techswivel.qthemusic.customData.enums.AdapterType
-import com.techswivel.qthemusic.customData.enums.AlbumStatus
 import com.techswivel.qthemusic.customData.enums.NetworkStatus
 import com.techswivel.qthemusic.customData.enums.SongType
+import com.techswivel.qthemusic.customData.interfaces.BaseInterface
 import com.techswivel.qthemusic.databinding.FragmentAlbumDetailsBinding
 import com.techswivel.qthemusic.models.ErrorResponse
 import com.techswivel.qthemusic.models.ResponseModel
@@ -26,25 +25,18 @@ import com.techswivel.qthemusic.utils.CommonKeys
 import com.techswivel.qthemusic.utils.DialogUtils
 import com.techswivel.qthemusic.utils.Log
 
-class AlbumDetailsFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.CallBack {
+class AlbumDetailsFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.CallBack,
+    BaseInterface {
     private lateinit var mBinding: FragmentAlbumDetailsBinding
     private lateinit var mViewModel: AlbumDetailsViewModel
     private lateinit var mSongsAdapter: RecyclerViewAdapter
     private lateinit var mSongsAndArtistsViewModel: SongAndArtistsViewModel
-
-    companion object {
-        private val TAG = "AlbumDetailsFragment"
-    }
-
-    override fun onPrepareAdapter(adapterType: AdapterType?): RecyclerView.Adapter<*> {
-        return mSongsAdapter
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initViewModel()
+        mViewModel.albumData =
+            arguments?.getParcelable<Album>(CommonKeys.KEY_ALBUM_DETAILS) as Album
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -61,10 +53,14 @@ class AlbumDetailsFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.Cal
         super.onViewCreated(view, savedInstanceState)
         initialization()
         getDataFromBundle()
-        setDataInViews()
+        bindViewModel()
         setObserverForSongsList()
         clickListeners()
 
+    }
+
+    override fun onPrepareAdapter(adapterType: AdapterType?): RecyclerView.Adapter<*> {
+        return mSongsAdapter
     }
 
     override fun inflateLayoutFromId(position: Int, data: Any?): Int {
@@ -73,6 +69,16 @@ class AlbumDetailsFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.Cal
 
     override fun onNoDataFound() {
         Log.d(TAG, "No Data Found")
+    }
+
+    override fun showProgressBar() {
+        mBinding.slTrendingSongs.visibility = View.VISIBLE
+        mBinding.slTrendingSongs.startShimmer()
+    }
+
+    override fun hideProgressBar() {
+        mBinding.slTrendingSongs.visibility = View.GONE
+        mBinding.slTrendingSongs.stopShimmer()
     }
 
     private fun initViewModel() {
@@ -97,7 +103,7 @@ class AlbumDetailsFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.Cal
     private fun createRequestAndCallApi() {
         val songsBuilder = SongsBodyBuilder()
         songsBuilder.type = SongType.ALBUM
-        songsBuilder.albumId = mViewModel.albumId
+        songsBuilder.albumId = mViewModel.albumData.albumId
         val songsBodyModel = SongsBodyBuilder.build(songsBuilder)
         mSongsAndArtistsViewModel.getSongsDataFromServer(
             songsBodyModel
@@ -105,38 +111,8 @@ class AlbumDetailsFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.Cal
     }
 
     private fun getDataFromBundle() {
-        mViewModel.albumData =
-            listOf(arguments?.getSerializable(CommonKeys.KEY_ALBUM_DETAILS) as Album)
-        mViewModel.albumStatus = mViewModel.albumData[0].albumStatus?.name.toString()
-        mViewModel.albumCoverImageUrl = mViewModel.albumData[0].albumCoverImageUrl.toString()
-        mViewModel.albumTitle = mViewModel.albumData[0].albumTitle.toString()
-        mViewModel.numberOfSongs = mViewModel.albumData[0].numberOfSongs
-        mViewModel.albumStatus = mViewModel.albumStatus
-        mViewModel.albumId = mViewModel.albumData[0].albumId
-        createRequestAndCallApi()
-    }
 
-    @SuppressLint("SetTextI18n")
-    private fun setDataInViews() {
-        if (mViewModel.albumStatus == AlbumStatus.PREMIUM.name) {
-            mBinding.tvPlayAllSongs.visibility = View.INVISIBLE
-            mBinding.premiumLayoutMain.visibility = View.VISIBLE
-        }
-        if (mViewModel.albumStatus == AlbumStatus.PREMIUM.name) {
-            mBinding.ivCron.visibility = View.VISIBLE
-        } else {
-            mBinding.ivCron.visibility = View.INVISIBLE
-        }
-        Glide.with(requireActivity()).load(mViewModel.albumCoverImageUrl)
-            .override(20, 20)
-            .into(mBinding.ivBackgroundAlbumDetails)
-        Glide.with(requireActivity()).load(mViewModel.albumCoverImageUrl)
-            .into(mBinding.ivSmallAlbumDetails)
-        mBinding.tvAlbumNameId.text = mViewModel.albumTitle
-        mBinding.tvTotalSongsTopTag.text =
-            mViewModel.numberOfSongs.toString() + getString(R.string._songs)
-        mBinding.tvTotalSongsTag.text =
-            mViewModel.numberOfSongs.toString() + getString(R.string._songs)
+        createRequestAndCallApi()
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -146,10 +122,10 @@ class AlbumDetailsFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.Cal
             Observer { songsDataResponse ->
                 when (songsDataResponse.status) {
                     NetworkStatus.LOADING -> {
-                        startShimmer()
+                        showProgressBar()
                     }
                     NetworkStatus.SUCCESS -> {
-                        stopShimmer()
+                        hideProgressBar()
                         mViewModel.albumSongsList.clear()
                         val response = songsDataResponse.t as ResponseModel
                         val songsList = response.data.songsResponse?.songs
@@ -158,10 +134,10 @@ class AlbumDetailsFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.Cal
                             mViewModel.albumSongsList.addAll(songsList)
                         }
                         if (::mSongsAdapter.isInitialized)
-                            mSongsAdapter.notifyDataSetChanged()
+                            mSongsAdapter.notifyItemRangeInserted(0, mViewModel.albumSongsList.size)
                     }
                     NetworkStatus.ERROR -> {
-                        stopShimmer()
+                        hideProgressBar()
                         val error = songsDataResponse.error as ErrorResponse
                         DialogUtils.errorAlert(
                             requireContext(),
@@ -170,7 +146,7 @@ class AlbumDetailsFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.Cal
                         )
                     }
                     NetworkStatus.EXPIRE -> {
-                        stopShimmer()
+                        hideProgressBar()
                         val error = songsDataResponse.error as ErrorResponse
                         DialogUtils.errorAlert(
                             requireContext(),
@@ -185,13 +161,12 @@ class AlbumDetailsFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.Cal
             })
     }
 
-    private fun startShimmer() {
-        mBinding.slTrendingSongs.visibility = View.VISIBLE
-        mBinding.slTrendingSongs.startShimmer()
+    private fun bindViewModel() {
+        mBinding.obj = mViewModel
+        mBinding.executePendingBindings()
     }
 
-    private fun stopShimmer() {
-        mBinding.slTrendingSongs.visibility = View.GONE
-        mBinding.slTrendingSongs.stopShimmer()
+    companion object {
+        private val TAG = "AlbumDetailsFragment"
     }
 }
