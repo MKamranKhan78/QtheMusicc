@@ -41,8 +41,7 @@ class SearchScreenFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.Cal
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        initViewMedel()
-        mViewModel.selectedTab = RecommendedSongsType.SONGS
+        initViewModel()
 
     }
 
@@ -59,16 +58,17 @@ class SearchScreenFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.Cal
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mDatabase = AppRoomDatabase.getDatabaseInstance(requireContext())
-        getSongsDataFromDatabase()
-        mRecentPlayAdapter = RecyclerViewAdapter(this, mViewModel.recentSongsDataList)
+        mViewModel.recentPlayedSongsList.clear()
+        mViewModel.selectedTab = RecommendedSongsType.SONGS
+        getRecentPlayedSongsFromDatabase()
+        mRecentPlayAdapter = RecyclerViewAdapter(this, mViewModel.recentPlayedSongsList)
         setCurrentUpRecyclerview(mViewModel.selectedTab)
         setListeners()
-        setCurrentUpRecyclerview(mViewModel.selectedTab)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        mViewModel.recentSongsDataList.clear()
+        mViewModel.recentPlayedSongsList.clear()
     }
 
     override fun inflateLayoutFromId(position: Int, data: Any?): Int {
@@ -108,8 +108,8 @@ class SearchScreenFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.Cal
     private fun setListeners() {
 
         mBinding.btnSongs.setOnClickListener {
-            mViewModel.recentSongsDataList.clear()
-            getSongsDataFromDatabase()
+            mViewModel.recentPlayedSongsList.clear()
+            getRecentPlayedSongsFromDatabase()
             mViewModel.selectedTab = RecommendedSongsType.SONGS
             setCurrentUpRecyclerview(mViewModel.selectedTab)
             updateSelectedTabBackground(
@@ -120,8 +120,8 @@ class SearchScreenFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.Cal
         }
 
         mBinding.btnAlbums.setOnClickListener {
-            mViewModel.recentSongsDataList.clear()
-            getAlbumDataFromDatabase()
+            mViewModel.recentPlayedSongsList.clear()
+            getRecentPlayedAlbumFromDatabase()
             mViewModel.selectedTab = RecommendedSongsType.ALBUM
             setCurrentUpRecyclerview(mViewModel.selectedTab)
             updateSelectedTabBackground(
@@ -132,8 +132,8 @@ class SearchScreenFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.Cal
         }
 
         mBinding.btnArtists.setOnClickListener {
-            mViewModel.recentSongsDataList.clear()
-            getArtistDataFromDatabase()
+            mViewModel.recentPlayedSongsList.clear()
+            getRecentPlayedArtistFromDatabase()
             mViewModel.selectedTab = RecommendedSongsType.ARTIST
             setCurrentUpRecyclerview(mViewModel.selectedTab)
             updateSelectedTabBackground(
@@ -157,34 +157,40 @@ class SearchScreenFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.Cal
         unselectedTab2.setBackgroundResource(R.drawable.unselected_tab_background)
     }
 
-    private fun initViewMedel() {
+    private fun initViewModel() {
         mViewModel = ViewModelProvider(this).get(SearchScreenViewModel::class.java)
     }
 
     private fun setCurrentUpRecyclerview(recommendedSongsType: RecommendedSongsType?) {
-        if (recommendedSongsType?.equals(RecommendedSongsType.SONGS) == true) {
-            setUpRecyclerView(mBinding.searchScreenRecyclerView, AdapterType.RECENT_PLAY)
-        } else {
-            setUpGridRecyclerView(
-                mBinding.searchScreenRecyclerView,
-                3,
-                0,
-                0,
-                AdapterType.RECENT_PLAY
-            )
+        try {
+            if (recommendedSongsType?.equals(RecommendedSongsType.SONGS) == true) {
+                setUpRecyclerView(mBinding.searchScreenRecyclerView, AdapterType.RECENT_PLAY)
+            } else {
+                setUpGridRecyclerView(
+                    mBinding.searchScreenRecyclerView,
+                    3,
+                    0,
+                    0,
+                    AdapterType.RECENT_PLAY
+                )
+            }
+        } catch (e: Exception) {
+            Log.d(TAG, "execption is ${e.message}")
         }
+
+
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private fun getSongsDataFromDatabase() {
+    private fun getRecentPlayedSongsFromDatabase() {
         mDatabase.mSongsDao().getRecentPlayedSongs()
             .observe(viewLifecycleOwner, Observer { dbSongsList ->
                 if (dbSongsList.isNotEmpty()) {
-                    mViewModel.recentSongsDataList.clear()
-                    mViewModel.recentSongsDataList.addAll(dbSongsList)
+                    mViewModel.recentPlayedSongsList.clear()
+                    mViewModel.recentPlayedSongsList.addAll(dbSongsList)
                     mRecentPlayAdapter.notifyDataSetChanged()
                     if (dbSongsList.size > 5) {
-                        deleteDataFromDb(mViewModel.selectedTab)
+                        deleteItemFromDatabaseIfListExceeds(mViewModel.selectedTab)
                     }
                 } else {
                     Log.d(TAG, "no songs data in database")
@@ -193,15 +199,15 @@ class SearchScreenFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.Cal
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private fun getAlbumDataFromDatabase() {
+    private fun getRecentPlayedAlbumFromDatabase() {
         runBlocking {
             val data = mDatabase.mAlbumDao().getAlbumList()
             data.observe(viewLifecycleOwner, Observer { dbAlbumList ->
                 if (dbAlbumList.isNotEmpty()) {
-                    mViewModel.recentSongsDataList.clear()
-                    mViewModel.recentSongsDataList.addAll(dbAlbumList)
+                    mViewModel.recentPlayedSongsList.clear()
+                    mViewModel.recentPlayedSongsList.addAll(dbAlbumList)
                     if (dbAlbumList.size > 5) {
-                        deleteDataFromDb(mViewModel.selectedTab)
+                        deleteItemFromDatabaseIfListExceeds(mViewModel.selectedTab)
                     }
                     mRecentPlayAdapter.notifyDataSetChanged()
                 } else {
@@ -212,15 +218,15 @@ class SearchScreenFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.Cal
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private fun getArtistDataFromDatabase() {
+    private fun getRecentPlayedArtistFromDatabase() {
         runBlocking {
             val data = mDatabase.mArtistDao().getArtistList()
             data.observe(viewLifecycleOwner, Observer { dbArtistList ->
                 if (dbArtistList.isNotEmpty()) {
-                    mViewModel.recentSongsDataList.clear()
-                    mViewModel.recentSongsDataList.addAll(dbArtistList)
+                    mViewModel.recentPlayedSongsList.clear()
+                    mViewModel.recentPlayedSongsList.addAll(dbArtistList)
                     if (dbArtistList.size > 5) {
-                        deleteDataFromDb(mViewModel.selectedTab)
+                        deleteItemFromDatabaseIfListExceeds(mViewModel.selectedTab)
                     }
                     mRecentPlayAdapter.notifyDataSetChanged()
                 } else {
@@ -230,14 +236,14 @@ class SearchScreenFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.Cal
         }
     }
 
-    private fun deleteDataFromDb(selectedTab: RecommendedSongsType?) {
+    private fun deleteItemFromDatabaseIfListExceeds(selectedTab: RecommendedSongsType?) {
         runBlocking {
             if (selectedTab == RecommendedSongsType.SONGS) {
-                mDatabase.mSongsDao().deleteData()
+                mDatabase.mSongsDao().deleteSongIfListExceedsFromFive()
             } else if (selectedTab == RecommendedSongsType.ALBUM) {
-                mDatabase.mAlbumDao().deleteAlbum()
+                mDatabase.mAlbumDao().deleteAlbumIfListExceedsFromFive()
             } else if (selectedTab == RecommendedSongsType.ARTIST) {
-                mDatabase.mArtistDao().deleteArtist()
+                mDatabase.mArtistDao().deleteArtistIfListExceedsFromFive()
             }
         }
     }

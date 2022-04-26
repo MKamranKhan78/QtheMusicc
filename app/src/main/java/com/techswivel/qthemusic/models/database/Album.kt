@@ -33,9 +33,9 @@ data class Album(
     @SerializedName("numberOfSongs")
     @ColumnInfo(name = "numberOfSongs")
     var numberOfSongs: Int?,
-    @SerializedName("timeStamp")
-    @ColumnInfo(name = "timeStamp")
-    var timeStamp: Long?
+    @SerializedName("recentPlay")
+    @ColumnInfo(name = "recentPlay")
+    var recentPlay: Long?
 ) : Serializable {
 
 }

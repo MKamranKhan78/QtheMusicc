@@ -23,5 +23,8 @@ data class Artist(
     @SerializedName("artistName")
     @ColumnInfo(name = "artistName")
     var artistName: String?,
-    var timestamp: Long?
+
+    @SerializedName("recentPlay")
+    @ColumnInfo(name = "recentPlay")
+    var recentPlay: Long?
 ) : Serializable

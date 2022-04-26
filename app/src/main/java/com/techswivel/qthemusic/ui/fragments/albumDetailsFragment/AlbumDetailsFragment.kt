@@ -53,7 +53,7 @@ class AlbumDetailsFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.Cal
         // Inflate the layout for this fragment
         mBinding = FragmentAlbumDetailsBinding.inflate(layoutInflater, container, false)
 
-        setUpActionBar(mBinding.toolbarM, "Toolbar", true)
+
         return mBinding.root
     }
 
@@ -62,8 +62,9 @@ class AlbumDetailsFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.Cal
         initialization()
         getDataFromBundle()
         setDataInViews()
-        observerSongsData()
+        setObserverForSongsList()
         clickListeners()
+
     }
 
     override fun inflateLayoutFromId(position: Int, data: Any?): Int {
@@ -71,7 +72,7 @@ class AlbumDetailsFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.Cal
     }
 
     override fun onNoDataFound() {
-
+        Log.d(TAG, "No Data Found")
     }
 
     private fun initViewModel() {
@@ -81,7 +82,6 @@ class AlbumDetailsFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.Cal
 
     @SuppressLint("NotifyDataSetChanged")
     private fun initialization() {
-
         mSongsAdapter = RecyclerViewAdapter(this, mViewModel.albumSongsList)
         setUpRecyclerView(mBinding.recViewAlbumSongs, AdapterType.ALBUM_SONGS)
         mSongsAdapter.notifyDataSetChanged()
@@ -113,7 +113,6 @@ class AlbumDetailsFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.Cal
         mViewModel.numberOfSongs = mViewModel.albumData[0].numberOfSongs
         mViewModel.albumStatus = mViewModel.albumStatus
         mViewModel.albumId = mViewModel.albumData[0].albumId
-        Log.d(TAG, "data is ${mViewModel.albumStatus} ${mViewModel.albumCoverImageUrl}")
         createRequestAndCallApi()
     }
 
@@ -141,16 +140,16 @@ class AlbumDetailsFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.Cal
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private fun observerSongsData() {
+    private fun setObserverForSongsList() {
         mSongsAndArtistsViewModel.songsResponse.observe(
             viewLifecycleOwner,
             Observer { songsDataResponse ->
                 when (songsDataResponse.status) {
                     NetworkStatus.LOADING -> {
-                        startSongsDataShimmer()
+                        startShimmer()
                     }
                     NetworkStatus.SUCCESS -> {
-                        stopSongsDataShimmer()
+                        stopShimmer()
                         mViewModel.albumSongsList.clear()
                         val response = songsDataResponse.t as ResponseModel
                         val songsList = response.data.songsResponse?.songs
@@ -162,7 +161,7 @@ class AlbumDetailsFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.Cal
                             mSongsAdapter.notifyDataSetChanged()
                     }
                     NetworkStatus.ERROR -> {
-                        stopSongsDataShimmer()
+                        stopShimmer()
                         val error = songsDataResponse.error as ErrorResponse
                         DialogUtils.errorAlert(
                             requireContext(),
@@ -171,7 +170,7 @@ class AlbumDetailsFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.Cal
                         )
                     }
                     NetworkStatus.EXPIRE -> {
-                        stopSongsDataShimmer()
+                        stopShimmer()
                         val error = songsDataResponse.error as ErrorResponse
                         DialogUtils.errorAlert(
                             requireContext(),
@@ -186,13 +185,13 @@ class AlbumDetailsFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.Cal
             })
     }
 
-    private fun startSongsDataShimmer() {
-//        mBinding.slTrendingSongs.visibility = View.VISIBLE
-//        mBinding.slTrendingSongs.startShimmer()
+    private fun startShimmer() {
+        mBinding.slTrendingSongs.visibility = View.VISIBLE
+        mBinding.slTrendingSongs.startShimmer()
     }
 
-    private fun stopSongsDataShimmer() {
-//        mBinding.slTrendingSongs.visibility = View.GONE
-//        mBinding.slTrendingSongs.stopShimmer()
+    private fun stopShimmer() {
+        mBinding.slTrendingSongs.visibility = View.GONE
+        mBinding.slTrendingSongs.stopShimmer()
     }
 }
