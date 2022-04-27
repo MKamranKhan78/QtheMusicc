@@ -8,5 +8,8 @@ enum class AdapterType {
     SEARCHED_SONGS,
     LANGUAGES,
     ALBUM_SONGS,
-    YOUR_INTERESTS
+    YOUR_INTERESTS,
+    RECENT_SONGS,
+    RECENT_ALBUM,
+    RECENT_ARTIST
 }

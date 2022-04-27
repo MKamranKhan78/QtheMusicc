@@ -107,4 +107,5 @@
     <dimen name="recycler_vertical_spacing">10dp</dimen>
     <dimen name="recycler_horizental_spacing_20">20dp</dimen>
     <dimen name="recycler_horizental_spacing_2">2dp</dimen>
+    <dimen name="recycler_language_horizental_spacing_4">4dp</dimen>
 </resources>

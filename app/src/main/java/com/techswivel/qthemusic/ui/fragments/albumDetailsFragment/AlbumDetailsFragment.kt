@@ -19,11 +19,14 @@ import com.techswivel.qthemusic.models.ErrorResponse
 import com.techswivel.qthemusic.models.ResponseModel
 import com.techswivel.qthemusic.models.SongsBodyBuilder
 import com.techswivel.qthemusic.models.database.Album
+import com.techswivel.qthemusic.models.database.Song
 import com.techswivel.qthemusic.source.remote.networkViewModel.SongAndArtistsViewModel
 import com.techswivel.qthemusic.ui.base.RecyclerViewBaseFragment
 import com.techswivel.qthemusic.utils.CommonKeys
 import com.techswivel.qthemusic.utils.DialogUtils
 import com.techswivel.qthemusic.utils.Log
+import com.techswivel.qthemusic.utils.Utilities
+import kotlinx.coroutines.runBlocking
 
 class AlbumDetailsFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.CallBack,
     BaseInterface {
@@ -69,6 +72,28 @@ class AlbumDetailsFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.Cal
 
     override fun onNoDataFound() {
         Log.d(TAG, "No Data Found")
+    }
+
+    override fun onViewClicked(view: View, data: Any?) {
+        super.onViewClicked(view, data)
+        when (view.id) {
+            R.id.rl_play_crown -> {
+                val song = data as Song
+                val unixTime = System.currentTimeMillis() / 1000L
+                song.recentPlay = unixTime
+
+                runBlocking {
+                    try {
+                        mViewModel.mLocalDataManager.insertRecentPlayedSongToDatabase(song)
+                        Utilities.showToast(requireContext(), "inserted")
+                    } catch (e: Exception) {
+                        Log.d(TAG, "exeception is ${e.message}")
+                    }
+
+                }
+
+            }
+        }
     }
 
     override fun showProgressBar() {

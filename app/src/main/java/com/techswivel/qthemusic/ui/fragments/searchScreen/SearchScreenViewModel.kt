@@ -6,4 +6,6 @@ import com.techswivel.qthemusic.ui.base.BaseViewModel
 class SearchScreenViewModel : BaseViewModel() {
     var selectedTab: RecommendedSongsType? = null
     var recentPlayedSongsList: MutableList<Any> = ArrayList()
+    var recentPlayedAlbumList: MutableList<Any> = ArrayList()
+    var recentPlayedArtistList: MutableList<Any> = ArrayList()
 }
