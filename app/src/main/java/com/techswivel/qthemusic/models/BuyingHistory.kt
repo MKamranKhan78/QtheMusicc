@@ -2,7 +2,7 @@ package com.techswivel.qthemusic.models
 
 import com.google.gson.annotations.SerializedName
 
-class BuyingHistory(
+data class BuyingHistory(
     @SerializedName("itemType")
     val itemType: String,
     @SerializedName("songTitle")
@@ -12,7 +12,7 @@ class BuyingHistory(
     @SerializedName("songDuration")
     val songDuration: Int,
     @SerializedName("songPrice")
-    val songPrice: Int,
+    var songPrice: Int?,
     @SerializedName("timeOfPurchased")
     val timeOfPurchased: Int,
     @SerializedName("typeOfTransection")

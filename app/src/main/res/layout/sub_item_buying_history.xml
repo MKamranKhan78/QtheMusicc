@@ -15,7 +15,6 @@
             name="click"
             type="com.techswivel.qthemusic.customData.interfaces.AdapterOnClick" />
 
-
     </data>
 
     <RelativeLayout
@@ -90,7 +89,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_gravity="center"
-                android:text="$5"
+                setDollarValue="@{obj.songPrice.toString()}"
                 android:textColor="@color/color_white_text_profile"
                 android:textSize="@dimen/_14sp" />
 

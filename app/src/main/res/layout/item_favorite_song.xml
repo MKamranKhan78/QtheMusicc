@@ -11,11 +11,6 @@
             name="obj"
             type="com.techswivel.qthemusic.models.Song" />
 
-        <variable
-            name="click"
-            type="com.techswivel.qthemusic.customData.interfaces.AdapterOnClick" />
-
-
     </data>
 
     <RelativeLayout
@@ -59,7 +54,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="@dimen/_10dp"
-                android:layout_toLeftOf="@id/play_button_id"
+                android:layout_toStartOf="@id/play_button_id"
                 android:layout_toEndOf="@id/cv_cover_image"
                 android:orientation="vertical">
 

@@ -12,18 +12,17 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.customData.adapter.RecyclerViewAdapter
 import com.techswivel.qthemusic.customData.enums.AdapterType
+import com.techswivel.qthemusic.customData.enums.ItemType
 import com.techswivel.qthemusic.customData.enums.NetworkStatus
 import com.techswivel.qthemusic.customData.interfaces.BaseInterface
 import com.techswivel.qthemusic.databinding.FragmentBuyingHistoryBinding
+import com.techswivel.qthemusic.models.BuyingHistory
 import com.techswivel.qthemusic.models.ResponseModel
 import com.techswivel.qthemusic.source.remote.networkViewModel.ProfileNetworkViewModel
 import com.techswivel.qthemusic.ui.base.RecyclerViewBaseFragment
 import com.techswivel.qthemusic.utils.DialogUtils
 
 
-// api will call in activity
-// send data to fragment using call back
-// after clicking bottom sheet item call back send to activity and on its scuccess again open fragment.
 class BuyingHistoryFragment : RecyclerViewBaseFragment(), BaseInterface,
     RecyclerViewAdapter.CallBack {
 
@@ -67,6 +66,8 @@ class BuyingHistoryFragment : RecyclerViewBaseFragment(), BaseInterface,
                     viewModel.buyingHistoryList.clear()
                     val response = recommendedSongsDataResponse.t as ResponseModel
                     val buyingHistoryList = response.data.buyingHistory
+                    val totalAmount = response.data.totalAmount
+                    setDataInViews(totalAmount)
 
                     if (!buyingHistoryList.isNullOrEmpty()) {
                         viewModel.buyingHistoryList.addAll(buyingHistoryList)
@@ -101,8 +102,11 @@ class BuyingHistoryFragment : RecyclerViewBaseFragment(), BaseInterface,
         }
     }
 
-    private fun getBuyingHistoryDataFromServer() {
+    private fun setDataInViews(totalAmount: Int?) {
+        mBinding.priceTextview.text = "$" + totalAmount.toString()
+    }
 
+    private fun getBuyingHistoryDataFromServer() {
         profileNetworkViewModel.getBuyingHistory("PAYPAL", 1234)
 
     }
@@ -122,14 +126,14 @@ class BuyingHistoryFragment : RecyclerViewBaseFragment(), BaseInterface,
 
 
     override fun inflateLayoutFromId(position: Int, data: Any?): Int {
-        /*if (itemType == Song){
-        return R.layout.item_buying_history
+        val data = data as BuyingHistory
+        var layoutId = 0
+        if (data.itemType == ItemType.SONG.toString()) {
+            layoutId = R.layout.item_buying_history
+        } else if (data.itemType == ItemType.ALBUM.toString()) {
+            layoutId = R.layout.item_buying_history_with_recyclerview
         }
-         else{
-        return R.layout.item_buying_history_with_recyclerview
-         }
-         */
-        return R.layout.item_buying_history
+        return layoutId
     }
 
     override fun onNoDataFound() {

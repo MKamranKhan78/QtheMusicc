@@ -39,5 +39,7 @@ data class Song(
     @SerializedName("songTitle")
     var songTitle: String?,
     @SerializedName("songVideoUrl")
-    var songVideoUrl: String?
+    var songVideoUrl: String?,
+    @SerializedName("songPrice")
+    var songPrice: Int?
 ) : Parcelable

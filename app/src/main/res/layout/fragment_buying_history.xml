@@ -13,7 +13,6 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/_20dp"
         android:fontFamily="@font/manrope_regular"
-        android:text="$1233.23"
         android:textColor="@color/color_white"
         android:textSize="@dimen/_24sp" />
 
@@ -30,7 +29,7 @@
 
     <TextView
         android:id="@+id/all_payment_textview"
-        android:layout_width="350dp"
+        android:layout_width="370dp"
         android:layout_height="@dimen/_40dp"
         android:layout_below="@id/textDescription"
         android:layout_centerHorizontal="true"

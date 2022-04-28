@@ -59,7 +59,7 @@ class DummyDataManager {
                     "atif",
                     12,
                     13,
-                    "https://st2.depositphotos.com/3474805/7901/v/950/depositphotos_79018872-stock-illustration-volumetric-ventilator-fan.jpg",
+                    "https://m.media-amazon.com/images/M/MV5BOWQyYmJiOWUtNzkzYS00YWJlLWI5YjgtYTg4MjI0MmM1N2ZkXkEyXkFqcGdeQXVyNjE0ODc0MDc@._V1_.jpg",
                     false,
                     false,
                     "lyrics",
@@ -69,7 +69,8 @@ class DummyDataManager {
                     54,
                     SongStatus.PURCHASED,
                     "song name1",
-                    "https://st2.depositphotos.com/3474805/7901/v/950/depositphotos_79018872-stock-illustration-volumetric-ventilator-fan.jpg"
+                    "https://st2.depositphotos.com/3474805/7901/v/950/depositphotos_79018872-stock-illustration-volumetric-ventilator-fan.jpg",
+                    453
                 )
             )
 
@@ -80,7 +81,7 @@ class DummyDataManager {
                     "atif2",
                     122,
                     132,
-                    "https://st2.depositphotos.com/3474805/7901/v/950/depositphotos_79018872-stock-illustration-volumetric-ventilator-fan.jpg",
+                    "https://m.media-amazon.com/images/M/MV5BOWQyYmJiOWUtNzkzYS00YWJlLWI5YjgtYTg4MjI0MmM1N2ZkXkEyXkFqcGdeQXVyNjE0ODc0MDc@._V1_.jpg",
                     false,
                     false,
                     "lyrics2",
@@ -90,7 +91,8 @@ class DummyDataManager {
                     542,
                     SongStatus.PURCHASED,
                     "song name2",
-                    "https://st2.depositphotos.com/3474805/7901/v/950/depositphotos_79018872-stock-illustration-volumetric-ventilator-fan.jpg"
+                    "https://st2.depositphotos.com/3474805/7901/v/950/depositphotos_79018872-stock-illustration-volumetric-ventilator-fan.jpg",
+                    6766
                 )
             )
 
@@ -101,7 +103,7 @@ class DummyDataManager {
                     "atif3",
                     13,
                     133,
-                    "https://st2.depositphotos.com/3474805/7901/v/950/depositphotos_79018872-stock-illustration-volumetric-ventilator-fan.jpg",
+                    "https://m.media-amazon.com/images/M/MV5BOWQyYmJiOWUtNzkzYS00YWJlLWI5YjgtYTg4MjI0MmM1N2ZkXkEyXkFqcGdeQXVyNjE0ODc0MDc@._V1_.jpg",
                     false,
                     false,
                     "lyrics3",
@@ -111,7 +113,8 @@ class DummyDataManager {
                     543,
                     SongStatus.PURCHASED,
                     "song name3",
-                    "https://st2.depositphotos.com/3474805/7901/v/950/depositphotos_79018872-stock-illustration-volumetric-ventilator-fan.jpg"
+                    "https://st2.depositphotos.com/3474805/7901/v/950/depositphotos_79018872-stock-illustration-volumetric-ventilator-fan.jpg",
+                    7878
                 )
             )
 
@@ -129,7 +132,7 @@ class DummyDataManager {
             return listOf(
                 BuyingHistory(
                     ItemType.SONG.toString(),
-                    "Ed Sheeran",
+                    "SongType Song 1",
                     "https://bowlyrics.com/wp-content/uploads/2018/07/ED-Sheeran-is-the-worlds-highest-earning-solo-musician-according-Forbes-731x411.jpg",
                     13847823,
                     2344,
@@ -140,7 +143,7 @@ class DummyDataManager {
                 ),
                 BuyingHistory(
                     ItemType.ALBUM.toString(),
-                    "Ed Sheeran2",
+                    "SongType Song 2",
                     "https://bowlyrics.com/wp-content/uploads/2018/07/ED-Sheeran-is-the-worlds-highest-earning-solo-musician-according-Forbes-731x411.jpg",
                     13847845,
                     234,
@@ -151,7 +154,18 @@ class DummyDataManager {
                 ),
                 BuyingHistory(
                     ItemType.SONG.toString(),
-                    "Ed Sheeran3",
+                    "SongType Song 3",
+                    "https://bowlyrics.com/wp-content/uploads/2018/07/ED-Sheeran-is-the-worlds-highest-earning-solo-musician-according-Forbes-731x411.jpg",
+                    13847845,
+                    234,
+                    234343,
+                    "PAYPAL",
+                    35463,
+                    albumModel
+                ),
+                BuyingHistory(
+                    ItemType.ALBUM.toString(),
+                    "SongType Song 4",
                     "https://bowlyrics.com/wp-content/uploads/2018/07/ED-Sheeran-is-the-worlds-highest-earning-solo-musician-according-Forbes-731x411.jpg",
                     13847845,
                     234,
@@ -208,7 +222,8 @@ class DummyDataManager {
                         1,
                         SongStatus.FREE,
                         "Lose Yourself",
-                        "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+                        "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+                        7676
                     ),
                     Song(
                         12,
@@ -226,7 +241,7 @@ class DummyDataManager {
                         2,
                         SongStatus.PREMIUM,
                         "Save Your Tears",
-                        null
+                        null, 7879
                     ),
                     Song(
                         33,
@@ -244,7 +259,7 @@ class DummyDataManager {
                         3,
                         SongStatus.FREE,
                         "On My Way",
-                        null
+                        null, 7877
                     )
                 ),
                 58
@@ -379,7 +394,7 @@ class DummyDataManager {
                         1,
                         SongStatus.FREE,
                         "Lose Yourself",
-                        null
+                        null, 8788
                     ),
                     Song(
                         12,
@@ -397,7 +412,8 @@ class DummyDataManager {
                         2,
                         SongStatus.PREMIUM,
                         "Save Your Tears",
-                        null
+                        null,
+                        6768
                     ),
                     Song(
                         33,
@@ -415,7 +431,8 @@ class DummyDataManager {
                         3,
                         SongStatus.PREMIUM,
                         "On My Way",
-                        null
+                        null,
+                        7879
                     ),
                     Song(
                         5,
@@ -433,7 +450,8 @@ class DummyDataManager {
                         4,
                         SongStatus.FREE,
                         "We Don't Talk Anymore",
-                        "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+                        "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+                        7879
                     ),
                     Song(
                         5,
@@ -451,7 +469,8 @@ class DummyDataManager {
                         5,
                         SongStatus.FREE,
                         "Let Me Down Slowly",
-                        "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+                        "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+                        98778
                     ),
                     Song(
                         5,
@@ -469,7 +488,8 @@ class DummyDataManager {
                         6,
                         SongStatus.FREE,
                         "On The Floor",
-                        "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+                        "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+                        67568
                     ),
                     Song(
                         5,
@@ -487,7 +507,8 @@ class DummyDataManager {
                         7,
                         SongStatus.FREE,
                         "Love Nwantiti",
-                        "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+                        "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+                        8989
                     ),
                     Song(
                         5,
@@ -505,7 +526,8 @@ class DummyDataManager {
                         8,
                         SongStatus.FREE,
                         "See You Again",
-                        "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+                        "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+                        9099
                     ),
                     Song(
                         5,
@@ -523,7 +545,8 @@ class DummyDataManager {
                         9,
                         SongStatus.FREE,
                         "Despacito",
-                        "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+                        "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+                        7890
                     ),
                     Song(
                         5,
@@ -541,7 +564,8 @@ class DummyDataManager {
                         10,
                         SongStatus.FREE,
                         "Shape Of You",
-                        "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+                        "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+                        67778
                     ),
                     Song(
                         5,
@@ -559,7 +583,8 @@ class DummyDataManager {
                         11,
                         SongStatus.FREE,
                         "Solo",
-                        "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+                        "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+                        4545
                     ),
                     Song(
                         5,
@@ -577,7 +602,8 @@ class DummyDataManager {
                         12,
                         SongStatus.FREE,
                         "Cheap Thrills",
-                        "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+                        "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+                        6666
                     )
                 )
             )

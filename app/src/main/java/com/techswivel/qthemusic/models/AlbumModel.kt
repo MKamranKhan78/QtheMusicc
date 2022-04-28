@@ -6,7 +6,7 @@ data class AlbumModel(
     @SerializedName("albumCoverImageURL")
     val albumCoverImageURL: String,
     @SerializedName("albumPrice")
-    val albumPrice: Int,
+    var albumPrice: Int?,
     @SerializedName("albumTitle")
     val albumTitle: String,
     @SerializedName("cardPrefix")
@@ -16,7 +16,7 @@ data class AlbumModel(
     @SerializedName("timeOfPurchased")
     val timeOfPurchased: Int,
     @SerializedName("totalSongs")
-    val totalSongs: Int,
+    var totalSongs: Int?,
     @SerializedName("typeOfTransection")
     val typeOfTransection: String
 )
