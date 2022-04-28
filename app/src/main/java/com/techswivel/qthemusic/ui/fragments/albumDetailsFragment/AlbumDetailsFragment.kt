@@ -79,6 +79,7 @@ class AlbumDetailsFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.Cal
         when (view.id) {
             R.id.rl_play_crown -> {
                 val song = data as Song
+
                 val unixTime = System.currentTimeMillis() / 1000L
                 song.recentPlay = unixTime
 
@@ -89,9 +90,7 @@ class AlbumDetailsFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.Cal
                     } catch (e: Exception) {
                         Log.d(TAG, "exeception is ${e.message}")
                     }
-
                 }
-
             }
         }
     }

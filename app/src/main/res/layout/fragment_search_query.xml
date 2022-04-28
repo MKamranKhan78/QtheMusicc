@@ -96,15 +96,33 @@
             </LinearLayout>
         </com.facebook.shimmer.ShimmerFrameLayout>
 
+        <TextView
+            android:id="@+id/btn_all_songs"
+            android:layout_width="@dimen/_50dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_14dp"
+            android:background="@drawable/shape_bg_your_interest_recview"
+            android:fontFamily="@font/manrope_bold"
+            android:paddingStart="@dimen/_16dp"
+            android:paddingTop="@dimen/_7dp"
+            android:paddingEnd="@dimen/_16dp"
+            android:paddingBottom="@dimen/_7dp"
+            android:text="@string/all_songs"
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/_12sp"
+            android:visibility="invisible"
+            app:layout_constraintStart_toStartOf="@id/search_layout"
+            app:layout_constraintTop_toBottomOf="@id/search_layout" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_languages"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_16dp"
             android:visibility="visible"
-            app:layout_constraintBottom_toTopOf="@id/recycler_view_search"
-            app:layout_constraintStart_toStartOf="@id/search_layout"
-            app:layout_constraintTop_toBottomOf="@id/search_layout"
+            android:layout_marginStart="@dimen/_8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_all_songs"
+            app:layout_constraintStart_toEndOf="@+id/btn_all_songs"
+            app:layout_constraintTop_toTopOf="@+id/btn_all_songs"
 
             />
 

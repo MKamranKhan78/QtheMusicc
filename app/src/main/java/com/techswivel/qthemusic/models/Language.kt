@@ -1,5 +1,6 @@
 package com.techswivel.qthemusic.models
 
+import android.os.Parcelable
 import androidx.databinding.BaseObservable
 import androidx.databinding.Bindable
 import androidx.databinding.ObservableField
@@ -7,8 +8,9 @@ import androidx.room.Ignore
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import com.techswivel.qthemusic.BR
-import java.io.Serializable
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class Language(
     @Expose
     @SerializedName("languageId")
@@ -17,17 +19,18 @@ data class Language(
     @SerializedName("languageTitle")
     val languageTitle: String,
 
-    ) : BaseObservable(), Serializable {
+    ) : BaseObservable(), Parcelable {
+
     @Ignore
     private var mSelectedButtonVisibility: ObservableField<Boolean>? = null
 
     @Bindable
-    fun getSelectedButtonVisibility(): ObservableField<Boolean>? {
+    fun getSelectedViewBackground(): ObservableField<Boolean>? {
         return mSelectedButtonVisibility
     }
 
-    fun setDownloadButtonVisibility(tickVisibility: ObservableField<Boolean>) {
+    fun setDownloadSelectedViewBackground(tickVisibility: ObservableField<Boolean>) {
         this.mSelectedButtonVisibility = tickVisibility
-        notifyPropertyChanged(BR.selectedButtonVisibility)
+        notifyPropertyChanged(BR.selectedViewBackground)
     }
 }

@@ -15,7 +15,7 @@ abstract class ArtistDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract suspend fun insertArtist(artist: Artist)
 
-    @Query("DELETE FROM Artist WHERE ROWID IN (SELECT ROWID FROM Artist ORDER BY ROWID DESC LIMIT -1 OFFSET 5)")
+    @Query("DELETE FROM Artist WHERE recentPlay IN (SELECT recentPlay FROM Artist ORDER BY recentPlay DESC LIMIT -1 OFFSET 5)")
     abstract suspend fun deleteArtistIfListExceedsFromFive()
 
     @Query("delete from Artist")

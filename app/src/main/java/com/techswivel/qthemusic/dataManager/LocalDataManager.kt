@@ -36,10 +36,6 @@ object LocalDataManager : BaseDataManager(), LocalDataManagerImp {
         }
     }
 
-    override fun getDatabaseInstance(): AppRoomDatabase {
-        return getRoomInstance()
-    }
-
     override fun getRecentPlayedSongs(): LiveData<List<Song>> {
         return getRoomInstance().mSongsDao().getRecentPlayedSongs()
     }

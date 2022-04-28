@@ -31,27 +31,17 @@
             android:fontFamily="@font/manrope_bold"
             android:paddingStart="@dimen/_16dp"
             android:paddingTop="@dimen/_7dp"
-            android:background="@drawable/shape_bg_your_interest_recview"
+            android:background="@{obj.selectedViewBackground ? @drawable/shape_bg_your_interest_selected:@drawable/shape_bg_your_interest_recview}"
             android:paddingEnd="@dimen/_16dp"
             android:paddingBottom="@dimen/_7dp"
             android:text="@{obj.languageTitle}"
             android:textColor="@color/color_white"
             android:textSize="@dimen/_12sp"
-            android:backgroundTint="@{obj.getSelectedButtonVisibility}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="UnusedAttribute" />
 
 
-        <View
-            android:layout_width="0dp"
-            android:layout_height="@dimen/_0dp"
-
-            android:background="@drawable/shape_bg_your_interest_selected"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_recview_languages_tittle"
-            app:layout_constraintEnd_toEndOf="@+id/tv_recview_languages_tittle"
-            app:layout_constraintStart_toStartOf="@+id/tv_recview_languages_tittle"
-            app:layout_constraintTop_toTopOf="@+id/tv_recview_languages_tittle" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

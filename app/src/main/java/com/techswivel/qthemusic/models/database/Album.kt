@@ -22,7 +22,6 @@ data class Album(
     @PrimaryKey
     @ColumnInfo(name = "albumId")
     var albumId: Int?,
-
     @SerializedName("albumStatus")
     @ColumnInfo(name = "albumStatus")
     @Expose

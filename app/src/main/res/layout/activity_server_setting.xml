@@ -99,6 +99,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
         android:text="song"
+        android:visibility="invisible"
         android:textColor="@color/color_black"
         app:layout_constraintBottom_toTopOf="@+id/buttonCrash"
         app:layout_constraintEnd_toStartOf="@+id/add_album"
@@ -111,7 +112,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="35dp"
         android:layout_marginBottom="17dp"
-
+        android:visibility="invisible"
         android:text="delete"
         android:textColor="@color/color_black"
         app:layout_constraintBottom_toTopOf="@+id/add_song"

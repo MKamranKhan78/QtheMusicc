@@ -117,7 +117,7 @@
             android:text="@string/play_all_songs"
             android:textColor="@color/color_white"
             android:textSize="@dimen/_14sp"
-            android:visibility="@{obj.albumData.albumStatus==albumStatus.FREE? View.VISIBLE : View.GONE}"
+            android:visibility="@{obj.albumData.albumStatus==albumStatus.FREE? View.VISIBLE : View.INVISIBLE}"
             app:layout_constraintBottom_toBottomOf="@+id/iv_background_album_details"
             app:layout_constraintEnd_toEndOf="@+id/iv_small_album_details"
             app:layout_constraintStart_toStartOf="@+id/iv_small_album_details" />
@@ -126,11 +126,11 @@
             android:id="@+id/premium_layout_main"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="@{obj.albumData.albumStatus==albumStatus.PREMIUM? View.VISIBLE : View.GONE}"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_play_all_songs"
+            android:layout_marginBottom="@dimen/_20dp"
+            android:visibility="@{obj.albumData.albumStatus==albumStatus.PREMIUM? View.VISIBLE : View.INVISIBLE}"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/tv_play_all_songs">
+            app:layout_constraintBottom_toBottomOf="@+id/iv_background_album_details"
+            app:layout_constraintStart_toStartOf="parent">
 
             <include
                 android:id="@+id/premium_layout"

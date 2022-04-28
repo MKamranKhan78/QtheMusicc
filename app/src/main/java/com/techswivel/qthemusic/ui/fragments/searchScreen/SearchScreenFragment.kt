@@ -13,9 +13,11 @@ import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.constant.Constants
 import com.techswivel.qthemusic.customData.adapter.RecyclerViewAdapter
 import com.techswivel.qthemusic.customData.enums.AdapterType
+import com.techswivel.qthemusic.customData.enums.AlbumStatus
 import com.techswivel.qthemusic.customData.enums.RecommendedSongsType
 import com.techswivel.qthemusic.databinding.FragmentSearchScreenBinding
 import com.techswivel.qthemusic.models.database.Album
+import com.techswivel.qthemusic.models.database.Artist
 import com.techswivel.qthemusic.ui.base.RecyclerViewBaseFragment
 import com.techswivel.qthemusic.ui.fragments.albumDetailsFragment.AlbumDetailsFragment
 import com.techswivel.qthemusic.ui.fragments.searchQueryFragment.SearchQueryFragment
@@ -54,6 +56,8 @@ class SearchScreenFragment : RecyclerViewBaseFragment() {
         callObservers()
         setCurrentUpRecyclerview(mViewModel.selectedTab)
         setListeners()
+        setDataInAlbum()
+        setDataInArtist()
     }
 
     override fun onDestroy() {
@@ -151,6 +155,7 @@ class SearchScreenFragment : RecyclerViewBaseFragment() {
 
         mBinding.btnAlbums.setOnClickListener {
             mViewModel.selectedTab = RecommendedSongsType.ALBUM
+            deleteItemFromDatabaseIfListExceeds(mViewModel.selectedTab)
             setCurrentUpRecyclerview(mViewModel.selectedTab)
             updateSelectedTabBackground(
                 mBinding.btnAlbums,
@@ -161,6 +166,7 @@ class SearchScreenFragment : RecyclerViewBaseFragment() {
 
         mBinding.btnArtists.setOnClickListener {
             mViewModel.selectedTab = RecommendedSongsType.ARTIST
+            deleteItemFromDatabaseIfListExceeds(mViewModel.selectedTab)
             setCurrentUpRecyclerview(mViewModel.selectedTab)
             updateSelectedTabBackground(
                 mBinding.btnArtists,
@@ -293,5 +299,75 @@ class SearchScreenFragment : RecyclerViewBaseFragment() {
 
     companion object {
         private val TAG = "SearchScreenFragment"
+    }
+
+    private fun setDataInAlbum() {
+        val unixTime = System.currentTimeMillis() / 1000L
+        val album = Album(
+            "https://upload.wikimedia.org/wikipedia/commons/0/06/Eminem_performing_on_April_2013_%28cropped%29.jpg",
+            1, AlbumStatus.FREE, "The Weeknd", 23,
+            unixTime
+        )
+        val album2 = Album(
+
+            "https://www.rocktotal.com/wp-content/uploads/2021/07/bon-jovi-its-my-life.png",
+            2, AlbumStatus.PREMIUM, "Pain", 9,
+            unixTime
+        )
+        val album3 = Album(
+            "https://cdn.smehost.net/rcarecordscom-usrcaprod/wp-content/uploads/2019/04/alanwalkeromwvic.jpg",
+            3, AlbumStatus.FREE, "Risk It All", 15,
+            unixTime
+        )
+        val album4 = Album(
+            "https://files.betamax.raywenderlich.com/attachments/collections/265/493f4504-b5ca-4c28-94f1-1e2810b68d04.png",
+            4, AlbumStatus.PREMIUM, "Risk It All", 15,
+            unixTime
+        )
+        val album5 = Album(
+            "https://upload.wikimedia.org/wikipedia/en/f/f6/Sky_-_Love_Song_single_cover.jpg",
+            5, AlbumStatus.FREE, "Risk It All", 15,
+            unixTime
+        )
+        mViewModel.mLocalDataManager.insertRecentPlayedAlbumToDatabase(album)
+        mViewModel.mLocalDataManager.insertRecentPlayedAlbumToDatabase(album2)
+        mViewModel.mLocalDataManager.insertRecentPlayedAlbumToDatabase(album3)
+        mViewModel.mLocalDataManager.insertRecentPlayedAlbumToDatabase(album4)
+        mViewModel.mLocalDataManager.insertRecentPlayedAlbumToDatabase(album5)
+    }
+
+    private fun setDataInArtist() {
+        val unixTime = System.currentTimeMillis() / 1000L
+        val artist = Artist(
+            "https://bowlyrics.com/wp-content/uploads/2018/07/ED-Sheeran-is-the-worlds-highest-earning-solo-musician-according-Forbes-731x411.jpg",
+            1, "Ed Sheeran",
+            unixTime
+        )
+        val artist2 = Artist(
+
+            "https://assets.bluethumb.com.au/media/image/fill/766/766/eyJpZCI6InVwbG9hZHMvbGlzdGluZy8zNDU2NTQvZGFuZS1pa2luLWZhbWUtYmx1ZXRodW1iLWE2YWYuanBnIiwic3RvcmFnZSI6InN0b3JlIiwibWV0YWRhdGEiOnsiZmlsZW5hbWUiOiJkYW5lLWlraW4tZmFtZS1ibHVldGh1bWItYTZhZi5qcGciLCJtaW1lX3R5cGUiOm51bGx9fQ?signature=798375b6cfc354d89abaa74cab9379008e641123895397a97daf0728604361c8",
+            2, "Selena gomez",
+            unixTime
+        )
+        val artist3 = Artist(
+            "https://www.rollingstone.com/wp-content/uploads/2020/01/eminem-review.jpg",
+            3, "Eminem",
+            unixTime
+        )
+        val artist4 = Artist(
+            "https://musicalsafar.com/wp-content/uploads/2021/08/20_05_2021-arijit_singh_21660518.jpg",
+            4, "Arijit Sing",
+            unixTime
+        )
+        val artist5 = Artist(
+            "https://st1.bollywoodlife.com/wp-content/uploads/2020/06/FotoJet208.jpg",
+            5, "Atif Aslam",
+            unixTime
+        )
+        mViewModel.mLocalDataManager.insertRecentPlayedArtistToDatabase(artist)
+        mViewModel.mLocalDataManager.insertRecentPlayedArtistToDatabase(artist2)
+        mViewModel.mLocalDataManager.insertRecentPlayedArtistToDatabase(artist3)
+        mViewModel.mLocalDataManager.insertRecentPlayedArtistToDatabase(artist4)
+        mViewModel.mLocalDataManager.insertRecentPlayedArtistToDatabase(artist5)
     }
 }

@@ -25,7 +25,6 @@ import com.techswivel.qthemusic.models.QueryRequestModel
 import com.techswivel.qthemusic.models.ResponseModel
 import com.techswivel.qthemusic.source.remote.networkViewModel.SongAndArtistsViewModel
 import com.techswivel.qthemusic.ui.base.RecyclerViewBaseFragment
-import com.techswivel.qthemusic.ui.base.TwoWayBindingForBg
 import com.techswivel.qthemusic.utils.DialogUtils
 import com.techswivel.qthemusic.utils.Log
 import com.techswivel.qthemusic.utils.Utilities
@@ -38,11 +37,11 @@ class SearchQueryFragment : RecyclerViewBaseFragment(), BaseInterface {
 
     private lateinit var mBinding: FragmentSearchQueryBinding
     private lateinit var mSongsAndArtistsViewModel: SongAndArtistsViewModel
-    private lateinit var mTwoWayBindingViewModel: TwoWayBindingForBg
     private lateinit var mViewModel: SearchQueryViewModel
     private lateinit var mSearchAdapter: RecyclerViewAdapter
     private lateinit var mLanguagesAdapter: RecyclerViewAdapter
     private var lastSelectedView: View? = null
+    var lastLanguageId = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,6 +63,7 @@ class SearchQueryFragment : RecyclerViewBaseFragment(), BaseInterface {
         super.onViewCreated(view, savedInstanceState)
         initialization()
         setListeners()
+
         setObserverForViewModel()
     }
 
@@ -105,44 +105,27 @@ class SearchQueryFragment : RecyclerViewBaseFragment(), BaseInterface {
 
                         override fun onItemClick(data: Any?, position: Int) {
                             super.onItemClick(data, position)
-                            Utilities.showToast(requireContext(), "clicked")
+                            updateSelectedTabBackground(R.drawable.shape_bg_your_interest_recview)
                             val mLanguages = data as Language
-                            for (item in mViewModel.searchedLanguagesDataList) {
-
+                            lastLanguageId = mLanguages.languageId
+                            for (i in mViewModel.searchedLanguagesDataList.indices) {
+                                mViewModel.searchedLanguagesDataList[i].setDownloadSelectedViewBackground(
+                                    ObservableField(false)
+                                )
+                                mViewModel.searchedLanguagesForRecyclerView.add(mViewModel.searchedLanguagesDataList[i])
                             }
+                            mLanguages.setDownloadSelectedViewBackground(ObservableField(true))
 
+                            createRequestOrCallApi(
+                                mViewModel.queryToSearch,
+                                mLanguages.languageId
+                            )
                         }
 
                         override fun onViewClicked(view: View, data: Any?) {
-                            val mLanguages = data as Language
-                            mLanguages.setDownloadButtonVisibility(ObservableField(true))
 
-                            Log.d(TAG, "Languages  $mLanguages")
-                            //   lastSelectedView?.setBackgroundResource(R.drawable.shape_bg_your_interest_recview)
-                            lastSelectedView = view
-                            //   view.setBackgroundResource(R.drawable.shape_bg_your_interest_selected)
-                            mViewModel.languageTittle = mLanguages.languageTitle
-                            mViewModel.languagesId = mLanguages.languageId
-                            if (mViewModel.queryToSearch.isNotEmpty()) {
-                                if (mLanguages.languageId == 0) {
-                                    createRequestOrCallApi(mViewModel.queryToSearch, null)
-                                    Log.d(
-                                        TAG,
-                                        "if request fort api ${mViewModel.queryToSearch} id ${mViewModel.languagesId}"
-                                    )
-                                } else {
-                                    createRequestOrCallApi(
-                                        mViewModel.queryToSearch,
-                                        mLanguages.languageId
-                                    )
-                                    Log.d(
-                                        TAG,
-                                        " else request fort api ${mViewModel.queryToSearch} id ${mViewModel.languagesId}"
-                                    )
-                                }
-                            }
                         }
-                    }, mViewModel.searchedLanguagesDataList)
+                    }, mViewModel.searchedLanguagesForRecyclerView)
 
                 mLanguagesAdapter
             }
@@ -166,7 +149,6 @@ class SearchQueryFragment : RecyclerViewBaseFragment(), BaseInterface {
     private fun initViewModel() {
         mViewModel = ViewModelProvider(this).get(SearchQueryViewModel::class.java)
         mSongsAndArtistsViewModel = ViewModelProvider(this).get(SongAndArtistsViewModel::class.java)
-        mTwoWayBindingViewModel = ViewModelProvider(this).get(TwoWayBindingForBg::class.java)
     }
 
     private fun initialization() {
@@ -198,10 +180,10 @@ class SearchQueryFragment : RecyclerViewBaseFragment(), BaseInterface {
 
             override fun afterTextChanged(s: Editable) {
                 if (s.toString().isEmpty()) {
+                    mBinding.btnAllSongs.visibility = View.INVISIBLE
                     mBinding.recyclerLanguages.visibility = View.INVISIBLE
                     mBinding.recyclerViewSearch.visibility = View.INVISIBLE
                 }
-
             }
         })
 
@@ -215,6 +197,19 @@ class SearchQueryFragment : RecyclerViewBaseFragment(), BaseInterface {
             }
             false
         })
+
+
+        mBinding.btnAllSongs.setOnClickListener {
+            lastLanguageId = 0
+            updateSelectedTabBackground(R.drawable.shape_bg_your_interest_selected)
+            if (mViewModel.queryToSearch.isNotEmpty()) {
+                createRequestOrCallApi(mViewModel.queryToSearch, null)
+            }
+        }
+    }
+
+    private fun updateSelectedTabBackground(background: Int) {
+        mBinding.btnAllSongs.setBackgroundResource(background)
     }
 
     private fun createRequestOrCallApi(query: String?, languagesId: Int?) {
@@ -235,19 +230,34 @@ class SearchQueryFragment : RecyclerViewBaseFragment(), BaseInterface {
                     hideProgressBar()
                     mViewModel.searchedSongsDataList.clear()
                     mViewModel.searchedLanguagesDataList.clear()
+                    mViewModel.searchedLanguagesForRecyclerView.clear()
                     mBinding.recyclerLanguages.visibility = View.VISIBLE
                     mBinding.recyclerViewSearch.visibility = View.VISIBLE
                     val data = it.t as ResponseModel
                     val mySongs = data.data.songs
                     val myLanguages = data.data.Languages
-
                     if (myLanguages != null) {
+                        mBinding.btnAllSongs.visibility = View.VISIBLE
                         for (items in myLanguages) {
-                            items.setDownloadButtonVisibility(ObservableField<Boolean>(false))
-                            mViewModel.searchedLanguagesDataList.add(items)
+                            val currentLanguageId = items.languageId
+                            if (currentLanguageId == lastLanguageId) {
+                                items.setDownloadSelectedViewBackground(
+                                    ObservableField<Boolean>(
+                                        true
+                                    )
+                                )
+                                mViewModel.searchedLanguagesDataList.add(items)
+                                mViewModel.searchedLanguagesForRecyclerView.add(items)
+                            } else {
+                                items.setDownloadSelectedViewBackground(
+                                    ObservableField<Boolean>(
+                                        false
+                                    )
+                                )
+                                mViewModel.searchedLanguagesDataList.add(items)
+                                mViewModel.searchedLanguagesForRecyclerView.add(items)
+                            }
                         }
-                        mViewModel.searchedLanguagesDataList.add(0, Language(0, "All"))
-                        mViewModel.searchedLanguagesDataList.addAll(myLanguages)
                         mLanguagesAdapter.notifyDataSetChanged()
                     }
                     if (mySongs != null) {
