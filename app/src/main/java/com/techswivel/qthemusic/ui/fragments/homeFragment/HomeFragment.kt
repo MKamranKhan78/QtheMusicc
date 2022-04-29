@@ -102,7 +102,14 @@ class HomeFragment : RecyclerViewBaseFragment() {
 
                         override fun onItemClick(data: Any?, position: Int) {
                             super.onItemClick(data, position)
-
+                            val mAlbum = data as Album
+                            val bundle = Bundle()
+                            bundle.putParcelable(CommonKeys.KEY_ALBUM_DETAILS, mAlbum)
+                            ActivityUtils.launchFragment(
+                                requireContext(),
+                                AlbumDetailsFragment::class.java.name,
+                                bundle
+                            )
                         }
 
                         override fun onViewClicked(view: View, data: Any?) {

@@ -17,12 +17,10 @@ import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.customData.adapter.RecyclerViewAdapter
 import com.techswivel.qthemusic.customData.enums.AdapterType
 import com.techswivel.qthemusic.customData.enums.NetworkStatus
+import com.techswivel.qthemusic.customData.enums.ResponseType
 import com.techswivel.qthemusic.customData.interfaces.BaseInterface
 import com.techswivel.qthemusic.databinding.FragmentSearchQueryBinding
-import com.techswivel.qthemusic.models.ErrorResponse
-import com.techswivel.qthemusic.models.Language
-import com.techswivel.qthemusic.models.QueryRequestModel
-import com.techswivel.qthemusic.models.ResponseModel
+import com.techswivel.qthemusic.models.*
 import com.techswivel.qthemusic.source.remote.networkViewModel.SongAndArtistsViewModel
 import com.techswivel.qthemusic.ui.base.RecyclerViewBaseFragment
 import com.techswivel.qthemusic.utils.DialogUtils
@@ -31,16 +29,13 @@ import com.techswivel.qthemusic.utils.Utilities
 
 
 class SearchQueryFragment : RecyclerViewBaseFragment(), BaseInterface {
-    companion object {
-        private val TAG = "SearchQueryFragment"
-    }
+
 
     private lateinit var mBinding: FragmentSearchQueryBinding
     private lateinit var mSongsAndArtistsViewModel: SongAndArtistsViewModel
     private lateinit var mViewModel: SearchQueryViewModel
     private lateinit var mSearchAdapter: RecyclerViewAdapter
     private lateinit var mLanguagesAdapter: RecyclerViewAdapter
-    private var lastSelectedView: View? = null
     var lastLanguageId = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,8 +58,8 @@ class SearchQueryFragment : RecyclerViewBaseFragment(), BaseInterface {
         super.onViewCreated(view, savedInstanceState)
         initialization()
         setListeners()
-
         setObserverForViewModel()
+        updateSelectedTabBackground(R.drawable.shape_bg_your_interest_selected)
     }
 
     override fun onDestroy() {
@@ -78,7 +73,15 @@ class SearchQueryFragment : RecyclerViewBaseFragment(), BaseInterface {
                 mSearchAdapter =
                     RecyclerViewAdapter(object : RecyclerViewAdapter.CallBack {
                         override fun inflateLayoutFromId(position: Int, data: Any?): Int {
-                            return R.layout.rec_view_searched_layout
+                            val myData = data as SearchedSongs
+                            if (myData.type == ResponseType.SONG.name) {
+                                return R.layout.rec_view_searched_layout
+                            } else if (myData.type == ResponseType.ARTIST.name) {
+                                return R.layout.recview_searched_artist
+                            } else {
+                                return R.layout.recview_searched_album
+                            }
+
                         }
 
                         override fun onNoDataFound() {
@@ -114,6 +117,7 @@ class SearchQueryFragment : RecyclerViewBaseFragment(), BaseInterface {
                                 )
                                 mViewModel.searchedLanguagesForRecyclerView.add(mViewModel.searchedLanguagesDataList[i])
                             }
+
                             mLanguages.setDownloadSelectedViewBackground(ObservableField(true))
 
                             createRequestOrCallApi(
@@ -235,6 +239,7 @@ class SearchQueryFragment : RecyclerViewBaseFragment(), BaseInterface {
                     mBinding.recyclerViewSearch.visibility = View.VISIBLE
                     val data = it.t as ResponseModel
                     val mySongs = data.data.songs
+                    Log.d(TAG, "data is $mySongs")
                     val myLanguages = data.data.Languages
                     if (myLanguages != null) {
                         mBinding.btnAllSongs.visibility = View.VISIBLE
@@ -285,5 +290,9 @@ class SearchQueryFragment : RecyclerViewBaseFragment(), BaseInterface {
                 }
             }
         })
+    }
+
+    companion object {
+        private val TAG = "SearchQueryFragment"
     }
 }

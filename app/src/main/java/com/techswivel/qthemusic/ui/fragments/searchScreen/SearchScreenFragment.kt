@@ -6,18 +6,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
+import com.techswivel.dfaktfahrerapp.ui.fragments.underDevelopmentMessageFragment.UnderDevelopmentMessageFragment
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.constant.Constants
 import com.techswivel.qthemusic.customData.adapter.RecyclerViewAdapter
-import com.techswivel.qthemusic.customData.enums.AdapterType
-import com.techswivel.qthemusic.customData.enums.AlbumStatus
-import com.techswivel.qthemusic.customData.enums.RecommendedSongsType
+import com.techswivel.qthemusic.customData.enums.*
 import com.techswivel.qthemusic.databinding.FragmentSearchScreenBinding
 import com.techswivel.qthemusic.models.database.Album
 import com.techswivel.qthemusic.models.database.Artist
+import com.techswivel.qthemusic.models.database.Song
+import com.techswivel.qthemusic.ui.activities.playerActivity.PlayerActivity
 import com.techswivel.qthemusic.ui.base.RecyclerViewBaseFragment
 import com.techswivel.qthemusic.ui.fragments.albumDetailsFragment.AlbumDetailsFragment
 import com.techswivel.qthemusic.ui.fragments.searchQueryFragment.SearchQueryFragment
@@ -79,7 +81,45 @@ class SearchScreenFragment : RecyclerViewBaseFragment() {
 
                     override fun onItemClick(data: Any?, position: Int) {
                         super.onItemClick(data, position)
+                        val song = data as Song
+                        val unixTime = System.currentTimeMillis() / 1000L
+                        song.recentPlay = unixTime
+                        runBlocking {
+                            try {
+                                mViewModel.mLocalDataManager.insertRecentPlayedSongToDatabase(song)
 
+                            } catch (e: Exception) {
+                                Log.d(TAG, "exeception is ${e.message}")
+                            }
+                        }
+                        if (song.songStatus == SongStatus.PREMIUM) {
+                            Toast.makeText(
+                                requireContext(),
+                                getString(R.string.str_underdevelopment_feature),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        } else {
+                            val bundle = Bundle().apply {
+                                putParcelable(CommonKeys.KEY_DATA_MODEL, song)
+                                putParcelableArrayList(
+                                    CommonKeys.KEY_SONGS_LIST,
+                                    mViewModel.recentPlayedSongsList as ArrayList<out Song>
+                                )
+                                putString(
+                                    CommonKeys.KEY_SONG_TYPE,
+                                    SongType.RECOMMENDED.value
+                                )
+                            }
+                            ActivityUtils.startNewActivity(
+                                requireActivity(),
+                                PlayerActivity::class.java,
+                                bundle
+                            )
+                            requireActivity().overridePendingTransition(
+                                R.anim.bottom_up,
+                                R.anim.null_transition
+                            )
+                        }
                     }
 
                     override fun onViewClicked(view: View, data: Any?) {
@@ -129,6 +169,10 @@ class SearchScreenFragment : RecyclerViewBaseFragment() {
 
                     override fun onItemClick(data: Any?, position: Int) {
                         super.onItemClick(data, position)
+                        ActivityUtils.launchFragment(
+                            requireContext(),
+                            UnderDevelopmentMessageFragment::class.java.name
+                        )
 
                     }
 
@@ -300,7 +344,6 @@ class SearchScreenFragment : RecyclerViewBaseFragment() {
     companion object {
         private val TAG = "SearchScreenFragment"
     }
-
     private fun setDataInAlbum() {
         val unixTime = System.currentTimeMillis() / 1000L
         val album = Album(
@@ -370,4 +413,5 @@ class SearchScreenFragment : RecyclerViewBaseFragment() {
         mViewModel.mLocalDataManager.insertRecentPlayedArtistToDatabase(artist4)
         mViewModel.mLocalDataManager.insertRecentPlayedArtistToDatabase(artist5)
     }
+
 }

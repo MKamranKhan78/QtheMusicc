@@ -26,18 +26,18 @@
         android:layout_marginBottom="@dimen/_10dp">
 
         <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/shapeableImageView"
+            android:id="@+id/shapeableImageView_artist"
             android:layout_width="@dimen/_60dp"
             android:layout_height="@dimen/_60dp"
             android:layout_marginStart="@dimen/_24dp"
             android:scaleType="fitXY"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:setImageViewImage="@{obj.coverImageUrl}"
-            app:shapeAppearanceOverlay="@style/circleImageViewRecentPlayView" />
+            app:setImageViewImage="@{obj.artistCoverImageUrl}"
+            app:shapeAppearanceOverlay="@style/circleImageView" />
 
         <TextView
-            android:id="@+id/tv_search_song_tittle_"
+            android:id="@+id/tv_search_artist_tittle_"
             android:layout_width="@dimen/_0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_24dp"
@@ -46,24 +46,24 @@
             android:text="@{obj.songTitle}"
             android:textColor="@color/color_white"
             android:textSize="@dimen/_14sp"
-            app:layout_constraintBottom_toTopOf="@+id/tv_search_song_duration_"
+            app:layout_constraintBottom_toTopOf="@+id/tv_search_artist_name_"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/shapeableImageView"
-            app:layout_constraintTop_toTopOf="@+id/shapeableImageView" />
+            app:layout_constraintStart_toEndOf="@+id/shapeableImageView_artist"
+            app:layout_constraintTop_toTopOf="@+id/shapeableImageView_artist" />
 
         <TextView
-            android:id="@+id/tv_search_song_duration_"
-            setSongTime="@{obj.songDuration}"
+            android:id="@+id/tv_search_artist_name_"
             android:layout_width="@dimen/_0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:fontFamily="@font/manrope_regular"
+            android:text="@{obj.type}"
             android:textColor="@color/color_light_grey"
             android:textSize="@dimen/_14sp"
-            app:layout_constraintBottom_toBottomOf="@+id/shapeableImageView"
-            app:layout_constraintEnd_toEndOf="@+id/tv_search_song_tittle_"
-            app:layout_constraintStart_toStartOf="@+id/tv_search_song_tittle_"
-            app:layout_constraintTop_toBottomOf="@+id/tv_search_song_tittle_" />
+            app:layout_constraintBottom_toBottomOf="@+id/shapeableImageView_artist"
+            app:layout_constraintEnd_toEndOf="@+id/tv_search_artist_tittle_"
+            app:layout_constraintStart_toStartOf="@+id/tv_search_artist_tittle_"
+            app:layout_constraintTop_toBottomOf="@+id/tv_search_artist_tittle_" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

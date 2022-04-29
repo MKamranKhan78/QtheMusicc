@@ -2,7 +2,6 @@ package com.techswivel.qthemusic.models
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
-import com.techswivel.qthemusic.models.database.Song
 
 class MyDataClass(
     @Expose
@@ -20,7 +19,7 @@ class MyDataClass(
     val Languages: List<Language>?,
     @Expose
     @SerializedName("songs")
-    val songs: List<Song>?
+    val songs: List<SearchedSongs>?,
 ) {
     constructor() : this(
         null,

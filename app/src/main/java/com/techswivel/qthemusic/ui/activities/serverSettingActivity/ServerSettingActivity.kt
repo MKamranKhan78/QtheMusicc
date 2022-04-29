@@ -9,10 +9,12 @@ import com.techswivel.qthemusic.BuildConfig
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.constant.Constants
 import com.techswivel.qthemusic.customData.enums.AlbumStatus
+import com.techswivel.qthemusic.customData.enums.SongStatus
 import com.techswivel.qthemusic.databinding.ActivityServerSettingBinding
 import com.techswivel.qthemusic.helper.RemoteConfigrations.RemoteConfigSharePrefrence
 import com.techswivel.qthemusic.models.database.Album
 import com.techswivel.qthemusic.models.database.Artist
+import com.techswivel.qthemusic.models.database.Song
 import com.techswivel.qthemusic.ui.base.BaseActivity
 import com.techswivel.qthemusic.utils.Log
 import com.techswivel.qthemusic.utils.Utilities
@@ -222,7 +224,60 @@ class ServerSettingActivity : BaseActivity() {
                 insertArtist(artist7)
             }
         }
-
+        mBinding.addSong.setOnClickListener {
+            mViewModel.count++
+            if (mViewModel.count == 1) {
+                val song1 = Song(
+                    1,
+                    "Risk It All",
+                    "Eminem",
+                    3,
+                    1,
+                    "https://upload.wikimedia.org/wikipedia/commons/0/06/Eminem_performing_on_April_2013_%28cropped%29.jpg",
+                    true,
+                    false,
+                    "No Lyrics Available",
+                    1,
+                    "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+                    "",
+                    "",
+                    3233,
+                    11.11f,
+                    1,
+                    SongStatus.FREE,
+                    "",
+                    "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+                    null,
+                    System.currentTimeMillis() / 1000L
+                )
+                mViewModel.mLocalDataManager.insertRecentPlayedSongToDatabase(song1)
+            } else if (mViewModel.count == 2) {
+                val song2 = Song(
+                    2,
+                    "The Weeknd",
+                    "Star Boy",
+                    31,
+                    3,
+                    "https://i.ytimg.com/vi/XXYlFuWEuKI/maxresdefault.jpg",
+                    true,
+                    false,
+                    "No Lyrics Available",
+                    2,
+                    "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3",
+                    "",
+                    "",
+                    3213,
+                    11.11f,
+                    2,
+                    SongStatus.PREMIUM,
+                    "Save Your Tears",
+                    "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+                    null,
+                    System.currentTimeMillis() / 1000L
+                )
+                mViewModel.mLocalDataManager.insertRecentPlayedSongToDatabase(song2)
+            }
+        }
     }
 
     fun insertArtist(artist: Artist) {

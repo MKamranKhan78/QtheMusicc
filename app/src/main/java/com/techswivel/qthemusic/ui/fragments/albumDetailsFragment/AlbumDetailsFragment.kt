@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
@@ -12,6 +13,7 @@ import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.customData.adapter.RecyclerViewAdapter
 import com.techswivel.qthemusic.customData.enums.AdapterType
 import com.techswivel.qthemusic.customData.enums.NetworkStatus
+import com.techswivel.qthemusic.customData.enums.SongStatus
 import com.techswivel.qthemusic.customData.enums.SongType
 import com.techswivel.qthemusic.customData.interfaces.BaseInterface
 import com.techswivel.qthemusic.databinding.FragmentAlbumDetailsBinding
@@ -21,11 +23,12 @@ import com.techswivel.qthemusic.models.SongsBodyBuilder
 import com.techswivel.qthemusic.models.database.Album
 import com.techswivel.qthemusic.models.database.Song
 import com.techswivel.qthemusic.source.remote.networkViewModel.SongAndArtistsViewModel
+import com.techswivel.qthemusic.ui.activities.playerActivity.PlayerActivity
 import com.techswivel.qthemusic.ui.base.RecyclerViewBaseFragment
+import com.techswivel.qthemusic.utils.ActivityUtils
 import com.techswivel.qthemusic.utils.CommonKeys
 import com.techswivel.qthemusic.utils.DialogUtils
 import com.techswivel.qthemusic.utils.Log
-import com.techswivel.qthemusic.utils.Utilities
 import kotlinx.coroutines.runBlocking
 
 class AlbumDetailsFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.CallBack,
@@ -79,17 +82,44 @@ class AlbumDetailsFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.Cal
         when (view.id) {
             R.id.rl_play_crown -> {
                 val song = data as Song
-
                 val unixTime = System.currentTimeMillis() / 1000L
                 song.recentPlay = unixTime
 
                 runBlocking {
                     try {
                         mViewModel.mLocalDataManager.insertRecentPlayedSongToDatabase(song)
-                        Utilities.showToast(requireContext(), "inserted")
+
                     } catch (e: Exception) {
                         Log.d(TAG, "exeception is ${e.message}")
                     }
+                }
+                if (song.songStatus == SongStatus.PREMIUM) {
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.str_underdevelopment_feature),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    val bundle = Bundle().apply {
+                        putParcelable(CommonKeys.KEY_DATA_MODEL, song)
+                        putParcelableArrayList(
+                            CommonKeys.KEY_SONGS_LIST,
+                            mViewModel.albumSongsList as ArrayList<out Song>
+                        )
+                        putString(
+                            CommonKeys.KEY_SONG_TYPE,
+                            SongType.RECOMMENDED.value
+                        )
+                    }
+                    ActivityUtils.startNewActivity(
+                        requireActivity(),
+                        PlayerActivity::class.java,
+                        bundle
+                    )
+                    requireActivity().overridePendingTransition(
+                        R.anim.bottom_up,
+                        R.anim.null_transition
+                    )
                 }
             }
         }
@@ -121,6 +151,29 @@ class AlbumDetailsFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.Cal
     private fun clickListeners() {
         mBinding.backBtnAlbum.setOnClickListener {
             requireActivity().onBackPressed()
+        }
+        mBinding.tvPlayAllSongs.setOnClickListener {
+            val bundle = Bundle().apply {
+                putParcelable(CommonKeys.KEY_DATA_MODEL, mViewModel.albumSongsList[0] as Song)
+                putParcelableArrayList(
+
+                    CommonKeys.KEY_SONGS_LIST,
+                    mViewModel.albumSongsList as ArrayList<out Song>
+                )
+                putString(
+                    CommonKeys.KEY_SONG_TYPE,
+                    SongType.RECOMMENDED.value
+                )
+            }
+            ActivityUtils.startNewActivity(
+                requireActivity(),
+                PlayerActivity::class.java,
+                bundle
+            )
+            requireActivity().overridePendingTransition(
+                R.anim.bottom_up,
+                R.anim.null_transition
+            )
         }
     }
 
@@ -188,6 +241,10 @@ class AlbumDetailsFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.Cal
     private fun bindViewModel() {
         mBinding.obj = mViewModel
         mBinding.executePendingBindings()
+    }
+
+    private fun playSongs(song: Song) {
+
     }
 
     companion object {

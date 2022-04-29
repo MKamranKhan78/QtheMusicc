@@ -132,6 +132,7 @@ object RemoteDataManager : BaseDataManager(), RemoteDataManagerImp {
         return Observable.create { observer ->
             observer.onNext(getResponseDummyData())
             observer.onComplete()
+
         }
     }
 
