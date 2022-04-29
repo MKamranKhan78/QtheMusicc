@@ -14,7 +14,7 @@ import retrofit2.Response
 
 class SongAndArtistsViewModel : BaseViewModel() {
     private var mRecommendedSongsResponse: MutableLiveData<ApiResponse> = MutableLiveData()
-
+    var mSearchedSongResponse: MutableLiveData<ApiResponse> = MutableLiveData()
     var recommendedSongsResponse: MutableLiveData<ApiResponse>
         get() = mRecommendedSongsResponse
         set(value) {
@@ -194,5 +194,36 @@ class SongAndArtistsViewModel : BaseViewModel() {
                 mSongsResponse.value = ApiResponse.complete()
             }
         })
+    }
+
+    fun getSearchedSongsFromServer(queryRequestModel: QueryRequestModel) {
+        mRemoteDataManager.getSearcherSongsList(queryRequestModel).doOnSubscribe {
+            mSearchedSongResponse.value = ApiResponse.loading()
+        }.subscribe(object : CustomObserver<Response<ResponseMain>>() {
+            override fun onSuccess(t: Response<ResponseMain>) {
+                if (t.isSuccessful) {
+                    mSearchedSongResponse.value = ApiResponse.success(t.body()?.response)
+                }
+            }
+
+            override fun onError(e: Throwable, isInternetError: Boolean, error: CustomError?) {
+                mSearchedSongResponse.value = ApiResponse.error(
+                    error?.code?.let { code ->
+                        ErrorResponse(
+                            false,
+                            error.message,
+                            code
+                        )
+                    }
+                )
+            }
+
+            override fun onRequestComplete() {
+
+            }
+
+
+        })
+
     }
 }

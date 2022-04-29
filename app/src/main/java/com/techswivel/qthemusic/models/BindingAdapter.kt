@@ -9,9 +9,9 @@ import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.techswivel.qthemusic.R
+import com.techswivel.qthemusic.utils.Utilities.roundOffDecimal
 import java.text.DateFormat
 import java.util.*
-import com.techswivel.qthemusic.utils.Utilities.roundOffDecimal
 
 object BindingAdapter {
 
@@ -73,5 +73,13 @@ object BindingAdapter {
         val seconds = duration % 60
 
         pTextView.text = String.format("%02d:%02d", minutes, seconds);
+    }
+
+    @JvmStatic
+    @BindingAdapter("setImageWithBlur")
+    fun setImageWithBlur(pImageView: ImageView, image: String) {
+        Glide.with(pImageView.context).load(image)
+            .override(20, 20)
+            .into(pImageView)
     }
 }

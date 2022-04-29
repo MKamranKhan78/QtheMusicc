@@ -17,6 +17,7 @@ interface RemoteDataManagerImp {
     fun sendOtp(authRequestModel: AuthRequestModel): Observable<Response<ResponseMain>>
     fun verifyOtpRequest(authRequestModel: AuthRequestModel): Observable<Response<ResponseMain>>
     fun setNewPassword(authRequestModel: AuthRequestModel): Observable<Response<ResponseMain>>
+    fun getSearcherSongsList(queryRequestModel: QueryRequestModel):Observable<Response<ResponseMain>>
     fun signUp(authRequestModel: AuthRequestModel): Observable<Response<ResponseMain>>
     fun saveInterest(category: List<Category?>): Observable<Response<ResponseMain>>
 

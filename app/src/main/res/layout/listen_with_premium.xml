@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_listen_with_premium">
+
+        <ImageView
+            android:id="@+id/chrome_sign_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_30dp"
+            android:layout_marginTop="@dimen/_12dp"
+            android:layout_marginBottom="@dimen/_12dp"
+            android:src="@drawable/ic_icon_awesome_crown"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/manrope_bold"
+            android:text="Listen With Premium"
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/_14sp"
+            android:layout_marginEnd="@dimen/_30dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="@dimen/_8dp"
+            app:layout_constraintBottom_toBottomOf="@id/chrome_sign_btn"
+            app:layout_constraintStart_toEndOf="@id/chrome_sign_btn"
+            app:layout_constraintTop_toTopOf="@id/chrome_sign_btn" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
