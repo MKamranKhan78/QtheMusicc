@@ -13,19 +13,21 @@ import androidx.databinding.ObservableField
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
+import com.techswivel.dfaktfahrerapp.ui.fragments.underDevelopmentMessageFragment.UnderDevelopmentMessageFragment
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.customData.adapter.RecyclerViewAdapter
 import com.techswivel.qthemusic.customData.enums.AdapterType
+import com.techswivel.qthemusic.customData.enums.AlbumStatus
 import com.techswivel.qthemusic.customData.enums.NetworkStatus
 import com.techswivel.qthemusic.customData.enums.ResponseType
 import com.techswivel.qthemusic.customData.interfaces.BaseInterface
 import com.techswivel.qthemusic.databinding.FragmentSearchQueryBinding
 import com.techswivel.qthemusic.models.*
+import com.techswivel.qthemusic.models.database.Album
 import com.techswivel.qthemusic.source.remote.networkViewModel.SongAndArtistsViewModel
 import com.techswivel.qthemusic.ui.base.RecyclerViewBaseFragment
-import com.techswivel.qthemusic.utils.DialogUtils
-import com.techswivel.qthemusic.utils.Log
-import com.techswivel.qthemusic.utils.Utilities
+import com.techswivel.qthemusic.ui.fragments.albumDetailsFragment.AlbumDetailsFragment
+import com.techswivel.qthemusic.utils.*
 
 
 class SearchQueryFragment : RecyclerViewBaseFragment(), BaseInterface {
@@ -88,7 +90,44 @@ class SearchQueryFragment : RecyclerViewBaseFragment(), BaseInterface {
                             Log.e(TAG, "No Data Found")
                         }
 
+                        override fun onItemClick(data: Any?, position: Int) {
+                            super.onItemClick(data, position)
+                            val myData = data as SearchedSongs
+                            if (myData.type == ResponseType.SONG.name) {
+                                ActivityUtils.launchFragment(
+                                    requireContext(),
+                                    UnderDevelopmentMessageFragment::class.java.name
+                                )
+
+                            } else if (myData.type == ResponseType.ARTIST.name) {
+                                ActivityUtils.launchFragment(
+                                    requireContext(),
+                                    UnderDevelopmentMessageFragment::class.java.name
+                                )
+
+                            } else {
+                                val mAlbum = data as SearchedSongs
+                                val album = Album(
+                                    mAlbum.albumCoverImageUrl,
+                                    mAlbum.albumId,
+                                    AlbumStatus.FREE,
+                                    mAlbum.albumTitle,
+                                    mAlbum.numberOfSongs,
+                                    System.currentTimeMillis() / 1000L
+                                )
+
+                                val bundle = Bundle()
+                                bundle.putParcelable(CommonKeys.KEY_ALBUM_DETAILS, album)
+                                ActivityUtils.launchFragment(
+                                    requireContext(),
+                                    AlbumDetailsFragment::class.java.name,
+                                    bundle
+                                )
+                            }
+                        }
+
                         override fun onViewClicked(view: View, data: Any?) {
+
 
                         }
                     }, mViewModel.searchedSongsDataList)
