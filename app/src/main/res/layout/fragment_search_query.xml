@@ -130,7 +130,6 @@
             android:id="@+id/sl_searched_songs"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_0dp"
-            android:layout_below="@id/tv_total_songs"
             android:padding="@dimen/_14dp"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
