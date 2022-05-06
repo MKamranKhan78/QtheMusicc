@@ -16,8 +16,8 @@ import com.techswivel.qthemusic.customData.enums.SongType
 import com.techswivel.qthemusic.customData.interfaces.BaseInterface
 import com.techswivel.qthemusic.databinding.FragmentFavoriteSongBinding
 import com.techswivel.qthemusic.models.ResponseModel
-import com.techswivel.qthemusic.models.Song
 import com.techswivel.qthemusic.models.SongsBodyBuilder
+import com.techswivel.qthemusic.models.database.Song
 import com.techswivel.qthemusic.source.remote.networkViewModel.SongAndArtistsViewModel
 import com.techswivel.qthemusic.ui.base.RecyclerViewBaseFragment
 import com.techswivel.qthemusic.utils.ActivityUtils

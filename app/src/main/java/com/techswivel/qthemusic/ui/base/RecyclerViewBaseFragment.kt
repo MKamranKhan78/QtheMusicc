@@ -105,6 +105,47 @@ abstract class RecyclerViewBaseFragment : BaseFragment() {
         }
     }
 
+
+    protected open fun setUpGridRecyclerView(
+        pRecyclerView: RecyclerView,
+        numColums: Int,
+        verticalSpacing: Int,
+        horizentalSpacing: Int,
+        adapterType: AdapterType?,
+    ) {
+
+        pRecyclerView.layoutManager = GridLayoutManager(requireContext(), numColums)
+        pRecyclerView.itemAnimator = DefaultItemAnimator()
+
+        pRecyclerView.clipToPadding = false
+        pRecyclerView.clipChildren = false
+        pRecyclerView.setHasFixedSize(true)
+        if (pRecyclerView.itemDecorationCount <= 0) {
+            pRecyclerView.addItemDecoration(object : ItemDecoration() {
+                override fun getItemOffsets(
+                    outRect: Rect,
+                    view: View,
+                    parent: RecyclerView,
+                    state: RecyclerView.State
+                ) {
+                    outRect.set(
+                        verticalSpacing,
+                        horizentalSpacing,
+                        verticalSpacing,
+                        horizentalSpacing
+                    )
+                }
+            })
+        }
+        if (pRecyclerView.adapter == null) {
+            pRecyclerView.adapter = onPrepareAdapter(adapterType)
+        } else {
+            pRecyclerView.adapter = null
+            pRecyclerView.adapter = onPrepareAdapter(adapterType)
+        }
+    }
+
+
     protected abstract fun onPrepareAdapter(): RecyclerView.Adapter<*>
 
 

@@ -1,6 +1,7 @@
 package com.techswivel.qthemusic.models
 
 import com.techswivel.qthemusic.customData.enums.SongStatus
+import com.techswivel.qthemusic.models.database.Song
 
 class SongBuilder {
 
@@ -15,11 +16,16 @@ class SongBuilder {
     var lyrics: String? = null
     var playListId: Int? = null
     var songAudioUrl: String? = null
+    var audiofileName: String? = null
+    var videofileName: String? = null
     var songDuration: Int? = null
+    var songPrice: Float? = null
     var songId: Int? = null
     var songStatus: SongStatus? = null
     var songTitle: String? = null
     var songVideoUrl: String? = null
+    var localPath: String? = null
+    var recentPlay: Long? = null
 
 
     fun albumId(albumId: Int?) = apply { this.albumId = albumId }
@@ -35,11 +41,16 @@ class SongBuilder {
     fun lyrics(lyrics: String?) = apply { this.lyrics = lyrics }
     fun playListId(playListId: Int?) = apply { this.playListId = playListId }
     fun songAudioUrl(songAudioUrl: String?) = apply { this.songAudioUrl = songAudioUrl }
+    fun audiofileName(audiofileName: String?) = apply { this.audiofileName = audiofileName }
+    fun videofileName(videofileName: String?) = apply { this.videofileName = videofileName }
     fun songDuration(songDuration: Int?) = apply { this.songDuration = songDuration }
+    fun songPrice(songPrice: Float?) = apply { this.songPrice = songPrice }
     fun songId(songId: Int?) = apply { this.songId = songId }
     fun songStatus(songStatus: SongStatus?) = apply { this.songStatus = songStatus }
     fun songTitle(songTitle: String?) = apply { this.songTitle = songTitle }
     fun songVideoUrl(songVideoUrl: String?) = apply { this.songVideoUrl = songVideoUrl }
+    fun localPath(localPath: String?) = apply { this.localPath = localPath }
+    fun recentPlay(recentPlay: Long?) = apply { this.recentPlay = recentPlay }
 
 
     companion object {
@@ -55,11 +66,16 @@ class SongBuilder {
             builder.lyrics,
             builder.playListId,
             builder.songAudioUrl,
+            builder.audiofileName,
+            builder.videofileName,
             builder.songDuration,
+            builder.songPrice,
             builder.songId,
             builder.songStatus,
             builder.songTitle,
-            builder.songVideoUrl
+            builder.songVideoUrl,
+            builder.localPath,
+            builder.recentPlay
         )
     }
 }

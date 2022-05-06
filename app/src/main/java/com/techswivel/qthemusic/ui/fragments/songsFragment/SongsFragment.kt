@@ -19,7 +19,11 @@ import com.techswivel.qthemusic.customData.enums.NetworkStatus
 import com.techswivel.qthemusic.customData.enums.SongType
 import com.techswivel.qthemusic.customData.interfaces.BaseInterface
 import com.techswivel.qthemusic.databinding.FragmentSongsBinding
-import com.techswivel.qthemusic.models.*
+import com.techswivel.qthemusic.models.PlaylistModel
+import com.techswivel.qthemusic.models.ResponseModel
+import com.techswivel.qthemusic.models.SongBuilder
+import com.techswivel.qthemusic.models.SongsBodyBuilder
+import com.techswivel.qthemusic.models.database.Song
 import com.techswivel.qthemusic.source.remote.networkViewModel.ProfileNetworkViewModel
 import com.techswivel.qthemusic.source.remote.networkViewModel.SongAndArtistsViewModel
 import com.techswivel.qthemusic.ui.activities.playlistActivity.PlaylistActivityImpl

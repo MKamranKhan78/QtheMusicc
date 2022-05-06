@@ -9,7 +9,7 @@
 
         <variable
             name="obj"
-            type="com.techswivel.qthemusic.models.Song" />
+            type="com.techswivel.qthemusic.models.database.Song" />
 
         <variable
             name="click"

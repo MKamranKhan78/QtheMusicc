@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.databinding.ActivityPlaylistBinding
 import com.techswivel.qthemusic.models.PlaylistModel
-import com.techswivel.qthemusic.models.Song
+import com.techswivel.qthemusic.models.database.Song
 import com.techswivel.qthemusic.ui.base.BaseActivity
 import com.techswivel.qthemusic.ui.base.BaseFragment
 import com.techswivel.qthemusic.ui.dialogFragments.createPlaylistDialogFragment.CreatePlaylistDialogFragment

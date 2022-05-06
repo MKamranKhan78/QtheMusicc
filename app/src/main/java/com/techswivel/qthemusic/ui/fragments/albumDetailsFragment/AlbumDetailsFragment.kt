@@ -65,6 +65,10 @@ class AlbumDetailsFragment : RecyclerViewBaseFragment(), RecyclerViewAdapter.Cal
 
     }
 
+    override fun onPrepareAdapter(): RecyclerView.Adapter<*> {
+        TODO("Not yet implemented")
+    }
+
     override fun onPrepareAdapter(adapterType: AdapterType?): RecyclerView.Adapter<*> {
         return mSongsAdapter
     }

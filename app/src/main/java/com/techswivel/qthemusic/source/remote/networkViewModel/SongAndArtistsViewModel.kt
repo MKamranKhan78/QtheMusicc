@@ -7,6 +7,7 @@ import com.techswivel.qthemusic.application.QTheMusicApplication
 import com.techswivel.qthemusic.customData.enums.ActionType
 import com.techswivel.qthemusic.customData.enums.CategoryType
 import com.techswivel.qthemusic.models.*
+import com.techswivel.qthemusic.models.database.Song
 import com.techswivel.qthemusic.source.remote.rxjava.CustomError
 import com.techswivel.qthemusic.source.remote.rxjava.ErrorUtils
 import com.techswivel.qthemusic.ui.base.BaseViewModel

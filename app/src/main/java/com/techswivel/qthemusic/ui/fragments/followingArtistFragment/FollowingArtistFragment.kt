@@ -16,8 +16,8 @@ import com.techswivel.qthemusic.customData.enums.AdapterType
 import com.techswivel.qthemusic.customData.enums.NetworkStatus
 import com.techswivel.qthemusic.customData.interfaces.BaseInterface
 import com.techswivel.qthemusic.databinding.FragmentFollowingArtistBinding
-import com.techswivel.qthemusic.models.Artist
 import com.techswivel.qthemusic.models.ResponseModel
+import com.techswivel.qthemusic.models.database.Artist
 import com.techswivel.qthemusic.source.remote.networkViewModel.SongAndArtistsViewModel
 import com.techswivel.qthemusic.ui.base.RecyclerViewBaseFragment
 import com.techswivel.qthemusic.utils.ActivityUtils

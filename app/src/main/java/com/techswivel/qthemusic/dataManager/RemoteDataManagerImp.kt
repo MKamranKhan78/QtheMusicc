@@ -3,6 +3,7 @@ package com.techswivel.qthemusic.dataManager
 import com.techswivel.qthemusic.customData.enums.ActionType
 import com.techswivel.qthemusic.customData.enums.CategoryType
 import com.techswivel.qthemusic.models.*
+import com.techswivel.qthemusic.models.database.Song
 import io.reactivex.Observable
 import retrofit2.Response
 

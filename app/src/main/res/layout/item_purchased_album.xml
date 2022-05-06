@@ -8,7 +8,7 @@
 
         <variable
             name="obj"
-            type="com.techswivel.qthemusic.models.Album" />
+            type="com.techswivel.qthemusic.models.database.Album" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
