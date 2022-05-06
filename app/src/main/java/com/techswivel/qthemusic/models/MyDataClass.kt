@@ -8,9 +8,9 @@ class MyDataClass(
     @SerializedName("auth")
     val authModel: AuthModel?,
     val recommendedSongsResponse: RecommendedSongsResponse?,
+    @Expose
     @SerializedName("category")
     var category: List<Category>?,
-    var songsResponse: SongsResponse?,
     @Expose
     @SerializedName("playlists")
     val playlistModel: List<PlaylistModel>?,
@@ -22,9 +22,16 @@ class MyDataClass(
     val songList: List<Song>?,
     @Expose
     @SerializedName("artist")
-    val artistList: List<Artist>?
-
-
+    val artistList: List<Artist>?,
+    @Expose
+    @SerializedName("songsResponse")
+    var songsResponse: SongsResponse?,
+    @Expose
+    @SerializedName("Languages")
+    val Languages: List<Language>?,
+    @Expose
+    @SerializedName("songs")
+    val songs: List<SearchedSongs>?,
 ) {
     constructor() : this(
         null,
@@ -34,7 +41,8 @@ class MyDataClass(
         null,
         null,
         null,
-        null
-
+        null,
+        null,
+        null,
     )
 }

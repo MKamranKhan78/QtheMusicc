@@ -15,20 +15,24 @@ import com.techswivel.qthemusic.customData.enums.*
 import com.techswivel.qthemusic.databinding.FragmentHomeBinding
 import com.techswivel.qthemusic.models.RecommendedSongsBodyBuilder
 import com.techswivel.qthemusic.models.ResponseModel
-import com.techswivel.qthemusic.models.Song
 import com.techswivel.qthemusic.models.SongsBodyBuilder
+import com.techswivel.qthemusic.models.database.Album
+import com.techswivel.qthemusic.models.database.Song
 import com.techswivel.qthemusic.source.remote.networkViewModel.SongAndArtistsViewModel
 import com.techswivel.qthemusic.ui.activities.playerActivity.PlayerActivity
 import com.techswivel.qthemusic.ui.base.RecyclerViewBaseFragment
+import com.techswivel.qthemusic.ui.fragments.albumDetailsFragment.AlbumDetailsFragment
 import com.techswivel.qthemusic.utils.ActivityUtils
 import com.techswivel.qthemusic.utils.CommonKeys
 import com.techswivel.qthemusic.utils.DialogUtils
+import com.techswivel.qthemusic.utils.Log
 
 class HomeFragment : RecyclerViewBaseFragment() {
 
     companion object {
         @JvmStatic
         fun newInstance() = HomeFragment()
+        private val TAG = "HomeFragment"
     }
 
     private lateinit var binding: FragmentHomeBinding
@@ -50,6 +54,7 @@ class HomeFragment : RecyclerViewBaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
         networkViewModel = ViewModelProvider(this)[SongAndArtistsViewModel::class.java]
+        viewModel.recommendedSongsDataList.clear()
         viewModel.selectedTab = RecommendedSongsType.SONGS
         setUpHorizentalRecyclerView(
             binding.recyclerViewRecommendedMedia,
@@ -99,10 +104,24 @@ class HomeFragment : RecyclerViewBaseFragment() {
 
                         }
 
+                        override fun onItemClick(data: Any?, position: Int) {
+                            super.onItemClick(data, position)
+                            val mAlbum = data as Album
+                            val bundle = Bundle()
+                            bundle.putParcelable(CommonKeys.KEY_ALBUM_DETAILS, mAlbum)
+                            ActivityUtils.launchFragment(
+                                requireContext(),
+                                AlbumDetailsFragment::class.java.name,
+                                bundle
+                            )
+                        }
+
                         override fun onViewClicked(view: View, data: Any?) {
-                            val songModel = data as Song
+
                             when (view.id) {
                                 R.id.cv_recommended_song -> {
+                                    Log.d(TAG, "cv_recommended_song called")
+                                    val songModel = data as Song
                                     if (songModel.songStatus == SongStatus.PREMIUM) {
                                         Toast.makeText(
                                             requireContext(),
@@ -131,6 +150,17 @@ class HomeFragment : RecyclerViewBaseFragment() {
                                             R.anim.null_transition
                                         )
                                     }
+                                }
+                                R.id.cv_main_image -> {
+                                    val mAlbum = data as Album
+                                    val bundle = Bundle()
+                                    bundle.putParcelable(CommonKeys.KEY_ALBUM_DETAILS, mAlbum)
+                                    Log.d(TAG, "cv_main_image called")
+                                    ActivityUtils.launchFragment(
+                                        requireContext(),
+                                        AlbumDetailsFragment::class.java.name,
+                                        bundle
+                                    )
                                 }
                             }
                         }
@@ -230,7 +260,15 @@ class HomeFragment : RecyclerViewBaseFragment() {
                     val songsList = response.data.recommendedSongsResponse?.songs
                     val albumsList = response.data.recommendedSongsResponse?.albums
                     val artistsList = response.data.recommendedSongsResponse?.artist
-
+                    if (!albumsList.isNullOrEmpty()) {
+                        viewModel.albumList.clear()
+                        viewModel.albumList.addAll(albumsList)
+                    }
+                    if (!songsList.isNullOrEmpty()) {
+                        viewModel.songsList.clear()
+                        viewModel.songsList.addAll(songsList)
+                        Log.d(TAG, "Songs are ${viewModel.songsList}")
+                    }
                     if (!songsList.isNullOrEmpty() && viewModel.selectedTab == RecommendedSongsType.SONGS) {
                         viewModel.recommendedSongsDataList.addAll(songsList)
                     } else if (!albumsList.isNullOrEmpty() && viewModel.selectedTab == RecommendedSongsType.ALBUM) {
@@ -240,7 +278,6 @@ class HomeFragment : RecyclerViewBaseFragment() {
                     }
                     if (::mRecommendedForYouAdapter.isInitialized)
                         mRecommendedForYouAdapter.notifyDataSetChanged()
-
                 }
                 NetworkStatus.ERROR -> {
                     recommendedSongsDataResponse.error?.message?.let { it1 ->

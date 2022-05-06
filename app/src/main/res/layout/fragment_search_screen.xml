@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/contstaint_layot"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_for_forgot_password"
+        tools:context=".ui.fragments.searchScreen.SearchScreenFragment">
+
+        <TextView
+            android:id="@+id/search_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_24dp"
+            android:layout_marginTop="@dimen/_20dp"
+            android:layout_marginEnd="@dimen/_24dp"
+            android:background="@drawable/shape_search_view_bacgruond"
+            android:drawablePadding="@dimen/_12dp"
+            android:fontFamily="@font/manrope_regular"
+            android:paddingStart="@dimen/_50dp"
+            android:paddingTop="@dimen/_14dp"
+            android:paddingBottom="@dimen/_14dp"
+            android:text="@string/search"
+            android:textColor="@color/search_text_color"
+            android:textSize="@dimen/_18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_18dp"
+            android:src="@drawable/ic_icon_feather_search"
+            app:layout_constraintBottom_toBottomOf="@+id/search_view"
+            app:layout_constraintStart_toStartOf="@+id/search_view"
+            app:layout_constraintTop_toTopOf="@+id/search_view" />
+
+        <TextView
+            android:id="@+id/recent_play_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_20dp"
+            android:layout_marginTop="@dimen/_24dp"
+            android:fontFamily="@font/manrope_bold"
+            android:text="@string/recently_played"
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/_18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/search_view" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_songs"
+            style="@style/TabButtonTextStyle"
+            android:layout_width="@dimen/_100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10dp"
+            android:background="@drawable/selected_tab_background"
+            android:text="@string/str_songs"
+            app:layout_constraintStart_toStartOf="@id/recent_play_tag"
+            app:layout_constraintTop_toBottomOf="@id/recent_play_tag" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_albums"
+            style="@style/TabButtonTextStyle"
+            android:layout_width="@dimen/_100dp"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/btn_songs"
+            android:background="@drawable/unselected_tab_background"
+            android:text="@string/str_albums"
+            app:layout_constraintBottom_toBottomOf="@id/btn_songs"
+            app:layout_constraintEnd_toStartOf="@id/btn_artists"
+            app:layout_constraintStart_toEndOf="@+id/btn_songs"
+            app:layout_constraintTop_toTopOf="@id/btn_songs" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_artists"
+            style="@style/TabButtonTextStyle"
+            android:layout_width="@dimen/_100dp"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/btn_albums"
+            android:background="@drawable/unselected_tab_background"
+            android:text="@string/str_artists"
+            app:layout_constraintStart_toEndOf="@id/btn_albums"
+            app:layout_constraintTop_toTopOf="@id/btn_albums" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/search_screen_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_songs" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -55,6 +55,7 @@
     <dimen name="_48dp">48dp</dimen>
     <dimen name="_49dp">49dp</dimen>
     <dimen name="_50dp">50dp</dimen>
+    <dimen name="_55dp">55dp</dimen>
     <dimen name="_60dp">60dp</dimen>
     <dimen name="_70dp">70dp</dimen>
     <dimen name="_75dp">75dp</dimen>
@@ -106,4 +107,5 @@
     <dimen name="recycler_vertical_spacing">10dp</dimen>
     <dimen name="recycler_horizental_spacing_20">20dp</dimen>
     <dimen name="recycler_horizental_spacing_2">2dp</dimen>
+    <dimen name="recycler_language_horizental_spacing_4">4dp</dimen>
 </resources>

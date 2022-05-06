@@ -2,21 +2,179 @@
   "formatVersion": 1,
   "database": {
     "version": 2,
-    "identityHash": "949659f64fbc1907972c4fbddec39215",
+    "identityHash": "2cf6ec4e91495d007ab8a9734101469f",
     "entities": [
       {
-        "tableName": "folders",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `folderId` INTEGER)",
+        "tableName": "Song",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`albumId` INTEGER, `albumName` TEXT, `artist` TEXT, `artistId` INTEGER, `categoryId` INTEGER, `coverImageUrl` TEXT, `isAddedToPlayList` INTEGER, `isFavourit` INTEGER, `lyrics` TEXT, `playListId` INTEGER, `songAudioUrl` TEXT, `audiofileName` TEXT, `videofileName` TEXT, `songDuration` INTEGER, `songPrice` REAL, `songId` INTEGER, `songStatus` TEXT, `songTitle` TEXT, `songVideoUrl` TEXT, `localPath` TEXT, PRIMARY KEY(`songId`))",
+        "fields": [
+          {
+            "fieldPath": "albumId",
+            "columnName": "albumId",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "albumName",
+            "columnName": "albumName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "artist",
+            "columnName": "artist",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "artistId",
+            "columnName": "artistId",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "categoryId",
+            "columnName": "categoryId",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "coverImageUrl",
+            "columnName": "coverImageUrl",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "isAddedToPlayList",
+            "columnName": "isAddedToPlayList",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "isFavourit",
+            "columnName": "isFavourit",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "lyrics",
+            "columnName": "lyrics",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "playListId",
+            "columnName": "playListId",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "songAudioUrl",
+            "columnName": "songAudioUrl",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "audiofileName",
+            "columnName": "audiofileName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "videofileName",
+            "columnName": "videofileName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "songDuration",
+            "columnName": "songDuration",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "songPrice",
+            "columnName": "songPrice",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "songId",
+            "columnName": "songId",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "songStatus",
+            "columnName": "songStatus",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "songTitle",
+            "columnName": "songTitle",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "songVideoUrl",
+            "columnName": "songVideoUrl",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "localPath",
+            "columnName": "localPath",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "songId"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "Album",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `albumCoverImageUrl` TEXT, `albumId` INTEGER, `albumStatus` TEXT, `albumTitle` TEXT, `numberOfSongs` INTEGER)",
         "fields": [
           {
             "fieldPath": "id",
             "columnName": "id",
             "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "albumCoverImageUrl",
+            "columnName": "albumCoverImageUrl",
+            "affinity": "TEXT",
             "notNull": false
           },
           {
-            "fieldPath": "folderId",
-            "columnName": "folderId",
+            "fieldPath": "albumId",
+            "columnName": "albumId",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "albumStatus",
+            "columnName": "albumStatus",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "albumTitle",
+            "columnName": "albumTitle",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "numberOfSongs",
+            "columnName": "numberOfSongs",
             "affinity": "INTEGER",
             "notNull": false
           }
@@ -29,12 +187,50 @@
         },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "Artist",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `artistCoverImageUrl` TEXT, `artistId` INTEGER, `artistName` TEXT)",
+        "fields": [
+          {
+            "fieldPath": "uid",
+            "columnName": "uid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "artistCoverImageUrl",
+            "columnName": "artistCoverImageUrl",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "artistId",
+            "columnName": "artistId",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "artistName",
+            "columnName": "artistName",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "uid"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '949659f64fbc1907972c4fbddec39215')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '2cf6ec4e91495d007ab8a9734101469f')"
     ]
   }
 }

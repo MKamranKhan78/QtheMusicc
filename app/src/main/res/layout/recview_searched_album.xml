@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="click"
+            type="com.techswivel.qthemusic.customData.interfaces.AdapterOnClick" />
+
+        <variable
+            name="obj"
+            type="com.techswivel.qthemusic.models.SearchedSongs" />
+
+        <variable
+            name="songStatus"
+            type="com.techswivel.qthemusic.customData.enums.SongStatus" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10dp"
+        android:layout_marginBottom="@dimen/_10dp">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/shapeableImageView_album"
+            android:layout_width="@dimen/_60dp"
+            android:layout_height="@dimen/_60dp"
+            android:layout_marginStart="@dimen/_24dp"
+            android:scaleType="fitXY"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:setImageViewImage="@{obj.albumCoverImageUrl}"
+            app:shapeAppearanceOverlay="@style/circleImageViewRecentPlayView" />
+
+        <TextView
+            android:id="@+id/tv_search_album_tittle_"
+            android:layout_width="@dimen/_0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_24dp"
+            android:layout_marginEnd="@dimen/_24dp"
+            android:fontFamily="@font/manrope_regular"
+            android:text="@{obj.albumTitle}"
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/_14sp"
+            app:layout_constraintBottom_toTopOf="@+id/tv_search_album_name"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/shapeableImageView_album"
+            app:layout_constraintTop_toTopOf="@+id/shapeableImageView_album" />
+
+        <TextView
+            android:id="@+id/tv_search_album_name"
+            android:layout_width="@dimen/_0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/manrope_regular"
+            android:text="@{`Album by `+obj.albumArtist}"
+            android:textColor="@color/color_light_grey"
+            android:textSize="@dimen/_14sp"
+            app:layout_constraintBottom_toBottomOf="@+id/shapeableImageView_album"
+            app:layout_constraintEnd_toEndOf="@+id/tv_search_album_tittle_"
+            app:layout_constraintStart_toStartOf="@+id/tv_search_album_tittle_"
+            app:layout_constraintTop_toBottomOf="@+id/tv_search_album_tittle_" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

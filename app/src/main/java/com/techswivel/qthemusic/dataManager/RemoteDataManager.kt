@@ -230,6 +230,14 @@ object RemoteDataManager : BaseDataManager(), RemoteDataManagerImp {
         }
     }
 
+    override fun getSearcherSongsList(queryRequestModel: QueryRequestModel): Observable<Response<ResponseMain>> {
+        return Observable.create { observer ->
+            observer.onNext(getResponseDummyData())
+            observer.onComplete()
+
+        }
+    }
+
 
     override fun signUp(authRequestModel: AuthRequestModel): Observable<Response<ResponseMain>> {
         return Observable.create{observer->

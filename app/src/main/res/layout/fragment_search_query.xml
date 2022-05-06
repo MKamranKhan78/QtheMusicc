@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_for_forgot_password"
+        tools:context=".ui.fragments.searchQueryFragment.SearchQueryFragment">
+
+        <LinearLayout
+            android:id="@+id/search_layout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_55dp"
+            android:layout_margin="@dimen/_20dp"
+            android:background="@drawable/shape_search_view_bacgruond"
+            android:orientation="horizontal"
+            android:weightSum="10"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/iv_back_btn_query"
+                android:layout_width="@dimen/_0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="@dimen/_16dp"
+                android:layout_weight="1"
+                android:padding="@dimen/_12dp"
+                android:src="@drawable/ic_icon_ionic_ios_arrow_back" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/et_search_box_layout"
+                android:layout_width="@dimen/_0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="9"
+                android:background="@null"
+                app:boxStrokeColor="@color/card_view_signin"
+                app:boxStrokeWidth="@dimen/_0dp"
+                app:boxStrokeWidthFocused="@dimen/_0dp"
+                app:endIconDrawable="@drawable/ic_mic"
+                app:endIconMode="clear_text"
+                app:endIconTint="@color/color_white"
+                app:hintEnabled="false">
+
+                <EditText
+                    android:id="@+id/et_search_box"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/_4dp"
+                    android:backgroundTint="@android:color/transparent"
+                    android:fontFamily="@font/manrope_regular"
+                    android:hint="@string/search"
+                    android:imeOptions="actionSearch"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:paddingTop="@dimen/_10dp"
+                    android:paddingBottom="@dimen/_14dp"
+                    android:textColor="@color/sign_up_btn"
+                    android:textColorHighlight="@color/color_white"
+                    android:textColorHint="@color/color_light_grey"
+                    android:textCursorDrawable="@drawable/custome_cursor_search_query_screen"
+                    android:textSize="@dimen/_18sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/sl_languages_"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_0dp"
+            android:padding="@dimen/_14dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/recycler_languages"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/recycler_languages">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <include layout="@layout/languages_shimmer" />
+
+                <include layout="@layout/languages_shimmer" />
+
+                <include layout="@layout/languages_shimmer" />
+
+                <include layout="@layout/languages_shimmer" />
+
+                <include layout="@layout/languages_shimmer" />
+
+            </LinearLayout>
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
+        <TextView
+            android:id="@+id/btn_all_songs"
+            android:layout_width="@dimen/_50dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_14dp"
+            android:background="@drawable/shape_bg_your_interest_recview"
+            android:fontFamily="@font/manrope_bold"
+            android:paddingStart="@dimen/_16dp"
+            android:paddingTop="@dimen/_7dp"
+            android:paddingEnd="@dimen/_16dp"
+            android:paddingBottom="@dimen/_7dp"
+            android:text="@string/all_songs"
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/_12sp"
+            android:visibility="invisible"
+            app:layout_constraintStart_toStartOf="@id/search_layout"
+            app:layout_constraintTop_toBottomOf="@id/search_layout" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_languages"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            android:layout_marginStart="@dimen/_8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_all_songs"
+            app:layout_constraintStart_toEndOf="@+id/btn_all_songs"
+            app:layout_constraintTop_toTopOf="@+id/btn_all_songs"
+
+            />
+
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/sl_searched_songs"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_0dp"
+            android:padding="@dimen/_14dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/recycler_languages">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <include layout="@layout/shimmer_rec_view_searched" />
+
+                <include layout="@layout/shimmer_rec_view_searched" />
+
+                <include layout="@layout/shimmer_rec_view_searched" />
+
+                <include layout="@layout/shimmer_rec_view_searched" />
+
+                <include layout="@layout/shimmer_rec_view_searched" />
+
+                <include layout="@layout/shimmer_rec_view_searched" />
+
+                <include layout="@layout/shimmer_rec_view_searched" />
+
+                <include layout="@layout/shimmer_rec_view_searched" />
+
+                <include layout="@layout/shimmer_rec_view_searched" />
+
+                <include layout="@layout/shimmer_rec_view_searched" />
+
+                <include layout="@layout/shimmer_rec_view_searched" />
+
+            </LinearLayout>
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_search"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_0dp"
+            android:layout_marginTop="@dimen/_16dp"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/recycler_languages" />
+
+        <ProgressBar
+            android:id="@+id/progress_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminateTint="@color/sign_up_btn"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
