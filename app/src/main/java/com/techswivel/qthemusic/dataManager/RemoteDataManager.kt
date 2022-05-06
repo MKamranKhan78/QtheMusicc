@@ -6,6 +6,7 @@ import com.techswivel.qthemusic.application.QTheMusicApplication
 import com.techswivel.qthemusic.constant.Constants
 import com.techswivel.qthemusic.customData.enums.CategoryType
 import com.techswivel.qthemusic.dataManager.DummyDataManager.Companion.getDummyAuthDetails
+import com.techswivel.qthemusic.dataManager.DummyDataManager.Companion.getDummyPaymentType
 import com.techswivel.qthemusic.dataManager.DummyDataManager.Companion.getResponseDummyData
 import com.techswivel.qthemusic.models.*
 import com.techswivel.qthemusic.source.remote.retrofit.ApiService
@@ -174,5 +175,9 @@ object RemoteDataManager : BaseDataManager(), RemoteDataManagerImp {
 
     override fun getAuthDetails(): AuthModel {
         return getDummyAuthDetails()
+    }
+
+    override fun getPaymentTypeList(): List<Payment>? {
+        return getDummyPaymentType()
     }
 }

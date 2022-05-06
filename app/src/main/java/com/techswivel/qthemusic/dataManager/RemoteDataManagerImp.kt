@@ -14,6 +14,7 @@ interface RemoteDataManagerImp {
     fun logoutUser(deviceIdentifier: String): Observable<Response<ResponseMain>>
     fun profileUpdate(authModel: AuthModel?): Observable<Response<ResponseMain>>
     fun getAuthDetails(): AuthModel?
+    fun getPaymentTypeList(): List<Payment>?
     fun userLogin(authRequestModel: AuthRequestModel): Observable<Response<ResponseMain>>
     fun sendOtp(authRequestModel: AuthRequestModel): Observable<Response<ResponseMain>>
     fun verifyOtpRequest(authRequestModel: AuthRequestModel): Observable<Response<ResponseMain>>

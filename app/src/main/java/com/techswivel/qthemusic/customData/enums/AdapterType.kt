@@ -7,5 +7,6 @@ enum class AdapterType {
     YOUR_INTERESTS,
     SONGS,
     ALBUMS,
-    ARTISTS
+    ARTISTS,
+    PAYMENT
 }

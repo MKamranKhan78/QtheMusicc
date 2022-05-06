@@ -41,7 +41,6 @@ class BuyingHistoryActivity : BaseActivity() {
         return super.onSupportNavigateUp()
     }
 
-
     private fun setToolBar() {
         setUpActionBar(
             mBinding.activityToolbar.toolbar, "", false, true
@@ -66,5 +65,4 @@ class BuyingHistoryActivity : BaseActivity() {
             }
         }
     }
-
 }

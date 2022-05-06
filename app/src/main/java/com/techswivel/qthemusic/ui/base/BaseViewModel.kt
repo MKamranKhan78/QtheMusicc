@@ -11,10 +11,7 @@ import com.techswivel.qthemusic.application.QTheMusicApplication
 import com.techswivel.qthemusic.constant.Constants
 import com.techswivel.qthemusic.dataManager.LocalDataManager
 import com.techswivel.qthemusic.dataManager.RemoteDataManager
-import com.techswivel.qthemusic.models.Address
-import com.techswivel.qthemusic.models.AuthModel
-import com.techswivel.qthemusic.models.Notification
-import com.techswivel.qthemusic.models.Subscription
+import com.techswivel.qthemusic.models.*
 import com.techswivel.qthemusic.source.local.preference.PrefUtils
 import com.techswivel.qthemusic.source.remote.rxjava.DisposableManager
 import com.techswivel.qthemusic.ui.activities.splashActivity.SplashActivity
@@ -41,6 +38,10 @@ abstract class BaseViewModel : ViewModel() {
 
     fun getDummyData(): AuthModel {
         return mRemoteDataManager.getAuthDetails()
+    }
+
+    fun getDummyPaymentList(): List<Payment>? {
+        return mRemoteDataManager.getPaymentTypeList()
     }
 
     fun setDataInSharedPrefrence(authModel: AuthModel?) {

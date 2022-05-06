@@ -4,12 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.techswivel.qthemusic.R
+import com.techswivel.qthemusic.application.QTheMusicApplication
 import com.techswivel.qthemusic.customData.adapter.RecyclerViewAdapter
 import com.techswivel.qthemusic.customData.enums.AdapterType
 import com.techswivel.qthemusic.customData.enums.ItemType
@@ -20,10 +19,12 @@ import com.techswivel.qthemusic.models.BuyingHistory
 import com.techswivel.qthemusic.models.ResponseModel
 import com.techswivel.qthemusic.source.remote.networkViewModel.ProfileNetworkViewModel
 import com.techswivel.qthemusic.ui.base.RecyclerViewBaseFragment
+import com.techswivel.qthemusic.ui.fragments.paymentTypesBottomSheetFragment.PaymentTypeBottomSheetFragment
+import com.techswivel.qthemusic.utils.ActivityUtils
 import com.techswivel.qthemusic.utils.DialogUtils
 
 
-class BuyingHistoryFragment : RecyclerViewBaseFragment(), BaseInterface,
+class BuyingHistoryFragment : RecyclerViewBaseFragment(), BaseInterface, BuyingHistoryFragmentImpl,
     RecyclerViewAdapter.CallBack {
 
     companion object {
@@ -149,11 +150,21 @@ class BuyingHistoryFragment : RecyclerViewBaseFragment(), BaseInterface,
 
     private fun clickListeners() {
         mBinding.allPaymentTextview.setOnClickListener {
-            openBottomSheetDialog()
+            // openBottomSheetDialog()
+
+            val fragmentTransaction =
+                requireActivity().supportFragmentManager.beginTransaction()
+            val paymentTypeBottomSheetFragment = PaymentTypeBottomSheetFragment.newInstance(this)
+            //paymentTypeBottomSheetFragment.show(fragmentTransaction, TAG)
+
+            ActivityUtils.launchFragment(
+                requireContext(),
+                paymentTypeBottomSheetFragment::class.java.name
+            )
         }
     }
 
-    private fun openBottomSheetDialog() {
+    /*private fun openBottomSheetDialog() {
         val dialog = BottomSheetDialog(
             requireContext(),
             R.style.BottomSheetDialog
@@ -173,7 +184,7 @@ class BuyingHistoryFragment : RecyclerViewBaseFragment(), BaseInterface,
         dialog.setContentView(view)
         dialog.show()
 
-    }
+    }*/
 
     private fun initViewModel() {
         viewModel =
@@ -181,6 +192,10 @@ class BuyingHistoryFragment : RecyclerViewBaseFragment(), BaseInterface,
         profileNetworkViewModel =
             ViewModelProvider(this).get(ProfileNetworkViewModel::class.java)
 
+    }
+
+    override fun openBottomSheetDialogFragment(type: String?) {
+        Toast.makeText(QTheMusicApplication.getContext(), type.toString(), Toast.LENGTH_LONG).show()
     }
 
 
