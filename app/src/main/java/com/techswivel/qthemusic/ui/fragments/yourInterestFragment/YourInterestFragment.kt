@@ -5,39 +5,53 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.techswivel.qthemusic.R
+import com.techswivel.qthemusic.application.QTheMusicApplication
 import com.techswivel.qthemusic.customData.adapter.RecyclerViewAdapter
 import com.techswivel.qthemusic.customData.enums.AdapterType
 import com.techswivel.qthemusic.customData.enums.CategoryType
+import com.techswivel.qthemusic.customData.enums.FragmentType
 import com.techswivel.qthemusic.customData.enums.NetworkStatus
 import com.techswivel.qthemusic.customData.interfaces.BaseInterface
 import com.techswivel.qthemusic.databinding.FragmentYourInterestBinding
 import com.techswivel.qthemusic.models.Category
+import com.techswivel.qthemusic.models.ErrorResponse
 import com.techswivel.qthemusic.models.ResponseModel
+import com.techswivel.qthemusic.source.local.preference.PrefUtils
+import com.techswivel.qthemusic.source.remote.networkViewModel.ProfileNetworkViewModel
 import com.techswivel.qthemusic.source.remote.networkViewModel.SongAndArtistsViewModel
 import com.techswivel.qthemusic.ui.activities.authActivity.AuthActivityImp
 import com.techswivel.qthemusic.ui.base.RecyclerViewBaseFragment
+import com.techswivel.qthemusic.utils.CommonKeys
 import com.techswivel.qthemusic.utils.DialogUtils
 import com.techswivel.qthemusic.utils.Log
 import com.techswivel.qthemusic.utils.Utilities
 
 class YourInterestFragment : RecyclerViewBaseFragment(),
     RecyclerViewAdapter.CallBack, BaseInterface {
+
     companion object {
-        private val TAG = "YourInterestFragment"
+        fun newInstance() = YourInterestFragment()
+        fun newInstance(mBundle: Bundle?) = YourInterestFragment().apply {
+            arguments = mBundle
+        }
     }
 
     private lateinit var mBinding: FragmentYourInterestBinding
     private lateinit var mViewModel: YourInterestViewModel
+    private lateinit var mProfileNetworkViewModel: ProfileNetworkViewModel
     private lateinit var mCategoriesAdapter: RecyclerViewAdapter
     private lateinit var mSongAndArtistViewModel: SongAndArtistsViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initViewModel()
+        getBundleData()
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -109,9 +123,8 @@ class YourInterestFragment : RecyclerViewBaseFragment(),
                 Utilities.showToast(requireContext(), getString(R.string.maximum_alert))
             }
         }
-
-
     }
+
 
     private fun onClickListeners() {
         mBinding.btnInterestLetsGo.setOnClickListener {
@@ -120,7 +133,7 @@ class YourInterestFragment : RecyclerViewBaseFragment(),
             } else if (mViewModel.categoriesListForApiRequest.size > 5) {
                 Utilities.showToast(requireContext(), getString(R.string.maximum_alert))
             } else {
-                (mActivityListener as AuthActivityImp).saveInterests(mViewModel.categoriesListForApiRequest)
+                mProfileNetworkViewModel.saveUserInterest(mViewModel.categoriesListForApiRequest)
             }
 
         }
@@ -157,7 +170,12 @@ class YourInterestFragment : RecyclerViewBaseFragment(),
 
     private fun initViewModel() {
         mViewModel = ViewModelProvider(this).get(YourInterestViewModel::class.java)
+        mProfileNetworkViewModel = ViewModelProvider(this).get(ProfileNetworkViewModel::class.java)
         mSongAndArtistViewModel = ViewModelProvider(this).get(SongAndArtistsViewModel::class.java)
+    }
+
+    private fun getBundleData() {
+        mViewModel.fragmentType = arguments?.getString(CommonKeys.KEY_DATA)
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -208,5 +226,48 @@ class YourInterestFragment : RecyclerViewBaseFragment(),
                 }
             }
         }
+
+
+        mProfileNetworkViewModel.saveInterestResponse.observe(viewLifecycleOwner, Observer {
+            when (it.status) {
+                NetworkStatus.LOADING -> {
+                    showProgressBar()
+                }
+                NetworkStatus.SUCCESS -> {
+                    hideProgressBar()
+                    val responseModel = it.t as ResponseModel
+                    val userData = responseModel.data
+                    PrefUtils.setBoolean(
+                        QTheMusicApplication.getContext(),
+                        CommonKeys.KEY_IS_INTEREST_SET,
+                        true
+                    )
+                    if (mViewModel.fragmentType == FragmentType.PROFILE_LANDING.toString()) {
+                        requireActivity().finish()
+                    } else {
+                        (mActivityListener as AuthActivityImp).saveInterests()
+                    }
+                }
+                NetworkStatus.EXPIRE -> {
+                    hideProgressBar()
+                    val error = it.error as ErrorResponse
+                    DialogUtils.errorAlert(
+                        requireContext(),
+                        getString(R.string.error_occurred),
+                        error.message
+                    )
+                }
+                NetworkStatus.ERROR -> {
+                    hideProgressBar()
+                    val error = it.error as ErrorResponse
+                    DialogUtils.errorAlert(
+                        requireContext(),
+                        getString(R.string.error_occurred),
+                        error.message
+                    )
+                }
+            }
+
+        })
     }
 }

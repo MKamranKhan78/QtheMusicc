@@ -8,4 +8,5 @@ class YourInterestViewModel : BaseViewModel() {
     lateinit var categoryResponseList: List<Category?>
     lateinit var categoriesListForApiRequest: ArrayList<Category>
     val selectedCategoryList = mutableListOf<String?>()
+    var fragmentType: String? = null
 }

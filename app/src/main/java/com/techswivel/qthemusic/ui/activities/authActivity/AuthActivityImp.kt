@@ -7,7 +7,6 @@ import com.techswivel.qthemusic.customData.interfaces.BaseInterface
 import com.techswivel.qthemusic.models.AuthModel
 import com.techswivel.qthemusic.models.AuthRequestBuilder
 import com.techswivel.qthemusic.models.AuthRequestModel
-import com.techswivel.qthemusic.models.Category
 
 interface AuthActivityImp : BaseInterface {
 
@@ -28,7 +27,7 @@ interface AuthActivityImp : BaseInterface {
         authRequestBuilder: AuthRequestBuilder
     )
 
-    fun saveInterests(category: List<Category?>)
+    fun saveInterests()
     fun popUpToAllFragments(fragment: Fragment)
     fun signInWithGoogle()
     fun signInWithFacebook()

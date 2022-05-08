@@ -64,7 +64,9 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
             " login ${mAuthActivityViewModel.isLogin} interset ${mAuthActivityViewModel.isInterestSelected}"
         )
         if (mAuthActivityViewModel.isLogin && !mAuthActivityViewModel.isInterestSelected) {
-            val yourIntersetFragment = YourInterestFragment()
+            val bundle = Bundle()
+            bundle.putString(CommonKeys.KEY_DATA, FragmentType.AUTH_ACTIVITY.toString())
+            val yourIntersetFragment = YourInterestFragment.newInstance(bundle)
             replaceFragmentWithoutAddingToBackStack(R.id.auth_container, yourIntersetFragment)
         } else {
             replaceFragmentWithoutAddingToBackStack(R.id.auth_container, SignInFragment())
@@ -175,8 +177,11 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
 
     }
 
-    override fun saveInterests(category: List<Category?>) {
-        mProfileNetworkViewModel.saveUserInterest(category)
+    override fun saveInterests() {
+        val intent = Intent(this, MainActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        startActivity(intent)
+        finish()
     }
 
     override fun popUpToAllFragments(fragment: Fragment) {
@@ -579,46 +584,7 @@ class AuthActivity : BaseActivity(), AuthActivityImp {
             }
         })
 
-        mProfileNetworkViewModel.saveInterestResponse.observe(this, Observer {
-            when (it.status) {
-                NetworkStatus.LOADING -> {
-                    showProgressBar()
-                }
-                NetworkStatus.SUCCESS -> {
-                    hideProgressBar()
-                    val responseModel = it.t as ResponseModel
-                    val userData = responseModel.data
-                    PrefUtils.setBoolean(
-                        QTheMusicApplication.getContext(),
-                        CommonKeys.KEY_IS_INTEREST_SET,
-                        true
-                    )
-                    val intent = Intent(this, MainActivity::class.java)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                    startActivity(intent)
-                    finish()
-                }
-                NetworkStatus.EXPIRE -> {
-                    hideProgressBar()
-                    val error = it.error as ErrorResponse
-                    DialogUtils.errorAlert(
-                        this,
-                        getString(R.string.error_occurred),
-                        error.message
-                    )
-                }
-                NetworkStatus.ERROR -> {
-                    hideProgressBar()
-                    val error = it.error as ErrorResponse
-                    DialogUtils.errorAlert(
-                        this,
-                        getString(R.string.error_occurred),
-                        error.message
-                    )
-                }
-            }
 
-        })
     }
 
 

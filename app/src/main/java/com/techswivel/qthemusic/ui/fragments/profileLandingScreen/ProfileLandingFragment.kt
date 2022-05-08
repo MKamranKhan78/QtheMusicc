@@ -7,13 +7,16 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import com.techswivel.dfaktfahrerapp.ui.fragments.underDevelopmentMessageFragment.UnderDevelopmentMessageFragment
 import com.techswivel.qthemusic.application.QTheMusicApplication
+import com.techswivel.qthemusic.customData.enums.FragmentType
 import com.techswivel.qthemusic.databinding.FragmentProfileLandingBinding
 import com.techswivel.qthemusic.ui.activities.buyingHistoryActivity.BuyingHistoryActivity
 import com.techswivel.qthemusic.ui.activities.listeningHistoryActivity.ListeningHistoryActivity
 import com.techswivel.qthemusic.ui.activities.profileSettingScreen.ProfileSettingActivity
 import com.techswivel.qthemusic.ui.activities.serverSettingActivity.ServerSettingActivity
 import com.techswivel.qthemusic.ui.base.BaseFragment
+import com.techswivel.qthemusic.ui.fragments.yourInterestFragment.YourInterestFragment
 import com.techswivel.qthemusic.utils.ActivityUtils
+import com.techswivel.qthemusic.utils.CommonKeys
 
 class ProfileLandingFragment : BaseFragment() {
 
@@ -103,12 +106,17 @@ class ProfileLandingFragment : BaseFragment() {
         mBinding.buyingHistoryTextview.setOnClickListener {
             openBuyingingHistoryActivity()
         }
+
         mBinding.yourIntrestTextview.setOnClickListener {
+            val bundle = Bundle()
+            bundle.putString(CommonKeys.KEY_DATA, FragmentType.PROFILE_LANDING.toString())
             ActivityUtils.launchFragment(
                 requireContext(),
-                UnderDevelopmentMessageFragment::class.java.name
+                YourInterestFragment::class.java.name,
+                bundle
             )
         }
+
         mBinding.profileLandingPremiumButton.setOnClickListener {
             ActivityUtils.launchFragment(
                 requireContext(),
