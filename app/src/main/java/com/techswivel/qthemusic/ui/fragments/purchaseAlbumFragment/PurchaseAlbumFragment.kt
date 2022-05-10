@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
-import com.techswivel.dfaktfahrerapp.ui.fragments.underDevelopmentMessageFragment.UnderDevelopmentMessageFragment
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.constant.Constants
 import com.techswivel.qthemusic.customData.adapter.RecyclerViewAdapter
@@ -18,9 +17,12 @@ import com.techswivel.qthemusic.customData.interfaces.BaseInterface
 import com.techswivel.qthemusic.databinding.FragmentPurchaseAlbumBinding
 import com.techswivel.qthemusic.models.RecommendedSongsBodyBuilder
 import com.techswivel.qthemusic.models.ResponseModel
+import com.techswivel.qthemusic.models.database.Album
 import com.techswivel.qthemusic.source.remote.networkViewModel.SongAndArtistsViewModel
 import com.techswivel.qthemusic.ui.base.RecyclerViewBaseFragment
+import com.techswivel.qthemusic.ui.fragments.albumDetailsFragment.AlbumDetailsFragment
 import com.techswivel.qthemusic.utils.ActivityUtils
+import com.techswivel.qthemusic.utils.CommonKeys
 import com.techswivel.qthemusic.utils.DialogUtils
 
 
@@ -66,9 +68,13 @@ class PurchaseAlbumFragment : RecyclerViewBaseFragment(), BaseInterface,
 
     override fun onItemClick(data: Any?, position: Int) {
         super.onItemClick(data, position)
+        val mAlbum = data as Album
+        val bundle = Bundle()
+        bundle.putParcelable(CommonKeys.KEY_ALBUM_DETAILS, mAlbum)
         ActivityUtils.launchFragment(
             requireContext(),
-            UnderDevelopmentMessageFragment::class.java.name
+            AlbumDetailsFragment::class.java.name,
+            bundle
         )
     }
 

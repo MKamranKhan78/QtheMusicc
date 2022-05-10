@@ -9,6 +9,7 @@ import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.techswivel.qthemusic.R
+import com.techswivel.qthemusic.utils.SwipeRevealLayout
 import com.techswivel.qthemusic.utils.Utilities
 import java.text.DateFormat
 import java.util.*
@@ -32,6 +33,11 @@ object BindingAdapter {
         }
     }
 
+    @JvmStatic
+    @BindingAdapter("closeDeleteView")
+    fun closeDeleteView(view: SwipeRevealLayout, model: Any) {
+        view.close(true)
+    }
 
     @SuppressLint("SetTextI18n", "DefaultLocale")
     @JvmStatic

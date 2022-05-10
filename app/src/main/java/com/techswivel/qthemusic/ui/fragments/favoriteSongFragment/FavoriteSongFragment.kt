@@ -5,9 +5,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
-import com.techswivel.dfaktfahrerapp.ui.fragments.underDevelopmentMessageFragment.UnderDevelopmentMessageFragment
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.customData.adapter.RecyclerViewAdapter
 import com.techswivel.qthemusic.customData.enums.AdapterType
@@ -19,8 +21,10 @@ import com.techswivel.qthemusic.models.ResponseModel
 import com.techswivel.qthemusic.models.SongsBodyBuilder
 import com.techswivel.qthemusic.models.database.Song
 import com.techswivel.qthemusic.source.remote.networkViewModel.SongAndArtistsViewModel
+import com.techswivel.qthemusic.ui.activities.playerActivity.PlayerActivity
 import com.techswivel.qthemusic.ui.base.RecyclerViewBaseFragment
 import com.techswivel.qthemusic.utils.ActivityUtils
+import com.techswivel.qthemusic.utils.CommonKeys
 import com.techswivel.qthemusic.utils.DialogUtils
 
 
@@ -85,11 +89,59 @@ class FavoriteSongFragment : RecyclerViewBaseFragment(), BaseInterface,
     override fun onItemClick(data: Any?, position: Int) {
         super.onItemClick(data, position)
         val song = data as Song
-        ActivityUtils.launchFragment(
-            requireContext(),
-            UnderDevelopmentMessageFragment::class.java.name
+        val bundle = Bundle().apply {
+            putParcelable(CommonKeys.KEY_DATA_MODEL, song)
+            putParcelableArrayList(
+                CommonKeys.KEY_SONGS_LIST,
+                viewModel.mFavoriteSongsList as ArrayList<out Song>
+            )
+        }
+        ActivityUtils.startNewActivity(
+            requireActivity(),
+            PlayerActivity::class.java,
+            bundle
         )
+
     }
+
+    override fun onViewClicked(view: View, data: Any?) {
+        super.onViewClicked(view, data)
+        val song = data as Song
+        viewModel.mFavoriteSongsList
+        viewModel.songId = song.songId
+        openBottomSheet(viewModel.songId)
+
+    }
+
+    private fun openBottomSheet(songId: Int?) {
+        val dialog = BottomSheetDialog(
+            requireContext(),
+            R.style.BottomSheetDialog
+        )
+        val view = layoutInflater.inflate(R.layout.bottomsheetlayout, null)
+        val textDelete = view.findViewById<TextView>(R.id.deletePlaylistTextviewBottomSheet)
+        textDelete.text = "Remove Favorite Song"
+        val closeDialogImageview =
+            view.findViewById<ImageView>(R.id.imageviewCancelDialogBottomSheet)
+        closeDialogImageview.setOnClickListener {
+            dialog.dismiss()
+        }
+        textDelete.setOnClickListener {
+            /*viewModel.playListID = playlistModel.playListId
+            val playlistModelBuilder = PlaylistModelBuilder()
+            playlistModelBuilder.playListId = playlistModel.playListId
+            val playlist = PlaylistModelBuilder.build(playlistModelBuilder)
+            profileNetworViewModel.deletePlaylist(
+                playlist
+            )*/
+            dialog.dismiss()
+        }
+
+        dialog.setCancelable(false)
+        dialog.setContentView(view)
+        dialog.show()
+    }
+
 
     @SuppressLint("NotifyDataSetChanged")
     private fun setObserver() {

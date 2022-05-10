@@ -213,4 +213,5 @@
     <string name="unfollow">Unfollow</string>
     <string name="artist_unfollow">Artist unfollow successfully.</string>
     <string name="playlist_exist">Playlist Exist</string>
+    <string name="delete">Delete</string>
 </resources>
