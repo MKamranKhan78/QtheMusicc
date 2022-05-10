@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.techswivel.qthemusic.R
@@ -75,6 +76,13 @@ class PaymentTypeBottomSheetFragment : RecyclerViewBaseFragment(), BaseInterface
         val type = data as Payment
 
 
+        for (items in viewModel.mData) {
+            items.setDownloadButtonVisibility(ObservableField<Int>(View.GONE))
+        }
+        viewModel.mSelectedPlayListItem = type
+        viewModel.mSelectedPlayListItem?.setDownloadButtonVisibility(ObservableField<Int>(View.VISIBLE))
+
+
 /*
         for (items in viewModel.paymentTypeList) {
             items.setDownloadButtonVisibility(ObservableField<Int>(View.GONE))
@@ -89,7 +97,7 @@ class PaymentTypeBottomSheetFragment : RecyclerViewBaseFragment(), BaseInterface
     }
 
     private fun setUpAdapter() {
-        adapter = RecyclerViewAdapter(this, viewModel.paymentTypeList.toMutableList())
+        adapter = RecyclerViewAdapter(this, viewModel.mData.toMutableList())
         setUpRecyclerView(
             mBinding.recyclerviewSelectingPaymentType,
             AdapterType.PAYMENT
@@ -105,10 +113,10 @@ class PaymentTypeBottomSheetFragment : RecyclerViewBaseFragment(), BaseInterface
     private fun getDataAndSetInViews() {
         viewModel.getDummyPaymentList()?.let { paymentList ->
 /*            viewModel.paymentTypeList.addAll(it)*/
-            /*for (item in paymentList) {
+            for (item in paymentList) {
                 item.setDownloadButtonVisibility(ObservableField<Int>(View.GONE))
-                viewModel.paymentTypeList.add(item)
-            }*/
+                viewModel.mData.add(item)
+            }
 /*            mAdapter = RecyclerViewAdapter(this, viewModel.mData as MutableList<Any>)
             setUpRecyclerView(mBinding.recyclerView)*/
         }
