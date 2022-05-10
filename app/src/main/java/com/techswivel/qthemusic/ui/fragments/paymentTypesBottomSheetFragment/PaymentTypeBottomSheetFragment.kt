@@ -43,7 +43,7 @@ class PaymentTypeBottomSheetFragment : RecyclerViewBaseFragment(), BaseInterface
         super.onViewCreated(view, savedInstanceState)
         initViewModel()
         getDataAndSetInViews()
-        setUpAdapter()
+       // setUpAdapter()
         clickListeners()
     }
 
@@ -96,13 +96,13 @@ class PaymentTypeBottomSheetFragment : RecyclerViewBaseFragment(), BaseInterface
 
     }
 
-    private fun setUpAdapter() {
+    /*private fun setUpAdapter() {
         adapter = RecyclerViewAdapter(this, viewModel.mData.toMutableList())
         setUpRecyclerView(
             mBinding.recyclerviewSelectingPaymentType,
             AdapterType.PAYMENT
         )
-    }
+    }*/
 
 
     private fun initViewModel() {
@@ -117,8 +117,8 @@ class PaymentTypeBottomSheetFragment : RecyclerViewBaseFragment(), BaseInterface
                 item.setDownloadButtonVisibility(ObservableField<Int>(View.GONE))
                 viewModel.mData.add(item)
             }
-/*            mAdapter = RecyclerViewAdapter(this, viewModel.mData as MutableList<Any>)
-            setUpRecyclerView(mBinding.recyclerView)*/
+            adapter = RecyclerViewAdapter(this, viewModel.mData as MutableList<Any>)
+            setUpRecyclerView(mBinding.recyclerviewSelectingPaymentType, AdapterType.PAYMENT)
         }
 
 
