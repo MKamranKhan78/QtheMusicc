@@ -16,11 +16,6 @@ import com.techswivel.qthemusic.ui.activities.buyingHistoryActivity.BuyingHistor
 import com.techswivel.qthemusic.ui.base.RecyclerViewBaseFragment
 
 
-// recyclerview click handling using two way data binding.
-// fragments issue at the last.
-// download section discussing with nasar bhai.
-
-
 class PaymentTypeBottomSheetFragment : RecyclerViewBaseFragment(), BaseInterface,
     RecyclerViewAdapter.CallBack {
 
@@ -32,7 +27,6 @@ class PaymentTypeBottomSheetFragment : RecyclerViewBaseFragment(), BaseInterface
     private lateinit var mBinding: FragmentPaymentTypeBottomSheetBinding
     private lateinit var adapter: RecyclerViewAdapter
     private lateinit var viewModel: PaymentTypeBottomSheetViewModel
-    private lateinit var buyingHistoryActivityImpl: BuyingHistoryActivityImpl
 
 
     override fun onCreateView(
@@ -80,12 +74,15 @@ class PaymentTypeBottomSheetFragment : RecyclerViewBaseFragment(), BaseInterface
         super.onItemClick(data, position)
         val type = data as Payment
 
-        /*for (items in viewModel.paymentTypeList.indices) {
+
+/*
+        for (items in viewModel.paymentTypeList) {
             items.setDownloadButtonVisibility(ObservableField<Int>(View.GONE))
         }
         viewModel.mSelectedPlayListItem = type
         viewModel.mSelectedPlayListItem?.setDownloadButtonVisibility(ObservableField<Int>(View.VISIBLE))
-        */
+*/
+
 
         (mActivityListener as BuyingHistoryActivityImpl).onItemClickCallBack(type.payment)
 
@@ -106,12 +103,14 @@ class PaymentTypeBottomSheetFragment : RecyclerViewBaseFragment(), BaseInterface
     }
 
     private fun getDataAndSetInViews() {
-        viewModel.getDummyPaymentList()?.let {
-            viewModel.paymentTypeList.addAll(it)
-            /*for (item in viewModel.paymentTypeList.indices ?: emptyList()) {
-                it[item].setDownloadButtonVisibility(ObservableField(View.GONE))
+        viewModel.getDummyPaymentList()?.let { paymentList ->
+/*            viewModel.paymentTypeList.addAll(it)*/
+            /*for (item in paymentList) {
+                item.setDownloadButtonVisibility(ObservableField<Int>(View.GONE))
                 viewModel.paymentTypeList.add(item)
             }*/
+/*            mAdapter = RecyclerViewAdapter(this, viewModel.mData as MutableList<Any>)
+            setUpRecyclerView(mBinding.recyclerView)*/
         }
 
 

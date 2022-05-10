@@ -1,15 +1,16 @@
 package com.techswivel.qthemusic.ui.fragments.paymentTypesBottomSheetFragment
 
+import com.techswivel.qthemusic.models.Payment
 import com.techswivel.qthemusic.ui.base.BaseViewModel
 
 class PaymentTypeBottomSheetViewModel : BaseViewModel() {
     var paymentTypeList: ArrayList<Any> = ArrayList()
 
-/*    private lateinit var mSelectedItem: Payment
-    private lateinit var mDataList: MutableList<PlaylistModel>
-    var mSelectedPlayListItem: PlaylistModel?
+    private lateinit var mSelectedItem: Payment
+    private lateinit var mDataList: MutableList<Payment>
+    var mSelectedPlayListItem: Payment?
         set(value) {
-            mSelectedItem = value ?: PlaylistModel()
+            mSelectedItem = value ?: Payment()
         }
         get() {
             return if (::mSelectedItem.isInitialized) {
@@ -18,7 +19,7 @@ class PaymentTypeBottomSheetViewModel : BaseViewModel() {
                 null
             }
         }
-    var mData: MutableList<PlaylistModel>
+/*    var mData: MutableList<Payment>
         set(value) {
             mDataList = value
         }
