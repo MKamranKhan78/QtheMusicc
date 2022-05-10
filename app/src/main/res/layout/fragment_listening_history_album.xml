@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/black_gradiant_background">
@@ -36,15 +35,13 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/mainPurchaseAlbumRecycler"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_below="@id/shimmer_layout"
         android:layout_marginTop="@dimen/_10dp"
         android:paddingHorizontal="@dimen/_10dp"
         android:scrollbarSize="@dimen/_2dp"
         android:scrollbars="vertical"
-        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-        app:spanCount="2"
-        tools:listitem="@layout/item_listening_history_album" />
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager" />
 
     <ProgressBar
         android:id="@+id/progress_bar"

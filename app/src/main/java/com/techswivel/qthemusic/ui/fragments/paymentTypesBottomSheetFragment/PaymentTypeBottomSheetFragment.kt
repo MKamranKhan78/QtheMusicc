@@ -4,48 +4,36 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.techswivel.qthemusic.R
-import com.techswivel.qthemusic.application.QTheMusicApplication
 import com.techswivel.qthemusic.customData.adapter.RecyclerViewAdapter
 import com.techswivel.qthemusic.customData.enums.AdapterType
 import com.techswivel.qthemusic.customData.interfaces.BaseInterface
 import com.techswivel.qthemusic.databinding.FragmentPaymentTypeBottomSheetBinding
 import com.techswivel.qthemusic.models.Payment
+import com.techswivel.qthemusic.ui.activities.buyingHistoryActivity.BuyingHistoryActivityImpl
 import com.techswivel.qthemusic.ui.base.RecyclerViewBaseFragment
-import com.techswivel.qthemusic.ui.fragments.buyingHistoryFragment.BuyingHistoryFragmentImpl
+
+
+// recyclerview click handling using two way data binding.
+// fragments issue at the last.
+// download section discussing with nasar bhai.
 
 
 class PaymentTypeBottomSheetFragment : RecyclerViewBaseFragment(), BaseInterface,
     RecyclerViewAdapter.CallBack {
 
     companion object {
-        fun newInstance(
-            buyingHistoryFragmentImpl: BuyingHistoryFragmentImpl//, bundle: Bundle?
-        ) =
-            PaymentTypeBottomSheetFragment().apply {
-                setCallBack(buyingHistoryFragmentImpl)
-                Toast.makeText(
-                    QTheMusicApplication.getContext(),
-                    buyingHistoryFragmentImpl.toString(),
-                    Toast.LENGTH_SHORT
-                ).show()
-                //arguments = bundle
-            }
-
+        fun newInstance() = PaymentTypeBottomSheetFragment().apply {
+        }
     }
 
     private lateinit var mBinding: FragmentPaymentTypeBottomSheetBinding
     private lateinit var adapter: RecyclerViewAdapter
     private lateinit var viewModel: PaymentTypeBottomSheetViewModel
-    private lateinit var buyingHistoryFragmentImpl: BuyingHistoryFragmentImpl
+    private lateinit var buyingHistoryActivityImpl: BuyingHistoryActivityImpl
 
-
-    private fun setCallBack(mbuyingHistoryFragmentImpl: BuyingHistoryFragmentImpl) {
-        buyingHistoryFragmentImpl = mbuyingHistoryFragmentImpl
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -59,9 +47,15 @@ class PaymentTypeBottomSheetFragment : RecyclerViewBaseFragment(), BaseInterface
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViewModel()
-        getPrefrencesData()
-        setDataInViews()
+        getDataAndSetInViews()
         setUpAdapter()
+        clickListeners()
+    }
+
+    private fun clickListeners() {
+        mBinding.imageviewCancelDialogBottomSheet.setOnClickListener {
+            (mActivityListener as BuyingHistoryActivityImpl).onCancelCallBack()
+        }
     }
 
 
@@ -85,8 +79,15 @@ class PaymentTypeBottomSheetFragment : RecyclerViewBaseFragment(), BaseInterface
     override fun onItemClick(data: Any?, position: Int) {
         super.onItemClick(data, position)
         val type = data as Payment
-        Toast.makeText(QTheMusicApplication.getContext(), type.payment, Toast.LENGTH_SHORT).show()
-        buyingHistoryFragmentImpl.openBottomSheetDialogFragment(type.payment)
+
+        /*for (items in viewModel.paymentTypeList.indices) {
+            items.setDownloadButtonVisibility(ObservableField<Int>(View.GONE))
+        }
+        viewModel.mSelectedPlayListItem = type
+        viewModel.mSelectedPlayListItem?.setDownloadButtonVisibility(ObservableField<Int>(View.VISIBLE))
+        */
+
+        (mActivityListener as BuyingHistoryActivityImpl).onItemClickCallBack(type.payment)
 
     }
 
@@ -98,20 +99,23 @@ class PaymentTypeBottomSheetFragment : RecyclerViewBaseFragment(), BaseInterface
         )
     }
 
-    private fun getPrefrencesData() {
-
-    }
 
     private fun initViewModel() {
         viewModel =
             ViewModelProvider(this).get(PaymentTypeBottomSheetViewModel::class.java)
     }
 
-    private fun setDataInViews() {
-        viewModel.getDummyPaymentList()?.let { viewModel.paymentTypeList.addAll(it) }
+    private fun getDataAndSetInViews() {
+        viewModel.getDummyPaymentList()?.let {
+            viewModel.paymentTypeList.addAll(it)
+            /*for (item in viewModel.paymentTypeList.indices ?: emptyList()) {
+                it[item].setDownloadButtonVisibility(ObservableField(View.GONE))
+                viewModel.paymentTypeList.add(item)
+            }*/
+        }
+
+
         if (::adapter.isInitialized)
             adapter.notifyDataSetChanged()
     }
-
-
 }

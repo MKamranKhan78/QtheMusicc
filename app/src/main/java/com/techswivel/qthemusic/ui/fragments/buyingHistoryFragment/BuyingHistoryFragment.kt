@@ -4,11 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.techswivel.qthemusic.R
-import com.techswivel.qthemusic.application.QTheMusicApplication
 import com.techswivel.qthemusic.customData.adapter.RecyclerViewAdapter
 import com.techswivel.qthemusic.customData.enums.AdapterType
 import com.techswivel.qthemusic.customData.enums.ItemType
@@ -18,13 +16,13 @@ import com.techswivel.qthemusic.databinding.FragmentBuyingHistoryBinding
 import com.techswivel.qthemusic.models.BuyingHistory
 import com.techswivel.qthemusic.models.ResponseModel
 import com.techswivel.qthemusic.source.remote.networkViewModel.ProfileNetworkViewModel
+import com.techswivel.qthemusic.ui.activities.buyingHistoryActivity.BuyingHistoryActivityImpl
 import com.techswivel.qthemusic.ui.base.RecyclerViewBaseFragment
-import com.techswivel.qthemusic.ui.fragments.paymentTypesBottomSheetFragment.PaymentTypeBottomSheetFragment
-import com.techswivel.qthemusic.utils.ActivityUtils
 import com.techswivel.qthemusic.utils.DialogUtils
 
 
-class BuyingHistoryFragment : RecyclerViewBaseFragment(), BaseInterface, BuyingHistoryFragmentImpl,
+class BuyingHistoryFragment : RecyclerViewBaseFragment(), BaseInterface,
+    BuyingHistoryActivityImpl, /*BuyingHistoryFragmentImpl,*/
     RecyclerViewAdapter.CallBack {
 
     companion object {
@@ -52,6 +50,7 @@ class BuyingHistoryFragment : RecyclerViewBaseFragment(), BaseInterface, BuyingH
         super.onViewCreated(view, savedInstanceState)
         initViewModel()
         clickListeners()
+        viewModel.type = "All Type Payment"
         getBuyingHistoryDataFromServer()
         setObserver()
         setUpAdapter()
@@ -108,8 +107,7 @@ class BuyingHistoryFragment : RecyclerViewBaseFragment(), BaseInterface, BuyingH
     }
 
     private fun getBuyingHistoryDataFromServer() {
-        profileNetworkViewModel.getBuyingHistory("PAYPAL", 1234)
-
+        profileNetworkViewModel.getBuyingHistory("All Payment Type", 1234)
     }
 
     private fun setUpAdapter() {
@@ -151,7 +149,7 @@ class BuyingHistoryFragment : RecyclerViewBaseFragment(), BaseInterface, BuyingH
     private fun clickListeners() {
         mBinding.allPaymentTextview.setOnClickListener {
             // openBottomSheetDialog()
-
+/*
             val fragmentTransaction =
                 requireActivity().supportFragmentManager.beginTransaction()
             val paymentTypeBottomSheetFragment = PaymentTypeBottomSheetFragment.newInstance(this)
@@ -160,7 +158,9 @@ class BuyingHistoryFragment : RecyclerViewBaseFragment(), BaseInterface, BuyingH
             ActivityUtils.launchFragment(
                 requireContext(),
                 paymentTypeBottomSheetFragment::class.java.name
-            )
+            )*/
+
+            (mActivityListener as BuyingHistoryActivityImpl).openPaymentTypeBottomSheetDialogFragment()
         }
     }
 
@@ -194,9 +194,26 @@ class BuyingHistoryFragment : RecyclerViewBaseFragment(), BaseInterface, BuyingH
 
     }
 
-    override fun openBottomSheetDialogFragment(type: String?) {
-        Toast.makeText(QTheMusicApplication.getContext(), type.toString(), Toast.LENGTH_LONG).show()
+    override fun openPaymentTypeBottomSheetDialogFragment() {
+
     }
+
+    override fun onCancelCallBack() {
+    }
+
+    override fun onItemClickCallBack(paymentType: String?) {
+        if (paymentType != null) {
+            viewModel.type = paymentType
+            mBinding.allPaymentTextview.text = viewModel.type
+            profileNetworkViewModel.getBuyingHistory(paymentType, 1234)
+        }
+
+
+    }
+
+/*    override fun openBottomSheetDialogFragment(type: String?) {
+        Toast.makeText(QTheMusicApplication.getContext(), type.toString(), Toast.LENGTH_LONG).show()
+    }*/
 
 
 }

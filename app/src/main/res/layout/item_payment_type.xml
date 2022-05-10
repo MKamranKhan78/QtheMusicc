@@ -3,6 +3,12 @@
 
     <data>
 
+        <import type="android.view.View" />
+
+        <variable
+            name="click"
+            type="com.techswivel.qthemusic.customData.interfaces.AdapterOnClick" />
+
         <variable
             name="obj"
             type="com.techswivel.qthemusic.models.Payment" />
@@ -20,8 +26,8 @@
         <TextView
             android:id="@+id/paymentTypeTextviewID"
             android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:layout_marginStart="@dimen/_10dp"
             android:fontFamily="@font/manrope_bold"
@@ -38,6 +44,9 @@
             android:layout_marginEnd="@dimen/_20dp"
             android:src="@drawable/ic_icon_feather_check" />
 
-        <!--        setImageViewImage="@{obj.clickImage}"-->
+        <!--
+                android:visibility="@{obj.selectedButtonVisibility}"
+        -->
+
     </RelativeLayout>
 </layout>

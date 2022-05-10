@@ -4,5 +4,6 @@ import com.techswivel.qthemusic.ui.base.BaseViewModel
 
 class BuyingHistoryViewModel : BaseViewModel() {
     var buyingHistoryList: ArrayList<Any> = ArrayList()
+    var type: String? = null
 
 }

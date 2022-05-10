@@ -4,11 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
+import com.techswivel.dfaktfahrerapp.ui.fragments.underDevelopmentMessageFragment.UnderDevelopmentMessageFragment
 import com.techswivel.qthemusic.R
-import com.techswivel.qthemusic.application.QTheMusicApplication
 import com.techswivel.qthemusic.constant.Constants
 import com.techswivel.qthemusic.customData.adapter.RecyclerViewAdapter
 import com.techswivel.qthemusic.customData.enums.AdapterType
@@ -19,6 +18,7 @@ import com.techswivel.qthemusic.models.Album
 import com.techswivel.qthemusic.models.Artist
 import com.techswivel.qthemusic.models.Song
 import com.techswivel.qthemusic.ui.base.RecyclerViewBaseFragment
+import com.techswivel.qthemusic.utils.ActivityUtils
 import com.techswivel.qthemusic.utils.CommonKeys
 
 
@@ -58,6 +58,14 @@ class ListeningHistoryAlbumFragment : RecyclerViewBaseFragment(), BaseInterface,
         return adapterAlbum
     }
 
+    override fun onItemClick(data: Any?, position: Int) {
+        super.onItemClick(data, position)
+        ActivityUtils.launchFragment(
+            requireContext(),
+            UnderDevelopmentMessageFragment::class.java.name
+        )
+    }
+
     override fun showProgressBar() {
         mBinding.progressBar.visibility = View.VISIBLE
     }
@@ -89,8 +97,6 @@ class ListeningHistoryAlbumFragment : RecyclerViewBaseFragment(), BaseInterface,
     private fun getBundleData() {
         val type = arguments?.getString(CommonKeys.KEY_ENUM)
         viewModel.type = type.toString()
-        Toast.makeText(QTheMusicApplication.getContext(), type.toString(), Toast.LENGTH_SHORT)
-            .show()
         if (type == RecommendedSongsType.ALBUM.toString()) {
             viewModel.albums =
                 arguments?.getParcelableArrayList<Album>(CommonKeys.KEY_DATA)
