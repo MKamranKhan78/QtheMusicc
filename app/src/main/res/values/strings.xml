@@ -194,6 +194,7 @@
     <string name="paypal">Paypal</string>
     <string name="apple_pay">Apple Pay</string>
     <string name="google_pay">Google Pay</string>
+    <string name="in_app_purchases">In App Purchases</string>
 
 
 </resources>

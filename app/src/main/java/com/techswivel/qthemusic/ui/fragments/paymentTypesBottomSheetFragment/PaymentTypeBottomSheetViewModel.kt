@@ -5,6 +5,7 @@ import com.techswivel.qthemusic.ui.base.BaseViewModel
 
 class PaymentTypeBottomSheetViewModel : BaseViewModel() {
     var paymentTypeList: ArrayList<Any> = ArrayList()
+    var paymentTypePosition = 0
 
 
     private lateinit var mSelectedItem: Payment

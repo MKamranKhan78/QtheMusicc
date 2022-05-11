@@ -2,6 +2,7 @@ package com.techswivel.qthemusic.utils
 
 class CommonKeys {
     companion object {
+        const val KEY_PAYMENT_TYPE_ = "_key_payment_type_"
         const val PROFILE_LANDING_DATA = "_key_user_data"
         const val KEY_FRAGMENT = "_key_fragment"
         const val KEY_DATA = "_key_data_"
