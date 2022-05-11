@@ -18,8 +18,10 @@ import com.techswivel.qthemusic.customData.enums.SongType
 import com.techswivel.qthemusic.customData.interfaces.BaseInterface
 import com.techswivel.qthemusic.databinding.FragmentFavoriteSongBinding
 import com.techswivel.qthemusic.models.ResponseModel
+import com.techswivel.qthemusic.models.SongBuilder
 import com.techswivel.qthemusic.models.SongsBodyBuilder
 import com.techswivel.qthemusic.models.database.Song
+import com.techswivel.qthemusic.source.remote.networkViewModel.ProfileNetworkViewModel
 import com.techswivel.qthemusic.source.remote.networkViewModel.SongAndArtistsViewModel
 import com.techswivel.qthemusic.ui.activities.playerActivity.PlayerActivity
 import com.techswivel.qthemusic.ui.base.RecyclerViewBaseFragment
@@ -42,6 +44,7 @@ class FavoriteSongFragment : RecyclerViewBaseFragment(), BaseInterface,
     private lateinit var viewModel: FavoriteSongFragmentViewModel
     private lateinit var songAndArtistViewModel: SongAndArtistsViewModel
     private lateinit var mFavoriteSongListAdapter: RecyclerViewAdapter
+    private lateinit var profileNetworViewModel: ProfileNetworkViewModel
 
 
     override fun onCreateView(
@@ -88,32 +91,36 @@ class FavoriteSongFragment : RecyclerViewBaseFragment(), BaseInterface,
 
     override fun onItemClick(data: Any?, position: Int) {
         super.onItemClick(data, position)
-        val song = data as Song
-        val bundle = Bundle().apply {
-            putParcelable(CommonKeys.KEY_DATA_MODEL, song)
-            putParcelableArrayList(
-                CommonKeys.KEY_SONGS_LIST,
-                viewModel.mFavoriteSongsList as ArrayList<out Song>
-            )
-        }
-        ActivityUtils.startNewActivity(
-            requireActivity(),
-            PlayerActivity::class.java,
-            bundle
-        )
-
     }
 
     override fun onViewClicked(view: View, data: Any?) {
         super.onViewClicked(view, data)
         val song = data as Song
-        viewModel.mFavoriteSongsList
-        viewModel.songId = song.songId
-        openBottomSheet(viewModel.songId)
-
+        when (view.id) {
+            R.id.play_button_id_favorite_song -> {
+                val bundle = Bundle().apply {
+                    putParcelable(CommonKeys.KEY_DATA_MODEL, song)
+                    putParcelableArrayList(
+                        CommonKeys.KEY_SONGS_LIST,
+                        viewModel.mFavoriteSongsList as ArrayList<out Song>
+                    )
+                }
+                ActivityUtils.startNewActivity(
+                    requireActivity(),
+                    PlayerActivity::class.java,
+                    bundle
+                )
+            }
+            R.id.privatetextDelete -> {
+                viewModel.song = song
+                viewModel.mFavoriteSongsList
+                viewModel.songId = song.songId
+                openBottomSheet()
+            }
+        }
     }
 
-    private fun openBottomSheet(songId: Int?) {
+    private fun openBottomSheet() {
         val dialog = BottomSheetDialog(
             requireContext(),
             R.style.BottomSheetDialog
@@ -127,13 +134,13 @@ class FavoriteSongFragment : RecyclerViewBaseFragment(), BaseInterface,
             dialog.dismiss()
         }
         textDelete.setOnClickListener {
-            /*viewModel.playListID = playlistModel.playListId
-            val playlistModelBuilder = PlaylistModelBuilder()
-            playlistModelBuilder.playListId = playlistModel.playListId
-            val playlist = PlaylistModelBuilder.build(playlistModelBuilder)
-            profileNetworViewModel.deletePlaylist(
-                playlist
-            )*/
+            val songBuilder = SongBuilder()
+            songBuilder.songId = viewModel.songId
+            songBuilder.isFavourit = false
+            val song = SongBuilder.build(songBuilder)
+            profileNetworViewModel.setFavoriteSong(
+                song
+            )
             dialog.dismiss()
         }
 
@@ -199,6 +206,57 @@ class FavoriteSongFragment : RecyclerViewBaseFragment(), BaseInterface,
                 }
             }
         }
+
+
+        profileNetworViewModel.setFavoriteSongResponse.observe(viewLifecycleOwner) { favoriteSongResponse ->
+            when (favoriteSongResponse.status) {
+                NetworkStatus.LOADING -> {
+                    showProgressBar()
+                }
+                NetworkStatus.SUCCESS -> {
+                    hideProgressBar()
+                    removeItemFromList(viewModel.song)
+
+                }
+                NetworkStatus.ERROR -> {
+                    hideProgressBar()
+                    favoriteSongResponse.error?.message?.let { it1 ->
+                        DialogUtils.errorAlert(
+                            requireContext(),
+                            favoriteSongResponse.error.code.toString(),
+                            favoriteSongResponse.error.message
+                        )
+                    }
+                }
+                NetworkStatus.EXPIRE -> {
+                    hideProgressBar()
+                    DialogUtils.sessionExpireAlert(requireContext(),
+                        object : DialogUtils.CallBack {
+                            override fun onPositiveCallBack() {
+                                viewModel.clearAppSession(requireActivity())
+                            }
+
+                            override fun onNegativeCallBack() {
+                            }
+                        })
+                }
+                NetworkStatus.COMPLETED -> {
+                    hideProgressBar()
+                }
+            }
+        }
+
+    }
+
+    private fun removeItemFromList(song: Song?) {
+        val index = viewModel.mFavoriteSongsList.indexOf(song as Song)
+        viewModel.mFavoriteSongsList.remove(song)
+        if (viewModel.mFavoriteSongsList.size == 0) {
+            mBinding.tvNoDataFound.visibility = View.VISIBLE
+        } else {
+            mBinding.tvNoDataFound.visibility = View.GONE
+        }
+        mFavoriteSongListAdapter.notifyItemRemoved(index)
     }
 
     private fun getFavoriteSongsFromServer() {
@@ -214,6 +272,9 @@ class FavoriteSongFragment : RecyclerViewBaseFragment(), BaseInterface,
 
         songAndArtistViewModel =
             ViewModelProvider(this).get(SongAndArtistsViewModel::class.java)
+
+        profileNetworViewModel =
+            ViewModelProvider(this).get(ProfileNetworkViewModel::class.java)
     }
 
     private fun setUpAdapter() {

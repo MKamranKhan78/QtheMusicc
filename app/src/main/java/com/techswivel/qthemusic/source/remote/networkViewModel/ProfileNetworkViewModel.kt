@@ -5,6 +5,7 @@ import com.techswivel.qthemusic.Data.RemoteRepository.ServerRepository.CustomObs
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.application.QTheMusicApplication
 import com.techswivel.qthemusic.models.*
+import com.techswivel.qthemusic.models.database.Song
 import com.techswivel.qthemusic.source.remote.rxjava.CustomError
 import com.techswivel.qthemusic.source.remote.rxjava.ErrorUtils
 import com.techswivel.qthemusic.ui.base.BaseViewModel
@@ -16,6 +17,61 @@ class ProfileNetworkViewModel :BaseViewModel() {
     var playlistResponse: MutableLiveData<ApiResponse> = MutableLiveData()
     var savePlaylistResponse: MutableLiveData<ApiResponse> = MutableLiveData()
     var deletePlaylistResponse: MutableLiveData<ApiResponse> = MutableLiveData()
+    var setFavoriteSongResponse: MutableLiveData<ApiResponse> = MutableLiveData()
+
+
+    fun setFavoriteSong(song: Song) {
+        mRemoteDataManager.setFavoriteSong(song).doOnSubscribe {
+            setFavoriteSongResponse.value = ApiResponse.loading()
+        }?.subscribe(object : CustomObserver<Response<ResponseMain>>() {
+            override fun onSuccess(t: Response<ResponseMain>) {
+                when {
+                    t.isSuccessful -> {
+                        setFavoriteSongResponse.postValue(
+                            ApiResponse.success(t.body()?.response)
+                        )
+                    }
+                    t.code() == 403 -> {
+                        val error: ResponseMain? = ErrorUtils.parseError(t)
+                        val errorData = ErrorResponse(
+                            error?.response?.status ?: false,
+                            error?.response?.message ?: QTheMusicApplication.getContext()
+                                .getString(R.string.something_wrong),
+                            t.code()
+                        )
+                        setFavoriteSongResponse.value = ApiResponse.expire(errorData)
+                    }
+                    else -> {
+                        val error: ResponseMain? = ErrorUtils.parseError(t)
+                        setFavoriteSongResponse.value = ApiResponse.error(
+                            ErrorResponse(
+                                error?.response?.status ?: false,
+                                error?.response?.message ?: QTheMusicApplication.getContext()
+                                    .getString(R.string.something_wrong),
+                                t.code()
+                            )
+                        )
+                    }
+                }
+            }
+
+            override fun onError(e: Throwable, isInternetError: Boolean, error: CustomError?) {
+                setFavoriteSongResponse.value = ApiResponse.error(
+                    error?.code?.let { code ->
+                        ErrorResponse(
+                            false,
+                            error.message,
+                            code
+                        )
+                    }
+                )
+            }
+
+            override fun onRequestComplete() {
+                setFavoriteSongResponse.value = ApiResponse.complete()
+            }
+        })
+    }
 
 
     fun getPlayListFromServer() {
