@@ -9,7 +9,8 @@ import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.techswivel.qthemusic.R
-import com.techswivel.qthemusic.utils.Utilities.roundOffDecimal
+import com.techswivel.qthemusic.utils.SwipeRevealLayout
+import com.techswivel.qthemusic.utils.Utilities
 import java.text.DateFormat
 import java.util.*
 
@@ -23,10 +24,39 @@ object BindingAdapter {
 
     @SuppressLint("SetTextI18n")
     @JvmStatic
+    @BindingAdapter("setNomberOfSong")
+    fun setNomberOfSong(textView: TextView, noOfSongs: Int?) {
+        if (noOfSongs == null) {
+            textView.text = "0 songs"
+        } else {
+            textView.text = "$noOfSongs songs"
+        }
+    }
+
+    @JvmStatic
+    @BindingAdapter("closeDeleteView")
+    fun closeDeleteView(view: SwipeRevealLayout, model: Any) {
+        view.close(true)
+    }
+
+    @SuppressLint("SetTextI18n", "DefaultLocale")
+    @JvmStatic
+    @BindingAdapter("setSongDuration")
+    fun setSongDuration(textView: TextView, song_duration: Int?) {
+        if (song_duration != null) {
+            val duration = Utilities.formatSongDuration(song_duration.toLong())
+            textView.text = duration
+        }
+    }
+
+
+    @SuppressLint("SetTextI18n")
+    @JvmStatic
     @BindingAdapter("setPlan")
     fun setPlan(textView: TextView, subscription: Subscription?) {
         textView.text =
-            "$" + roundOffDecimal(subscription?.planPrice).toString() + " / " + subscription?.planDuration
+            "$" + Utilities.roundOffDecimal(subscription?.planPrice)
+                .toString() + " / " + subscription?.planDuration
     }
 
     @JvmStatic

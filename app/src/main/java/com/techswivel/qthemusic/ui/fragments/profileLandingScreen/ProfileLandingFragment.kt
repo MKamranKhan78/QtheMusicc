@@ -8,9 +8,14 @@ import androidx.lifecycle.ViewModelProvider
 import com.techswivel.dfaktfahrerapp.ui.fragments.underDevelopmentMessageFragment.UnderDevelopmentMessageFragment
 import com.techswivel.qthemusic.application.QTheMusicApplication
 import com.techswivel.qthemusic.databinding.FragmentProfileLandingBinding
+import com.techswivel.qthemusic.ui.activities.playlistActivity.PlaylistActivity
 import com.techswivel.qthemusic.ui.activities.profileSettingScreen.ProfileSettingActivity
 import com.techswivel.qthemusic.ui.activities.serverSettingActivity.ServerSettingActivity
 import com.techswivel.qthemusic.ui.base.BaseFragment
+import com.techswivel.qthemusic.ui.fragments.favoriteSongFragment.FavoriteSongFragment
+import com.techswivel.qthemusic.ui.fragments.followingArtistFragment.FollowingArtistFragment
+import com.techswivel.qthemusic.ui.fragments.purchaseAlbumFragment.PurchaseAlbumFragment
+import com.techswivel.qthemusic.ui.fragments.purchasedSongFragment.PurchasedSongFragment
 import com.techswivel.qthemusic.utils.ActivityUtils
 
 class ProfileLandingFragment : BaseFragment() {
@@ -60,33 +65,33 @@ class ProfileLandingFragment : BaseFragment() {
             )
         }
         mBinding.playListTextView.setOnClickListener {
-            ActivityUtils.launchFragment(
-                requireContext(),
-                UnderDevelopmentMessageFragment::class.java.name
+            ActivityUtils.startNewActivity(
+                requireActivity(),
+                PlaylistActivity::class.java
             )
         }
         mBinding.favoriteSongTextview.setOnClickListener {
             ActivityUtils.launchFragment(
                 requireContext(),
-                UnderDevelopmentMessageFragment::class.java.name
+                FavoriteSongFragment::class.java.name
             )
         }
         mBinding.purchasedAldumTextview.setOnClickListener {
             ActivityUtils.launchFragment(
                 requireContext(),
-                UnderDevelopmentMessageFragment::class.java.name
+                PurchaseAlbumFragment::class.java.name
             )
         }
         mBinding.purchaseSongTextView.setOnClickListener {
             ActivityUtils.launchFragment(
                 requireContext(),
-                UnderDevelopmentMessageFragment::class.java.name
+                PurchasedSongFragment::class.java.name
             )
         }
         mBinding.followingArtistTextview.setOnClickListener {
             ActivityUtils.launchFragment(
                 requireContext(),
-                UnderDevelopmentMessageFragment::class.java.name
+                FollowingArtistFragment::class.java.name
             )
         }
         mBinding.listeningHistoryTextview.setOnClickListener {

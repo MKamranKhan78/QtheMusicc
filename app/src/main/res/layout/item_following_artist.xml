@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="obj"
+            type="com.techswivel.qthemusic.models.database.Artist" />
+
+        <variable
+            name="click"
+            type="com.techswivel.qthemusic.customData.interfaces.AdapterOnClick" />
+
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/color_black_landing_background">
+
+        <RelativeLayout
+            android:id="@+id/rl_trending_song"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_15dp"
+            tools:ignore="UselessParent">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/artistImageview"
+                setImageViewImage="@{obj.artistCoverImageUrl}"
+                android:layout_width="@dimen/_45dp"
+                android:layout_height="@dimen/_45dp"
+                android:layout_gravity="center_horizontal"
+                android:scaleType="centerCrop"
+                android:src="@drawable/no_image_palce_holder"
+                app:shapeAppearanceOverlay="@style/circleImageView"
+                tools:ignore="VectorDrawableCompat" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/_10dp"
+                android:layout_marginEnd="@dimen/_20dp"
+                android:layout_toStartOf="@id/followTextView"
+                android:layout_toEndOf="@id/artistImageview"
+                android:ellipsize="end"
+                android:fontFamily="@font/manrope_regular"
+                android:maxLines="1"
+                android:minLines="1"
+                android:text="@{obj.artistName}"
+                android:textColor="@color/color_white_text_profile"
+                android:textSize="@dimen/_14sp" />
+
+            <RelativeLayout
+                android:id="@+id/followTextView"
+                android:layout_width="@dimen/_95dp"
+                android:layout_height="@dimen/_37dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                android:background="@drawable/capsule_shape_green_border">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:fontFamily="@font/manrope_semibold"
+                    android:onClick="@{(view)-> click.onViewClick(view,obj)}"
+                    android:text="@string/unfollow"
+                    android:textColor="@color/green_border_color"
+                    android:textSize="@dimen/_14sp" />
+
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.05dp"
+            android:layout_below="@id/rl_trending_song"
+            android:background="@color/color_light_white" />
+    </RelativeLayout>
+
+</layout>

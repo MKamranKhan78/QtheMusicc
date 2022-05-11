@@ -69,6 +69,10 @@ class SearchQueryFragment : RecyclerViewBaseFragment(), BaseInterface {
         Utilities.hideSoftKeyBoard(requireContext(), mBinding.etSearchBox)
     }
 
+    override fun onPrepareAdapter(): RecyclerView.Adapter<*> {
+        TODO("Not yet implemented")
+    }
+
     override fun onPrepareAdapter(adapterType: AdapterType?): RecyclerView.Adapter<*> {
         return when (adapterType) {
             AdapterType.SEARCHED_SONGS -> {

@@ -74,6 +74,10 @@ class YourInterestFragment : RecyclerViewBaseFragment(),
 
     }
 
+    override fun onPrepareAdapter(): RecyclerView.Adapter<*> {
+        return mCategoriesAdapter
+    }
+
     override fun onPrepareAdapter(adapterType: AdapterType?): RecyclerView.Adapter<*> {
         return mCategoriesAdapter
     }
@@ -150,8 +154,7 @@ class YourInterestFragment : RecyclerViewBaseFragment(),
     private fun setUpAdapter() {
         mCategoriesAdapter = RecyclerViewAdapter(this, mViewModel.mCategoryResponseList)
         setUpFlexBoxRecViewForYourInterest(
-            mBinding.recViewYourInterests,
-            AdapterType.YOUR_INTERESTS
+            mBinding.recViewYourInterests
         )
     }
 

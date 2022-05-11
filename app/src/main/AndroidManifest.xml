@@ -12,8 +12,11 @@
     <uses-permission
         android:name="com.google.android.gms.permission.AD_ID"
         tools:node="remove" />
-
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
+    <queries>
+        <package android:name="com.facebook.katana" />
+    </queries>
 
     <application
         android:name=".application.QTheMusicApplication"
@@ -25,7 +28,9 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-
+        <activity
+            android:name=".ui.activities.playlistActivity.PlaylistActivity"
+            android:exported="false" />
         <activity
             android:name=".ui.activities.playerActivity.PlayerActivity"
             android:screenOrientation="portrait"
@@ -41,6 +46,7 @@
             android:name=".ui.activities.splashActivity.SplashActivity"
             android:exported="true"
             android:screenOrientation="portrait">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -59,7 +65,6 @@
             android:screenOrientation="portrait" />
 
         <service android:name=".services.PlayerBackgroundService" />
-
         <service
             android:name=".source.remote.firebase.FirebaseNotificationService"
             android:exported="false">
@@ -107,7 +112,4 @@
         </provider>
     </application>
 
-    <queries>
-        <package android:name="com.facebook.katana" />
-    </queries>
 </manifest>

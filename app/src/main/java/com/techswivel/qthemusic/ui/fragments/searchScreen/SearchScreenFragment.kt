@@ -67,6 +67,10 @@ class SearchScreenFragment : RecyclerViewBaseFragment() {
         mViewModel.recentPlayedSongsList.clear()
     }
 
+    override fun onPrepareAdapter(): RecyclerView.Adapter<*> {
+        TODO("Not yet implemented")
+    }
+
     override fun onPrepareAdapter(adapterType: AdapterType?): RecyclerView.Adapter<*> {
         return when (adapterType) {
             AdapterType.RECENT_SONGS -> {

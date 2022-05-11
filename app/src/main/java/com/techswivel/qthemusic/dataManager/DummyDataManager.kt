@@ -46,12 +46,47 @@ class DummyDataManager {
                 authModel,
                 getRecommendedSongsDummyData(),
                 getCategoriesDummyData(),
+                getDummyPlaylist(),
+                getDummyPlaylistResponse(),
+                getDummySongs(),
+                getDummyFollowingArtist(),
                 getSongsDummyData(),
                 getLanguages(),
                 getSearchedSongs()
 
             )
         }
+
+        private fun getDummyFollowingArtist(): List<Artist> {
+            return arrayListOf(
+                Artist(
+
+                    "https://media.timeout.com/images/101659805/image.jpg",
+                    1,
+                    "Hamdan Ali",
+                    null
+                ),
+                Artist(
+
+                    "https://cdn.lifehack.org/wp-content/uploads/2015/09/rock-music-wallpapers.jpg",
+                    2,
+                    "Hassan",
+                    null
+                ),
+                Artist(
+
+                    "https://cdn5.vectorstock.com/i/1000x1000/77/09/colorful-detailed-pop-music-can-vector-19847709.jpg",
+                    3,
+                    "Salman",
+                    null
+                ),
+            )
+        }
+
+        private fun getDummyPlaylistResponse(): PlaylistModel {
+            return PlaylistModel(10, "Dummy Playlist", null)
+        }
+
 
         private fun getLanguages(): List<Language> {
             return listOf(
@@ -143,7 +178,6 @@ class DummyDataManager {
             )
 
         }
-
         private fun getRecommendedSongsDummyData(): RecommendedSongsResponse {
             return RecommendedSongsResponse(
                 listOf(
@@ -327,6 +361,163 @@ class DummyDataManager {
 
             )
         }
+
+        private fun getDummyPlaylist(): List<PlaylistModel> {
+            return arrayListOf(
+                PlaylistModel(
+                    1,
+                    "Emotional songs",
+                    30
+                ),
+                PlaylistModel(
+                    2,
+                    "Hamd e bari tala",
+                    40
+                ),
+                PlaylistModel(
+                    3,
+                    "For Sleeping time",
+                    100
+                ),
+                PlaylistModel(
+                    4,
+                    "Naat",
+                    12
+                ),
+                PlaylistModel(
+                    5,
+                    "Punjabi songs",
+                    25
+                ),
+                PlaylistModel(
+                    6,
+                    "New Songs",
+                    50
+                )
+            )
+        }
+
+
+        private fun getDummySongs(): List<Song> {
+            return arrayListOf(
+                Song(
+                    1,
+                    "Risk It All",
+                    "Eminem",
+                    3,
+                    1,
+                    "https://upload.wikimedia.org/wikipedia/commons/0/06/Eminem_performing_on_April_2013_%28cropped%29.jpg",
+                    true,
+                    false,
+                    "No Lyrics Available",
+                    1,
+                    "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+                    "",
+                    "",
+                    3233,
+                    11.11f,
+                    1,
+                    SongStatus.FREE,
+                    "",
+                    "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+                    null,
+                    null
+                ),
+                Song(
+                    2,
+                    "The Weeknd",
+                    "Star Boy",
+                    31,
+                    3,
+                    "https://i.ytimg.com/vi/XXYlFuWEuKI/maxresdefault.jpg",
+                    true,
+                    false,
+                    "No Lyrics Available",
+                    2,
+                    "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3",
+                    "",
+                    "",
+                    3213,
+                    11.11f,
+                    2,
+                    SongStatus.PREMIUM,
+                    "Save Your Tears",
+                    "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+                    null,
+                    null
+                ),
+                Song(
+                    3,
+                    "RCA Records",
+                    "Sabrina and Farruko",
+                    5,
+                    10,
+                    "https://cdn.smehost.net/rcarecordscom-usrcaprod/wp-content/uploads/2019/04/alanwalkeromwvic.jpg",
+                    true,
+                    false,
+                    "No Lyrics Available",
+                    3,
+                    "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
+                    "",
+                    "",
+                    4533,
+                    11.11f,
+                    3,
+                    SongStatus.FREE,
+                    "On My Way",
+                    "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+                    null,
+                    null
+                ),
+                Song(
+                    4,
+                    "Voice Of Arijit",
+                    "Arijit Sign",
+                    7,
+                    9,
+                    "https://musicalsafar.com/wp-content/uploads/2021/08/20_05_2021-arijit_singh_21660518.jpg",
+                    true,
+                    false,
+                    "No Lyrics Available",
+                    6,
+                    "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3",
+                    "",
+                    "",
+                    193,
+                    11.11f,
+                    4,
+                    SongStatus.FREE,
+                    "Thori Jaga",
+                    "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+                    null,
+                    null
+                ),
+                Song(
+                    5,
+                    "Voice Of Atif",
+                    "Atif Aslam",
+                    7,
+                    9,
+                    "https://st1.bollywoodlife.com/wp-content/uploads/2020/06/FotoJet208.jpg",
+                    true,
+                    false,
+                    "No Lyrics Available",
+                    6,
+                    "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3",
+                    "",
+                    "",
+                    193,
+                    11.11f,
+                    5,
+                    SongStatus.FREE,
+                    "Rafta Rafta",
+                    "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+                    null,
+                    null
+                )
+            )
+        }
+
 
         fun getDummyAuthDetails(): AuthModel {
             val address = Address(

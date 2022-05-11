@@ -58,6 +58,7 @@ object Utilities {
     }
 
 
+
     fun takeScreenShot(activity: Activity): Bitmap? {
         val view: View = activity.window.decorView
         view.setDrawingCacheEnabled(true)

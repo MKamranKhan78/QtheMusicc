@@ -24,6 +24,15 @@
         <item name="cornerSize">10%</item>
     </style>
 
+    <style name="BottomSheetDialog" parent="@style/ThemeOverlay.MaterialComponents.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/ShoppingList.BottomSheetDialog</item>
+    </style>
+
+    <style name="ShoppingList.BottomSheetDialog" parent="Widget.MaterialComponents.BottomSheet.Modal">
+        <item name="backgroundTint">@color/transparent_color</item>
+    </style>
+
+
     <style name="InputEditTextHindAppearance" parent="TextAppearance.Design.Hint">
         <item name="android:textSize">12sp</item>
         <item name="fontFamily">@font/manrope_regular</item>
@@ -102,6 +111,11 @@
         <!--        &lt;!&ndash; Additionally if you want animations when dialog opening &ndash;&gt;-->
         <!--        &lt;!&ndash;<item name="android:windowEnterAnimation">@anim/slide_up</item>&ndash;&gt;-->
         <!--        &lt;!&ndash;<item name="android:windowExitAnimation">@anim/slide_down</item>&ndash;&gt;-->
+    </style>
+
+
+    <style name="MyBottomSheetDialog" parent="@android:style/Theme.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 
 
