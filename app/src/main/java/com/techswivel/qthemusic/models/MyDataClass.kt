@@ -34,7 +34,6 @@ class MyDataClass(
     @Expose
     @SerializedName("songs")
     val songs: List<SearchedSongs>?,
-    var songsResponse: SongsResponse?,
     @SerializedName("totalAmount")
     val totalAmount: Int?,
     @SerializedName("buyingHistory")

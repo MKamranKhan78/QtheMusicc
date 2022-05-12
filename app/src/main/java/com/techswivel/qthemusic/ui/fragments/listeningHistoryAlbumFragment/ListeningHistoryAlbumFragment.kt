@@ -14,9 +14,9 @@ import com.techswivel.qthemusic.customData.enums.AdapterType
 import com.techswivel.qthemusic.customData.enums.RecommendedSongsType
 import com.techswivel.qthemusic.customData.interfaces.BaseInterface
 import com.techswivel.qthemusic.databinding.FragmentListeningHistoryAlbumBinding
-import com.techswivel.qthemusic.models.Album
-import com.techswivel.qthemusic.models.Artist
-import com.techswivel.qthemusic.models.Song
+import com.techswivel.qthemusic.models.database.Album
+import com.techswivel.qthemusic.models.database.Artist
+import com.techswivel.qthemusic.models.database.Song
 import com.techswivel.qthemusic.ui.base.RecyclerViewBaseFragment
 import com.techswivel.qthemusic.utils.ActivityUtils
 import com.techswivel.qthemusic.utils.CommonKeys
@@ -51,6 +51,10 @@ class ListeningHistoryAlbumFragment : RecyclerViewBaseFragment(), BaseInterface,
         initViewModel()
         getBundleData()
         setUpAdapter()
+    }
+
+    override fun onPrepareAdapter(): RecyclerView.Adapter<*> {
+        return adapterAlbum
     }
 
 

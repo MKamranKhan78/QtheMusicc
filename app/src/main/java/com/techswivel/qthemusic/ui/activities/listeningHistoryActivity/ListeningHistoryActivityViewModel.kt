@@ -1,10 +1,10 @@
 package com.techswivel.qthemusic.ui.activities.listeningHistoryActivity
 
 import com.techswivel.qthemusic.customData.enums.RecommendedSongsType
-import com.techswivel.qthemusic.models.Album
-import com.techswivel.qthemusic.models.Artist
 import com.techswivel.qthemusic.models.RecommendedSongsBodyModel
-import com.techswivel.qthemusic.models.Song
+import com.techswivel.qthemusic.models.database.Album
+import com.techswivel.qthemusic.models.database.Artist
+import com.techswivel.qthemusic.models.database.Song
 import com.techswivel.qthemusic.ui.base.BaseViewModel
 
 class ListeningHistoryActivityViewModel : BaseViewModel() {

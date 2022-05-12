@@ -119,6 +119,10 @@ class BuyingHistoryFragment : RecyclerViewBaseFragment(), BaseInterface,
         )
     }
 
+    override fun onPrepareAdapter(): RecyclerView.Adapter<*> {
+        return adapterBuyingHistory
+    }
+
 
     override fun onPrepareAdapter(adapterType: AdapterType?): RecyclerView.Adapter<*> {
         return adapterBuyingHistory

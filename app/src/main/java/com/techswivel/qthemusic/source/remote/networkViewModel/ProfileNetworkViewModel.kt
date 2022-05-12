@@ -4,15 +4,9 @@ import androidx.lifecycle.MutableLiveData
 import com.techswivel.qthemusic.Data.RemoteRepository.ServerRepository.CustomObserver
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.application.QTheMusicApplication
+import com.techswivel.qthemusic.dataManager.RemoteDataManager
 import com.techswivel.qthemusic.models.*
 import com.techswivel.qthemusic.models.database.Song
-import com.techswivel.qthemusic.R
-import com.techswivel.qthemusic.application.QTheMusicApplication
-import com.techswivel.qthemusic.dataManager.RemoteDataManager
-import com.techswivel.qthemusic.models.ApiResponse
-import com.techswivel.qthemusic.models.Category
-import com.techswivel.qthemusic.models.ErrorResponse
-import com.techswivel.qthemusic.models.ResponseMain
 import com.techswivel.qthemusic.source.remote.rxjava.CustomError
 import com.techswivel.qthemusic.source.remote.rxjava.ErrorUtils
 import com.techswivel.qthemusic.ui.base.BaseViewModel

@@ -10,6 +10,9 @@ import com.techswivel.qthemusic.customData.enums.NetworkStatus
 import com.techswivel.qthemusic.customData.enums.RecommendedSongsType
 import com.techswivel.qthemusic.databinding.ActivityListeningHistoryBinding
 import com.techswivel.qthemusic.models.*
+import com.techswivel.qthemusic.models.database.Album
+import com.techswivel.qthemusic.models.database.Artist
+import com.techswivel.qthemusic.models.database.Song
 import com.techswivel.qthemusic.source.remote.networkViewModel.SongAndArtistsViewModel
 import com.techswivel.qthemusic.ui.base.BaseActivity
 import com.techswivel.qthemusic.ui.fragments.listeningHistoryAlbumFragment.ListeningHistoryAlbumFragment
