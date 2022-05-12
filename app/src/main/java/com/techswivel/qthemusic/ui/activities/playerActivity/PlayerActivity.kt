@@ -17,7 +17,7 @@ import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.constant.Constants
 import com.techswivel.qthemusic.customData.enums.SongStatus
 import com.techswivel.qthemusic.databinding.ActivityPlayerBinding
-import com.techswivel.qthemusic.models.Song
+import com.techswivel.qthemusic.models.database.Song
 import com.techswivel.qthemusic.ui.base.BaseActivity
 import com.techswivel.qthemusic.utils.*
 import com.techswivel.qthemusic.utils.Utilities.formatSongDuration

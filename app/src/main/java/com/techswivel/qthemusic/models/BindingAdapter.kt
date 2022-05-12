@@ -14,6 +14,7 @@ import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.customData.adapter.RecyclerViewAdapter
 import com.techswivel.qthemusic.utils.Utilities
 import com.techswivel.qthemusic.utils.Utilities.roundOffDecimal
+import com.techswivel.qthemusic.utils.SwipeRevealLayout
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -28,14 +29,6 @@ object BindingAdapter {
 
     @SuppressLint("SetTextI18n")
     @JvmStatic
-    @BindingAdapter("setPlan")
-    fun setPlan(textView: TextView, subscription: Subscription?) {
-        textView.text =
-            "$" + roundOffDecimal(subscription?.planPrice).toString() + " / " + subscription?.planDuration
-    }
-
-    @SuppressLint("SetTextI18n")
-    @JvmStatic
     @BindingAdapter("setNomberOfSong")
     fun setNomberOfSong(textView: TextView, noOfSongs: Int?) {
         if (noOfSongs == null) {
@@ -43,6 +36,12 @@ object BindingAdapter {
         } else {
             textView.text = "$noOfSongs songs"
         }
+    }
+
+    @JvmStatic
+    @BindingAdapter("closeDeleteView")
+    fun closeDeleteView(view: SwipeRevealLayout, model: Any) {
+        view.close(true)
     }
 
     @SuppressLint("SetTextI18n", "DefaultLocale")
@@ -54,6 +53,20 @@ object BindingAdapter {
             textView.text = duration
         }
     }
+
+
+    @SuppressLint("SetTextI18n")
+    @JvmStatic
+    @BindingAdapter("setPlan")
+    fun setPlan(textView: TextView, subscription: Subscription?) {
+        textView.text =
+            "$" + Utilities.roundOffDecimal(subscription?.planPrice)
+                .toString() + " / " + subscription?.planDuration
+    }
+
+
+
+
 
     @JvmStatic
     @BindingAdapter("setDate")
@@ -93,8 +106,8 @@ object BindingAdapter {
 
     @JvmStatic
     @BindingAdapter("setDateOfBirth")
-    fun setDateOfBirth(textView: TextView, text: String) {
-
+    fun setDateOfBirth(textView: TextView, text: String?) {
+        textView.text = text
     }
 
 
@@ -142,5 +155,13 @@ object BindingAdapter {
         val seconds = duration % 60
 
         pTextView.text = String.format("%02d:%02d", minutes, seconds);
+    }
+
+    @JvmStatic
+    @BindingAdapter("setImageWithBlur")
+    fun setImageWithBlur(pImageView: ImageView, image: String) {
+        Glide.with(pImageView.context).load(image)
+            .override(20, 20)
+            .into(pImageView)
     }
 }

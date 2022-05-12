@@ -26,6 +26,15 @@ abstract class RecyclerViewBaseFragment : BaseFragment() {
         pRecyclerView.adapter = mAdapter
     }
 
+    protected open fun setUpRecyclerView(pRecyclerView: RecyclerView) {
+        val linearLayoutManager = LinearLayoutManager(requireContext())
+        linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
+        pRecyclerView.layoutManager = linearLayoutManager
+        pRecyclerView.itemAnimator = DefaultItemAnimator()
+        val mAdapter: RecyclerView.Adapter<*> = onPrepareAdapter()
+        pRecyclerView.adapter = mAdapter
+    }
+
     protected open fun setUpRecyclerView(
         pRecyclerView: RecyclerView,
         verticalSpacing: Int,
@@ -57,6 +66,45 @@ abstract class RecyclerViewBaseFragment : BaseFragment() {
         val mAdapter: RecyclerView.Adapter<*> = onPrepareAdapter(adapterType)
         pRecyclerView.adapter = mAdapter
     }
+
+    protected open fun setUpGridRecyclerView(
+        pRecyclerView: RecyclerView,
+        numColums: Int,
+        verticalSpacing: Int,
+        horizentalSpacing: Int
+    ) {
+
+        pRecyclerView.layoutManager = GridLayoutManager(requireContext(), numColums)
+        pRecyclerView.itemAnimator = DefaultItemAnimator()
+
+        pRecyclerView.clipToPadding = false
+        pRecyclerView.clipChildren = false
+        pRecyclerView.setHasFixedSize(true)
+        if (pRecyclerView.itemDecorationCount <= 0) {
+            pRecyclerView.addItemDecoration(object : ItemDecoration() {
+                override fun getItemOffsets(
+                    outRect: Rect,
+                    view: View,
+                    parent: RecyclerView,
+                    state: RecyclerView.State
+                ) {
+                    outRect.set(
+                        verticalSpacing,
+                        horizentalSpacing,
+                        verticalSpacing,
+                        horizentalSpacing
+                    )
+                }
+            })
+        }
+        if (pRecyclerView.adapter == null) {
+            pRecyclerView.adapter = onPrepareAdapter()
+        } else {
+            pRecyclerView.adapter = null
+            pRecyclerView.adapter = onPrepareAdapter()
+        }
+    }
+
 
     protected open fun setUpGridRecyclerView(
         pRecyclerView: RecyclerView,
@@ -97,16 +145,33 @@ abstract class RecyclerViewBaseFragment : BaseFragment() {
         }
     }
 
+
+    protected abstract fun onPrepareAdapter(): RecyclerView.Adapter<*>
+
+
     protected abstract fun onPrepareAdapter(adapterType: AdapterType?): RecyclerView.Adapter<*>
 
-    protected open fun setUpFlexBoxRecViewForYourInterest(pRecyclerView: RecyclerView, adapterType: AdapterType?) {
+    //    fun setUpFlexBoxRecViewForYourInterest(
+//        recyclerView: RecyclerView,
+//        adapter: CategoriesAdapter
+//    ) {
+//        val layoutManager = FlexboxLayoutManager(requireContext())
+//        layoutManager.justifyContent = JustifyContent.CENTER
+//        layoutManager.alignItems = AlignItems.CENTER
+//        layoutManager.flexDirection = FlexDirection.ROW
+//        layoutManager.flexWrap = FlexWrap.WRAP
+//        recyclerView.layoutManager=layoutManager
+//        recyclerView.adapter=adapter
+//    }
+
+    protected open fun setUpFlexBoxRecViewForYourInterest(pRecyclerView: RecyclerView) {
         val layoutManager = FlexboxLayoutManager(requireContext())
         layoutManager.justifyContent = JustifyContent.CENTER
         layoutManager.alignItems = AlignItems.CENTER
         layoutManager.flexDirection = FlexDirection.ROW
         layoutManager.flexWrap = FlexWrap.WRAP
-        pRecyclerView.layoutManager=layoutManager
-        val mAdapter: RecyclerView.Adapter<*> = onPrepareAdapter(adapterType)
+        pRecyclerView.layoutManager = layoutManager
+        val mAdapter: RecyclerView.Adapter<*> = onPrepareAdapter()
         pRecyclerView.adapter = mAdapter
     }
 }

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/_5dp"
+    android:background="@color/color_white"
+    app:cardCornerRadius="@dimen/_10dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/color_black"
+        android:orientation="vertical"
+        android:padding="@dimen/_15dp">
+
+        <ImageView
+            android:id="@+id/imageviewCancelDialog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:src="@drawable/ic_baseline_clear_24"
+            android:textColor="@color/color_black"
+            android:textSize="@dimen/_16sp" />
+
+        <TextView
+            android:id="@+id/textMainTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_5dp"
+            android:fontFamily="@font/manrope_bold"
+            android:text="@string/create_new_playlist"
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/_18sp" />
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/et_name_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_40dp"
+            android:hint="@string/title"
+            android:padding="@dimen/_2dp"
+            android:textColorHint="@color/color_white"
+            app:boxBackgroundMode="outline"
+            app:boxCornerRadiusBottomEnd="@dimen/_10dp"
+            app:boxCornerRadiusBottomStart="@dimen/_10dp"
+            app:boxCornerRadiusTopEnd="@dimen/_10dp"
+            app:boxCornerRadiusTopStart="@dimen/_10dp"
+            app:boxStrokeColor="@color/set_password_et_border_clr"
+            app:boxStrokeWidth="@dimen/_1dp"
+            app:boxStrokeWidthFocused="@dimen/_1dp"
+            app:errorTextColor="@color/logout_button_color"
+            app:hintEnabled="true"
+            app:hintTextColor="@color/color_white">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_playlist_name_id"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/_4dp"
+                android:drawablePadding="@dimen/_16dp"
+                android:fontFamily="@font/manrope_regular"
+                android:maxLines="1"
+                android:paddingStart="@dimen/_16dp"
+                android:paddingTop="@dimen/_16dp"
+                android:paddingEnd="@dimen/_36dp"
+                android:paddingBottom="@dimen/_16dp"
+                android:textColor="@color/color_white_text_profile"
+                android:textColorHighlight="@color/color_white"
+                android:textColorHint="@color/light_gray_color"
+                android:textSize="@dimen/_14sp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <LinearLayout
+            android:id="@+id/createPlaylistButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_20dp"
+            android:layout_marginBottom="@dimen/_15dp"
+            android:background="@drawable/logout_button_drawable">
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="@dimen/_10dp"
+                android:text="@string/create"
+                android:textColor="@color/color_white" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:indeterminate="true"
+        android:indeterminateTint="@color/logout_button_color"
+        android:progressTint="@color/logout_button_color"
+        android:visibility="gone" />
+</androidx.cardview.widget.CardView>

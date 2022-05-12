@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="obj"
+            type="com.techswivel.qthemusic.models.PlaylistModel" />
+
+        <variable
+            name="click"
+            type="com.techswivel.qthemusic.customData.interfaces.AdapterOnClick" />
+
+
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/color_black_landing_background"
+        >
+
+        <RelativeLayout
+            android:id="@+id/rl_trending_song"
+            android:layout_width="match_parent"
+            android:layout_margin="@dimen/_20dp"
+            android:layout_height="wrap_content"
+            tools:ignore="UselessParent">
+
+            <ImageView
+                android:id="@+id/imageAudioSong"
+                android:layout_width="@dimen/_45dp"
+                android:layout_height="@dimen/_45dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_audio_song_icon"
+                tools:ignore="ContentDescription" />
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/_10dp"
+                android:layout_toLeftOf="@id/item_menu_button_id"
+                android:layout_toEndOf="@id/imageAudioSong"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/_20dp"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/manrope_regular"
+                    android:maxLines="1"
+                    android:minLines="1"
+                    android:text="@{obj.playListTitle.toString()}"
+                    android:textColor="@color/color_white_text_profile"
+                    android:textSize="@dimen/_14sp" />
+
+                <TextView
+                    setNomberOfSong="@{obj.totalSongs}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:minLines="1"
+                    android:fontFamily="@font/manrope_regular"
+                    android:textColor="@color/color_light_grey"
+                    android:textSize="@dimen/_10sp" />
+
+
+            </LinearLayout>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:paddingStart="@dimen/_10dp"
+                    android:id="@+id/item_menu_button_id"
+                    android:layout_marginEnd="@dimen/_0dp"
+                    android:onClick="@{(view)-> click.onViewClick(view,obj)}"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_item_menu_dots"
+                    tools:ignore="ContentDescription" />
+
+            </RelativeLayout>
+        </RelativeLayout>
+
+</layout>

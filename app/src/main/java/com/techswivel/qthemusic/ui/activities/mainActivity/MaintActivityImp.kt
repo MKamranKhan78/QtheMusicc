@@ -5,4 +5,5 @@ import com.techswivel.qthemusic.models.Category
 
 interface MaintActivityImp:BaseInterface {
 
+
 }

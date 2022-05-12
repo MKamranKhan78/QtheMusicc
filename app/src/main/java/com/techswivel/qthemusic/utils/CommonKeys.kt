@@ -6,6 +6,8 @@ class CommonKeys {
         const val PROFILE_LANDING_DATA = "_key_user_data"
         const val KEY_FRAGMENT = "_key_fragment"
         const val KEY_DATA = "_key_data_"
+        const val KEY_DELETE_VIEW_TYPE = "_key_delete_view_type_"
+        const val KEY_PLAYLIST_ID = "_key_playlist_id_"
         const val KEY_JWT = "_key_jwt"
         const val KEY_FIRST_NAME = "_key_first_name_"
         const val KEY_LAST_NAME = "_key_last_name_"
@@ -13,15 +15,17 @@ class CommonKeys {
         const val KEY_IS_LOGGED_IN = "_key_is_logged_in"
         const val TYPE_VIDEO = 1
         const val TYPE_PHOTO = 2
+        const val APP_FLOW = "app_flow"
         const val START_TIMER = "Start_Timer"
         const val USER_EMAIL = "user_email"
-        const val USER_OTP = "user_otp"
-        const val SIGNIN_BTN_ANIMATION = "sigin_btn_animation"
+        const val USER_OTP="user_otp"
+        const val SIGNIN_BTN_ANIMATION="sigin_btn_animation"
         const val KEY_DATA_MODEL = "_key_data_model_"
         const val KEY_SONG_TYPE = "_key_song_type_"
         const val KEY_SONGS_LIST = "_key_songs_list_"
         const val KEY_ALBUM_LIST = "_key_songs_list_"
         const val KEY_ARTIST_LIST = "_key_songs_list_"
+        const val KEY_PLAY_LIST = "_key_play_list_"
         const val KEY_USER_NAME = "_key_user_name"
         const val KEY_USER_EMAIL = "_key_user_email"
         const val KEY_USER_AVATAR = "_key_user_avatar"
@@ -55,7 +59,8 @@ class CommonKeys {
         const val   AUTH_BUILDER_MODEL="auth_builder_model"
         const val KEY_TERM_AND_CONDITION_PRIVACY = "_key_term_and_condition_privacy_policy"
         const val IMAGE_DIRECTORY = "/demonuts"
+        const val ID_FOR_DB = "id_for_db"
 
-
+        const val KEY_ALBUM_DETAILS="key_album_details"
     }
 }

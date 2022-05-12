@@ -29,6 +29,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
         <activity
+            android:name=".ui.activities.playlistActivity.PlaylistActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.activities.buyingHistoryActivity.BuyingHistoryActivity"
             android:exported="false" />
         <activity
@@ -49,6 +52,7 @@
             android:name=".ui.activities.splashActivity.SplashActivity"
             android:exported="true"
             android:screenOrientation="portrait">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -57,7 +61,9 @@
         </activity>
         <activity
             android:name=".ui.activities.mainActivity.MainActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan"
+            />
         <activity
             android:name=".ui.activities.serverSettingActivity.ServerSettingActivity"
             android:screenOrientation="portrait" />

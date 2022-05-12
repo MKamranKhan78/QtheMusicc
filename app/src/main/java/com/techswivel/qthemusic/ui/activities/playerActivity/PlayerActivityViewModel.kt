@@ -5,7 +5,7 @@ import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.TracksInfo
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.upstream.DataSource
-import com.techswivel.qthemusic.models.Song
+import com.techswivel.qthemusic.models.database.Song
 import com.techswivel.qthemusic.ui.base.BaseViewModel
 
 class PlayerActivityViewModel : BaseViewModel() {

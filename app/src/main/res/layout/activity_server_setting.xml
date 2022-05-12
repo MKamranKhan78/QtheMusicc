@@ -69,4 +69,52 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <Button
+        android:id="@+id/add_album"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Album"
+        android:textColor="@color/color_black"
+        app:layout_constraintBottom_toBottomOf="@+id/add_song"
+        app:layout_constraintEnd_toStartOf="@+id/add_artist"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/add_song"
+        app:layout_constraintTop_toTopOf="@+id/add_song" />
+
+    <Button
+        android:id="@+id/add_artist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="artist"
+        android:textColor="@color/color_black"
+        app:layout_constraintBottom_toBottomOf="@+id/add_album"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/add_album"
+        app:layout_constraintTop_toTopOf="@+id/add_album" />
+
+    <Button
+        android:id="@+id/add_song"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:text="song"
+        android:visibility="invisible"
+        android:textColor="@color/color_black"
+        app:layout_constraintBottom_toTopOf="@+id/buttonCrash"
+        app:layout_constraintEnd_toStartOf="@+id/add_album"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/delete_sng"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="35dp"
+        android:layout_marginBottom="17dp"
+        android:visibility="invisible"
+        android:text="delete"
+        android:textColor="@color/color_black"
+        app:layout_constraintBottom_toTopOf="@+id/add_song"
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
