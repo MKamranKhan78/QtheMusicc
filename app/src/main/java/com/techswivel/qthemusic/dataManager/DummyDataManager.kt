@@ -337,12 +337,6 @@ class DummyDataManager {
             )
         }
 
-        fun getDummyPaymentType(): List<Payment>? {
-            return listOf(
-                Payment("All Payment Type", "image"),
-                Payment("In app Purchases", "image2")
-            )
-        }
 
         fun getDummyAuthDetails(): AuthModel {
             val address = Address(

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.techswivel.qthemusic.R
@@ -19,11 +20,11 @@ import com.techswivel.qthemusic.source.remote.networkViewModel.ProfileNetworkVie
 import com.techswivel.qthemusic.ui.activities.buyingHistoryActivity.BuyingHistoryActivityImpl
 import com.techswivel.qthemusic.ui.base.RecyclerViewBaseFragment
 import com.techswivel.qthemusic.utils.DialogUtils
+import com.techswivel.qthemusic.utils.Log
 
 
 class BuyingHistoryFragment : RecyclerViewBaseFragment(), BaseInterface,
-    BuyingHistoryActivityImpl, /*BuyingHistoryFragmentImpl,*/
-    RecyclerViewAdapter.CallBack {
+    BuyingHistoryActivityImpl, RecyclerViewAdapter.CallBack {
 
     companion object {
         fun newInstance() = BuyingHistoryFragment()
@@ -50,7 +51,7 @@ class BuyingHistoryFragment : RecyclerViewBaseFragment(), BaseInterface,
         super.onViewCreated(view, savedInstanceState)
         initViewModel()
         clickListeners()
-        viewModel.type = "All Type Payment"
+        mBinding.allPaymentTextview.text = getString(R.string.all_payment_type)
         getBuyingHistoryDataFromServer()
         setObserver()
         setUpAdapter()
@@ -60,7 +61,7 @@ class BuyingHistoryFragment : RecyclerViewBaseFragment(), BaseInterface,
         profileNetworkViewModel.buyingHistoryResponse.observe(viewLifecycleOwner) { recommendedSongsDataResponse ->
             when (recommendedSongsDataResponse.status) {
                 NetworkStatus.LOADING -> {
-//                    startRecommendedDataShimmer()
+                    Log.v("TAG", "Loading")
                 }
                 NetworkStatus.SUCCESS -> {
                     viewModel.buyingHistoryList.clear()
@@ -96,7 +97,7 @@ class BuyingHistoryFragment : RecyclerViewBaseFragment(), BaseInterface,
                         })
                 }
                 NetworkStatus.COMPLETED -> {
-//                    stopRecommendedDataShimmer()
+                    Log.v("TAG", "Completed")
                 }
             }
         }
@@ -107,7 +108,7 @@ class BuyingHistoryFragment : RecyclerViewBaseFragment(), BaseInterface,
     }
 
     private fun getBuyingHistoryDataFromServer() {
-        profileNetworkViewModel.getBuyingHistory("All Payment Type", 1234)
+        profileNetworkViewModel.getBuyingHistory(getString(R.string.all_payment_type), 1234)
     }
 
     private fun setUpAdapter() {
@@ -148,43 +149,9 @@ class BuyingHistoryFragment : RecyclerViewBaseFragment(), BaseInterface,
 
     private fun clickListeners() {
         mBinding.allPaymentTextview.setOnClickListener {
-            // openBottomSheetDialog()
-/*
-            val fragmentTransaction =
-                requireActivity().supportFragmentManager.beginTransaction()
-            val paymentTypeBottomSheetFragment = PaymentTypeBottomSheetFragment.newInstance(this)
-            //paymentTypeBottomSheetFragment.show(fragmentTransaction, TAG)
-
-            ActivityUtils.launchFragment(
-                requireContext(),
-                paymentTypeBottomSheetFragment::class.java.name
-            )*/
-
             (mActivityListener as BuyingHistoryActivityImpl).openPaymentTypeBottomSheetDialogFragment()
         }
     }
-
-    /*private fun openBottomSheetDialog() {
-        val dialog = BottomSheetDialog(
-            requireContext(),
-            R.style.BottomSheetDialog
-        )
-        val view = layoutInflater.inflate(R.layout.bottom_sheet_all_payment_layout, null)
-        val textAllPaymentType = view.findViewById<TextView>(R.id.allPaymentTypeTextviewBottomSheet)
-        val closeDialogImageview =
-            view.findViewById<ImageView>(R.id.imageviewCancelDialogBottomSheet)
-        closeDialogImageview.setOnClickListener {
-            dialog.dismiss()
-        }
-        textAllPaymentType.setOnClickListener {
-            dialog.dismiss()
-        }
-
-        dialog.setCancelable(false)
-        dialog.setContentView(view)
-        dialog.show()
-
-    }*/
 
     private fun initViewModel() {
         viewModel =
@@ -204,16 +171,11 @@ class BuyingHistoryFragment : RecyclerViewBaseFragment(), BaseInterface,
     override fun onItemClickCallBack(paymentType: String?) {
         if (paymentType != null) {
             viewModel.type = paymentType
+            Toast.makeText(requireContext(), paymentType.toString(), Toast.LENGTH_SHORT).show()
             mBinding.allPaymentTextview.text = viewModel.type
             profileNetworkViewModel.getBuyingHistory(paymentType, 1234)
+
         }
-
-
     }
-
-/*    override fun openBottomSheetDialogFragment(type: String?) {
-        Toast.makeText(QTheMusicApplication.getContext(), type.toString(), Toast.LENGTH_LONG).show()
-    }*/
-
 
 }
