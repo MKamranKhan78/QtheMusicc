@@ -47,7 +47,7 @@
         android:layout_height="match_parent"
         android:layout_below="@id/all_payment_textview"
         android:layout_marginTop="@dimen/_10dp"
-        tools:listitem="@layout/item_buying_history" />
+        tools:listitem="@layout/item_song_buying_history" />
 
     <ProgressBar
         android:id="@+id/progress_bar"

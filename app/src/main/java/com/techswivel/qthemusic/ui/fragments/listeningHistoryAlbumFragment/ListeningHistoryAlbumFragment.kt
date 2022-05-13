@@ -81,7 +81,7 @@ class ListeningHistoryAlbumFragment : RecyclerViewBaseFragment(), BaseInterface,
     override fun inflateLayoutFromId(position: Int, data: Any?): Int {
         var layout = 0
         if (viewModel.type == RecommendedSongsType.ALBUM.toString()) {
-            layout = R.layout.item_listening_history_album
+            layout = R.layout.item_albums
         } else if (viewModel.type == RecommendedSongsType.ARTIST.toString()) {
             layout = R.layout.item_artist
         } else if (viewModel.type == RecommendedSongsType.SONGS.toString()) {

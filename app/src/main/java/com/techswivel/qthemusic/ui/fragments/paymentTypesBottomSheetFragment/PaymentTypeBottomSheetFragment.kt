@@ -6,18 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import com.techswivel.qthemusic.R
-import com.techswivel.qthemusic.customData.adapter.RecyclerViewAdapter
 import com.techswivel.qthemusic.customData.interfaces.BaseInterface
 import com.techswivel.qthemusic.databinding.FragmentPaymentTypeBottomSheetBinding
 import com.techswivel.qthemusic.source.local.preference.PrefUtils
 import com.techswivel.qthemusic.ui.activities.buyingHistoryActivity.BuyingHistoryActivityImpl
-import com.techswivel.qthemusic.ui.base.BaseFragment
+import com.techswivel.qthemusic.ui.base.BaseBottomSheetFragment
 import com.techswivel.qthemusic.utils.CommonKeys
 
 
-class PaymentTypeBottomSheetFragment : BaseFragment(), BaseInterface,
-    RecyclerViewAdapter.CallBack {
-
+class PaymentTypeBottomSheetFragment : BaseBottomSheetFragment(), BaseInterface {
     companion object {
         fun newInstance() = PaymentTypeBottomSheetFragment().apply {
         }
@@ -25,7 +22,6 @@ class PaymentTypeBottomSheetFragment : BaseFragment(), BaseInterface,
 
     private lateinit var mBinding: FragmentPaymentTypeBottomSheetBinding
     private lateinit var viewModel: PaymentTypeBottomSheetViewModel
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,6 +38,13 @@ class PaymentTypeBottomSheetFragment : BaseFragment(), BaseInterface,
         getPrefrencesData()
         clickListeners()
     }
+
+    override fun showProgressBar() {
+    }
+
+    override fun hideProgressBar() {
+    }
+
 
     private fun getPrefrencesData() {
         if (PrefUtils.getString(
@@ -80,18 +83,6 @@ class PaymentTypeBottomSheetFragment : BaseFragment(), BaseInterface,
         }
     }
 
-    override fun inflateLayoutFromId(position: Int, data: Any?): Int {
-        return 0
-    }
-
-    override fun onNoDataFound() {
-    }
-
-    override fun showProgressBar() {
-    }
-
-    override fun hideProgressBar() {
-    }
 
     private fun initViewModel() {
         viewModel =

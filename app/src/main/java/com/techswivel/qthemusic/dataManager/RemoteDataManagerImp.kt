@@ -21,7 +21,11 @@ interface RemoteDataManagerImp {
     fun savePlaylist(playlistModel: PlaylistModel): Observable<Response<ResponseMain>>
     fun setFavoriteSong(song: Song): Observable<Response<ResponseMain>>
     fun deletePlaylist(playlistModel: PlaylistModel): Observable<Response<ResponseMain>>
-    fun getBuyingHistory(typeOfTransaction: String, cardId: Int): Observable<Response<ResponseMain>>
+    fun getBuyingHistory(
+        typeOfTransaction: String,
+        cardId: Int?
+    ): Observable<Response<ResponseMain>>
+
     fun getCategoriesData(categoryType: CategoryType): Observable<Response<ResponseMain>>
     fun getSongsData(songsBodyModel: SongsBodyModel): Observable<Response<ResponseMain>>
     fun getGoogleAccessToken(serverAuthCode: String): Observable<Response<GoogleResponseModel>>

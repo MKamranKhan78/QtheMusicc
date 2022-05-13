@@ -57,6 +57,56 @@ class BuyingHistoryFragment : RecyclerViewBaseFragment(), BaseInterface,
         setUpAdapter()
     }
 
+    override fun onPrepareAdapter(): RecyclerView.Adapter<*> {
+        return adapterBuyingHistory
+    }
+
+
+    override fun onPrepareAdapter(adapterType: AdapterType?): RecyclerView.Adapter<*> {
+        return adapterBuyingHistory
+    }
+
+
+    override fun inflateLayoutFromId(position: Int, data: Any?): Int {
+        val data = data as BuyingHistory
+        var layoutId = 0
+        if (data.itemType == ItemType.SONG.toString()) {
+            layoutId = R.layout.item_song_buying_history
+        } else if (data.itemType == ItemType.ALBUM.toString()) {
+            layoutId = R.layout.item_album_buying_history
+        }
+        return layoutId
+    }
+
+    override fun onNoDataFound() {
+    }
+
+    override fun showProgressBar() {
+        mBinding.progressBar.visibility = View.VISIBLE
+    }
+
+    override fun hideProgressBar() {
+        mBinding.progressBar.visibility = View.GONE
+    }
+
+    override fun openPaymentTypeBottomSheetDialogFragment() {
+
+    }
+
+    override fun onCancelCallBack() {
+    }
+
+    override fun onItemClickCallBack(paymentType: String?) {
+        if (paymentType != null) {
+            viewModel.type = paymentType
+            Toast.makeText(requireContext(), paymentType.toString(), Toast.LENGTH_SHORT).show()
+            mBinding.allPaymentTextview.text = viewModel.type
+            profileNetworkViewModel.getBuyingHistory(paymentType, 1234)
+
+        }
+    }
+
+
     private fun setObserver() {
         profileNetworkViewModel.buyingHistoryResponse.observe(viewLifecycleOwner) { recommendedSongsDataResponse ->
             when (recommendedSongsDataResponse.status) {
@@ -119,37 +169,7 @@ class BuyingHistoryFragment : RecyclerViewBaseFragment(), BaseInterface,
         )
     }
 
-    override fun onPrepareAdapter(): RecyclerView.Adapter<*> {
-        return adapterBuyingHistory
-    }
 
-
-    override fun onPrepareAdapter(adapterType: AdapterType?): RecyclerView.Adapter<*> {
-        return adapterBuyingHistory
-    }
-
-
-    override fun inflateLayoutFromId(position: Int, data: Any?): Int {
-        val data = data as BuyingHistory
-        var layoutId = 0
-        if (data.itemType == ItemType.SONG.toString()) {
-            layoutId = R.layout.item_buying_history
-        } else if (data.itemType == ItemType.ALBUM.toString()) {
-            layoutId = R.layout.item_buying_history_with_recyclerview
-        }
-        return layoutId
-    }
-
-    override fun onNoDataFound() {
-    }
-
-    override fun showProgressBar() {
-        mBinding.progressBar.visibility = View.VISIBLE
-    }
-
-    override fun hideProgressBar() {
-        mBinding.progressBar.visibility = View.GONE
-    }
 
     private fun clickListeners() {
         mBinding.allPaymentTextview.setOnClickListener {
@@ -165,21 +185,5 @@ class BuyingHistoryFragment : RecyclerViewBaseFragment(), BaseInterface,
 
     }
 
-    override fun openPaymentTypeBottomSheetDialogFragment() {
-
-    }
-
-    override fun onCancelCallBack() {
-    }
-
-    override fun onItemClickCallBack(paymentType: String?) {
-        if (paymentType != null) {
-            viewModel.type = paymentType
-            Toast.makeText(requireContext(), paymentType.toString(), Toast.LENGTH_SHORT).show()
-            mBinding.allPaymentTextview.text = viewModel.type
-            profileNetworkViewModel.getBuyingHistory(paymentType, 1234)
-
-        }
-    }
 
 }

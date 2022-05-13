@@ -266,7 +266,7 @@ class ProfileNetworkViewModel :BaseViewModel() {
         })
     }
 
-    fun getBuyingHistory(typeOfTransaction: String, cardId: Int) {
+    fun getBuyingHistory(typeOfTransaction: String, cardId: Int?) {
         RemoteDataManager.getBuyingHistory(typeOfTransaction, cardId).doOnSubscribe {
             buyingHistoryResponse.value = ApiResponse.loading()
         }?.subscribe(object : CustomObserver<Response<ResponseMain>>() {
