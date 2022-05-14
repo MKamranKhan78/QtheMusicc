@@ -20,5 +20,5 @@ data class BuyingHistory(
     @SerializedName("cardPrefix")
     val cardPrefix: Int,
     @SerializedName("album")
-    val album: AlbumModel
+    val purchasedHistoryAlbum: PurchasedHistoryAlbum
 )

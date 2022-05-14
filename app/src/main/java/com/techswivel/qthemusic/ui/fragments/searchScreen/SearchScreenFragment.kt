@@ -296,7 +296,7 @@ class SearchScreenFragment : RecyclerViewBaseFragment() {
                         mViewModel.recentPlayedAlbumList.addAll(dbAlbumList)
                         mRecentPlayAdapter.notifyDataSetChanged()
                     } else {
-                        Log.d(TAG, "no album data in database")
+                        Log.d(TAG, "no purchasedHistoryAlbum data in database")
                     }
                 })
         }

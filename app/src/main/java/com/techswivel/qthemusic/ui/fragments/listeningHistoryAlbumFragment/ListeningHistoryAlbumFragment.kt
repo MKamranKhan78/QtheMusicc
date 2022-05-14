@@ -99,7 +99,7 @@ class ListeningHistoryAlbumFragment : RecyclerViewBaseFragment(), BaseInterface,
     }
 
     private fun getBundleData() {
-        val type = arguments?.getString(CommonKeys.KEY_ENUM)
+        val type = arguments?.getString(CommonKeys.KEY_TYPE)
         viewModel.type = type.toString()
         if (type == RecommendedSongsType.ALBUM.toString()) {
             viewModel.albums =

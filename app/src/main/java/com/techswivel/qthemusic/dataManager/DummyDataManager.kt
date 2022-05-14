@@ -137,7 +137,7 @@ class DummyDataManager {
                 )
             )
 
-            val albumModel = AlbumModel(
+            val albumModel = PurchasedHistoryAlbum(
                 "https://bowlyrics.com/wp-content/uploads/2018/07/ED-Sheeran-is-the-worlds-highest-earning-solo-musician-according-Forbes-731x411.jpg",
                 34,
                 "album1",

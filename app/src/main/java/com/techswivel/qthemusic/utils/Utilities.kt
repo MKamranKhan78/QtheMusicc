@@ -74,6 +74,13 @@ object Utilities {
         return b
     }
 
+    fun getDate(milliSeconds: Long, dateFormat: String?): String? {
+        val formatter = SimpleDateFormat(dateFormat)
+        val calendar = Calendar.getInstance()
+        calendar.timeInMillis = milliSeconds
+        return formatter.format(calendar.time)
+    }
+
     fun fastblur(sentBitmap: Bitmap, radius: Int): Bitmap? {
         val bitmap = sentBitmap.copy(sentBitmap.config, true)
         if (radius < 1) {

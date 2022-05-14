@@ -108,19 +108,19 @@ class ListeningHistoryActivity : BaseActivity() {
                 CommonKeys.KEY_DATA,
                 viewModel.mAlbumsDataList as ArrayList<out Album>
             )
-            bundle.putString(CommonKeys.KEY_ENUM, RecommendedSongsType.ALBUM.toString())
+            bundle.putString(CommonKeys.KEY_TYPE, RecommendedSongsType.ALBUM.toString())
         } else if (type == RecommendedSongsType.ARTIST) {
             bundle.putParcelableArrayList(
                 CommonKeys.KEY_DATA,
                 viewModel.mArtistsDataList as ArrayList<out Artist>
             )
-            bundle.putString(CommonKeys.KEY_ENUM, RecommendedSongsType.ARTIST.toString())
+            bundle.putString(CommonKeys.KEY_TYPE, RecommendedSongsType.ARTIST.toString())
         } else if (type == RecommendedSongsType.SONGS) {
             bundle.putParcelableArrayList(
                 CommonKeys.KEY_DATA,
                 viewModel.mSongsDataList as ArrayList<out Song>
             )
-            bundle.putString(CommonKeys.KEY_ENUM, RecommendedSongsType.SONGS.toString())
+            bundle.putString(CommonKeys.KEY_TYPE, RecommendedSongsType.SONGS.toString())
         }
         popUpAllFragmentIncludeThis(ListeningHistoryAlbumFragment::class.java.name)
         openFragment(ListeningHistoryAlbumFragment.newInstance(bundle))

@@ -149,7 +149,7 @@ class SongAndArtistsViewModel : BaseViewModel() {
     }
 
     fun getSongsDataFromServer(songsBodyModel: SongsBodyModel) {
-        mRemoteDataManager.getSongsData(songsBodyModel).doOnSubscribe {
+        mRemoteDataManager.getSongsFromServer(songsBodyModel).doOnSubscribe {
             mSongsResponse.value = ApiResponse.loading()
         }?.subscribe(object : CustomObserver<Response<ResponseMain>>() {
             override fun onSuccess(t: Response<ResponseMain>) {

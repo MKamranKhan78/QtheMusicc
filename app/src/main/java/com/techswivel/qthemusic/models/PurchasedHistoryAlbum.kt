@@ -3,7 +3,7 @@ package com.techswivel.qthemusic.models
 import com.google.gson.annotations.SerializedName
 import com.techswivel.qthemusic.models.database.Song
 
-data class AlbumModel(
+data class PurchasedHistoryAlbum(
     @SerializedName("albumCoverImageURL")
     val albumCoverImageURL: String,
     @SerializedName("albumPrice")

@@ -54,7 +54,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:scaleType="centerCrop"
-                            app:setImageViewImage="@{obj.album.albumCoverImageURL}"
+                            app:setImageViewImage="@{obj.purchasedHistoryAlbum.albumCoverImageURL}"
                             tools:src="@drawable/no_image_palce_holder" />
 
                     </androidx.cardview.widget.CardView>
@@ -77,12 +77,12 @@
                             android:fontFamily="@font/manrope_regular"
                             android:maxLines="1"
                             android:minLines="1"
-                            android:text="@{obj.album.albumTitle}"
+                            android:text="@{obj.purchasedHistoryAlbum.albumTitle}"
                             android:textColor="@color/color_white_text_profile"
                             android:textSize="@dimen/_14sp" />
 
                         <TextView
-                            setNomberOfSong="@{obj.album.totalSongs}"
+                            setNomberOfSong="@{obj.purchasedHistoryAlbum.totalSongs}"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_5dp"
@@ -110,9 +110,9 @@
                             android:src="@drawable/ic_arrow_up_red_price" />
 
                         <TextView
-                            setDollarValue="@{obj.album.albumPrice.toString()}"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:text="@{`$ `+obj.purchasedHistoryAlbum.albumPrice.toString()}"
                             android:fontFamily="@font/manrope_regular"
                             android:textColor="@color/color_white_text_profile"
                             android:textSize="@dimen/_14sp" />
@@ -131,7 +131,7 @@
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/subItemRecyclerview"
-                    setSongListAdapter="@{obj.album}"
+                    setSongListAdapter="@{obj.purchasedHistoryAlbum}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/linegray"
@@ -156,7 +156,7 @@
                     android:layout_margin="@dimen/_10dp">
 
                     <TextView
-                        setDateTime="@{obj.album.timeOfPurchased}"
+                        setDateTime="@{obj.purchasedHistoryAlbum.timeOfPurchased}"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
@@ -172,7 +172,7 @@
                         android:layout_marginStart="@dimen/_10dp"
                         android:layout_marginEnd="@dimen/_10dp"
                         android:fontFamily="@font/manrope_medium"
-                        android:text="@{obj.album.typeOfTransection}"
+                        android:text="@{obj.purchasedHistoryAlbum.typeOfTransection}"
                         android:textColor="@color/color_white_text_profile"
                         android:textSize="@dimen/_12sp" />
 

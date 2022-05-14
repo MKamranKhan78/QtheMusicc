@@ -108,9 +108,9 @@
                             android:src="@drawable/ic_arrow_up_red_price" />
 
                         <TextView
-                            setDollarValue="@{obj.songPrice.toString()}"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:text="@{`$ `+obj.songPrice.toString()}"
                             android:fontFamily="@font/manrope_regular"
                             android:textColor="@color/color_white_text_profile"
                             android:textSize="@dimen/_14sp" />

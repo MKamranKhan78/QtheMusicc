@@ -89,7 +89,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_gravity="center"
-                setDollarValue="@{obj.songPrice.toString()}"
+                android:text="@{`$ `+obj.songPrice.toString()}"
                 android:textColor="@color/color_white_text_profile"
                 android:textSize="@dimen/_14sp" />
 

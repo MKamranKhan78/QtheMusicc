@@ -11,12 +11,11 @@ import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.techswivel.qthemusic.R
+import com.techswivel.qthemusic.constant.Constants
 import com.techswivel.qthemusic.customData.adapter.RecyclerViewAdapter
-import com.techswivel.qthemusic.utils.Utilities
-import com.techswivel.qthemusic.utils.Utilities.roundOffDecimal
 import com.techswivel.qthemusic.utils.SwipeRevealLayout
+import com.techswivel.qthemusic.utils.Utilities
 import java.text.DateFormat
-import java.text.SimpleDateFormat
 import java.util.*
 
 object BindingAdapter {
@@ -84,7 +83,10 @@ object BindingAdapter {
 
     @JvmStatic
     @BindingAdapter("setSongListAdapter")
-    fun setSongListAdapter(pRecyclerView: RecyclerView, albumModel: AlbumModel) {
+    fun setSongListAdapter(
+        pRecyclerView: RecyclerView,
+        purchasedHistoryAlbum: PurchasedHistoryAlbum
+    ) {
         val songListAdapter =
             RecyclerViewAdapter(object : RecyclerViewAdapter.CallBack {
                 override fun inflateLayoutFromId(position: Int, data: Any?): Int {
@@ -98,7 +100,7 @@ object BindingAdapter {
                 override fun onViewClicked(view: View, data: Any?) {
 
                 }
-            }, albumModel.song as MutableList<Any>)
+            }, purchasedHistoryAlbum.song as MutableList<Any>)
         pRecyclerView.adapter = songListAdapter
         pRecyclerView.setHasFixedSize(true)
         songListAdapter.notifyDataSetChanged()
@@ -111,26 +113,13 @@ object BindingAdapter {
     }
 
 
-    @JvmStatic
-    @BindingAdapter("setDollarValue")
-    fun setDollarValue(textView: TextView, text: String) {
-        textView.text = "$" + text
-    }
-
 
     @JvmStatic
     @BindingAdapter("setDateTime")
     fun setDateTime(textView: TextView, text: Int) {
-        textView.text = getDate(text.toLong(), "dd MMM yyyy-HH:mmaa")
+        textView.text = Utilities.getDate(text.toLong(), Constants.DATE_FORMATE)
     }
 
-
-    private fun getDate(milliSeconds: Long, dateFormat: String?): String? {
-        val formatter = SimpleDateFormat(dateFormat)
-        val calendar = Calendar.getInstance()
-        calendar.timeInMillis = milliSeconds
-        return formatter.format(calendar.time)
-    }
 
     @JvmStatic
     @BindingAdapter("setImageViewImage")

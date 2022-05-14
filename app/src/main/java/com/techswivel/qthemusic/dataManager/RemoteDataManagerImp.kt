@@ -27,7 +27,6 @@ interface RemoteDataManagerImp {
     ): Observable<Response<ResponseMain>>
 
     fun getCategoriesData(categoryType: CategoryType): Observable<Response<ResponseMain>>
-    fun getSongsData(songsBodyModel: SongsBodyModel): Observable<Response<ResponseMain>>
     fun getGoogleAccessToken(serverAuthCode: String): Observable<Response<GoogleResponseModel>>
     fun logoutUser(deviceIdentifier: String): Observable<Response<ResponseMain>>
     fun profileUpdate(authModel: AuthModel?): Observable<Response<ResponseMain>>

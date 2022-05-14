@@ -45,6 +45,30 @@ class BuyingHistoryActivity : BaseActivity(), BuyingHistoryActivityImpl {
         return super.onSupportNavigateUp()
     }
 
+    override fun openPaymentTypeBottomSheetDialogFragment() {
+        mBinding.activityToolbar.toolbar.visibility = View.GONE
+        openPaymentTypeFragment()
+    }
+
+    override fun onCancelCallBack() {
+        if (getEntryCount() == 1) {
+            this.finish()
+        } else {
+            supportFragmentManager.popBackStackImmediate()
+        }
+    }
+
+    override fun onItemClickCallBack(paymentType: String?) {
+        (mCurrentFragment as BuyingHistoryActivityImpl).onItemClickCallBack(
+            paymentType
+        )
+        if (getEntryCount() == 1) {
+            this.finish()
+        } else {
+            supportFragmentManager.popBackStackImmediate()
+        }
+    }
+
     private fun setToolBar() {
         setUpActionBar(
             mBinding.activityToolbar.toolbar, "", false, true
@@ -76,27 +100,5 @@ class BuyingHistoryActivity : BaseActivity(), BuyingHistoryActivityImpl {
         }
     }
 
-    override fun openPaymentTypeBottomSheetDialogFragment() {
-        mBinding.activityToolbar.toolbar.visibility = View.GONE
-        openPaymentTypeFragment()
-    }
 
-    override fun onCancelCallBack() {
-        if (getEntryCount() == 1) {
-            this.finish()
-        } else {
-            supportFragmentManager.popBackStackImmediate()
-        }
-    }
-
-    override fun onItemClickCallBack(paymentType: String?) {
-        (mCurrentFragment as BuyingHistoryActivityImpl).onItemClickCallBack(
-            paymentType
-        )
-        if (getEntryCount() == 1) {
-            this.finish()
-        } else {
-            supportFragmentManager.popBackStackImmediate()
-        }
-    }
 }
