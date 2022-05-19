@@ -40,6 +40,10 @@ object LocalDataManager : BaseDataManager(), LocalDataManagerImp {
         return getRoomInstance().mSongsDao().getRecentPlayedSongs()
     }
 
+    override fun getDownloadedSongs(): LiveData<List<Song>> {
+        return getRoomInstance().mSongsDao().getDownloadedSongs()
+    }
+
     override fun getRecentPlayedAlbum(): LiveData<List<Album>> {
         return getRoomInstance().mAlbumDao().getAlbumList()
     }

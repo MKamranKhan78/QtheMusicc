@@ -557,8 +557,8 @@ class DummyDataManager {
                     11.11f,
                     1,
                     SongStatus.FREE,
-                    "",
-                    "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+                    "Humaray pass",
+                    null,
                     null,
                     null
                 ),
@@ -604,7 +604,7 @@ class DummyDataManager {
                     3,
                     SongStatus.FREE,
                     "On My Way",
-                    "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+                    null,
                     null,
                     null
                 ),

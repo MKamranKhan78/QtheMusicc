@@ -24,7 +24,7 @@ object Constants {
     const val SPLASHDELAY = 1000 * 3 * 1 // in milliSeconds
 
     const val DEFAULT_DATE_FORMATE = "dd MMMM,yyyy"
-    const val DATE_FORMATE = "dd MMM yyyy-HH:mmaa"
+    const val DATE_FORMATE = "dd MMM yyyy - HH:mm aa"
     const val FCM_ANDROID_TOPIC = "Android_Users"
 
     const val CPP_LIBRARY_NAME = "keys"

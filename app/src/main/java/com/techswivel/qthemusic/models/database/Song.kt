@@ -68,7 +68,7 @@ data class Song(
     @ColumnInfo(name = "songDuration")
     @SerializedName("songDuration")
     @Expose
-    var songDuration: Int?,
+    val songDuration: Int?,
     @ColumnInfo(name = "songPrice")
     @SerializedName("songPrice")
     @Expose

@@ -16,6 +16,9 @@ abstract class SongsDao {
     @Query("SELECT * FROM Song ORDER BY recentPlay DESC")
     abstract fun getRecentPlayedSongs(): LiveData<List<Song>>
 
+    @Query("SELECT * FROM Song WHERE songStatus == 'DOWNLOADED'")
+    abstract fun getDownloadedSongs(): LiveData<List<Song>>
+
     @Query("DELETE FROM Song WHERE recentPlay IN (SELECT recentPlay FROM Song ORDER BY recentPlay DESC LIMIT -1 OFFSET 5)")
     abstract suspend fun deleteSongIfListExceedsFromFive()
 

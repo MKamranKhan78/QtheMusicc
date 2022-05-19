@@ -86,6 +86,7 @@
     <string name="purchased_albums">Purchased Albums</string>
     <string name="albums">Albums</string>
     <string name="favorite_songs">Favorite Songs</string>
+    <string name="downloaded_songs">Downloaded Songs</string>
     <string name="playlists">Playlists</string>
     <string name="something_wrong">Something went wrong.</string>
     <string name="email">Email</string>
@@ -221,4 +222,6 @@
     <string name="artist_unfollow">Artist unfollow successfully.</string>
     <string name="playlist_exist">Playlist Exist</string>
     <string name="delete">Delete</string>
+    <string name="download_songs">Download Songs</string>
+    <string name="download_description_text">Q The Music allows premium user to download songs and listen them offline.</string>
 </resources>

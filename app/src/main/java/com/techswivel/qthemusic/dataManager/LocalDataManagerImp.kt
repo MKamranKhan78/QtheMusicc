@@ -11,6 +11,7 @@ interface LocalDataManagerImp {
     fun insertRecentPlayedAlbumToDatabase(album: Album)
     fun insertRecentPlayedArtistToDatabase(artist: Artist)
     fun getRecentPlayedSongs(): LiveData<List<Song>>
+    fun getDownloadedSongs(): LiveData<List<Song>>
     fun getRecentPlayedAlbum(): LiveData<List<Album>>
     fun getRecentPlayedArtist(): LiveData<List<Artist>>
     fun deleteSongsIfExceed()

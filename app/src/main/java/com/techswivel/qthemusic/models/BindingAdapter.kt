@@ -13,6 +13,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.techswivel.qthemusic.R
 import com.techswivel.qthemusic.constant.Constants
 import com.techswivel.qthemusic.customData.adapter.RecyclerViewAdapter
+import com.techswivel.qthemusic.models.database.Song
 import com.techswivel.qthemusic.utils.SwipeRevealLayout
 import com.techswivel.qthemusic.utils.Utilities
 import java.text.DateFormat
@@ -51,6 +52,26 @@ object BindingAdapter {
             val duration = Utilities.formatSongDuration(song_duration.toLong())
             textView.text = duration
         }
+    }
+
+
+    @SuppressLint("SetTextI18n", "DefaultLocale")
+    @JvmStatic
+    @BindingAdapter("setSongTypeAndDuration")
+    fun setSongTypeAndDuration(textView: TextView, song: Song) {
+        var songType: String? = null
+        var songDuration: String? = null
+        if (song != null) {
+            if (song.songVideoUrl != null) {
+                songType = "Video"
+            } else {
+                songType = "Audio"
+            }
+        }
+        if (song.songDuration != null) {
+            songDuration = Utilities.formatSongDuration(song.songDuration.toLong())
+        }
+        textView.text = "$songType - $songDuration"
     }
 
 

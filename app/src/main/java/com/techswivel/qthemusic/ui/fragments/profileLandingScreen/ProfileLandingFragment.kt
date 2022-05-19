@@ -9,12 +9,13 @@ import com.techswivel.dfaktfahrerapp.ui.fragments.underDevelopmentMessageFragmen
 import com.techswivel.qthemusic.application.QTheMusicApplication
 import com.techswivel.qthemusic.customData.enums.FragmentType
 import com.techswivel.qthemusic.databinding.FragmentProfileLandingBinding
-import com.techswivel.qthemusic.ui.activities.playlistActivity.PlaylistActivity
 import com.techswivel.qthemusic.ui.activities.buyingHistoryActivity.BuyingHistoryActivity
 import com.techswivel.qthemusic.ui.activities.listeningHistoryActivity.ListeningHistoryActivity
+import com.techswivel.qthemusic.ui.activities.playlistActivity.PlaylistActivity
 import com.techswivel.qthemusic.ui.activities.profileSettingScreen.ProfileSettingActivity
 import com.techswivel.qthemusic.ui.activities.serverSettingActivity.ServerSettingActivity
 import com.techswivel.qthemusic.ui.base.BaseFragment
+import com.techswivel.qthemusic.ui.fragments.downloadSongFragment.DownloadSongFragment
 import com.techswivel.qthemusic.ui.fragments.favoriteSongFragment.FavoriteSongFragment
 import com.techswivel.qthemusic.ui.fragments.followingArtistFragment.FollowingArtistFragment
 import com.techswivel.qthemusic.ui.fragments.purchaseAlbumFragment.PurchaseAlbumFragment
@@ -103,9 +104,12 @@ class ProfileLandingFragment : BaseFragment() {
             openListeningHistoryActivity()
         }
         mBinding.downloadedTextview.setOnClickListener {
+            val bundle = Bundle()
+            bundle.putSerializable(CommonKeys.KEY_DATA, viewModel.authModel)
             ActivityUtils.launchFragment(
                 requireContext(),
-                UnderDevelopmentMessageFragment::class.java.name
+                DownloadSongFragment::class.java.name,
+                bundle
             )
         }
         mBinding.buyingHistoryTextview.setOnClickListener {

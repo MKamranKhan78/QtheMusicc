@@ -172,9 +172,9 @@ class BuyingHistoryFragment : RecyclerViewBaseFragment(), BaseInterface,
 
 
     private fun clickListeners() {
-        mBinding.allPaymentTextview.setOnClickListener {
+        /*mBinding.allPaymentTextview.setOnClickListener {
             (mActivityListener as BuyingHistoryActivityImpl).openPaymentTypeBottomSheetDialogFragment()
-        }
+        }*/
     }
 
     private fun initViewModel() {
