@@ -79,6 +79,10 @@ class DownloadSongFragment : RecyclerViewBaseFragment(), BaseInterface,
                 CommonKeys.KEY_SONGS_LIST,
                 viewModel.mDownloadedSongsList as ArrayList<out Song>
             )
+            putString(
+                CommonKeys.KEY_SONG_TYPE,
+                SongType.DOWNLOADED.value
+            )
         }
         ActivityUtils.startNewActivity(
             requireActivity(),

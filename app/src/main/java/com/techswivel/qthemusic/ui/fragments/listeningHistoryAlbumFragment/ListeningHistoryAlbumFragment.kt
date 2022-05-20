@@ -12,12 +12,15 @@ import com.techswivel.qthemusic.constant.Constants
 import com.techswivel.qthemusic.customData.adapter.RecyclerViewAdapter
 import com.techswivel.qthemusic.customData.enums.AdapterType
 import com.techswivel.qthemusic.customData.enums.RecommendedSongsType
+import com.techswivel.qthemusic.customData.enums.SongType
 import com.techswivel.qthemusic.customData.interfaces.BaseInterface
 import com.techswivel.qthemusic.databinding.FragmentListeningHistoryAlbumBinding
 import com.techswivel.qthemusic.models.database.Album
 import com.techswivel.qthemusic.models.database.Artist
 import com.techswivel.qthemusic.models.database.Song
+import com.techswivel.qthemusic.ui.activities.playerActivity.PlayerActivity
 import com.techswivel.qthemusic.ui.base.RecyclerViewBaseFragment
+import com.techswivel.qthemusic.ui.fragments.albumDetailsFragment.AlbumDetailsFragment
 import com.techswivel.qthemusic.utils.ActivityUtils
 import com.techswivel.qthemusic.utils.CommonKeys
 
@@ -64,10 +67,42 @@ class ListeningHistoryAlbumFragment : RecyclerViewBaseFragment(), BaseInterface,
 
     override fun onItemClick(data: Any?, position: Int) {
         super.onItemClick(data, position)
-        ActivityUtils.launchFragment(
-            requireContext(),
-            UnderDevelopmentMessageFragment::class.java.name
-        )
+
+        if (viewModel.type == RecommendedSongsType.SONGS.toString()) {
+            val bundle = Bundle().apply {
+                val song = data as Song
+                putParcelable(CommonKeys.KEY_DATA_MODEL, song)
+                putParcelableArrayList(
+
+                    CommonKeys.KEY_SONGS_LIST,
+                    viewModel.songs as ArrayList<out Song>
+                )
+                putString(
+                    CommonKeys.KEY_SONG_TYPE,
+                    SongType.RECOMMENDED.value
+                )
+            }
+            ActivityUtils.startNewActivity(
+                requireActivity(),
+                PlayerActivity::class.java,
+                bundle
+            )
+        } else if (viewModel.type == RecommendedSongsType.ALBUM.toString()) {
+
+            val mAlbum = data as Album
+            val bundle = Bundle()
+            bundle.putParcelable(CommonKeys.KEY_ALBUM_DETAILS, mAlbum)
+            ActivityUtils.launchFragment(
+                requireContext(),
+                AlbumDetailsFragment::class.java.name,
+                bundle
+            )
+        } else {
+            ActivityUtils.launchFragment(
+                requireContext(),
+                UnderDevelopmentMessageFragment::class.java.name,
+            )
+        }
     }
 
     override fun showProgressBar() {
